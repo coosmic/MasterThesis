@@ -20,8 +20,15 @@
 
 #include <pcl/filters/filter.h>
 
-void showCloud(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud){
-  pcl::visualization::CloudViewer viewer ("Simple Cloud Viewer");
+#define DEBUG true
+//#define MIN_POINTS_IN_PLANE 20000
+
+void showCloud(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud, std::string windowName){
+
+  if(!DEBUG)
+    return;
+
+  pcl::visualization::CloudViewer viewer (windowName);
   viewer.showCloud (cloud);
   while (!viewer.wasStopped ())
   {
@@ -45,7 +52,7 @@ int main (int argc, char** argv)
 {
   pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZRGB>);
 
-  if( pcl::io::loadPLYFile("../data/point_cloud_odm.ply", *cloud) == -1){
+  if( pcl::io::loadPLYFile(argv[1], *cloud) == -1){
 
     PCL_ERROR ("Couldn't read ply file\n");
     return (-1);
@@ -53,27 +60,53 @@ int main (int argc, char** argv)
   }
 
   printMinMax(cloud);
+  //showCloud(cloud, "PlainCloud");
 
-  pcl::ModelCoefficients::Ptr coefficients (new pcl::ModelCoefficients);
-  pcl::PointIndices::Ptr inliers (new pcl::PointIndices);
 
-  // Create the segmentation object
-  pcl::SACSegmentation<pcl::PointXYZRGB> seg;
-  // Optional
-  seg.setOptimizeCoefficients (true);
-  // Mandatory
-  seg.setModelType (pcl::SACMODEL_PLANE);
-  seg.setMethodType (pcl::SAC_RANSAC);
-  seg.setDistanceThreshold (0.5);
+  ///////////////////
+  // Remove Planes //
+  ///////////////////
 
-  seg.setInputCloud (cloud);
-  seg.segment (*inliers, *coefficients);
+  long MIN_POINTS_IN_PLANE = cloud->size()*0.4;
+  cout << "min points in plane: "<<MIN_POINTS_IN_PLANE<<endl;
+
+  long pointsInPlane = 0;
+
+  do{
+
+    pcl::ModelCoefficients::Ptr coefficients (new pcl::ModelCoefficients);
+    pcl::PointIndices::Ptr inliers (new pcl::PointIndices);
+
+    // Create the segmentation object
+    pcl::SACSegmentation<pcl::PointXYZRGB> seg;
+    // Optional
+    seg.setOptimizeCoefficients (true);
+    // Mandatory
+    seg.setModelType (pcl::SACMODEL_PLANE);
+    seg.setMethodType (pcl::SAC_RANSAC);
+    seg.setDistanceThreshold (0.5);
+
+    seg.setInputCloud (cloud);
+    seg.segment (*inliers, *coefficients);
+
+    pointsInPlane = inliers->indices.size();
+
+    if(pointsInPlane > MIN_POINTS_IN_PLANE){
+      pcl::ExtractIndices<pcl::PointXYZRGB> extract;
+      extract.setInputCloud(cloud);
+      extract.setIndices(inliers);
+      extract.setNegative(true);
+      extract.filter(*cloud);
+    }
   
-  pcl::ExtractIndices<pcl::PointXYZRGB> extract;
-  extract.setInputCloud(cloud);
-  extract.setIndices(inliers);
-  extract.setNegative(true);
-  extract.filter(*cloud);
+  }
+  while(pointsInPlane > MIN_POINTS_IN_PLANE);
+
+  showCloud(cloud, "PlaneFilter");
+
+  //////////////////////////
+  // Remove Noise Level 1 //
+  //////////////////////////
 
   pcl::RadiusOutlierRemoval<pcl::PointXYZRGB> outrem;
     // build the filter
@@ -88,6 +121,12 @@ int main (int argc, char** argv)
   std::vector<int> indices;
   pcl::removeNaNFromPointCloud(*cloud, *cloud, indices);
 
+  //showCloud(cloud, "Noise1");
+
+  //////////////////////////
+  // Remove Noise Level 2 //
+  //////////////////////////
+
   pcl::RadiusOutlierRemoval<pcl::PointXYZRGB> outrem2;
     // build the filter
     outrem2.setInputCloud(cloud);
@@ -97,7 +136,7 @@ int main (int argc, char** argv)
     // apply filter
     outrem2.filter (*cloud);
 
-  showCloud(cloud);
+  //showCloud(cloud, "Noise2");
 
   return (0);
 }
