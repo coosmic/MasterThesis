@@ -1,5 +1,6 @@
 #include <iostream>
 #include <thread>
+#include <unordered_set>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -21,15 +22,21 @@
 #include <pcl/filters/extract_indices.h>
 #include <pcl/filters/statistical_outlier_removal.h>
 #include <pcl/filters/radius_outlier_removal.h>
+#include <pcl/filters/voxel_grid.h>
 
 #include <pcl/common/common.h>
 #include <pcl/common/centroid.h>
 #include <pcl/common/transforms.h>
 #include <pcl/common/io.h>
+#include <pcl/common/pca.h>
 
 #include <pcl/filters/filter.h>
 
 #include <pcl/features/principal_curvatures.h>
+
+#include <pcl/registration/icp.h>
+#include <pcl/registration/gicp.h>
+#include <pcl/registration/transformation_estimation_svd_scale.h>
 
 #include "vtkPlaneSource.h"
 
@@ -478,8 +485,49 @@ void noiseFilter(pcl::PointCloud<PointType>::Ptr cloud, int minNumberNeighbors, 
   pcl::removeNaNFromPointCloud(*cloud, *cloud, indices);
 }
 
-int main (int argc, char** argv)
-{
+void findPlaneInCloud (pcl::PointCloud<PointType>::Ptr cloud, pcl::ModelCoefficients::Ptr coefficients, pcl::PointIndices::Ptr inliers){
+  // Create the segmentation object
+  pcl::SACSegmentation<PointType> seg;
+  // Optional
+  seg.setOptimizeCoefficients (true);
+  // Mandatory
+  seg.setModelType (pcl::SACMODEL_PLANE);
+  seg.setMethodType (pcl::SAC_RANSAC);
+  seg.setDistanceThreshold (0.5);
+
+  seg.setInputCloud (cloud);
+  seg.segment (*inliers, *coefficients);
+}
+
+void removePointsInCloud(pcl::PointCloud<PointType>::Ptr cloud, pcl::PointIndices::Ptr inliers){
+  pcl::ExtractIndices<PointType> extract;
+  extract.setInputCloud(cloud);
+  extract.setIndices(inliers);
+  extract.setNegative(true);
+  extract.filter(*cloud);
+}
+
+pcl::ModelCoefficients::Ptr planeFilter(pcl::PointCloud<PointType>::Ptr cloud){
+  long MIN_POINTS_IN_PLANE = cloud->size()*0.4;
+  cout << "min points in plane: "<<MIN_POINTS_IN_PLANE<<endl;
+
+  long pointsInPlane = 0;
+
+  pcl::ModelCoefficients::Ptr coefficients (new pcl::ModelCoefficients);
+  pcl::PointIndices::Ptr inliers (new pcl::PointIndices);
+
+  findPlaneInCloud(cloud, coefficients, inliers);
+
+  pointsInPlane = inliers->indices.size();
+
+  if(pointsInPlane > MIN_POINTS_IN_PLANE){
+    removePointsInCloud(cloud, inliers);
+  }
+
+  return coefficients;
+}
+
+int main1(int argc, char** argv){
   pcl::PointCloud<PointType>::Ptr cloud(new pcl::PointCloud<PointType>);
 
   std::string pathToFile = argv[1];
@@ -501,49 +549,11 @@ int main (int argc, char** argv)
   } else
     return -1;
 
-  
-
-  //printMinMax(cloud);
-  //showCloud(cloud, "PlainCloud");
-
   ///////////////////
   // Remove Planes //
   ///////////////////
 
-  long MIN_POINTS_IN_PLANE = cloud->size()*0.4;
-  cout << "min points in plane: "<<MIN_POINTS_IN_PLANE<<endl;
-
-  long pointsInPlane = 0;
-
-  //do{
-
-    pcl::ModelCoefficients::Ptr coefficients (new pcl::ModelCoefficients);
-    pcl::PointIndices::Ptr inliers (new pcl::PointIndices);
-
-    // Create the segmentation object
-    pcl::SACSegmentation<PointType> seg;
-    // Optional
-    seg.setOptimizeCoefficients (true);
-    // Mandatory
-    seg.setModelType (pcl::SACMODEL_PLANE);
-    seg.setMethodType (pcl::SAC_RANSAC);
-    seg.setDistanceThreshold (0.5);
-
-    seg.setInputCloud (cloud);
-    seg.segment (*inliers, *coefficients);
-
-    pointsInPlane = inliers->indices.size();
-
-    if(pointsInPlane > MIN_POINTS_IN_PLANE){
-      pcl::ExtractIndices<PointType> extract;
-      extract.setInputCloud(cloud);
-      extract.setIndices(inliers);
-      extract.setNegative(true);
-      extract.filter(*cloud);
-    }
-  
-  //}
-  //while(pointsInPlane > MIN_POINTS_IN_PLANE);
+  pcl::ModelCoefficients::Ptr coefficients = planeFilter(cloud);
 
   //showCloud2(cloud, "PlaneFilter", coefficients);
 
@@ -575,4 +585,171 @@ int main (int argc, char** argv)
   //stemSegmentation3(cloud);
 
   return (0);
+}
+
+void matchClouds(pcl::PointCloud<PointType>::Ptr cloudA, pcl::PointCloud<PointType>::Ptr cloudB){
+  pcl::ModelCoefficients::Ptr coefficientsA (new pcl::ModelCoefficients);
+  pcl::PointIndices::Ptr inliersA (new pcl::PointIndices);
+  findPlaneInCloud(cloudA, coefficientsA, inliersA);
+
+  pcl::ModelCoefficients::Ptr coefficientsB (new pcl::ModelCoefficients);
+  pcl::PointIndices::Ptr inliersB(new pcl::PointIndices);
+  findPlaneInCloud(cloudB, coefficientsB, inliersB);
+
+  rotateCloud(cloudA, coefficientsA);
+  rotateCloud(cloudB, coefficientsB);
+
+  PointType aMin, aMax;
+  pcl::getMinMax3D(*cloudA, aMin, aMax);
+  PointType bMin, bMax;
+  pcl::getMinMax3D(*cloudB, bMin, bMax);
+
+  double xScale = (aMax.x - aMin.x) / (bMax.x - bMin.x);
+  for (int i = 0; i < cloudA->points.size(); i++)
+  {
+    cloudA->points[i].x = cloudA->points[i].x / xScale;
+    cloudA->points[i].y = cloudA->points[i].y / xScale;
+    cloudA->points[i].z = cloudA->points[i].z / xScale;
+  }
+
+  //remove planes
+  planeFilter(cloudA);
+  planeFilter(cloudB);
+
+  pcl::IterativeClosestPoint<PointType, PointType> icp;
+  icp.setInputSource(cloudA);
+  icp.setInputTarget(cloudB);
+
+  pcl::PointCloud<PointType> Unused;
+  icp.align(Unused);
+
+  std::cout << "has converged:" << icp.hasConverged() << " score: " <<
+  icp.getFitnessScore() << std::endl;
+  std::cout << icp.getFinalTransformation() << std::endl;
+
+  pcl::transformPointCloud (*cloudA, *cloudA, icp.getFinalTransformation());
+
+  pcl::IterativeClosestPoint<PointType, PointType> icp2;
+  icp2.setInputSource(cloudA);
+  icp2.setInputTarget(cloudB);
+
+  boost::shared_ptr<pcl::registration::TransformationEstimationSVDScale <PointType, PointType>> teSVDscale (new pcl::registration::TransformationEstimationSVDScale <PointType, PointType>());
+  icp2.setTransformationEstimation (teSVDscale);
+
+  pcl::PointCloud<PointType> Unused2;
+  icp2.align(Unused2);
+
+  std::cout << "has converged:" << icp2.hasConverged() << " score: " <<
+  icp2.getFitnessScore() << std::endl;
+  std::cout << icp2.getFinalTransformation() << std::endl;
+
+  pcl::transformPointCloud (*cloudA, *cloudA, icp2.getFinalTransformation());
+
+}
+
+void debug_showCombinedCloud(pcl::PointCloud<PointType>::Ptr cloudA, pcl::PointCloud<PointType>::Ptr cloudB, std::string windowName){
+  pcl::PointCloud<PointType>::Ptr combinedCloud (new pcl::PointCloud<PointType> ());
+
+  *combinedCloud += *cloudA;
+  *combinedCloud += *cloudB;
+
+  showCloud2(combinedCloud, windowName);
+}
+
+void substractCloudFromOtherCloud(pcl::PointCloud<PointType>::Ptr cloud, pcl::PointCloud<PointType>::Ptr otherCloud){
+
+  pcl::KdTreeFLANN<PointType> kdtree;
+  kdtree.setInputCloud (otherCloud);
+
+  std::vector<int> indicesToBeRemoved; 
+
+  for(int i=0; i<cloud->points.size(); ++i){
+    std::vector<int> neighborIndices; //to store index of surrounding points 
+    //pcl::PointIndices::Ptr neighborIndices (new pcl::PointIndices);
+    std::vector<float> pointRadiusSquaredDistance; // to store distance to surrounding
+    kdtree.radiusSearch(cloud->points[i], 0.25, neighborIndices, pointRadiusSquaredDistance);
+
+    //indicesToBeRemoved[i] = neighborIndices;
+    indicesToBeRemoved.insert(indicesToBeRemoved.end(), neighborIndices.begin(), neighborIndices.end());
+  }
+
+  std::vector<int>::iterator itr = indicesToBeRemoved.begin();
+  std::unordered_set<int> s;
+ 
+  for (auto curr = indicesToBeRemoved.begin(); curr != indicesToBeRemoved.end(); ++curr)
+  {
+      if (s.insert(*curr).second) {
+          *itr++ = *curr;
+      }
+  }
+  indicesToBeRemoved.erase(itr, indicesToBeRemoved.end());
+
+  pcl::PointIndices::Ptr inliers(new pcl::PointIndices);
+  inliers->indices = indicesToBeRemoved;
+  removePointsInCloud(otherCloud, inliers);
+
+}
+
+int main2(int argc, char** argv){
+
+  std::string pathToFolder = argv[1];
+
+  std::string pathToBackground = pathToFolder+"/background2.ply";
+  std::string pathToPlant = pathToFolder+"/t1.ply";
+
+  pcl::PointCloud<PointType>::Ptr cloudPlant(new pcl::PointCloud<PointType>);
+  pcl::PointCloud<PointType>::Ptr cloudBackground(new pcl::PointCloud<PointType>);
+
+  if( pcl::io::loadPLYFile(pathToPlant, *cloudPlant) == -1){
+
+    PCL_ERROR ("Couldn't read ply file\n");
+    return (-1);
+
+  }
+  if( pcl::io::loadPLYFile(pathToBackground, *cloudBackground) == -1){
+
+    PCL_ERROR ("Couldn't read ply file\n");
+    return (-1);
+
+  }
+
+  matchClouds(cloudBackground, cloudPlant);
+
+  for(int i=0; i< cloudBackground->points.size(); ++i){
+    cloudBackground->points[i].r = 255;
+    cloudBackground->points[i].g = 0;
+    cloudBackground->points[i].b = 0;
+  }
+  debug_showCombinedCloud(cloudPlant, cloudBackground, "combined");
+ 
+  substractCloudFromOtherCloud(cloudBackground, cloudPlant);
+
+  //////////////////////////
+  // Remove Noise Level 1 //
+  //////////////////////////
+  noiseFilter(cloudPlant, 30, 0.8);
+
+  //showCloud(cloud, "Noise1");
+
+  //////////////////////////
+  // Remove Noise Level 2 //
+  //////////////////////////
+
+  noiseFilter(cloudPlant, 500, 3.0);
+
+  //////////////////////////
+  // Remove Noise Level 3 //
+  //////////////////////////
+
+  noiseFilter(cloudPlant, 1000, 10.0);
+
+  showCloud2(cloudPlant, "Cloud without Background");
+
+  return 0;
+
+}
+
+int main (int argc, char** argv)
+{
+  return main2(argc, argv);
 }
