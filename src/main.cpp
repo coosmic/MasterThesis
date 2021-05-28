@@ -409,17 +409,17 @@ void rotateCloud(pcl::PointCloud<PointType>::Ptr cloud, pcl::ModelCoefficients::
   floor_plane_normal_vector[1] = coefficientsPlane->values[1];
   floor_plane_normal_vector[2] = coefficientsPlane->values[2];
 
-  std::cout << floor_plane_normal_vector << std::endl;
+  //std::cout << floor_plane_normal_vector << std::endl;
 
   xy_plane_normal_vector[0] = 0.0;
   xy_plane_normal_vector[1] = 0.0;
   xy_plane_normal_vector[2] = 1.0;
 
-  std::cout << xy_plane_normal_vector << std::endl;
+  //std::cout << xy_plane_normal_vector << std::endl;
 
   rotation_vector = xy_plane_normal_vector.cross (floor_plane_normal_vector);
   rotation_vector.normalize();
-  std::cout << "Rotation Vector: "<< rotation_vector << std::endl;
+  //std::cout << "Rotation Vector: "<< rotation_vector << std::endl;
 
   float theta = -acos(floor_plane_normal_vector.dot(xy_plane_normal_vector)/sqrt( pow(coefficientsPlane->values[0],2)+ pow(coefficientsPlane->values[1],2) + pow(coefficientsPlane->values[2],2)));
 
@@ -483,6 +483,20 @@ void noiseFilter(pcl::PointCloud<PointType>::Ptr cloud, int minNumberNeighbors, 
   pcl::PointIndices::Ptr nanIndices (new pcl::PointIndices);
   std::vector<int> indices;
   pcl::removeNaNFromPointCloud(*cloud, *cloud, indices);
+}
+
+void noiseFilter(pcl::PointCloud<PointType>::Ptr cloud){
+  //////////////////////////
+  // Remove Noise Level 1 //
+  //////////////////////////
+  
+  noiseFilter(cloud, 30, 0.8);
+
+  //////////////////////////
+  // Remove Noise Level 2 //
+  //////////////////////////
+
+  noiseFilter(cloud, 1000, 2.0);
 }
 
 void findPlaneInCloud (pcl::PointCloud<PointType>::Ptr cloud, pcl::ModelCoefficients::Ptr coefficients, pcl::PointIndices::Ptr inliers){
@@ -587,6 +601,78 @@ int main1(int argc, char** argv){
   return (0);
 }
 
+void debug_showCombinedCloud(pcl::PointCloud<PointType>::Ptr cloudA, pcl::PointCloud<PointType>::Ptr cloudB, std::string windowName){
+
+  pcl::PointCloud<PointType>::Ptr combinedCloud (new pcl::PointCloud<PointType> ());
+
+  *combinedCloud += *cloudA;
+  *combinedCloud += *cloudB;
+
+  showCloud2(combinedCloud, windowName);
+}
+
+void extractCenterOfCloud(pcl::PointCloud<PointType>::Ptr cloud, double centerPortion){
+  PointType min, max;
+  pcl::getMinMax3D(*cloud, min, max);
+
+  double xLength, yLength;
+  xLength = abs(min.x) + abs(max.x);
+  yLength = abs(min.y) + abs(max.y);
+
+  double searchRadius;
+  if(xLength > yLength){
+    searchRadius = yLength * centerPortion;
+  } else {
+    searchRadius = xLength * centerPortion;
+  }
+
+  pcl::KdTreeFLANN<PointType> kdtree;
+  kdtree.setInputCloud (cloud);
+
+  std::vector<int> neighborIndices; //to store index of surrounding points 
+  std::vector<float> pointRadiusSquaredDistance; // to store distance to surrounding
+
+  pcl::PCA<PointType> pca;
+  pca.setInputCloud(cloud);
+  Eigen::Vector4f meanVector = pca.getMean();
+
+  PointType searchPoint;
+  searchPoint.x = meanVector.x();
+  searchPoint.y = meanVector.y();
+  searchPoint.z = meanVector.z();
+  kdtree.radiusSearch(searchPoint, searchRadius, neighborIndices, pointRadiusSquaredDistance);
+
+  pcl::PointIndices::Ptr inliers (new pcl::PointIndices);
+
+  inliers->indices = neighborIndices;
+
+  pcl::PointCloud<PointType>::Ptr cloudOutliers(new pcl::PointCloud<PointType>);
+  pcl::ExtractIndices<PointType> extractDebug;
+  extractDebug.setInputCloud(cloud);
+  extractDebug.setIndices(inliers);
+  extractDebug.setNegative(true);
+  extractDebug.filter(*cloudOutliers);
+
+  //showCloud2(cloudOutliers, "outliers of cloud");
+
+  pcl::ExtractIndices<PointType> extract;
+  extract.setInputCloud(cloud);
+  extract.setIndices(inliers);
+  extract.setNegative(false);
+  extract.filter(*cloud);
+
+  //showCloud2(cloud, "center of cloud");
+
+}
+
+void downsampleCloud(pcl::PointCloud<PointType>::Ptr cloud, float voxelSize){
+  pcl::VoxelGrid<PointType> sor;
+  sor.setInputCloud (cloud);
+  sor.setMinimumPointsNumberPerVoxel(1);
+  sor.setLeafSize (voxelSize, voxelSize, voxelSize);
+  sor.filter (*cloud);
+}
+
 void matchClouds(pcl::PointCloud<PointType>::Ptr cloudA, pcl::PointCloud<PointType>::Ptr cloudB){
   pcl::ModelCoefficients::Ptr coefficientsA (new pcl::ModelCoefficients);
   pcl::PointIndices::Ptr inliersA (new pcl::PointIndices);
@@ -598,6 +684,8 @@ void matchClouds(pcl::PointCloud<PointType>::Ptr cloudA, pcl::PointCloud<PointTy
 
   rotateCloud(cloudA, coefficientsA);
   rotateCloud(cloudB, coefficientsB);
+
+  //debug_showCombinedCloud(cloudA, cloudB, "rotated Clouds");
 
   PointType aMin, aMax;
   pcl::getMinMax3D(*cloudA, aMin, aMax);
@@ -612,9 +700,28 @@ void matchClouds(pcl::PointCloud<PointType>::Ptr cloudA, pcl::PointCloud<PointTy
     cloudA->points[i].z = cloudA->points[i].z / xScale;
   }
 
+  //debug_showCombinedCloud(cloudA, cloudB, "prescaled Clouds");
+
+  downsampleCloud(cloudA, 0.05f);
+  downsampleCloud(cloudB, 0.05f);
+
+  //debug_showCombinedCloud(cloudA, cloudB, "downsampled Clouds");
+
+  noiseFilter(cloudA);
+  noiseFilter(cloudB);
+
+  //debug_showCombinedCloud(cloudA, cloudB, "noise filtered Clouds");
+
+  extractCenterOfCloud(cloudA, 0.4);
+  extractCenterOfCloud(cloudB, 0.4);
+
+  debug_showCombinedCloud(cloudA, cloudB, "centered Clouds");
+
   //remove planes
   planeFilter(cloudA);
   planeFilter(cloudB);
+
+  debug_showCombinedCloud(cloudA, cloudB, "plane filtered Clouds");
 
   pcl::IterativeClosestPoint<PointType, PointType> icp;
   icp.setInputSource(cloudA);
@@ -628,6 +735,8 @@ void matchClouds(pcl::PointCloud<PointType>::Ptr cloudA, pcl::PointCloud<PointTy
   std::cout << icp.getFinalTransformation() << std::endl;
 
   pcl::transformPointCloud (*cloudA, *cloudA, icp.getFinalTransformation());
+
+  debug_showCombinedCloud(cloudA, cloudB, "simple alligned Clouds");
 
   pcl::IterativeClosestPoint<PointType, PointType> icp2;
   icp2.setInputSource(cloudA);
@@ -645,15 +754,8 @@ void matchClouds(pcl::PointCloud<PointType>::Ptr cloudA, pcl::PointCloud<PointTy
 
   pcl::transformPointCloud (*cloudA, *cloudA, icp2.getFinalTransformation());
 
-}
+  debug_showCombinedCloud(cloudA, cloudB, "scale alligned Clouds");
 
-void debug_showCombinedCloud(pcl::PointCloud<PointType>::Ptr cloudA, pcl::PointCloud<PointType>::Ptr cloudB, std::string windowName){
-  pcl::PointCloud<PointType>::Ptr combinedCloud (new pcl::PointCloud<PointType> ());
-
-  *combinedCloud += *cloudA;
-  *combinedCloud += *cloudB;
-
-  showCloud2(combinedCloud, windowName);
 }
 
 void substractCloudFromOtherCloud(pcl::PointCloud<PointType>::Ptr cloud, pcl::PointCloud<PointType>::Ptr otherCloud){
@@ -690,12 +792,16 @@ void substractCloudFromOtherCloud(pcl::PointCloud<PointType>::Ptr cloud, pcl::Po
 
 }
 
+
 int main2(int argc, char** argv){
 
-  std::string pathToFolder = argv[1];
+  /*std::string pathToFolder = argv[1];
 
   std::string pathToBackground = pathToFolder+"/background2.ply";
-  std::string pathToPlant = pathToFolder+"/t1.ply";
+  std::string pathToPlant = pathToFolder+"/t1.ply";*/
+
+  std::string pathToBackground = argv[1];
+  std::string pathToPlant = argv[2];
 
   pcl::PointCloud<PointType>::Ptr cloudPlant(new pcl::PointCloud<PointType>);
   pcl::PointCloud<PointType>::Ptr cloudBackground(new pcl::PointCloud<PointType>);
@@ -713,35 +819,16 @@ int main2(int argc, char** argv){
 
   }
 
-  matchClouds(cloudBackground, cloudPlant);
-
+  //debug
   for(int i=0; i< cloudBackground->points.size(); ++i){
     cloudBackground->points[i].r = 255;
     cloudBackground->points[i].g = 0;
     cloudBackground->points[i].b = 0;
   }
-  debug_showCombinedCloud(cloudPlant, cloudBackground, "combined");
+
+  matchClouds(cloudBackground, cloudPlant);
  
   substractCloudFromOtherCloud(cloudBackground, cloudPlant);
-
-  //////////////////////////
-  // Remove Noise Level 1 //
-  //////////////////////////
-  noiseFilter(cloudPlant, 30, 0.8);
-
-  //showCloud(cloud, "Noise1");
-
-  //////////////////////////
-  // Remove Noise Level 2 //
-  //////////////////////////
-
-  noiseFilter(cloudPlant, 500, 3.0);
-
-  //////////////////////////
-  // Remove Noise Level 3 //
-  //////////////////////////
-
-  noiseFilter(cloudPlant, 1000, 10.0);
 
   showCloud2(cloudPlant, "Cloud without Background");
 
