@@ -1,3 +1,6 @@
+#include "definitions.h"
+#include "registration.h"
+
 #include <iostream>
 #include <thread>
 #include <unordered_set>
@@ -10,7 +13,6 @@
 #include <pcl/io/pcd_io.h>
 #include <pcl/io/ply_io.h>
 #include <pcl/io/ascii_io.h>
-#include <pcl/point_types.h>
 
 #include <pcl/visualization/cloud_viewer.h>
 #include <pcl/visualization/pcl_visualizer.h>
@@ -47,11 +49,11 @@
 
 #define DEBUG true
 
-#define PointType pcl::PointXYZRGBNormal
+//#define PointTypePCL pcl::PointXYZRGBNormal
 
 using namespace std::chrono_literals;
 
-bool loadAsciCloud(std::string filename, pcl::PointCloud<PointType>::Ptr cloud)
+bool loadAsciCloud(std::string filename, pcl::PointCloud<PointTypePCL>::Ptr cloud)
 {
     std::cout << "Begin Loading Model" << std::endl;
     FILE* f = fopen(filename.c_str(), "r");
@@ -72,7 +74,7 @@ bool loadAsciCloud(std::string filename, pcl::PointCloud<PointType>::Ptr cloud)
         if (n_args != 9)
             continue;
 
-        PointType point;
+        PointTypePCL point;
         point.x = x; 
         point.y = y; 
         point.z = z;
@@ -93,7 +95,7 @@ bool loadAsciCloud(std::string filename, pcl::PointCloud<PointType>::Ptr cloud)
     return cloud->size() > 0;
 }
 
-void showCloud2(pcl::PointCloud<PointType>::Ptr cloud, std::string windowName, pcl::ModelCoefficients::Ptr coefficientsPlane = nullptr, bool showNormals = false){
+void showCloud2(pcl::PointCloud<PointTypePCL>::Ptr cloud, std::string windowName, pcl::ModelCoefficients::Ptr coefficientsPlane = nullptr, bool showNormals = false){
 
   // --------------------------------------------
   // -----Open 3D viewer and add point cloud-----
@@ -101,8 +103,8 @@ void showCloud2(pcl::PointCloud<PointType>::Ptr cloud, std::string windowName, p
   pcl::visualization::PCLVisualizer::Ptr viewer (new pcl::visualization::PCLVisualizer (windowName));
   viewer->setBackgroundColor (0, 0, 0);
 
-  pcl::visualization::PointCloudColorHandlerRGBField<PointType> rgb(cloud);
-  viewer->addPointCloud<PointType> (cloud, rgb, "sample cloud");
+  pcl::visualization::PointCloudColorHandlerRGBField<PointTypePCL> rgb(cloud);
+  viewer->addPointCloud<PointTypePCL> (cloud, rgb, "sample cloud");
   viewer->setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 3, "sample cloud");
 
   viewer->addCoordinateSystem (1.0);
@@ -134,7 +136,7 @@ void showCloud2(pcl::PointCloud<PointType>::Ptr cloud, std::string windowName, p
   }
 
   if(showNormals){
-    viewer->addPointCloudNormals<PointType, PointType> (cloud, cloud, 10, 0.15, "normals"); 
+    viewer->addPointCloudNormals<PointTypePCL, PointTypePCL> (cloud, cloud, 10, 0.15, "normals"); 
 
   }
   
@@ -146,12 +148,12 @@ void showCloud2(pcl::PointCloud<PointType>::Ptr cloud, std::string windowName, p
 
 }
 
-void stemSegmentation3(pcl::PointCloud<PointType>::Ptr cloud){
+void stemSegmentation3(pcl::PointCloud<PointTypePCL>::Ptr cloud){
   
-  pcl::SACSegmentationFromNormals<PointType, PointType> seg;
+  pcl::SACSegmentationFromNormals<PointTypePCL, PointTypePCL> seg;
   pcl::ModelCoefficients::Ptr coefficients_cylinder (new pcl::ModelCoefficients);
   
-  pcl::ExtractIndices<PointType> extract, extract2;
+  pcl::ExtractIndices<PointTypePCL> extract, extract2;
 
   seg.setOptimizeCoefficients (true);
   seg.setModelType (pcl::SACMODEL_CYLINDER);
@@ -163,10 +165,10 @@ void stemSegmentation3(pcl::PointCloud<PointType>::Ptr cloud){
   seg.setInputCloud (cloud);
   seg.setInputNormals (cloud);
 
-  pcl::PointCloud<PointType>::Ptr cloud_labeld (new pcl::PointCloud<PointType> ());
+  pcl::PointCloud<PointTypePCL>::Ptr cloud_labeld (new pcl::PointCloud<PointTypePCL> ());
   copyPointCloud(*cloud, *cloud_labeld);
 
-  pcl::PointCloud<PointType>::Ptr cloud_cylinder (new pcl::PointCloud<PointType> ());
+  pcl::PointCloud<PointTypePCL>::Ptr cloud_cylinder (new pcl::PointCloud<PointTypePCL> ());
 
   while(true){
 
@@ -207,12 +209,12 @@ void stemSegmentation3(pcl::PointCloud<PointType>::Ptr cloud){
 
 }
 
-void stemSegmentation2(pcl::PointCloud<PointType>::Ptr cloud, float searchRadius){
-  pcl::PrincipalCurvaturesEstimation<PointType, PointType, pcl::PrincipalCurvatures> principalCurvaturesEstimation;
+void stemSegmentation2(pcl::PointCloud<PointTypePCL>::Ptr cloud, float searchRadius){
+  pcl::PrincipalCurvaturesEstimation<PointTypePCL, PointTypePCL, pcl::PrincipalCurvatures> principalCurvaturesEstimation;
   principalCurvaturesEstimation.setInputCloud (cloud);
   principalCurvaturesEstimation.setInputNormals (cloud);
 
-  pcl::search::KdTree<PointType>::Ptr tree (new pcl::search::KdTree<PointType>);
+  pcl::search::KdTree<PointTypePCL>::Ptr tree (new pcl::search::KdTree<PointTypePCL>);
   principalCurvaturesEstimation.setSearchMethod (tree);
   principalCurvaturesEstimation.setRadiusSearch(searchRadius);
 
@@ -299,9 +301,9 @@ void stemSegmentation2(pcl::PointCloud<PointType>::Ptr cloud, float searchRadius
   
 }
 
-void stemSegementation(pcl::PointCloud<PointType>::Ptr cloud, float searchRadius){
+void stemSegementation(pcl::PointCloud<PointTypePCL>::Ptr cloud, float searchRadius){
 
-  pcl::KdTreeFLANN<PointType> kdtree;
+  pcl::KdTreeFLANN<PointTypePCL> kdtree;
   kdtree.setInputCloud (cloud);
 
   int pointsInCloud = cloud->points.size();
@@ -312,7 +314,7 @@ void stemSegementation(pcl::PointCloud<PointType>::Ptr cloud, float searchRadius
     std::vector<int> neighborIndices; //to store index of surrounding points 
     std::vector<float> pointRadiusSquaredDistance; // to store distance to surrounding
 
-    PointType searchPoint = cloud->points[i];
+    PointTypePCL searchPoint = cloud->points[i];
     kdtree.radiusSearch(searchPoint, searchRadius, neighborIndices, pointRadiusSquaredDistance);
 
     int numberOfNeighbors = neighborIndices.size();
@@ -401,7 +403,7 @@ vtkSmartPointer<vtkPolyData> createPlane(const pcl::ModelCoefficients &coefficie
 }
 
 
-void rotateCloud(pcl::PointCloud<PointType>::Ptr cloud, pcl::ModelCoefficients::Ptr coefficientsPlane){
+void rotateCloud(pcl::PointCloud<PointTypePCL>::Ptr cloud, pcl::ModelCoefficients::Ptr coefficientsPlane){
 
   Eigen::Matrix<float, 1, 3> floor_plane_normal_vector, xy_plane_normal_vector, rotation_vector;
 
@@ -457,9 +459,9 @@ void mouseEventOccurred (const pcl::visualization::MouseEvent &event,
   }
 }
 
-void printMinMax(pcl::PointCloud<PointType>::Ptr cloud){
+void printMinMax(pcl::PointCloud<PointTypePCL>::Ptr cloud){
 
-  PointType minPt, maxPt;
+  PointTypePCL minPt, maxPt;
   pcl::getMinMax3D (*cloud, minPt, maxPt);
   std::cout << "Max x: " << maxPt.x << std::endl;
   std::cout << "Max y: " << maxPt.y << std::endl;
@@ -470,8 +472,8 @@ void printMinMax(pcl::PointCloud<PointType>::Ptr cloud){
 
 }
 
-void noiseFilter(pcl::PointCloud<PointType>::Ptr cloud, int minNumberNeighbors, float radius){
-  pcl::RadiusOutlierRemoval<PointType> outrem;
+void noiseFilter(pcl::PointCloud<PointTypePCL>::Ptr cloud, int minNumberNeighbors, float radius){
+  pcl::RadiusOutlierRemoval<PointTypePCL> outrem;
   // build the filter
   outrem.setInputCloud(cloud);
   outrem.setRadiusSearch(radius);
@@ -485,7 +487,7 @@ void noiseFilter(pcl::PointCloud<PointType>::Ptr cloud, int minNumberNeighbors, 
   pcl::removeNaNFromPointCloud(*cloud, *cloud, indices);
 }
 
-void noiseFilter(pcl::PointCloud<PointType>::Ptr cloud){
+void noiseFilter(pcl::PointCloud<PointTypePCL>::Ptr cloud){
   //////////////////////////
   // Remove Noise Level 1 //
   //////////////////////////
@@ -499,9 +501,9 @@ void noiseFilter(pcl::PointCloud<PointType>::Ptr cloud){
   noiseFilter(cloud, 1000, 2.0);
 }
 
-void findPlaneInCloud (pcl::PointCloud<PointType>::Ptr cloud, pcl::ModelCoefficients::Ptr coefficients, pcl::PointIndices::Ptr inliers){
+void findPlaneInCloud (pcl::PointCloud<PointTypePCL>::Ptr cloud, pcl::ModelCoefficients::Ptr coefficients, pcl::PointIndices::Ptr inliers){
   // Create the segmentation object
-  pcl::SACSegmentation<PointType> seg;
+  pcl::SACSegmentation<PointTypePCL> seg;
   // Optional
   seg.setOptimizeCoefficients (true);
   // Mandatory
@@ -513,15 +515,15 @@ void findPlaneInCloud (pcl::PointCloud<PointType>::Ptr cloud, pcl::ModelCoeffici
   seg.segment (*inliers, *coefficients);
 }
 
-void removePointsInCloud(pcl::PointCloud<PointType>::Ptr cloud, pcl::PointIndices::Ptr inliers){
-  pcl::ExtractIndices<PointType> extract;
+void removePointsInCloud(pcl::PointCloud<PointTypePCL>::Ptr cloud, pcl::PointIndices::Ptr inliers){
+  pcl::ExtractIndices<PointTypePCL> extract;
   extract.setInputCloud(cloud);
   extract.setIndices(inliers);
   extract.setNegative(true);
   extract.filter(*cloud);
 }
 
-pcl::ModelCoefficients::Ptr planeFilter(pcl::PointCloud<PointType>::Ptr cloud){
+pcl::ModelCoefficients::Ptr planeFilter(pcl::PointCloud<PointTypePCL>::Ptr cloud){
   long MIN_POINTS_IN_PLANE = cloud->size()*0.4;
   cout << "min points in plane: "<<MIN_POINTS_IN_PLANE<<endl;
 
@@ -542,7 +544,7 @@ pcl::ModelCoefficients::Ptr planeFilter(pcl::PointCloud<PointType>::Ptr cloud){
 }
 
 int main1(int argc, char** argv){
-  pcl::PointCloud<PointType>::Ptr cloud(new pcl::PointCloud<PointType>);
+  pcl::PointCloud<PointTypePCL>::Ptr cloud(new pcl::PointCloud<PointTypePCL>);
 
   std::string pathToFile = argv[1];
 
@@ -601,9 +603,9 @@ int main1(int argc, char** argv){
   return (0);
 }
 
-void debug_showCombinedCloud(pcl::PointCloud<PointType>::Ptr cloudA, pcl::PointCloud<PointType>::Ptr cloudB, std::string windowName){
+void debug_showCombinedCloud(pcl::PointCloud<PointTypePCL>::Ptr cloudA, pcl::PointCloud<PointTypePCL>::Ptr cloudB, std::string windowName){
 
-  pcl::PointCloud<PointType>::Ptr combinedCloud (new pcl::PointCloud<PointType> ());
+  pcl::PointCloud<PointTypePCL>::Ptr combinedCloud (new pcl::PointCloud<PointTypePCL> ());
 
   *combinedCloud += *cloudA;
   *combinedCloud += *cloudB;
@@ -611,8 +613,8 @@ void debug_showCombinedCloud(pcl::PointCloud<PointType>::Ptr cloudA, pcl::PointC
   showCloud2(combinedCloud, windowName);
 }
 
-void extractCenterOfCloud(pcl::PointCloud<PointType>::Ptr cloud, double centerPortion){
-  PointType min, max;
+void extractCenterOfCloud(pcl::PointCloud<PointTypePCL>::Ptr cloud, double centerPortion){
+  PointTypePCL min, max;
   pcl::getMinMax3D(*cloud, min, max);
 
   double xLength, yLength;
@@ -626,17 +628,17 @@ void extractCenterOfCloud(pcl::PointCloud<PointType>::Ptr cloud, double centerPo
     searchRadius = xLength * centerPortion;
   }
 
-  pcl::KdTreeFLANN<PointType> kdtree;
+  pcl::KdTreeFLANN<PointTypePCL> kdtree;
   kdtree.setInputCloud (cloud);
 
   std::vector<int> neighborIndices; //to store index of surrounding points 
   std::vector<float> pointRadiusSquaredDistance; // to store distance to surrounding
 
-  pcl::PCA<PointType> pca;
+  pcl::PCA<PointTypePCL> pca;
   pca.setInputCloud(cloud);
   Eigen::Vector4f meanVector = pca.getMean();
 
-  PointType searchPoint;
+  PointTypePCL searchPoint;
   searchPoint.x = meanVector.x();
   searchPoint.y = meanVector.y();
   searchPoint.z = meanVector.z();
@@ -646,8 +648,8 @@ void extractCenterOfCloud(pcl::PointCloud<PointType>::Ptr cloud, double centerPo
 
   inliers->indices = neighborIndices;
 
-  pcl::PointCloud<PointType>::Ptr cloudOutliers(new pcl::PointCloud<PointType>);
-  pcl::ExtractIndices<PointType> extractDebug;
+  pcl::PointCloud<PointTypePCL>::Ptr cloudOutliers(new pcl::PointCloud<PointTypePCL>);
+  pcl::ExtractIndices<PointTypePCL> extractDebug;
   extractDebug.setInputCloud(cloud);
   extractDebug.setIndices(inliers);
   extractDebug.setNegative(true);
@@ -655,25 +657,26 @@ void extractCenterOfCloud(pcl::PointCloud<PointType>::Ptr cloud, double centerPo
 
   //showCloud2(cloudOutliers, "outliers of cloud");
 
-  pcl::ExtractIndices<PointType> extract;
+  pcl::ExtractIndices<PointTypePCL> extract;
   extract.setInputCloud(cloud);
   extract.setIndices(inliers);
   extract.setNegative(false);
   extract.filter(*cloud);
 
+  //cout << "extracting center of cloud finished" << endl;
   //showCloud2(cloud, "center of cloud");
 
 }
 
-void downsampleCloud(pcl::PointCloud<PointType>::Ptr cloud, float voxelSize){
-  pcl::VoxelGrid<PointType> sor;
+void downsampleCloud(pcl::PointCloud<PointTypePCL>::Ptr cloud, float voxelSize){
+  pcl::VoxelGrid<PointTypePCL> sor;
   sor.setInputCloud (cloud);
   sor.setMinimumPointsNumberPerVoxel(1);
   sor.setLeafSize (voxelSize, voxelSize, voxelSize);
   sor.filter (*cloud);
 }
 
-void matchClouds(pcl::PointCloud<PointType>::Ptr cloudA, pcl::PointCloud<PointType>::Ptr cloudB){
+void matchClouds(pcl::PointCloud<PointTypePCL>::Ptr cloudA, pcl::PointCloud<PointTypePCL>::Ptr cloudB){
   pcl::ModelCoefficients::Ptr coefficientsA (new pcl::ModelCoefficients);
   pcl::PointIndices::Ptr inliersA (new pcl::PointIndices);
   findPlaneInCloud(cloudA, coefficientsA, inliersA);
@@ -687,9 +690,9 @@ void matchClouds(pcl::PointCloud<PointType>::Ptr cloudA, pcl::PointCloud<PointTy
 
   //debug_showCombinedCloud(cloudA, cloudB, "rotated Clouds");
 
-  PointType aMin, aMax;
+  PointTypePCL aMin, aMax;
   pcl::getMinMax3D(*cloudA, aMin, aMax);
-  PointType bMin, bMax;
+  PointTypePCL bMin, bMax;
   pcl::getMinMax3D(*cloudB, bMin, bMax);
 
   double xScale = (aMax.x - aMin.x) / (bMax.x - bMin.x);
@@ -701,17 +704,17 @@ void matchClouds(pcl::PointCloud<PointType>::Ptr cloudA, pcl::PointCloud<PointTy
   }
 
   //debug_showCombinedCloud(cloudA, cloudB, "prescaled Clouds");
-
+  cout << "downsampling clouds..." <<endl;
   downsampleCloud(cloudA, 0.05f);
   downsampleCloud(cloudB, 0.05f);
 
   //debug_showCombinedCloud(cloudA, cloudB, "downsampled Clouds");
-
+  cout << "noise filtering clouds..." <<endl;
   noiseFilter(cloudA);
   noiseFilter(cloudB);
 
   //debug_showCombinedCloud(cloudA, cloudB, "noise filtered Clouds");
-
+  cout << "extracting center clouds..." <<endl;
   extractCenterOfCloud(cloudA, 0.4);
   extractCenterOfCloud(cloudB, 0.4);
 
@@ -723,11 +726,15 @@ void matchClouds(pcl::PointCloud<PointType>::Ptr cloudA, pcl::PointCloud<PointTy
 
   debug_showCombinedCloud(cloudA, cloudB, "plane filtered Clouds");
 
-  pcl::IterativeClosestPoint<PointType, PointType> icp;
+  registerPointCloudsCGAL(cloudA, cloudB);
+
+  debug_showCombinedCloud(cloudA, cloudB, "CGAL Matching");
+
+  /*pcl::IterativeClosestPoint<PointTypePCL, PointTypePCL> icp;
   icp.setInputSource(cloudA);
   icp.setInputTarget(cloudB);
 
-  pcl::PointCloud<PointType> Unused;
+  pcl::PointCloud<PointTypePCL> Unused;
   icp.align(Unused);
 
   std::cout << "has converged:" << icp.hasConverged() << " score: " <<
@@ -738,14 +745,14 @@ void matchClouds(pcl::PointCloud<PointType>::Ptr cloudA, pcl::PointCloud<PointTy
 
   debug_showCombinedCloud(cloudA, cloudB, "simple alligned Clouds");
 
-  pcl::IterativeClosestPoint<PointType, PointType> icp2;
+  pcl::IterativeClosestPoint<PointTypePCL, PointTypePCL> icp2;
   icp2.setInputSource(cloudA);
   icp2.setInputTarget(cloudB);
 
-  boost::shared_ptr<pcl::registration::TransformationEstimationSVDScale <PointType, PointType>> teSVDscale (new pcl::registration::TransformationEstimationSVDScale <PointType, PointType>());
+  boost::shared_ptr<pcl::registration::TransformationEstimationSVDScale <PointTypePCL, PointTypePCL>> teSVDscale (new pcl::registration::TransformationEstimationSVDScale <PointTypePCL, PointTypePCL>());
   icp2.setTransformationEstimation (teSVDscale);
 
-  pcl::PointCloud<PointType> Unused2;
+  pcl::PointCloud<PointTypePCL> Unused2;
   icp2.align(Unused2);
 
   std::cout << "has converged:" << icp2.hasConverged() << " score: " <<
@@ -754,13 +761,15 @@ void matchClouds(pcl::PointCloud<PointType>::Ptr cloudA, pcl::PointCloud<PointTy
 
   pcl::transformPointCloud (*cloudA, *cloudA, icp2.getFinalTransformation());
 
-  debug_showCombinedCloud(cloudA, cloudB, "scale alligned Clouds");
+  debug_showCombinedCloud(cloudA, cloudB, "scale alligned Clouds");*/
+
+  
 
 }
 
-void substractCloudFromOtherCloud(pcl::PointCloud<PointType>::Ptr cloud, pcl::PointCloud<PointType>::Ptr otherCloud){
+void substractCloudFromOtherCloud(pcl::PointCloud<PointTypePCL>::Ptr cloud, pcl::PointCloud<PointTypePCL>::Ptr otherCloud){
 
-  pcl::KdTreeFLANN<PointType> kdtree;
+  pcl::KdTreeFLANN<PointTypePCL> kdtree;
   kdtree.setInputCloud (otherCloud);
 
   std::vector<int> indicesToBeRemoved; 
@@ -803,8 +812,8 @@ int main2(int argc, char** argv){
   std::string pathToBackground = argv[1];
   std::string pathToPlant = argv[2];
 
-  pcl::PointCloud<PointType>::Ptr cloudPlant(new pcl::PointCloud<PointType>);
-  pcl::PointCloud<PointType>::Ptr cloudBackground(new pcl::PointCloud<PointType>);
+  pcl::PointCloud<PointTypePCL>::Ptr cloudPlant(new pcl::PointCloud<PointTypePCL>);
+  pcl::PointCloud<PointTypePCL>::Ptr cloudBackground(new pcl::PointCloud<PointTypePCL>);
 
   if( pcl::io::loadPLYFile(pathToPlant, *cloudPlant) == -1){
 
@@ -836,7 +845,38 @@ int main2(int argc, char** argv){
 
 }
 
+int testcgalRegistartion(int argc, char** argv){
+  std::string pathToBackground = argv[1];
+  std::string pathToPlant = argv[2];
+
+  //pcl::PointCloud<PointTypePCL>::Ptr cloudPlant(new pcl::PointCloud<PointTypePCL>);
+  //pcl::PointCloud<PointTypePCL>::Ptr cloudBackground(new pcl::PointCloud<PointTypePCL>);
+
+  pcl::PointCloud<PointTypePCL>::Ptr cloudPlant(new pcl::PointCloud<PointTypePCL>);
+  pcl::PointCloud<PointTypePCL>::Ptr cloudBackground(new pcl::PointCloud<PointTypePCL>);
+
+  if( pcl::io::loadPLYFile(pathToPlant, *cloudPlant) == -1){
+
+    PCL_ERROR ("Couldn't read ply file\n");
+    return (-1);
+
+  }
+  if( pcl::io::loadPLYFile(pathToBackground, *cloudBackground) == -1){
+
+    PCL_ERROR ("Couldn't read ply file\n");
+    return (-1);
+
+  }
+  registerPointCloudsCGAL(cloudBackground, cloudPlant);
+
+  debug_showCombinedCloud(cloudBackground, cloudPlant, "CGAL Matching");
+}
+
 int main (int argc, char** argv)
 {
+  //testcgalRegistartion(argc, argv);
+  //cgalMatchingExamplePointMatcher(argv[1], argv[2]);
+  //cgalMatchingExampleOpenGR(argv[1], argv[2]);
+
   return main2(argc, argv);
 }

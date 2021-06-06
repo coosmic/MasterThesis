@@ -5,7 +5,8 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "/usr/local/include/**",
-                "/usr/include/**"
+                "/usr/include/**",
+                "/home/solomon/Thesis/CGAL-5.2/include/**"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/gcc",
