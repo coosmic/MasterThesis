@@ -1,5 +1,8 @@
 #include "definitions.h"
-#include "registration.h"
+#include "registration_cgal.h"
+#include "test.h"
+#include "registration_pcl.h"
+#include "debug.h"
 
 #include <iostream>
 #include <thread>
@@ -95,58 +98,7 @@ bool loadAsciCloud(std::string filename, pcl::PointCloud<PointTypePCL>::Ptr clou
     return cloud->size() > 0;
 }
 
-void showCloud2(pcl::PointCloud<PointTypePCL>::Ptr cloud, std::string windowName, pcl::ModelCoefficients::Ptr coefficientsPlane = nullptr, bool showNormals = false){
 
-  // --------------------------------------------
-  // -----Open 3D viewer and add point cloud-----
-  // --------------------------------------------
-  pcl::visualization::PCLVisualizer::Ptr viewer (new pcl::visualization::PCLVisualizer (windowName));
-  viewer->setBackgroundColor (0, 0, 0);
-
-  pcl::visualization::PointCloudColorHandlerRGBField<PointTypePCL> rgb(cloud);
-  viewer->addPointCloud<PointTypePCL> (cloud, rgb, "sample cloud");
-  viewer->setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 3, "sample cloud");
-
-  viewer->addCoordinateSystem (1.0);
-  viewer->initCameraParameters ();
-
-  //---------------------------------------
-  //-----Add shapes at other locations-----
-  //---------------------------------------
-  
-  if(coefficientsPlane != nullptr){
-
-    pcl::ModelCoefficients coeffs;
-    coeffs.values.push_back (0.0);
-    coeffs.values.push_back (0.0);
-    coeffs.values.push_back (1.0);
-    coeffs.values.push_back (0.0);
-
-    Eigen::Vector4f centroid;
-    pcl::compute3DCentroid(*cloud, centroid);
-    
-    cout << "centroid: " << centroid[0] << " " <<  centroid[1] << " " <<   centroid[2] << " " <<   centroid[3] << " \n";
-
-    //vtkSmartPointer<vtkPolyData> plane = createPlane(*coefficientsPlane,0,0,0,2.0);
-    
-    //viewer->addModelFromPolyData(plane,"myplane");
-
-    viewer->addPlane (*coefficientsPlane, centroid[0],centroid[1],centroid[2], "plane");
-    viewer->addPlane (coeffs, centroid[0],centroid[1],centroid[2], "planeBase");
-  }
-
-  if(showNormals){
-    viewer->addPointCloudNormals<PointTypePCL, PointTypePCL> (cloud, cloud, 10, 0.15, "normals"); 
-
-  }
-  
-  while (!viewer->wasStopped ())
-  {
-    viewer->spinOnce (100);
-    std::this_thread::sleep_for(100ms);
-  }
-
-}
 
 void stemSegmentation3(pcl::PointCloud<PointTypePCL>::Ptr cloud){
   
@@ -603,15 +555,7 @@ int main1(int argc, char** argv){
   return (0);
 }
 
-void debug_showCombinedCloud(pcl::PointCloud<PointTypePCL>::Ptr cloudA, pcl::PointCloud<PointTypePCL>::Ptr cloudB, std::string windowName){
 
-  pcl::PointCloud<PointTypePCL>::Ptr combinedCloud (new pcl::PointCloud<PointTypePCL> ());
-
-  *combinedCloud += *cloudA;
-  *combinedCloud += *cloudB;
-
-  showCloud2(combinedCloud, windowName);
-}
 
 void extractCenterOfCloud(pcl::PointCloud<PointTypePCL>::Ptr cloud, double centerPortion){
   PointTypePCL min, max;
@@ -676,6 +620,21 @@ void downsampleCloud(pcl::PointCloud<PointTypePCL>::Ptr cloud, float voxelSize){
   sor.filter (*cloud);
 }
 
+void transformCloudsToSameSize(pcl::PointCloud<PointTypePCL>::Ptr cloudA, pcl::PointCloud<PointTypePCL>::Ptr cloudB){
+  PointTypePCL aMin, aMax;
+  pcl::getMinMax3D(*cloudA, aMin, aMax);
+  PointTypePCL bMin, bMax;
+  pcl::getMinMax3D(*cloudB, bMin, bMax);
+
+  double xScale = (aMax.x - aMin.x) / (bMax.x - bMin.x);
+  for (int i = 0; i < cloudA->points.size(); i++)
+  {
+    cloudA->points[i].x = cloudA->points[i].x / xScale;
+    cloudA->points[i].y = cloudA->points[i].y / xScale;
+    cloudA->points[i].z = cloudA->points[i].z / xScale;
+  }
+}
+
 void matchClouds(pcl::PointCloud<PointTypePCL>::Ptr cloudA, pcl::PointCloud<PointTypePCL>::Ptr cloudB){
   pcl::ModelCoefficients::Ptr coefficientsA (new pcl::ModelCoefficients);
   pcl::PointIndices::Ptr inliersA (new pcl::PointIndices);
@@ -689,81 +648,74 @@ void matchClouds(pcl::PointCloud<PointTypePCL>::Ptr cloudA, pcl::PointCloud<Poin
   rotateCloud(cloudB, coefficientsB);
 
   //debug_showCombinedCloud(cloudA, cloudB, "rotated Clouds");
-
-  PointTypePCL aMin, aMax;
-  pcl::getMinMax3D(*cloudA, aMin, aMax);
-  PointTypePCL bMin, bMax;
-  pcl::getMinMax3D(*cloudB, bMin, bMax);
-
-  double xScale = (aMax.x - aMin.x) / (bMax.x - bMin.x);
-  for (int i = 0; i < cloudA->points.size(); i++)
-  {
-    cloudA->points[i].x = cloudA->points[i].x / xScale;
-    cloudA->points[i].y = cloudA->points[i].y / xScale;
-    cloudA->points[i].z = cloudA->points[i].z / xScale;
-  }
-
+  cout << "Transform clouds to same size..." <<endl;
+  transformCloudsToSameSize(cloudA, cloudB);
   //debug_showCombinedCloud(cloudA, cloudB, "prescaled Clouds");
+
   cout << "downsampling clouds..." <<endl;
   downsampleCloud(cloudA, 0.05f);
   downsampleCloud(cloudB, 0.05f);
-
   //debug_showCombinedCloud(cloudA, cloudB, "downsampled Clouds");
+
   cout << "noise filtering clouds..." <<endl;
   noiseFilter(cloudA);
   noiseFilter(cloudB);
-
   //debug_showCombinedCloud(cloudA, cloudB, "noise filtered Clouds");
+
   cout << "extracting center clouds..." <<endl;
   extractCenterOfCloud(cloudA, 0.4);
   extractCenterOfCloud(cloudB, 0.4);
+  //debug_showCombinedCloud(cloudA, cloudB, "centered Clouds");
 
-  debug_showCombinedCloud(cloudA, cloudB, "centered Clouds");
+  //cout << "Transform clouds to same size..." <<endl;
+  //transformCloudsToSameSize(cloudA, cloudB);
 
+  cout << "register clouds feature based..." <<endl;
+  pcl::PointCloud<PointTypeRegistration>::Ptr src(new pcl::PointCloud<PointTypeRegistration>);
+  copyPointCloud(*cloudA, *src);
+  pcl::PointCloud<PointTypeRegistration>::Ptr target(new pcl::PointCloud<PointTypeRegistration>);
+  copyPointCloud(*cloudB, *target);
+
+  Eigen::Matrix4f initialTransformation = registerClouds(src, target, true);
+
+  debug_showCombinedCloud(src, target, "Feature Registration");
+
+  cout << "register clouds with icp and estimate scale..." <<endl;
+  pcl::IterativeClosestPoint<PointTypeRegistration, PointTypeRegistration> icp2;
+  icp2.setInputSource(src);
+  icp2.setInputTarget(target);
+
+  boost::shared_ptr<pcl::registration::TransformationEstimationSVDScale <PointTypeRegistration, PointTypeRegistration>> teSVDscale (new pcl::registration::TransformationEstimationSVDScale <PointTypeRegistration, PointTypeRegistration>());
+  icp2.setTransformationEstimation (teSVDscale);
+
+  pcl::PointCloud<PointTypeRegistration> Unused2;
+  icp2.align(Unused2);
+
+  Eigen::Matrix4f icpTransformation = icp2.getFinalTransformation();
+  pcl::transformPointCloud (*src, *src, icpTransformation);
+
+  //debug_showCombinedCloud(src, target, "scale alligned Clouds");
+
+  Eigen::Matrix4f finalTransformation = icpTransformation * initialTransformation;
+  pcl::transformPointCloud (*cloudA, *cloudA, finalTransformation);
+
+  debug_showCombinedCloud(cloudA, cloudB, "Scale Transformation");
+
+  cout << "register clouds with icp and remove plane..." <<endl;
   //remove planes
   planeFilter(cloudA);
   planeFilter(cloudB);
-
-  debug_showCombinedCloud(cloudA, cloudB, "plane filtered Clouds");
-
-  registerPointCloudsCGAL(cloudA, cloudB);
-
-  debug_showCombinedCloud(cloudA, cloudB, "CGAL Matching");
-
-  /*pcl::IterativeClosestPoint<PointTypePCL, PointTypePCL> icp;
+  
+  pcl::IterativeClosestPoint<PointTypePCL, PointTypePCL> icp;
   icp.setInputSource(cloudA);
   icp.setInputTarget(cloudB);
 
   pcl::PointCloud<PointTypePCL> Unused;
   icp.align(Unused);
 
-  std::cout << "has converged:" << icp.hasConverged() << " score: " <<
-  icp.getFitnessScore() << std::endl;
-  std::cout << icp.getFinalTransformation() << std::endl;
-
   pcl::transformPointCloud (*cloudA, *cloudA, icp.getFinalTransformation());
 
   debug_showCombinedCloud(cloudA, cloudB, "simple alligned Clouds");
-
-  pcl::IterativeClosestPoint<PointTypePCL, PointTypePCL> icp2;
-  icp2.setInputSource(cloudA);
-  icp2.setInputTarget(cloudB);
-
-  boost::shared_ptr<pcl::registration::TransformationEstimationSVDScale <PointTypePCL, PointTypePCL>> teSVDscale (new pcl::registration::TransformationEstimationSVDScale <PointTypePCL, PointTypePCL>());
-  icp2.setTransformationEstimation (teSVDscale);
-
-  pcl::PointCloud<PointTypePCL> Unused2;
-  icp2.align(Unused2);
-
-  std::cout << "has converged:" << icp2.hasConverged() << " score: " <<
-  icp2.getFitnessScore() << std::endl;
-  std::cout << icp2.getFinalTransformation() << std::endl;
-
-  pcl::transformPointCloud (*cloudA, *cloudA, icp2.getFinalTransformation());
-
-  debug_showCombinedCloud(cloudA, cloudB, "scale alligned Clouds");*/
-
-  
 
 }
 
@@ -845,38 +797,13 @@ int main2(int argc, char** argv){
 
 }
 
-int testcgalRegistartion(int argc, char** argv){
-  std::string pathToBackground = argv[1];
-  std::string pathToPlant = argv[2];
-
-  //pcl::PointCloud<PointTypePCL>::Ptr cloudPlant(new pcl::PointCloud<PointTypePCL>);
-  //pcl::PointCloud<PointTypePCL>::Ptr cloudBackground(new pcl::PointCloud<PointTypePCL>);
-
-  pcl::PointCloud<PointTypePCL>::Ptr cloudPlant(new pcl::PointCloud<PointTypePCL>);
-  pcl::PointCloud<PointTypePCL>::Ptr cloudBackground(new pcl::PointCloud<PointTypePCL>);
-
-  if( pcl::io::loadPLYFile(pathToPlant, *cloudPlant) == -1){
-
-    PCL_ERROR ("Couldn't read ply file\n");
-    return (-1);
-
-  }
-  if( pcl::io::loadPLYFile(pathToBackground, *cloudBackground) == -1){
-
-    PCL_ERROR ("Couldn't read ply file\n");
-    return (-1);
-
-  }
-  registerPointCloudsCGAL(cloudBackground, cloudPlant);
-
-  debug_showCombinedCloud(cloudBackground, cloudPlant, "CGAL Matching");
-}
-
 int main (int argc, char** argv)
 {
   //testcgalRegistartion(argc, argv);
   //cgalMatchingExamplePointMatcher(argv[1], argv[2]);
   //cgalMatchingExampleOpenGR(argv[1], argv[2]);
+
+  //testKeyPoints(argc, argv);
 
   return main2(argc, argv);
 }

@@ -5,3 +5,5 @@
 #define DEBUG true
 
 #define PointTypePCL pcl::PointXYZRGBNormal
+
+#define PointTypeRegistration pcl::PointXYZRGB

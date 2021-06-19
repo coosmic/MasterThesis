@@ -65,6 +65,8 @@ int readPlyFileCGAL(std::string fileName, std::vector<Pwn> *pwns){
     return -1;
   }
   input.close();
+
+  return 0;
 }
 
 int cgalMatchingExamplePointMatcher(std::vector<Pwn> &pwns1, std::vector<Pwn> &pwns2)
