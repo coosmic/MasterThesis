@@ -559,14 +559,17 @@ int main1(int argc, char** argv){
 }
 
 
-
+/**
+ * Expects a centered cloud as input.
+ */
 void extractCenterOfCloud(pcl::PointCloud<PointTypePCL>::Ptr cloud, double centerPortion){
   PointTypePCL min, max;
   pcl::getMinMax3D(*cloud, min, max);
 
-  double xLength, yLength;
-  xLength = abs(min.x) + abs(max.x);
-  yLength = abs(min.y) + abs(max.y);
+  double xLength, yLength, zLength;
+  xLength = min.x < 0.0 ? abs(min.x) + abs(max.x) : abs(max.x) - abs(min.x);
+  yLength = min.y < 0.0 ? abs(min.y) + abs(max.y) : abs(max.y) - abs(min.y);
+  //zLength = min.z < 0.0 ? abs(min.z) + abs(max.z) : abs(max.z) - abs(min.z);
 
   double searchRadius;
   if(xLength > yLength){
@@ -578,8 +581,6 @@ void extractCenterOfCloud(pcl::PointCloud<PointTypePCL>::Ptr cloud, double cente
   pcl::KdTreeFLANN<PointTypePCL> kdtree;
   kdtree.setInputCloud (cloud);
 
-  std::vector<int> neighborIndices; //to store index of surrounding points 
-  std::vector<float> pointRadiusSquaredDistance; // to store distance to surrounding
 
   pcl::PCA<PointTypePCL> pca;
   pca.setInputCloud(cloud);
@@ -589,11 +590,26 @@ void extractCenterOfCloud(pcl::PointCloud<PointTypePCL>::Ptr cloud, double cente
   searchPoint.x = meanVector.x();
   searchPoint.y = meanVector.y();
   searchPoint.z = meanVector.z();
-  kdtree.radiusSearch(searchPoint, searchRadius, neighborIndices, pointRadiusSquaredDistance);
+
+  std::vector<int> centerIndices;
+  std::vector<float> pointRadiusSquaredDistance; // to store distance to surrounding
+  kdtree.radiusSearch(searchPoint, searchRadius, centerIndices, pointRadiusSquaredDistance);
+  while(searchPoint.z+searchRadius < max.z){
+    searchPoint.z+=searchRadius;
+    std::vector<int> neighborIndices; //to store index of surrounding points 
+    
+    kdtree.radiusSearch(searchPoint, searchRadius, neighborIndices, pointRadiusSquaredDistance);
+    centerIndices.insert(centerIndices.end(), neighborIndices.begin(), neighborIndices.end());
+  }
+
+  std::unordered_set<int> s;
+  for (int i : centerIndices)
+    s.insert(i);
+  centerIndices.assign( s.begin(), s.end() );
+  assert(centerIndices.size() == s.size());
 
   pcl::PointIndices::Ptr inliers (new pcl::PointIndices);
-
-  inliers->indices = neighborIndices;
+  inliers->indices = centerIndices;
 
   pcl::PointCloud<PointTypePCL>::Ptr cloudOutliers(new pcl::PointCloud<PointTypePCL>);
   pcl::ExtractIndices<PointTypePCL> extractDebug;
@@ -602,7 +618,7 @@ void extractCenterOfCloud(pcl::PointCloud<PointTypePCL>::Ptr cloud, double cente
   extractDebug.setNegative(true);
   extractDebug.filter(*cloudOutliers);
 
-  //showCloud2(cloudOutliers, "outliers of cloud");
+  showCloud2(cloudOutliers, "outliers of cloud");
 
   pcl::ExtractIndices<PointTypePCL> extract;
   extract.setInputCloud(cloud);
@@ -611,7 +627,7 @@ void extractCenterOfCloud(pcl::PointCloud<PointTypePCL>::Ptr cloud, double cente
   extract.filter(*cloud);
 
   //cout << "extracting center of cloud finished" << endl;
-  //showCloud2(cloud, "center of cloud");
+  showCloud2(cloud, "center of cloud");
 
 }
 
