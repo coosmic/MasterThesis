@@ -1,3 +1,4 @@
+#pragma once
 #include <iostream>   
 
 #include "definitions.h"
@@ -10,9 +11,14 @@
 #include <pcl/keypoints/sift_keypoint.h>
 #include <pcl/features/normal_3d.h>
 #include <pcl/features/fpfh.h>
+#include <pcl/features/principal_curvatures.h>
 #include <pcl/registration/ia_ransac.h>
 #include <pcl/registration/icp.h>
 #include <pcl/filters/voxel_grid.h>
+
+#include <math.h>  
+
+#include "debug.h"
 
 // --------------------
 // -----Parameters-----
@@ -149,20 +155,8 @@ Eigen::Matrix4f registerClouds(pcl::PointCloud<PointTypeRegistration>::Ptr sourc
                                                                source_cloud.sensor_origin_[1],
                                                                source_cloud.sensor_origin_[2])) *
                         Eigen::Affine3f (source_cloud.sensor_orientation_);
-    // Downsample input clouds
-    /*  
-    pcl::VoxelGrid<PointTypeRegistration> sor;
-    sor.setLeafSize (0.01f, 0.01f, 0.01f);
-    sor.setInputCloud(source_cloud_ptr);
-    sor.filter(source_cloud);
-    sor.setInputCloud(target_cloud_ptr);
-    sor.filter(target_cloud);
-    */
-    // Remove NaN points from point clouds
-    // (this is necessary to avoid a segfault when running ICP)
-    std::vector<int> nan_idx;
-    pcl::removeNaNFromPointCloud(source_cloud, source_cloud, nan_idx);
-    pcl::removeNaNFromPointCloud(target_cloud, target_cloud, nan_idx);
+    
+
     // Estimate cloud normals
     cout << "Computing source cloud normals\n";
     pcl::NormalEstimation<PointTypeRegistration, pcl::PointNormal> ne;
@@ -178,6 +172,8 @@ Eigen::Matrix4f registerClouds(pcl::PointCloud<PointTypeRegistration>::Ptr sourc
         src_normals.points[i].y = source_cloud.points[i].y;
         src_normals.points[i].z = source_cloud.points[i].z;
     }
+    //showCloud2(source_cloud_ptr, "src normals", src_normals_ptr_2);
+
     cout << "Computing target cloud normals\n";
     pcl::PointCloud<pcl::PointNormal>::Ptr tar_normals_ptr (new pcl::PointCloud<pcl::PointNormal>);
     pcl::PointCloud<pcl::PointNormal>& tar_normals = *tar_normals_ptr;
@@ -188,6 +184,19 @@ Eigen::Matrix4f registerClouds(pcl::PointCloud<PointTypeRegistration>::Ptr sourc
         tar_normals.points[i].y = target_cloud.points[i].y;
         tar_normals.points[i].z = target_cloud.points[i].z;
     }
+    //showCloud2(target_cloud_ptr, "src normals", tar_normals_ptr);
+
+    int nanCount=0;
+    int differingPoints =0;
+    for(int i=0; i<tar_normals.size(); ++i){
+      if(isnan(tar_normals.points[i].normal_x))
+        ++nanCount;
+      if(tar_normals.points[i].x != tar_normals_ptr->points[i].x || tar_normals.points[i].y != tar_normals_ptr->points[i].y || tar_normals.points[i].z != tar_normals_ptr->points[i].z  )
+        ++differingPoints;
+    }
+    cout << "Found "<<nanCount<<" nan normals of "<<tar_normals.size()<<"\n";
+    cout << "Found "<<differingPoints<<" differing points of "<<tar_normals.size()<<"\n";
+
     // Estimate the SIFT keypoints
     pcl::SIFTKeypoint<pcl::PointNormal, pcl::PointWithScale> sift;
     pcl::PointCloud<pcl::PointWithScale>::Ptr src_keypoints_ptr (new pcl::PointCloud<pcl::PointWithScale>);
@@ -206,6 +215,7 @@ Eigen::Matrix4f registerClouds(pcl::PointCloud<PointTypeRegistration>::Ptr sourc
     cout << "Found " << tar_keypoints.points.size () << " SIFT keypoints in target cloud\n";
 
     // Extract FPFH features from SIFT keypoints
+    //pcl::search::KdTree<PointTypeRegistration>::Ptr tree_xyz (new pcl::search::KdTree<PointTypeRegistration>());
     pcl::PointCloud<PointTypeRegistration>::Ptr src_keypoints_xyz (new pcl::PointCloud<PointTypeRegistration>);                           
     pcl::copyPointCloud (src_keypoints, *src_keypoints_xyz);
     pcl::FPFHEstimation<PointTypeRegistration, pcl::PointNormal, pcl::FPFHSignature33> fpfh;
@@ -245,4 +255,109 @@ Eigen::Matrix4f registerClouds(pcl::PointCloud<PointTypeRegistration>::Ptr sourc
 
     return tform;
     
+}
+
+void calculatePrinzipalCurvature(pcl::PointCloud<PointTypePCL>::Ptr cloud_ptr){
+  pcl::PrincipalCurvaturesEstimation<PointTypePCL, PointTypePCL, pcl::PrincipalCurvatures> principalCurvaturesEstimation;
+  principalCurvaturesEstimation.setInputCloud (cloud_ptr);
+  principalCurvaturesEstimation.setInputNormals (cloud_ptr);
+
+  pcl::search::KdTree<PointTypePCL>::Ptr tree (new pcl::search::KdTree<PointTypePCL>);
+  principalCurvaturesEstimation.setSearchMethod (tree);
+  principalCurvaturesEstimation.setRadiusSearch(1.0);
+
+  // Actually compute the principal curvatures
+  pcl::PointCloud<pcl::PrincipalCurvatures>::Ptr principalCurvatures (new pcl::PointCloud<pcl::PrincipalCurvatures> ());
+  principalCurvaturesEstimation.compute (*principalCurvatures);
+
+  for(int i=0; i< cloud_ptr->size(); ++i){
+    //cloud_ptr->points[i].curvature = (principalCurvatures->points[i].principal_curvature_x + principalCurvatures->points[i].principal_curvature_y + principalCurvatures->points[i].principal_curvature_z)*0.33333333;
+    //cloud_ptr->points[i].curvature = (principalCurvatures->points[i].pc1 + principalCurvatures->points[i].pc2 )*0.5;
+    cloud_ptr->points[i].curvature = principalCurvatures->points[i].pc2 / (principalCurvatures->points[i].pc2 + principalCurvatures->points[i].pc1);
+  }
+
+}
+
+void getCurvatureFromNormalEstimation(Cloud::Ptr cloud){
+  pcl::NormalEstimation<PointTypePCL, pcl::PointNormal> ne;
+  pcl::PointCloud<pcl::PointNormal>::Ptr normals_ptr (new pcl::PointCloud<pcl::PointNormal>);
+  pcl::search::KdTree<PointTypePCL>::Ptr tree_xyz (new pcl::search::KdTree<PointTypePCL>());
+  ne.setInputCloud(cloud);
+  ne.setSearchMethod(tree_xyz);
+  ne.setRadiusSearch(0.1);
+  ne.compute(*normals_ptr);
+  for(size_t i = 0;  i < cloud->points.size(); ++i) {
+      cloud->points[i].curvature = normals_ptr->points[i].curvature;
+  }
+}
+
+Eigen::Matrix4f registerClouds(
+  pcl::PointCloud<PointTypePCL>::Ptr source_cloud_ptr, 
+  pcl::PointCloud<PointTypePCL>::Ptr target_cloud_ptr, 
+  bool transformSourceCloud){
+
+    cout << "Estimating Curvature for src cloud\n";
+    //getCurvatureFromNormalEstimation(source_cloud_ptr);
+    calculatePrinzipalCurvature(source_cloud_ptr);
+    cout << "Estimating Curvature for target cloud\n";
+    //getCurvatureFromNormalEstimation(target_cloud_ptr);
+    calculatePrinzipalCurvature(target_cloud_ptr);
+
+    // Estimate the SIFT keypoints
+    pcl::SIFTKeypoint<PointTypePCL, pcl::PointWithScale> sift;
+    pcl::PointCloud<pcl::PointWithScale>::Ptr src_keypoints_ptr (new pcl::PointCloud<pcl::PointWithScale>);
+    pcl::PointCloud<pcl::PointWithScale>& src_keypoints = *src_keypoints_ptr;
+    pcl::search::KdTree<PointTypePCL>::Ptr tree_normal(new pcl::search::KdTree<PointTypePCL> ());
+    sift.setSearchMethod(tree_normal);
+    sift.setScales(min_scale, n_octaves, n_scales_per_octave);
+    sift.setMinimumContrast(min_contrast);
+    sift.setInputCloud(source_cloud_ptr);
+    sift.compute(src_keypoints);
+    cout << "Found " << src_keypoints.points.size () << " SIFT keypoints in source cloud\n";
+    pcl::PointCloud<pcl::PointWithScale>::Ptr tar_keypoints_ptr (new pcl::PointCloud<pcl::PointWithScale>);
+    pcl::PointCloud<pcl::PointWithScale>& tar_keypoints = *tar_keypoints_ptr;
+    sift.setInputCloud(target_cloud_ptr);
+    sift.compute(tar_keypoints);
+    cout << "Found " << tar_keypoints.points.size () << " SIFT keypoints in target cloud\n";
+
+    // Extract FPFH features from SIFT keypoints
+    pcl::search::KdTree<PointTypePCL>::Ptr tree_xyz (new pcl::search::KdTree<PointTypePCL>());
+    pcl::PointCloud<PointTypePCL>::Ptr src_keypoints_xyz (new pcl::PointCloud<PointTypePCL>);                           
+    pcl::copyPointCloud (src_keypoints, *src_keypoints_xyz);
+    pcl::FPFHEstimation<PointTypePCL, PointTypePCL, pcl::FPFHSignature33> fpfh;
+    fpfh.setSearchSurface (source_cloud_ptr);
+    fpfh.setInputCloud (src_keypoints_xyz);
+    fpfh.setInputNormals (source_cloud_ptr);
+    fpfh.setSearchMethod (tree_xyz);
+    pcl::PointCloud<pcl::FPFHSignature33>::Ptr src_features_ptr (new pcl::PointCloud<pcl::FPFHSignature33>());
+    pcl::PointCloud<pcl::FPFHSignature33>& src_features = *src_features_ptr;
+    fpfh.setRadiusSearch(0.05);
+    fpfh.compute(src_features);
+    cout << "Computed " << src_features.size() << " FPFH features for source cloud\n";
+    pcl::PointCloud<PointTypePCL>::Ptr tar_keypoints_xyz (new pcl::PointCloud<PointTypePCL>);                           
+    pcl::copyPointCloud (tar_keypoints, *tar_keypoints_xyz);
+    fpfh.setSearchSurface (target_cloud_ptr);
+    fpfh.setInputCloud (tar_keypoints_xyz);
+    fpfh.setInputNormals (target_cloud_ptr);
+    pcl::PointCloud<pcl::FPFHSignature33>::Ptr tar_features_ptr (new pcl::PointCloud<pcl::FPFHSignature33>());
+    pcl::PointCloud<pcl::FPFHSignature33>& tar_features = *tar_features_ptr;
+    fpfh.compute(tar_features);
+    cout << "Computed " << tar_features.size() << " FPFH features for target cloud\n";
+
+    // Compute the transformation matrix for alignment
+    Eigen::Matrix4f tform = Eigen::Matrix4f::Identity();
+    tform = computeInitialAlignment (src_keypoints_ptr, src_features_ptr, tar_keypoints_ptr,
+            tar_features_ptr, min_sample_dist, max_correspondence_dist, nr_iters);
+
+    
+    /*tform = refineAlignment (source_cloud_ptr, target_cloud_ptr, tform, max_correspondence_distance,
+            outlier_rejection_threshold, transformation_epsilon, max_iterations);*/
+    
+    if(transformSourceCloud){
+      pcl::transformPointCloud(*source_cloud_ptr, *source_cloud_ptr, tform);
+      cout << "Calculated transformation\n";
+    }
+    
+
+    return tform;
 }

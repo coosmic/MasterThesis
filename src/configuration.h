@@ -1,0 +1,1 @@
+bool registration_recalculateNormals=false;

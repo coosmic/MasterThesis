@@ -1,3 +1,4 @@
+#pragma once
 #include "definitions.h"
 
 #include <pcl/visualization/cloud_viewer.h>
@@ -66,7 +67,7 @@ void showCloud2(pcl::PointCloud<PointTypePCL>::Ptr cloud, std::string windowName
 
 }
 
-void showCloud2(pcl::PointCloud<PointTypeRegistration>::Ptr cloud, std::string windowName){
+void showCloud2(pcl::PointCloud<PointTypeRegistration>::Ptr cloud, std::string windowName, pcl::PointCloud<pcl::PointNormal>::Ptr normalCloud = nullptr){
 
   // --------------------------------------------
   // -----Open 3D viewer and add point cloud-----
@@ -81,6 +82,38 @@ void showCloud2(pcl::PointCloud<PointTypeRegistration>::Ptr cloud, std::string w
   viewer->addCoordinateSystem (1.0);
   viewer->initCameraParameters ();
   
+  if(normalCloud != nullptr){
+    viewer->addPointCloudNormals<PointTypeRegistration, pcl::PointNormal> (cloud, normalCloud, 10, 0.15, "normals"); 
+  }
+
+  while (!viewer->wasStopped ())
+  {
+    viewer->spinOnce (100);
+    std::this_thread::sleep_for(100ms);
+  }
+
+}
+
+void showCloud2(pcl::PointCloud<pcl::PointNormal>::Ptr cloud, std::string windowName, bool showNormals){
+
+  // --------------------------------------------
+  // -----Open 3D viewer and add point cloud-----
+  // --------------------------------------------
+  pcl::visualization::PCLVisualizer::Ptr viewer (new pcl::visualization::PCLVisualizer (windowName));
+  viewer->setBackgroundColor (0, 0, 0);
+
+  //pcl::visualization::PointCloudColorHandlerRGBField<pcl::PointNormal> rgb(cloud);
+  //pcl::visualization::PointCloudColorHandler<pcl::PointNormal> color(cloud);
+  viewer->addPointCloud<pcl::PointNormal> (cloud, "sample cloud");
+  viewer->setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 3, "sample cloud");
+
+  viewer->addCoordinateSystem (1.0);
+  viewer->initCameraParameters ();
+  
+  if(showNormals){
+    viewer->addPointCloudNormals<pcl::PointNormal, pcl::PointNormal> (cloud, cloud, 10, 0.15, "normals"); 
+  }
+
   while (!viewer->wasStopped ())
   {
     viewer->spinOnce (100);

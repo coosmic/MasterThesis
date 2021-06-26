@@ -1,8 +1,11 @@
+
 #include "definitions.h"
+#include "configuration.h"
+#include "debug.h"
 #include "registration_cgal.h"
 #include "test.h"
 #include "registration_pcl.h"
-#include "debug.h"
+
 
 #include <iostream>
 #include <thread>
@@ -662,42 +665,71 @@ void matchClouds(pcl::PointCloud<PointTypePCL>::Ptr cloudA, pcl::PointCloud<Poin
   noiseFilter(cloudB);
   //debug_showCombinedCloud(cloudA, cloudB, "noise filtered Clouds");
 
-  cout << "extracting center clouds..." <<endl;
-  extractCenterOfCloud(cloudA, 0.4);
-  extractCenterOfCloud(cloudB, 0.4);
+  cout << "extracting center of clouds..." <<endl;
+  extractCenterOfCloud(cloudA, 0.3);
+  extractCenterOfCloud(cloudB, 0.3);
   //debug_showCombinedCloud(cloudA, cloudB, "centered Clouds");
 
-  //cout << "Transform clouds to same size..." <<endl;
-  //transformCloudsToSameSize(cloudA, cloudB);
-
   cout << "register clouds feature based..." <<endl;
-  pcl::PointCloud<PointTypeRegistration>::Ptr src(new pcl::PointCloud<PointTypeRegistration>);
-  copyPointCloud(*cloudA, *src);
-  pcl::PointCloud<PointTypeRegistration>::Ptr target(new pcl::PointCloud<PointTypeRegistration>);
-  copyPointCloud(*cloudB, *target);
 
-  Eigen::Matrix4f initialTransformation = registerClouds(src, target, true);
+  if(registration_recalculateNormals){
+    pcl::PointCloud<PointTypeRegistration>::Ptr src(new pcl::PointCloud<PointTypeRegistration>);
+     pcl::PointCloud<pcl::PointNormal>::Ptr src_normals(new pcl::PointCloud<pcl::PointNormal>);
+    copyPointCloud(*cloudA, *src);
+    //copyPointCloud(*cloudA, *src_normals);
+    pcl::PointCloud<PointTypeRegistration>::Ptr target(new pcl::PointCloud<PointTypeRegistration>);
+    pcl::PointCloud<pcl::PointNormal>::Ptr target_normals(new pcl::PointCloud<pcl::PointNormal>);
+    copyPointCloud(*cloudB, *target);
+    //copyPointCloud(*cloudB, *target_normals);
+    target_normals->resize(cloudB->size());
+    src_normals->resize(cloudA->size());
 
-  debug_showCombinedCloud(src, target, "Feature Registration");
+    //showCloud2(target, "Target Normals", target_normals);
 
-  cout << "register clouds with icp and estimate scale..." <<endl;
-  pcl::IterativeClosestPoint<PointTypeRegistration, PointTypeRegistration> icp2;
-  icp2.setInputSource(src);
-  icp2.setInputTarget(target);
+    Eigen::Matrix4f initialTransformation = registerClouds(src, target, true);
 
-  boost::shared_ptr<pcl::registration::TransformationEstimationSVDScale <PointTypeRegistration, PointTypeRegistration>> teSVDscale (new pcl::registration::TransformationEstimationSVDScale <PointTypeRegistration, PointTypeRegistration>());
-  icp2.setTransformationEstimation (teSVDscale);
+    debug_showCombinedCloud(src, target, "Feature Registration");
 
-  pcl::PointCloud<PointTypeRegistration> Unused2;
-  icp2.align(Unused2);
+    cout << "register clouds with icp and estimate scale..." <<endl;
+    pcl::IterativeClosestPoint<PointTypeRegistration, PointTypeRegistration> icp2;
+    icp2.setInputSource(src);
+    icp2.setInputTarget(target);
 
-  Eigen::Matrix4f icpTransformation = icp2.getFinalTransformation();
-  pcl::transformPointCloud (*src, *src, icpTransformation);
+    boost::shared_ptr<pcl::registration::TransformationEstimationSVDScale <PointTypeRegistration, PointTypeRegistration>> teSVDscale (new pcl::registration::TransformationEstimationSVDScale <PointTypeRegistration, PointTypeRegistration>());
+    icp2.setTransformationEstimation (teSVDscale);
 
-  //debug_showCombinedCloud(src, target, "scale alligned Clouds");
+    pcl::PointCloud<PointTypeRegistration> Unused2;
+    icp2.align(Unused2);
 
-  Eigen::Matrix4f finalTransformation = icpTransformation * initialTransformation;
-  pcl::transformPointCloud (*cloudA, *cloudA, finalTransformation);
+    Eigen::Matrix4f icpTransformation = icp2.getFinalTransformation();
+    pcl::transformPointCloud (*src, *src, icpTransformation);
+
+    Eigen::Matrix4f finalTransformation = icpTransformation * initialTransformation;
+    pcl::transformPointCloud (*cloudA, *cloudA, finalTransformation);
+  
+  } else {
+
+    Eigen::Matrix4f initialTransformation = registerClouds(cloudA, cloudB, true);
+    debug_showCombinedCloud(cloudA, cloudB, "Feature Registration");
+
+    cout << "register clouds with icp and estimate scale..." <<endl;
+    pcl::IterativeClosestPoint<PointTypePCL, PointTypePCL> icp2;
+    icp2.setInputSource(cloudA);
+    icp2.setInputTarget(cloudB);
+
+    boost::shared_ptr<pcl::registration::TransformationEstimationSVDScale <PointTypePCL, PointTypePCL>> teSVDscale (new pcl::registration::TransformationEstimationSVDScale <PointTypePCL, PointTypePCL>());
+    icp2.setTransformationEstimation (teSVDscale);
+
+    pcl::PointCloud<PointTypePCL> Unused2;
+    icp2.align(Unused2);
+
+    Eigen::Matrix4f icpTransformation = icp2.getFinalTransformation();
+    pcl::transformPointCloud (*cloudA, *cloudA, icpTransformation);
+  }
+  debug_showCombinedCloud(cloudA, cloudB, "scale alligned Clouds");
+
+  //Eigen::Matrix4f finalTransformation = icpTransformation * initialTransformation;
+  //pcl::transformPointCloud (*cloudA, *cloudA, finalTransformation);
 
   debug_showCombinedCloud(cloudA, cloudB, "Scale Transformation");
 
@@ -715,7 +747,7 @@ void matchClouds(pcl::PointCloud<PointTypePCL>::Ptr cloudA, pcl::PointCloud<Poin
 
   pcl::transformPointCloud (*cloudA, *cloudA, icp.getFinalTransformation());
 
-  debug_showCombinedCloud(cloudA, cloudB, "simple alligned Clouds");
+  //debug_showCombinedCloud(cloudA, cloudB, "simple alligned Clouds");
 
 }
 

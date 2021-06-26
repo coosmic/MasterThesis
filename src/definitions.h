@@ -7,3 +7,5 @@
 #define PointTypePCL pcl::PointXYZRGBNormal
 
 #define PointTypeRegistration pcl::PointXYZRGB
+
+#define Cloud pcl::PointCloud<PointTypePCL>
