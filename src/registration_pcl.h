@@ -270,9 +270,9 @@ void calculatePrinzipalCurvature(pcl::PointCloud<PointTypePCL>::Ptr cloud_ptr){
   pcl::PointCloud<pcl::PrincipalCurvatures>::Ptr principalCurvatures (new pcl::PointCloud<pcl::PrincipalCurvatures> ());
   principalCurvaturesEstimation.compute (*principalCurvatures);
 
+  #pragma omp parallel for
   for(int i=0; i< cloud_ptr->size(); ++i){
     //cloud_ptr->points[i].curvature = (principalCurvatures->points[i].principal_curvature_x + principalCurvatures->points[i].principal_curvature_y + principalCurvatures->points[i].principal_curvature_z)*0.33333333;
-    //cloud_ptr->points[i].curvature = (principalCurvatures->points[i].pc1 + principalCurvatures->points[i].pc2 )*0.5;
     cloud_ptr->points[i].curvature = principalCurvatures->points[i].pc2 / (principalCurvatures->points[i].pc2 + principalCurvatures->points[i].pc1);
   }
 
@@ -286,6 +286,7 @@ void getCurvatureFromNormalEstimation(Cloud::Ptr cloud){
   ne.setSearchMethod(tree_xyz);
   ne.setRadiusSearch(0.1);
   ne.compute(*normals_ptr);
+  #pragma omp parallel for
   for(size_t i = 0;  i < cloud->points.size(); ++i) {
       cloud->points[i].curvature = normals_ptr->points[i].curvature;
   }
@@ -297,11 +298,9 @@ Eigen::Matrix4f registerClouds(
   bool transformSourceCloud){
 
     cout << "Estimating Curvature for src cloud\n";
-    //getCurvatureFromNormalEstimation(source_cloud_ptr);
-    calculatePrinzipalCurvature(source_cloud_ptr);
+    registration_takeCurvatureFromNormal? getCurvatureFromNormalEstimation(source_cloud_ptr):calculatePrinzipalCurvature(source_cloud_ptr);
     cout << "Estimating Curvature for target cloud\n";
-    //getCurvatureFromNormalEstimation(target_cloud_ptr);
-    calculatePrinzipalCurvature(target_cloud_ptr);
+    registration_takeCurvatureFromNormal? getCurvatureFromNormalEstimation(target_cloud_ptr):calculatePrinzipalCurvature(target_cloud_ptr);
 
     // Estimate the SIFT keypoints
     pcl::SIFTKeypoint<PointTypePCL, pcl::PointWithScale> sift;
