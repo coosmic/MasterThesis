@@ -1,0 +1,35 @@
+\begin{thebibliography}{1}
+
+\bibitem{ODM}
+pierotofy, ``Open drone map - a command line toolkit to generate maps, point
+  clouds, 3d models and dems from drone, balloon or kite images.,'' 2020.
+
+\bibitem{schoenberger2016sfm}
+J.~L. Sch\"{o}nberger and J.-M. Frahm, ``Structure-from-motion revisited,''
+  2016.
+
+\bibitem{Moulon2012}
+P.~Moulon, P.~Monasse, and R.~Marlet, ``Adaptive structure from motion with
+  a~contrario model estimation,'' 2012.
+
+\bibitem{Sift3D}
+R.~Hänsch, T.~Weber, and O.~Hellwich, ``Comparison of 3d interest point
+  detectors and descriptors for point cloud fusion,'' {\em ISPRS Annals of
+  Photogrammetry, Remote Sensing and Spatial Information Sciences}, vol.~II-3,
+  09 2014.
+
+\bibitem{ICP}
+J.~Zhang, Y.~Yao, and B.~Deng, ``Fast and robust iterative closest point,''
+  {\em IEEE Transactions on Pattern Analysis and Machine Intelligence}, 2021.
+
+\bibitem{RegionGrowing}
+D.~Li, Y.~Cao, G.~Shi, X.~Cai, Y.~Chen, S.~Wang, and S.~Yan, ``An
+  overlapping-free leaf segmentation method for plant point clouds,'' {\em IEEE
+  Access}, vol.~7, pp.~129054--129070, 2019.
+
+\bibitem{ThreeBasics}
+I.~Ziamtsov and S.~Navlakha, ``{Machine Learning Approaches to Improve Three
+  Basic Plant Phenotyping Tasks Using Three-Dimensional Point Clouds1[OPEN]},''
+  {\em Plant Physiology}, vol.~181, pp.~1425--1440, 10 2019.
+
+\end{thebibliography}

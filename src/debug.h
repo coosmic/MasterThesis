@@ -12,7 +12,44 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <boost/thread.hpp>
+#include <boost/thread/mutex.hpp>
+
 using namespace std::chrono_literals;
+
+bool update;
+bool vis_started = false;
+boost::mutex updateModelMutex;
+pcl::visualization::PCLVisualizer::Ptr viewer;
+boost::thread t_viz;
+
+void visualize()  
+{  
+    std::cout << "Visualization started" << std::endl;
+    
+    boost::shared_ptr<pcl::visualization::PCLVisualizer> tmp (new pcl::visualization::PCLVisualizer ("3D Viewer"));
+    viewer = tmp;
+    vis_started = true;
+    //std::cout << "unlocking mutex" << std::endl;
+    updateModelMutex.unlock();
+    // prepare visualizer named "viewer"
+    while (!viewer->wasStopped ())
+    {
+        // Get lock on the boolean update and check if cloud was updated
+        updateModelMutex.lock();
+          viewer->spinOnce (100);
+        updateModelMutex.unlock();
+        sleep(1);
+    }   
+    vis_started = false;
+    viewer->close();
+} 
+
+boost::thread startVisualization(){
+  
+    return boost::thread(visualize);
+  
+}
 
 void showCloud2(pcl::PointCloud<PointTypePCL>::Ptr cloud, std::string windowName, pcl::ModelCoefficients::Ptr coefficientsPlane = nullptr, bool showNormals = false){
 
@@ -83,7 +120,7 @@ void showCloud2(pcl::PointCloud<PointTypeRegistration>::Ptr cloud, std::string w
   viewer->initCameraParameters ();
   
   if(normalCloud != nullptr){
-    viewer->addPointCloudNormals<PointTypeRegistration, pcl::PointNormal> (cloud, normalCloud, 10, 0.15, "normals"); 
+    viewer->addPointCloudNormals<PointTypeRegistration, pcl::PointNormal> (cloud, normalCloud, 10, 0.3, "normals"); 
   }
 
   while (!viewer->wasStopped ())
@@ -91,6 +128,7 @@ void showCloud2(pcl::PointCloud<PointTypeRegistration>::Ptr cloud, std::string w
     viewer->spinOnce (100);
     std::this_thread::sleep_for(100ms);
   }
+  viewer->close();
 
 }
 
@@ -119,6 +157,7 @@ void showCloud2(pcl::PointCloud<pcl::PointNormal>::Ptr cloud, std::string window
     viewer->spinOnce (100);
     std::this_thread::sleep_for(100ms);
   }
+  viewer->close();
 
 }
 
@@ -129,8 +168,18 @@ void debug_showCombinedCloud(pcl::PointCloud<PointTypePCL>::Ptr cloudA, pcl::Poi
 
   *combinedCloud += *cloudA;
   *combinedCloud += *cloudB;
-
-  showCloud2(combinedCloud, windowName);
+  //std::cout << "show combined cloud started" << std::endl;
+  
+  //showCloud2(combinedCloud, windowName);
+  pcl::visualization::PointCloudColorHandlerRGBField<PointTypePCL> rgb(combinedCloud);
+  //std::cout << "waiting for mutex" << std::endl;
+  updateModelMutex.lock();
+  //std::cout << "mutex taken for add or update cloud" << std::endl;
+  if(!viewer->updatePointCloud( combinedCloud, rgb, "combinedCloud")){
+    viewer->addPointCloud(combinedCloud, rgb, "combinedCloud");
+  }
+  updateModelMutex.unlock();
+  
 }
 
 void debug_showCombinedCloud(pcl::PointCloud<PointTypeRegistration>::Ptr cloudA, pcl::PointCloud<PointTypeRegistration>::Ptr cloudB, std::string windowName){
@@ -139,6 +188,6 @@ void debug_showCombinedCloud(pcl::PointCloud<PointTypeRegistration>::Ptr cloudA,
 
   *combinedCloud += *cloudA;
   *combinedCloud += *cloudB;
-
   showCloud2(combinedCloud, windowName);
 }
+

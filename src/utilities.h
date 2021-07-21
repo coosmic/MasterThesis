@@ -16,6 +16,7 @@
 #include <pcl/filters/filter.h>
 #include <pcl/filters/radius_outlier_removal.h>
 #include <pcl/filters/extract_indices.h>
+#include <pcl/filters/random_sample.h>
 
 vtkSmartPointer<vtkPolyData> createPlane(const pcl::ModelCoefficients &coefficients, double x, double y, double z, double scale = 1.0)
 {
@@ -101,11 +102,11 @@ void rotateCloud(pcl::PointCloud<PointTypePCL>::Ptr cloud, pcl::ModelCoefficient
   Eigen::Vector4f centroid;
   pcl::compute3DCentroid(*cloud, centroid);
     
-    cout << "centroid: " << centroid[0] << " " <<  centroid[1] << " " <<   centroid[2] << " " <<   centroid[3] << " \n";
+    //cout << "centroid: " << centroid[0] << " " <<  centroid[1] << " " <<   centroid[2] << " " <<   centroid[3] << " \n";
 
   transform_2.translation() << -centroid[0], -centroid[1], -centroid[2];
   transform_2.rotate (Eigen::AngleAxisf (theta, rotation_vector));
-  std::cout << "Transformation matrix: " << std::endl << transform_2.matrix() << std::endl;
+  //std::cout << "Transformation matrix: " << std::endl << transform_2.matrix() << std::endl;
 
   pcl::transformPointCloud (*cloud, *cloud, transform_2);
 
@@ -133,13 +134,13 @@ void noiseFilter(pcl::PointCloud<PointTypePCL>::Ptr cloud){
   // Remove Noise Level 1 //
   //////////////////////////
   
-  noiseFilter(cloud, 30, 0.8);
+  noiseFilter(cloud, 50, 0.08);
 
   //////////////////////////
   // Remove Noise Level 2 //
   //////////////////////////
 
-  noiseFilter(cloud, 1000, 2.0);
+  noiseFilter(cloud, 1400, 0.2);
 }
 
 void findPlaneInCloud (pcl::PointCloud<PointTypePCL>::Ptr cloud, pcl::ModelCoefficients::Ptr coefficients, pcl::PointIndices::Ptr inliers){
@@ -150,7 +151,7 @@ void findPlaneInCloud (pcl::PointCloud<PointTypePCL>::Ptr cloud, pcl::ModelCoeff
   // Mandatory
   seg.setModelType (pcl::SACMODEL_PLANE);
   seg.setMethodType (pcl::SAC_RANSAC);
-  seg.setDistanceThreshold (0.5);
+  seg.setDistanceThreshold (0.02);
 
   seg.setInputCloud (cloud);
   seg.segment (*inliers, *coefficients);
@@ -280,7 +281,38 @@ void transformCloudsToSameSize(pcl::PointCloud<PointTypePCL>::Ptr cloudA, pcl::P
   }
 }
 
-void substractCloudFromOtherCloud(pcl::PointCloud<PointTypePCL>::Ptr cloud, pcl::PointCloud<PointTypePCL>::Ptr otherCloud){
+void transformCloudToUnitSize(Cloud::Ptr cloud, float scale){
+  PointTypePCL min, max;
+  pcl::getMinMax3D(*cloud, min, max);
+
+  float length = abs(min.x) + abs(max.x);
+  float width = abs(min.y) + abs(max.y);
+
+  float faktor = scale;
+  if(length > width)
+    faktor = length;
+  else
+    faktor = width;
+
+  for (int i = 0; i < cloud->points.size(); i++)
+  {
+    cloud->points[i].x = cloud->points[i].x / faktor * scale;
+    cloud->points[i].y = cloud->points[i].y / faktor * scale;
+    cloud->points[i].z = cloud->points[i].z / faktor * scale;
+  }
+  
+}
+
+void centerCloud(Cloud::Ptr cloud){
+  pcl::PCA<PointTypePCL> pca;
+  pca.setInputCloud(cloud);
+  Eigen::Vector4f meanVector = pca.getMean();
+  Eigen::Affine3f transform(Eigen::Translation3f(-meanVector.x(),-meanVector.y(),-meanVector.z()));
+  Eigen::Matrix4f matrix = transform.matrix();
+  pcl::transformPointCloud (*cloud, *cloud, matrix);
+}
+
+void substractCloudFromOtherCloud(pcl::PointCloud<PointTypePCL>::Ptr cloud, pcl::PointCloud<PointTypePCL>::Ptr otherCloud, float radius){
 
   pcl::KdTreeFLANN<PointTypePCL> kdtree;
   kdtree.setInputCloud (otherCloud);
@@ -291,7 +323,7 @@ void substractCloudFromOtherCloud(pcl::PointCloud<PointTypePCL>::Ptr cloud, pcl:
     std::vector<int> neighborIndices; //to store index of surrounding points 
     //pcl::PointIndices::Ptr neighborIndices (new pcl::PointIndices);
     std::vector<float> pointRadiusSquaredDistance; // to store distance to surrounding
-    kdtree.radiusSearch(cloud->points[i], 0.25, neighborIndices, pointRadiusSquaredDistance);
+    kdtree.radiusSearch(cloud->points[i], radius, neighborIndices, pointRadiusSquaredDistance);
 
     //indicesToBeRemoved[i] = neighborIndices;
     indicesToBeRemoved.insert(indicesToBeRemoved.end(), neighborIndices.begin(), neighborIndices.end());
@@ -312,4 +344,138 @@ void substractCloudFromOtherCloud(pcl::PointCloud<PointTypePCL>::Ptr cloud, pcl:
   inliers->indices = indicesToBeRemoved;
   removePointsInCloud(otherCloud, inliers);
 
+}
+
+inline
+uint8_t setColorChannelAt(Cloud::Ptr cloud, ColorChannel channel, int index, uint8_t value){
+  uint8_t tmp;
+  switch(channel){
+    case r:
+      tmp = cloud->points[index].r;
+      cloud->points[index].r = value;
+    break;
+    case g:
+      tmp = cloud->points[index].g;
+      cloud->points[index].g = value;
+    break;
+    case b:
+      tmp = cloud->points[index].b;
+      cloud->points[index].b = value;
+    break;
+  }
+  return tmp;
+}
+
+inline 
+void swapColorChannelAt(Cloud::Ptr cloud, ColorChannel channelSrc, ColorChannel channelTgt, int index){
+  switch(channelSrc){
+    case r:
+      setColorChannelAt(cloud, channelSrc, index, setColorChannelAt(cloud, channelTgt, index, cloud->points[index].r));
+    break;
+    case g:
+      setColorChannelAt(cloud, channelSrc, index,setColorChannelAt(cloud, channelTgt, index, cloud->points[index].g));
+    break;
+    case b:
+      setColorChannelAt(cloud, channelSrc, index, setColorChannelAt(cloud, channelTgt, index, cloud->points[index].b));
+    break;
+  }
+}
+
+void switchColorChannel(Cloud::Ptr cloud, ColorChannel channelSrc, ColorChannel channelTgt){
+  #pragma omp parallel for
+  for(int i=0; i< cloud->points.size(); ++i){
+    swapColorChannelAt(cloud, channelSrc, channelTgt, i);
+  }
+}
+
+void setColorChannelExclusive(Cloud::Ptr cloud, ColorChannel channel, uint8_t value){
+  ColorChannel otherChannel1 = channel == ColorChannel::b ? ColorChannel::r : channel == ColorChannel::r ? ColorChannel::g : ColorChannel::b;
+  ColorChannel otherChannel2 =  channel == ColorChannel::b && otherChannel1 == ColorChannel::g ? ColorChannel::r : 
+                                channel == ColorChannel::b && otherChannel1 == ColorChannel::r ? ColorChannel::g : 
+                                channel == ColorChannel::r && otherChannel1 == ColorChannel::g ? ColorChannel::b : 
+                                channel == ColorChannel::r && otherChannel1 == ColorChannel::b ? ColorChannel::g : 
+                                channel == ColorChannel::g && otherChannel1 == ColorChannel::b ? ColorChannel::r : 
+                                ColorChannel::b;
+  #pragma omp parallel for
+  for(int i=0; i< cloud->points.size(); ++i){
+    setColorChannelAt(cloud, channel, i, value);
+    //setColorChannelAt(cloud, otherChannel1, i, 0);
+    //setColorChannelAt(cloud, otherChannel2, i, 0);
+  }
+}
+
+inline
+int colorToCode(PointTypePCL point){
+    
+    // background
+    if(point.r == 255 && point.g == 0 && point.b == 0)
+        return BackgroundLabel;
+    // stem
+    if(point.r == 0 && point.g == 255 && point.b == 0)
+        return StemLabel;
+    // leave
+    return LeaveLabel;
+}
+
+void removeBackgroundPointsShapenet(Cloud::Ptr cloud){
+  pcl::PointIndices::Ptr backgroundIndicies(new pcl::PointIndices());
+  for(int i=0; i<cloud->size(); ++i){
+    if(colorToCode(cloud->points[i]) == BackgroundLabel){
+      backgroundIndicies->indices.push_back(i);
+    }
+  }
+
+  pcl::ExtractIndices<PointTypePCL> extract;
+  extract.setInputCloud(cloud);
+  extract.setIndices(backgroundIndicies);
+  extract.setNegative(true);
+  extract.filter(*cloud);
+
+}
+
+void transformToShapenetFormat(Cloud::Ptr cloud){
+  
+  PointTypePCL min, max;
+  pcl::getMinMax3D(*cloud, min, max);
+
+  Eigen::Affine3f transform(Eigen::Translation3f(-min.x,-min.y,-min.z));
+  Eigen::Matrix4f matrix = transform.matrix();
+  pcl::transformPointCloud (*cloud, *cloud, matrix);
+  //showCloud2(cloud, "translation");
+
+  pcl::getMinMax3D(*cloud, min, max);
+
+  float scaleFactor = std::max(max.x, std::max(max.y,max.z));
+  scaleFactor = 1/scaleFactor;
+
+  Eigen::Transform <float , 3, Eigen::Affine > t = Eigen::Transform <float , 3, Eigen::Affine >::Identity ();
+  t.scale( scaleFactor );
+  matrix = t.matrix();
+  pcl::transformPointCloud (*cloud, *cloud, matrix);
+}
+
+Cloud::Ptr subSampleCloudRandom(Cloud::Ptr cloud, int numberOfSamples){
+  Cloud::Ptr subsampledCloud (new Cloud);
+  
+  pcl::RandomSample<PointTypePCL> rs;
+  rs.setInputCloud(cloud);
+  rs.setSample(numberOfSamples);
+  rs.setSeed(rand());
+
+  std::vector<int> indices;
+  rs.filter(indices);
+
+  //Extract Subsamples from Cloud
+  pcl::PointIndices::Ptr subsampledIndicies(new pcl::PointIndices());
+  subsampledIndicies->indices = indices;
+  pcl::ExtractIndices<PointTypePCL> extract;
+  extract.setInputCloud(cloud);
+  extract.setIndices(subsampledIndicies);
+  extract.filter(*subsampledCloud);
+
+  //Remove Subsamples from Cloud
+  extract.setNegative(true);
+  extract.filter(*cloud);
+
+  return subsampledCloud;
 }

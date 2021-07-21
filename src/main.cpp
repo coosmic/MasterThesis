@@ -6,6 +6,7 @@
 #include "test.h"
 #include "registration_pcl.h"
 #include "utilities.h"
+#include "utilities_io.h"
 
 
 #include <iostream>
@@ -53,56 +54,16 @@
 
 #include <Eigen/Dense>
 
+#include <boost/program_options.hpp>
+
 
 #define DEBUG true
 
 //#define PointTypePCL pcl::PointXYZRGBNormal
 
-using namespace std::chrono_literals;
+//using namespace std::chrono_literals;
 
-bool loadAsciCloud(std::string filename, pcl::PointCloud<PointTypePCL>::Ptr cloud)
-{
-    std::cout << "Begin Loading Model" << std::endl;
-    FILE* f = fopen(filename.c_str(), "r");
-
-    if (NULL == f)
-    {
-        std::cout << "ERROR: failed to open file: " << filename << endl;
-        return false;
-    }
-
-    float x, y, z;
-    char r, g, b;
-    float x_n, y_n, z_n;
-
-    while (!feof(f))
-    {
-        int n_args = fscanf(f, "%f %f %f %c %c %c %f %f %f", &x, &y, &z, &r, &g, &b, &x_n, &y_n, &z_n);
-        if (n_args != 9)
-            continue;
-
-        PointTypePCL point;
-        point.x = x; 
-        point.y = y; 
-        point.z = z;
-        point.r = r;
-        point.g = g;
-        point.b = b;
-        point.normal_x = x_n;
-        point.normal_y = y_n;
-        point.normal_z = z_n;
-
-        cloud->push_back(point);
-    }
-
-    fclose(f);
-
-    std::cout << "Loaded cloud with " << cloud->size() << " points." << std::endl;
-
-    return cloud->size() > 0;
-}
-
-
+namespace po = boost::program_options;
 
 void stemSegmentation3(pcl::PointCloud<PointTypePCL>::Ptr cloud){
   
@@ -165,7 +126,7 @@ void stemSegmentation3(pcl::PointCloud<PointTypePCL>::Ptr cloud){
 
 }
 
-void stemSegmentation2(pcl::PointCloud<PointTypePCL>::Ptr cloud, float searchRadius){
+void stemSegmentation2(pcl::PointCloud<PointTypePCL>::Ptr cloud, float searchRadius, bool printInfos=true){
   pcl::PrincipalCurvaturesEstimation<PointTypePCL, PointTypePCL, pcl::PrincipalCurvatures> principalCurvaturesEstimation;
   principalCurvaturesEstimation.setInputCloud (cloud);
   principalCurvaturesEstimation.setInputNormals (cloud);
@@ -181,8 +142,10 @@ void stemSegmentation2(pcl::PointCloud<PointTypePCL>::Ptr cloud, float searchRad
   pcl::PrincipalCurvatures descriptor = principalCurvatures->points[0];
   std::cout << descriptor << std::endl;
 
-  if(false){
-    float minpc1 = FLT_MAX, maxpc1 = FLT_MIN, minpc2 = FLT_MAX, maxpc2 = FLT_MIN;
+  if(printInfos){
+    float pc1ScaleFactorToColor = 3.947358033 * 255;
+    float minpc1 = FLT_MAX, maxpc1 = FLT_MIN, minpc2 = FLT_MAX, maxpc2 = FLT_MIN, maxpcx = FLT_MIN, minpcx = FLT_MAX, maxpcy = FLT_MIN, minpcy = FLT_MAX, maxpcz = FLT_MIN, minpcz = FLT_MAX;
+    #pragma omp parallel for
     for(int i=0; i<principalCurvatures->points.size(); ++i){
       if(principalCurvatures->points[i].pc1 < minpc1)
         minpc1 = principalCurvatures->points[i].pc1;
@@ -191,13 +154,60 @@ void stemSegmentation2(pcl::PointCloud<PointTypePCL>::Ptr cloud, float searchRad
 
       if(principalCurvatures->points[i].pc2 < minpc2)
         minpc2 = principalCurvatures->points[i].pc2;
-      else if(principalCurvatures->points[i].pc1 > maxpc2)
+      else if(principalCurvatures->points[i].pc2 > maxpc2)
         maxpc2 = principalCurvatures->points[i].pc2;
+
+      if(principalCurvatures->points[i].principal_curvature_x < minpcx)
+        minpcx = principalCurvatures->points[i].principal_curvature_x;
+      else if(principalCurvatures->points[i].principal_curvature_x > maxpcx)
+        maxpcx = principalCurvatures->points[i].principal_curvature_x;
+
+      if(principalCurvatures->points[i].principal_curvature_y < minpcy)
+        minpcy = principalCurvatures->points[i].principal_curvature_y;
+      else if(principalCurvatures->points[i].principal_curvature_y > maxpcy)
+        maxpcy = principalCurvatures->points[i].principal_curvature_y;
+
+      if(principalCurvatures->points[i].principal_curvature_z < minpcz)
+        minpcz = principalCurvatures->points[i].principal_curvature_z;
+      else if(principalCurvatures->points[i].principal_curvature_z > maxpcz)
+        maxpcz = principalCurvatures->points[i].principal_curvature_z;
+
+      //cloud->points[i].r = 0;
+      //cloud->points[i].g = 0;
+      //cloud->points[i].b = max(255 * (principalCurvatures->points[i].principal_curvature_x), max(255 * principalCurvatures->points[i].principal_curvature_y, 255 * principalCurvatures->points[i].principal_curvature_z));
       //std::cout << i << " pc1: "<< principalCurvatures->points[i].pc1 << " pc2: " << principalCurvatures->points[i].pc2 << std::endl;
+      /*if(principalCurvatures->points[i].pc1 * principalCurvatures->points[i].pc2 > 0.0){
+        cloud->points[i].r = 0;
+        cloud->points[i].g = 0;
+        cloud->points[i].b = 255;
+      }
+
+      if(principalCurvatures->points[i].pc1 * principalCurvatures->points[i].pc2 < 0.0){
+        cloud->points[i].r = 255;
+        cloud->points[i].g = 0;
+        cloud->points[i].b = 0;
+      }
+
+      if(principalCurvatures->points[i].pc1 <= 0.001 && principalCurvatures->points[i].pc2 <= 0.0001 && principalCurvatures->points[i].pc1 >= 0.001 && principalCurvatures->points[i].pc2 >= 0.0001){
+        cloud->points[i].r = 0;
+        cloud->points[i].g = 255;
+        cloud->points[i].b = 0;
+      }
+
+      if(principalCurvatures->points[i].pc1 - principalCurvatures->points[i].pc2 <= 0.01 ){
+        cloud->points[i].r = 255;
+        cloud->points[i].g = 255;
+        cloud->points[i].b = 0;
+      }*/
+      cloud->points[i].r = (uint8_t)((principalCurvatures->points[i].pc1 - 0.192002f) * pc1ScaleFactorToColor);
+      cloud->points[i].g = 0;
+      cloud->points[i].b = 0;
     }
 
     cout<< "maxpc1: "<<maxpc1 << "\nminpc1: "<<minpc1<<"\nmaxpc2: "<<maxpc2<<"\nminpc2: "<<minpc2<<endl;
 
+    cout<< "maxpcx: "<<maxpcx << "\nminpcx: "<<minpcx<<"\nmaxpcy: "<<maxpcy<<"\nminpcy: "<<minpcy<<"\nmaxpcz: "<<maxpcz<<"\nminpcz: "<<minpcz<<endl;
+    showCloud2(cloud, "intensity");
   }
 
 
@@ -234,9 +244,11 @@ void stemSegmentation2(pcl::PointCloud<PointTypePCL>::Ptr cloud, float searchRad
   while(input != "q"){
     float threshold = stof(input);
 
+    //#pragma omp parallel for
     for(int i=0; i<principalCurvatures->points.size(); ++i){
-      float linearity_i = (principalCurvatures->points[i].pc1 - principalCurvatures->points[i].pc2) / principalCurvatures->points[i].pc1;
-
+      float linearity_i = principalCurvatures->points[i].pc1;
+      //float linearity_i = (principalCurvatures->points[i].pc1 - principalCurvatures->points[i].pc2) / principalCurvatures->points[i].pc1;
+      //float linearity_i = max(principalCurvatures->points[i].principal_curvature_x, max(principalCurvatures->points[i].principal_curvature_y, principalCurvatures->points[i].principal_curvature_z));
       if(linearity_i > threshold){
         cloud->points[i].r = 255;
         cloud->points[i].g = 0;
@@ -265,7 +277,8 @@ void stemSegementation(pcl::PointCloud<PointTypePCL>::Ptr cloud, float searchRad
   int pointsInCloud = cloud->points.size();
 
   //#pragma omp parallel num_threads(24)
-  #pragma omp target teams distribute parallel for collapse(2)
+  //#pragma omp target teams distribute parallel for collapse(2)
+  #pragma omp parallel for 
   for(int i=0; i< pointsInCloud; i++){
     std::vector<int> neighborIndices; //to store index of surrounding points 
     std::vector<float> pointRadiusSquaredDistance; // to store distance to surrounding
@@ -401,126 +414,66 @@ void matchClouds(pcl::PointCloud<PointTypePCL>::Ptr cloudA, pcl::PointCloud<Poin
   pcl::PointIndices::Ptr inliersA (new pcl::PointIndices);
   findPlaneInCloud(cloudA, coefficientsA, inliersA);
 
-  pcl::ModelCoefficients::Ptr coefficientsB (new pcl::ModelCoefficients);
-  pcl::PointIndices::Ptr inliersB(new pcl::PointIndices);
-  findPlaneInCloud(cloudB, coefficientsB, inliersB);
+  //pcl::ModelCoefficients::Ptr coefficientsB (new pcl::ModelCoefficients);
+  //pcl::PointIndices::Ptr inliersB(new pcl::PointIndices);
+  //findPlaneInCloud(cloudB, coefficientsB, inliersB);
 
   rotateCloud(cloudA, coefficientsA);
-  rotateCloud(cloudB, coefficientsB);
+  //rotateCloud(cloudB, coefficientsB);
 
   //debug_showCombinedCloud(cloudA, cloudB, "rotated Clouds");
   cout << "Transform clouds to same size..." <<endl;
   transformCloudsToSameSize(cloudA, cloudB);
   //debug_showCombinedCloud(cloudA, cloudB, "prescaled Clouds");
 
-  cout << "downsampling clouds..." <<endl;
-  downsampleCloud(cloudA, 0.05f);
-  downsampleCloud(cloudB, 0.05f);
-  //debug_showCombinedCloud(cloudA, cloudB, "downsampled Clouds");
-
-  cout << "noise filtering clouds..." <<endl;
-  noiseFilter(cloudA);
-  noiseFilter(cloudB);
-  //debug_showCombinedCloud(cloudA, cloudB, "noise filtered Clouds");
+  
 
   cout << "extracting center of clouds..." <<endl;
   extractCenterOfCloud(cloudA, 0.3);
   extractCenterOfCloud(cloudB, 0.3);
   //debug_showCombinedCloud(cloudA, cloudB, "centered Clouds");
 
-  cout << "register clouds feature based..." <<endl;
+  cout << "Transform clouds to same size..." <<endl;
+  transformCloudsToSameSize(cloudA, cloudB);
+  centerCloud(cloudA);
+  debug_showCombinedCloud(cloudA, cloudB, "rescaled src Cloud");
 
-  if(registration_recalculateNormals){
-    pcl::PointCloud<PointTypeRegistration>::Ptr src(new pcl::PointCloud<PointTypeRegistration>);
-     pcl::PointCloud<pcl::PointNormal>::Ptr src_normals(new pcl::PointCloud<pcl::PointNormal>);
-    copyPointCloud(*cloudA, *src);
-    //copyPointCloud(*cloudA, *src_normals);
-    pcl::PointCloud<PointTypeRegistration>::Ptr target(new pcl::PointCloud<PointTypeRegistration>);
-    pcl::PointCloud<pcl::PointNormal>::Ptr target_normals(new pcl::PointCloud<pcl::PointNormal>);
-    copyPointCloud(*cloudB, *target);
-    //copyPointCloud(*cloudB, *target_normals);
-    target_normals->resize(cloudB->size());
-    src_normals->resize(cloudA->size());
+  cout << "downsampling clouds..." <<endl;
+  downsampleCloud(cloudA, 0.0075f);
+  downsampleCloud(cloudB, 0.0075f);
+  cout << "cloudA Points: "<<cloudA->size()<<endl; 
+  //debug_showCombinedCloud(cloudA, cloudB, "downsampled Clouds");
 
-    //showCloud2(target, "Target Normals", target_normals);
+  cout << "noise filtering clouds..." <<endl;
+  noiseFilter(cloudA);
+  noiseFilter(cloudB);
+  debug_showCombinedCloud(cloudA, cloudB, "noise filtered Clouds");
 
-    Eigen::Matrix4f initialTransformation = registerClouds(src, target, true);
+  registrationPipeline(cloudA, cloudB, true, true, true, false, true); 
 
-    debug_showCombinedCloud(src, target, "Feature Registration");
+  cout << "Transform clouds to same size..." <<endl;
+  transformCloudsToSameSize(cloudA, cloudB);
+  centerCloud(cloudA);
+  debug_showCombinedCloud(cloudA, cloudB, "rescaled src Cloud");
 
-    cout << "register clouds with icp and estimate scale..." <<endl;
-    pcl::IterativeClosestPoint<PointTypeRegistration, PointTypeRegistration> icp2;
-    icp2.setInputSource(src);
-    icp2.setInputTarget(target);
-
-    boost::shared_ptr<pcl::registration::TransformationEstimationSVDScale <PointTypeRegistration, PointTypeRegistration>> teSVDscale (new pcl::registration::TransformationEstimationSVDScale <PointTypeRegistration, PointTypeRegistration>());
-    icp2.setTransformationEstimation (teSVDscale);
-
-    pcl::PointCloud<PointTypeRegistration> Unused2;
-    icp2.align(Unused2);
-
-    Eigen::Matrix4f icpTransformation = icp2.getFinalTransformation();
-    pcl::transformPointCloud (*src, *src, icpTransformation);
-
-    Eigen::Matrix4f finalTransformation = icpTransformation * initialTransformation;
-    pcl::transformPointCloud (*cloudA, *cloudA, finalTransformation);
   
-  } else {
-
-    Eigen::Matrix4f initialTransformation = registerClouds(cloudA, cloudB, true);
-    debug_showCombinedCloud(cloudA, cloudB, "Feature Registration");
-
-    cout << "register clouds with icp and estimate scale..." <<endl;
-    pcl::IterativeClosestPoint<PointTypePCL, PointTypePCL> icp2;
-    icp2.setInputSource(cloudA);
-    icp2.setInputTarget(cloudB);
-
-    boost::shared_ptr<pcl::registration::TransformationEstimationSVDScale <PointTypePCL, PointTypePCL>> teSVDscale (new pcl::registration::TransformationEstimationSVDScale <PointTypePCL, PointTypePCL>());
-    icp2.setTransformationEstimation (teSVDscale);
-
-    pcl::PointCloud<PointTypePCL> Unused2;
-    icp2.align(Unused2);
-
-    Eigen::Matrix4f icpTransformation = icp2.getFinalTransformation();
-    pcl::transformPointCloud (*cloudA, *cloudA, icpTransformation);
-  }
-  debug_showCombinedCloud(cloudA, cloudB, "scale alligned Clouds");
-
-  //Eigen::Matrix4f finalTransformation = icpTransformation * initialTransformation;
-  //pcl::transformPointCloud (*cloudA, *cloudA, finalTransformation);
-
-  debug_showCombinedCloud(cloudA, cloudB, "Scale Transformation");
-
-  cout << "register clouds with icp and remove plane..." <<endl;
-  //remove planes
-  planeFilter(cloudA);
-  planeFilter(cloudB);
-  
-  pcl::IterativeClosestPoint<PointTypePCL, PointTypePCL> icp;
-  icp.setInputSource(cloudA);
-  icp.setInputTarget(cloudB);
-
-  pcl::PointCloud<PointTypePCL> Unused;
-  icp.align(Unused);
-
-  pcl::transformPointCloud (*cloudA, *cloudA, icp.getFinalTransformation());
-
-  //debug_showCombinedCloud(cloudA, cloudB, "simple alligned Clouds");
 
 }
 
-void switchRBColorChannel(Cloud::Ptr cloud){
-  #pragma omp parallel for
-  for(int i=0; i< cloud->points.size(); ++i){
-    uint8_t tmpR = cloud->points[i].r;
+void backgroundPreparation(Cloud::Ptr backgroundCloud){
+  pcl::ModelCoefficients::Ptr coefficients(new pcl::ModelCoefficients);
+  pcl::PointIndices::Ptr inliers(new pcl::PointIndices);
+  findPlaneInCloud(backgroundCloud, coefficients, inliers);
 
-    cloud->points[i].r = cloud->points[i].b;
-    cloud->points[i].b = tmpR;
-  }
+  rotateCloud(backgroundCloud, coefficients);
+
+  transformCloudToUnitSize(backgroundCloud, 5.0);
+  centerCloud(backgroundCloud);
+  //showCloud2(backgroundCloud, "Background");
 }
 
 int backgroundRemovalPipeline(int argc, char** argv){
-
+  boost::thread t = startVisualization();
   /*std::string pathToFolder = argv[1];
 
   std::string pathToBackground = pathToFolder+"/background2.ply";
@@ -545,26 +498,266 @@ int backgroundRemovalPipeline(int argc, char** argv){
 
   }
 
-  //switchRBColorChannel(cloudPlant);
-  //switchRBColorChannel(cloudBackground);
+  backgroundPreparation(cloudBackground);
 
-  matchClouds(cloudBackground, cloudPlant);
- 
-  substractCloudFromOtherCloud(cloudBackground, cloudPlant);
+  setColorChannelExclusive(cloudPlant, ColorChannel::b, 255);
+  setColorChannelExclusive(cloudBackground, ColorChannel::r, 255);
 
-  showCloud2(cloudPlant, "Cloud without Background");
+  //debug_showCombinedCloud(cloudPlant, cloudBackground, "ChannelSwap");
+
+  matchClouds(cloudPlant, cloudBackground);
+  debug_showCombinedCloud(cloudBackground, cloudPlant, "Matched Clouds");
+  substractCloudFromOtherCloud(cloudBackground, cloudPlant, 0.05);
+
+  //showCloud2(cloudPlant, "Cloud without Background");
+
+  stemSegmentation2(cloudPlant, 3.0);
+
+  showCloud2(cloudPlant, "Classified Cloud");
+  t.join();
+  return 0;
+
+}
+
+int convertToShapenetFormat2(po::variables_map vm){
+
+  if(!vm.count("PointCloudName")){
+    cout << "Missing Parameter PointCloudName\n";
+    return 1;
+  }
+
+  if(!vm.count("snin")){
+    cout << "Missing parameter snin\n";
+    return 1;
+  }
+  if(!vm.count("snout")){
+    cout << "Missing parameter snout\n";
+    return 1;
+  }
+
+  std::string namePly = vm["PointCloudName"].as<std::string>()+".ply";
+  std::string nameTxt = vm["PointCloudName"].as<std::string>()+".txt";
+  std::string pathToShapenetFormatResult = vm["snout"].as<std::string>();
+  std::string pathToPlant = vm["snin"].as<std::string>()+namePly;
+
+  pcl::PointCloud<PointTypePCL>::Ptr cloudPlant(new pcl::PointCloud<PointTypePCL>);
+
+  if( pcl::io::loadPLYFile(pathToPlant, *cloudPlant) == -1){
+
+    PCL_ERROR ("Couldn't read ply file\n");
+    return (-1);
+
+  }
+
+  pcl::ModelCoefficients::Ptr coefficientsA (new pcl::ModelCoefficients);
+  pcl::PointIndices::Ptr inliersA (new pcl::PointIndices);
+  findPlaneInCloud(cloudPlant, coefficientsA, inliersA);
+  rotateCloud(cloudPlant, coefficientsA);
+  //showCloud2(cloudPlant, "rotation");
+
+  //showCloud2(cloudPlant, "Labeled Cloud");
+  removeBackgroundPointsShapenet(cloudPlant);
+  //showCloud2(cloudPlant, "Cloud Without Background");
+  transformToShapenetFormat(cloudPlant);
+  //showCloud2(cloudPlant, "Shapenet Formatted Cloud");
+
+  writeShapenetFormat2(cloudPlant, pathToShapenetFormatResult, nameTxt);
+
+  return 0;
+}
+
+int convertToShapenetFormat(std::string pathToPlant, std::string pathToShapenetFormatResult){
+
+  cout << "Converting file saved under "<< pathToPlant  << " to Shapenet format\n";
+
+  pcl::PointCloud<PointTypePCL>::Ptr cloudPlant(new pcl::PointCloud<PointTypePCL>);
+
+  if( pcl::io::loadPLYFile(pathToPlant, *cloudPlant) == -1){
+    PCL_ERROR ("Couldn't read ply file\n");
+    return (-1);
+  }
+
+  int numOfPointsPerSubsample = 16384;
+
+  pcl::ModelCoefficients::Ptr coefficientsA (new pcl::ModelCoefficients);
+  pcl::PointIndices::Ptr inliersA (new pcl::PointIndices);
+  findPlaneInCloud(cloudPlant, coefficientsA, inliersA);
+  rotateCloud(cloudPlant, coefficientsA);
+  //showCloud2(cloudPlant, "rotation");
+
+  //showCloud2(cloudPlant, "Labeled Cloud");
+  removeBackgroundPointsShapenet(cloudPlant);
+  //showCloud2(cloudPlant, "Cloud Without Background");
+  transformToShapenetFormat(cloudPlant);
+  //showCloud2(cloudPlant, "Shapenet Formatted Cloud");
+
+  int createdSubsamplesCount = 0;
+  while(cloudPlant->size() > numOfPointsPerSubsample && createdSubsamplesCount < 20){
+    Cloud::Ptr subsampledCloud = subSampleCloudRandom(cloudPlant, numOfPointsPerSubsample);
+    createdSubsamplesCount++;
+
+    assert(subsampledCloud->size() == numOfPointsPerSubsample);
+
+    writeShapenetFormat(subsampledCloud, pathToShapenetFormatResult+"SS"+std::to_string(createdSubsamplesCount));
+
+    cout << "remaining points in org cloud: "<<std::to_string(cloudPlant->size())<<endl;
+  }
+
+  //writeShapenetFormat(cloudPlant, pathToShapenetFormatResult);
+
+  return 0;
+}
+
+int showCloudWithNormals(po::variables_map vm){
+  if(!vm.count("PointCloudPlant")){
+    cout << "Missing Parameter PointCloudPlant\n";
+    return 1;
+  }
+
+  std::string pathToPlant = vm["PointCloudPlant"].as<std::string>();
+
+  pcl::PointCloud<PointTypePCL>::Ptr cloudPlant(new pcl::PointCloud<PointTypePCL>);
+
+  if( pcl::io::loadPLYFile(pathToPlant, *cloudPlant) == -1){
+
+    PCL_ERROR ("Couldn't read ply file\n");
+    return (-1);
+
+  }
+
+  centerCloud(cloudPlant);
+
+  showCloud2(cloudPlant, "Cloud with normals", nullptr, true);
 
   return 0;
 
 }
 
+int computeAndShowNormals(po::variables_map vm){
+  if(!vm.count("PointCloudPlant")){
+    cout << "Missing Parameter PointCloudPlant\n";
+    return 1;
+  }
+
+  if(!vm.count("NormalEsitmationSearchRadius")){
+    cout << "Missing Parameter NormalEsitmationSearchRadius\n";
+    return 1;
+  }
+
+  std::string pathToPlant = vm["PointCloudPlant"].as<std::string>();
+
+  pcl::PointCloud<PointTypePCL>::Ptr cloudPlant(new pcl::PointCloud<PointTypePCL>);
+
+  if( pcl::io::loadPLYFile(pathToPlant, *cloudPlant) == -1){
+
+    PCL_ERROR ("Couldn't read ply file\n");
+    return (-1);
+
+  }
+
+  float normalEstiamtionRadius = vm["NormalEsitmationSearchRadius"].as<float>();
+  cout << "Normal estimation will be done with search radius "<<normalEstiamtionRadius <<endl;
+  pcl::NormalEstimation<PointTypePCL, PointTypePCL> ne;
+  pcl::search::KdTree<PointTypePCL>::Ptr tree_xyz (new pcl::search::KdTree<PointTypePCL>());
+  ne.setInputCloud(cloudPlant);
+  ne.setSearchMethod(tree_xyz);
+  //ne.setRadiusSearch(normalEstiamtionRadius);
+  ne.setKSearch(8);
+  ne.compute(*cloudPlant);
+
+  centerCloud(cloudPlant);
+  showCloud2(cloudPlant, "Cloud with estimated normals", nullptr, true);
+
+  return 0;
+
+}
+
+enum JobName {
+  Shapenet,
+  Shapenet2,
+  ShowCloudWithNormals,
+  ComputeAndShowNormals,
+  UnknownJob
+};
+
+JobName jobStringToEnum(std::string jobString){
+  if(jobString == "Shapenet") return Shapenet;
+  if(jobString == "Shapenet2") return Shapenet2;
+  if(jobString == "ShowCloudWithNormals") return ShowCloudWithNormals;
+  if(jobString == "ComputeAndShowNormals") return ComputeAndShowNormals;
+  return UnknownJob;
+}
+
 int main (int argc, char** argv)
 {
+  int target_thread_num = 4;
+  omp_set_num_threads(target_thread_num);
   //testcgalRegistartion(argc, argv);
   //cgalMatchingExamplePointMatcher(argv[1], argv[2]);
   //cgalMatchingExampleOpenGR(argv[1], argv[2]);
 
-  //testKeyPoints(argc, argv);
+  po::options_description desc("Allowed options");
+  desc.add_options()
+    ("help", "produce help message")
+    ("job,J", po::value<std::string>(), "Job that should be performed")
+    ("snin", po::value<std::string>(), "Path to ply file or folder that should be converted to Shapenet format")
+    ("snout", po::value<std::string>(), "Path to file or folder where converted Shapenet format should be saved")
+    ("PointCloudName", po::value<std::string>(), "Name of the PointCloud that should be converted to Shapenet format")
+    ("PointCloudPlant", po::value<std::string>(), "Path to Plant Point Cloud")
+    ("NormalEsitmationSearchRadius", po::value<float>(), "Radius that should be used in Normal Estimation")
+  ;
 
-  return backgroundRemovalPipeline(argc, argv);
+  po::variables_map vm;
+  po::store(po::parse_command_line(argc, argv, desc), vm);
+  po::notify(vm);   
+
+  if (vm.count("help")) {
+    cout << desc << "\n";
+    return 1;
+  }
+
+  srand (time(NULL)); //set Random
+
+  if (vm.count("job")) {
+    cout << "Job " << vm["job"].as<std::string>() << " will be perfomed.\n";
+
+    JobName jobName = jobStringToEnum(vm["job"].as<std::string>());
+
+    switch(jobName){
+      case Shapenet:
+        if(!vm.count("snin")){
+          cout << "Missing parameter snin\n";
+          return 1;
+        }
+        if(!vm.count("snout")){
+          cout << "Missing parameter snout\n";
+          return 1;
+        }
+        convertToShapenetFormat(vm["snin"].as<std::string>(), vm["snout"].as<std::string>());
+        break;
+      case Shapenet2:
+        return convertToShapenetFormat2(vm);
+        break;
+      case ShowCloudWithNormals:
+        return showCloudWithNormals(vm);
+      case ComputeAndShowNormals:
+        return computeAndShowNormals(vm);
+      case UnknownJob:
+        cout << "Job " << vm["job"].as<std::string>() << " is unknown.\n";
+        return 1;
+    }
+
+    return 0;
+  } else {
+    cout << "You have to specify a Job that should be performed" << endl;
+    return 1;
+  }
+
+  //testKeyPoints(argc, argv);
+  /*std::map<std::string,std::string> testConfig = readConfig("../config/test.config");
+  if(testConfig.find("registration_debug") != testConfig.end())
+    cout << "config contains key registration_debug" << endl;*/
+
+  //return backgroundRemovalPipeline(argc, argv);
+
 }

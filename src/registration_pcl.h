@@ -2,6 +2,7 @@
 #include <iostream>   
 
 #include "definitions.h"
+#include "utilities.h"
 
 #include <pcl/io/pcd_io.h>
 #include <pcl/visualization/pcl_visualizer.h>
@@ -13,6 +14,9 @@
 #include <pcl/features/fpfh.h>
 #include <pcl/features/principal_curvatures.h>
 #include <pcl/registration/ia_ransac.h>
+#include <pcl/registration/icp.h>
+#include <pcl/registration/gicp.h>
+#include <pcl/registration/transformation_estimation_svd_scale.h>
 #include <pcl/registration/icp.h>
 #include <pcl/filters/voxel_grid.h>
 
@@ -284,7 +288,7 @@ void getCurvatureFromNormalEstimation(Cloud::Ptr cloud){
   pcl::search::KdTree<PointTypePCL>::Ptr tree_xyz (new pcl::search::KdTree<PointTypePCL>());
   ne.setInputCloud(cloud);
   ne.setSearchMethod(tree_xyz);
-  ne.setRadiusSearch(0.1);
+  ne.setRadiusSearch(0.01);
   ne.compute(*normals_ptr);
   #pragma omp parallel for
   for(size_t i = 0;  i < cloud->points.size(); ++i) {
@@ -359,4 +363,104 @@ Eigen::Matrix4f registerClouds(
     
 
     return tform;
+}
+
+void registrationPipeline(Cloud::Ptr cloudSrc, Cloud::Ptr cloudTrg, bool useSift = true, bool useScale = true, bool useCgalICP = true, bool usePclICP = true, bool removePlanes = true){
+  cout << "register clouds feature based..." <<endl;
+
+  if(registration_recalculateNormals){
+    
+    pcl::PointCloud<PointTypeRegistration>::Ptr src(new pcl::PointCloud<PointTypeRegistration>);
+    pcl::PointCloud<pcl::PointNormal>::Ptr src_normals(new pcl::PointCloud<pcl::PointNormal>);
+    copyPointCloud(*cloudSrc, *src);
+    //copyPointCloud(*cloudA, *src_normals);
+    pcl::PointCloud<PointTypeRegistration>::Ptr target(new pcl::PointCloud<PointTypeRegistration>);
+    pcl::PointCloud<pcl::PointNormal>::Ptr target_normals(new pcl::PointCloud<pcl::PointNormal>);
+    copyPointCloud(*cloudTrg, *target);
+    Eigen::Matrix4f initialTransformation;
+    if(useSift){
+      //copyPointCloud(*cloudB, *target_normals);
+      target_normals->resize(cloudTrg->size());
+      src_normals->resize(cloudSrc->size());
+
+      //showCloud2(target, "Target Normals", target_normals);
+
+      initialTransformation = registerClouds(src, target, true);
+
+      //debug_showCombinedCloud(src, target, "Feature Registration");
+    }
+    
+    Eigen::Matrix4f icpTransformation;
+    if(useScale){
+      cout << "register clouds with icp and estimate scale..." <<endl;
+      pcl::IterativeClosestPoint<PointTypeRegistration, PointTypeRegistration> icp2;
+      icp2.setInputSource(src);
+      icp2.setInputTarget(target);
+
+      boost::shared_ptr<pcl::registration::TransformationEstimationSVDScale <PointTypeRegistration, PointTypeRegistration>> teSVDscale (new pcl::registration::TransformationEstimationSVDScale <PointTypeRegistration, PointTypeRegistration>());
+      icp2.setTransformationEstimation (teSVDscale);
+
+      pcl::PointCloud<PointTypeRegistration> Unused2;
+      icp2.align(Unused2);
+
+      icpTransformation = icp2.getFinalTransformation();
+      pcl::transformPointCloud (*src, *src, icpTransformation); 
+    }
+    
+    Eigen::Matrix4f finalTransformation = icpTransformation * initialTransformation;
+    pcl::transformPointCloud (*cloudSrc, *cloudSrc, finalTransformation);
+
+  } else {
+    if(useSift)
+      Eigen::Matrix4f initialTransformation = registerClouds(cloudSrc, cloudTrg, true);
+    if(registration_debug)debug_showCombinedCloud(cloudSrc, cloudTrg, "Feature Registration");
+
+    /*cout << "remove planes and rescale..." <<endl;
+    planeFilter(cloudA);
+    planeFilter(cloudB);
+    transformCloudsToSameSize(cloudA, cloudB);
+    debug_showCombinedCloud(cloudA, cloudB, "rescaled Clouds without Plane");*/
+    if(useScale){
+      cout << "register clouds with icp and estimate scale..." <<endl;
+      pcl::IterativeClosestPoint<PointTypePCL, PointTypePCL> icp2;
+      icp2.setInputSource(cloudSrc);
+      icp2.setInputTarget(cloudTrg);
+      //icp2.setMaxCorrespondenceDistance(1.0);
+
+      boost::shared_ptr<pcl::registration::TransformationEstimationSVDScale <PointTypePCL, PointTypePCL>> teSVDscale (new pcl::registration::TransformationEstimationSVDScale <PointTypePCL, PointTypePCL>());
+      icp2.setTransformationEstimation (teSVDscale);
+
+      pcl::PointCloud<PointTypePCL> Unused2;
+      icp2.align(Unused2);
+
+      Eigen::Matrix4f icpTransformation = icp2.getFinalTransformation();
+      pcl::transformPointCloud (*cloudSrc, *cloudSrc, icpTransformation);
+    }
+  }
+  if(registration_debug)debug_showCombinedCloud(cloudSrc, cloudTrg, "scale alligned Clouds");
+
+  //Eigen::Matrix4f finalTransformation = icpTransformation * initialTransformation;
+  //pcl::transformPointCloud (*cloudA, *cloudA, finalTransformation);
+  if(useCgalICP)
+    registerPointCloudsCGAL(cloudSrc, cloudTrg);
+
+  if(removePlanes){
+    //remove planes
+    planeFilter(cloudSrc);
+    planeFilter(cloudTrg);
+    if(registration_debug)debug_showCombinedCloud(cloudSrc, cloudTrg, "plane Filtered Cloud");
+  }
+
+  cout << "register clouds with icp..." <<endl;
+  if(usePclICP){
+    pcl::IterativeClosestPoint<PointTypePCL, PointTypePCL> icp;
+    icp.setInputSource(cloudSrc);
+    icp.setInputTarget(cloudTrg);
+
+    pcl::PointCloud<PointTypePCL> Unused;
+    icp.align(Unused);
+
+    pcl::transformPointCloud (*cloudSrc, *cloudSrc, icp.getFinalTransformation());
+  }
+  
 }

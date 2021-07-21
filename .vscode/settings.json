@@ -62,6 +62,12 @@
         "cinttypes": "cpp",
         "typeindex": "cpp",
         "typeinfo": "cpp",
-        "variant": "cpp"
-    }
+        "variant": "cpp",
+        "csignal": "cpp"
+    },
+    "spellright.language": [],
+    "spellright.documentTypes": [
+        "markdown",
+        "plaintext"
+    ]
 }

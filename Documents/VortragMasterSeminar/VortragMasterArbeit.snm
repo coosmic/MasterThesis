@@ -1,0 +1,8 @@
+\beamer@slide {ColmapPointCloudAvocado5}{5}
+\beamer@slide {ODMPointCloudAvocado5}{5}
+\beamer@slide {UnalignedClouds}{6}
+\beamer@slide {SIFTAlignment}{7}
+\beamer@slide {FinalAlignment}{7}
+\beamer@slide {MatchedTimestamps}{9}
+\beamer@slide {ClassifiedPointCloud}{10}
+\beamer@slide {StemSkelet}{12}

@@ -9,3 +9,11 @@
 #define PointTypeRegistration pcl::PointXYZRGB
 
 #define Cloud pcl::PointCloud<PointTypePCL>
+
+enum ColorChannel{
+  r,g,b
+};
+
+#define BackgroundLabel 2
+#define StemLabel 1
+#define LeaveLabel 0
