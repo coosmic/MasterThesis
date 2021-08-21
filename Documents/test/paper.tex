@@ -1,0 +1,252 @@
+%%
+%% This is file `sample-xelatex.tex',
+%% generated with the docstrip utility.
+%%
+%% The original source files were:
+%%
+%% samples.dtx  (with options: `sigconf')
+%% 
+%% IMPORTANT NOTICE:
+%% 
+%% For the copyright see the source file.
+%% 
+%% Any modified versions of this file must be renamed
+%% with new filenames distinct from sample-xelatex.tex.
+%% 
+%% For distribution of the original source see the terms
+%% for copying and modification in the file samples.dtx.
+%% 
+%% This generated file may be distributed as long as the
+%% original source files, as listed above, are part of the
+%% same distribution. (The sources need not necessarily be
+%% in the same archive or directory.)
+%%
+%% The first command in your LaTeX source must be the \documentclass command.
+
+\documentclass[sigconf]{acmart}
+\renewcommand\footnotetextcopyrightpermission[1]{} 
+
+\settopmatter{printacmref=false}
+\pagestyle{plain}
+%%
+%% \BibTeX command to typeset BibTeX logo in the docs
+\AtBeginDocument{%
+  \providecommand\BibTeX{{%
+    \normalfont B\kern-0.5em{\scshape i\kern-0.25em b}\kern-0.8em\TeX}}}
+
+\usepackage{bm}
+\usepackage{enumitem}
+%\usepackage{fontspec}
+%\setmonofont[
+%  Scale=MatchLowercase,
+ % Ligatures=NoCommon,
+%]{Courier}
+\makeatletter
+\def\@copyrightspace{\relax}
+\makeatother
+\setcopyright{none}
+\usepackage{caption}
+\usepackage{subcaption}
+
+% imports and settings for code listings
+\usepackage{listings}
+\usepackage{color}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+  language=c,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+
+%%
+%% end of the preamble, start of the body of the document source.
+\DeclareMathOperator*{\argmin}{arg\,\,min} 
+\begin{document}
+
+
+%%
+%% The "title" command has an optional parameter,
+%% allowing the author to define a "short title" to be used in page headers.
+\title{Distributed Solving of Mixed-Integer Programs with Coin-OR CBC and Thrift}
+
+%%
+%% The "author" command and its associated commands are used to define
+%% the authors and their affiliations.
+%% Of note is the shared affiliation of the first two authors, and the
+%% "authornote" and "authornotemark" commands
+%% used to denote shared contribution to the research.
+\author{Ramon Janssen, Jakob Görner}
+\email{ramon.janssen@stud.hn.de, jakob.goerner@stud.hn.de}
+
+
+
+
+
+
+%%
+%% The abstract is a short summary of the work to be presented in the
+%% article.
+\begin{abstract}
+We present a distributed branch and bound solver for mixed-integer programming (MIP) problems. Our solver utilizes Coin-OR CBC for solving subproblems. Interprocess communication is achieved by using the remote procedure call framework Thrift. Our aim is to provide an easy to use and free of charge alternative to commercial solvers like CPLEX and Gurobi. Our work extends the approach presented in \cite{gurski2018distributed}
+\end{abstract}
+
+%% This command processes the author and affiliation and title
+%% information and builds the first part of the formatted document.
+\maketitle
+\pagestyle{plain}
+
+\section{Introduction}
+
+\section{Architecture}
+
+\section{Determinism}
+
+\subsection{Motivation to use Determinism}
+
+Non-deterministic behaviour in the context of parallel branch and bound is the possibility that different (but valid) search paths are explored at different times due to exogenous effects like high occupancy of a machine where a worker is running. Providing a deterministic implementation is very important in practice, cause the expectation of most customers is the same result in approximately the same time for multiple times solving the same problem under the same configuration. Especially returning the same result is important to prevent customers losing confidence into the software.
+
+\subsection{Implementation}
+
+We compared three implementations to reach determinism. In the beginning we used a simple approach using a Barrier which synchronised the worker after each job. Problem with this a approach is that the perfomance drops to 40 percent of the Non-deterministic solution.  We use a timeout between 10-25 seconds until a job has to be finished which causes a lot of idle time for worker solving jobs much faster than the timeout. This explains the huge perfomance drop.
+
+\begin{lstlisting}
+void worker(){
+	...
+	processJob();
+	if(barrier())	//returns true for the last thread leaving the barrier
+		processResultsOfFinishedJobs();
+	barrier();
+	...
+}
+\end{lstlisting}
+
+To avoid the idl time we implemented a second solution. In the second solution we let the worker solve all subproblems we created so far but the resulst where not processed until the job list is empty. After the job list is empty we processed the results and added new jobs to the job list. This worked well for smaller problems but for bigger problems the programm timed out without solving the problem. Turns out that the jobs where processed in manner that is close to an breadth-first search. Only differences between a breadth-first search is that we priorize the execution order of a level of the search tree. This can be fast for some problems but in general the execution time is much higher. \cite{gurski2018distributed}
+
+Finaly we combined both approaches and defined a small number $n=4\cdot workerCount$ and allowed the worker to solve $n$ Jobs before being synchronised by the barrier. Also we don't process the results of the $n$ Jobs until all of them are processed by a worker. With this solution we was able to avoid most of the idle time and the priorization of jobs is not manipulated any more. 
+
+\section{Evaluation}
+
+%\subsection{Setup}
+\textbf{Setup}
+We evaluated our solution on a cluster of 16 Machines of the same type. The Machines are equipped with a Intel(R) Core(TM) i7-8700 CPU with a clock frequenzy of 3.20 GHz and 16 GB of RAM. The RAM is running with a clock frequency of 2666 MHz. The Machines are connected with Ethernet to a Switch. All solvers ran in opportunistic mode.
+
+Debian 10 is the installed operation system on all machines. We use Thrift Version 0.13.0, Coin-OR CBC Version 2.10.5 and GLPK Version 4.65.  
+
+%\subsection{Test Data}
+%\textbf{Test Data}
+As test data we used several problems from the miplib 2003 and 2010 test set which contain various types of problems and are made to benchmark MIP Solvers \cite{koch2011miplib}. Also we used several problems from the OR-Library  which is a set of multidimensional knapsack problems \cite{chu1998genetic}. 
+
+A major problem when assessing MIP solvers is that there are many sources of variability that can have an impact on the measuring results. The two major factors causing variability are Non-deterministic behaviour and perfomance variability \cite{maher2019assessing}. Perfomance variability arises through different but mathematical equivalent inputs causing differnet execution paths. For example we could permute the rows and columns of the constraint matrix which could lead to changes in the branching order without changing the problem itself. Non-deterministic behaviour can be caused when jobs finishing in different order from run to run caused by external effects like other programms running on the same machine as a worker. This can have critical effect on the branching order which results in varying execution times and also can have an impact on the results itself. To address this problems we repeated execution of a problem several times and calculated the geometric mean which is more stable against statistic outliers. We calculate the geoemtric mean as follows:
+
+\[ G(N)=(\prod_{k=1}^n(x_k+s))^{\frac{1}{n}}-s \]
+\[  N:=\{x_1,x_2,...,x_n\}\]
+
+%\subsection{Distributed GLPK vs Distributed CBC}
+\textbf{Comparison to distributed GLPK}
+We compared our CBC based solution with the original GLPK based solution. In most cases we observed a significant perfomance increase with the CBC based solution compared to the GLPK based one. There was some cases where the GLPK based solution outperfomed the CBC based solver. 
+
+\begin{table}
+\caption{Solve duration on various instances. We report the geometric mean of the solve duration over multiple trials in seconds.}
+\begin{tabular}{|l || c |c| c |c|} 
+ \hline
+ Instance  & GLPK 4x4 & CBC 4x4 & CBC 8x4 &  Gurobi \\  
+ \hline\hline
+ OR30x100-0.25\_9 & $1954$& $376$ & $169$ & $237$ \\ 
+ \hline
+  OR10x250-0.75\_1 & $2633$  & $273$ & $136$ & $209$ \\ 
+ \hline
+  OR10x250-0.75\_2 & $>3600$ & $626$ & $349$ & $641$ \\ 
+ \hline 
+  OR10x250-0.75\_5 & $3259$ & $697$ & $253$ & $230$\\ 
+   \hline
+  OR10x250-0.75\_9 & $1321$& $112$ & $77$ & $77$ \\ 
+  \hline
+   mas74 & $1915$ &  $106$ & $61$&  $73$\\ 
+   \hline 
+   danoint & $530$ &  $747$ & $403$&$309$\\
+   \hline
+\end{tabular}
+\end{table}
+
+%\subsection{Distributed CBC Speedup}
+\textbf{Distributed CBC Speedup}
+We analysed the speedup of our solution. To do so we compared the runtime for several problems from our test set on a setup with 4 machines - each running 4 worker - to an setup with 8 machines - also with 4 worker per machine. In other words we duplicated the amount of worker. The measurements did not give a clear result cause the speedup was dependend to the problem instance. Some problems scaled very good but some instances don't. By this fact it is hard to specify a overall speedup. 
+
+%\subsection{Comparison to Gurobi}
+\textbf{Comparison to Gurobi}
+We compared our solution to Gurobi which is a state of the art solver. With Gurobi we solved problems from our test set on a machine similar to the one we used for our CBC based solver. Only difference is that the machine used by Gurobi has a i7-8700K CPU instead of the i7-8700 CPU. The i7-8700K CPU has a clock frequency of 3.7 GHz instead of 3.2 GHz. Gurobi used 12 Threads. 
+
+The results shows that in most cases we are faster than Gurobi when running the CBC based solution on 8 machines with 4 worker per machine. Due to the fact that Gurobi uses heuristics and pseudocost branching in a very efficent way, in some cases Gurobi outperformces our solution even if we use more than twice as much worker as Gurobi uses Threads. 
+
+%\subsection{CBC Multithreaded vs Distributed CBC}
+\textbf{CBC Multithreaded vs Distributed CBC}
+We compared the execution time from CBC Console Application using muliple threads on the same machine with our solution using same amount of workers running in single threaded mode to evaluate if we should start multiple workers or one worker with multiple threads on one machine.
+
+Suprisingly, the worker-based solution is often on par with the multi-threaded CBC solver. In Table 2 it can be seen that it is problem dependend if the multi threaded version is faster than the one with multiple worker running one thread. Therfore we decided to stick to the multiple single threaded worker per machine setup.
+
+\begin{table}
+\caption{CBC Console Appilcation with multithreading and distributed CBC solver results}
+
+\begin{tabular}{|l || c | c| c |} 
+ \hline
+ Instance & CBC 4 Thr. & CBC 8 Thr. & CBC 1x4  \\  
+ \hline
+ OR10x250-0.75\_9 & $384$ & $312$ & $343$ \\
+ \hline
+ OR10x250-0.75\_3 &$614$&$429$ & $759$\\
+ \hline
+ OR10x250-0.25\_6& $1765$& $1287$ & $1307$\\
+ \hline
+ mas74 & $311$&$241$&$324$ \\
+ \hline
+\end{tabular}
+\end{table}
+
+%\subsection{Impact of Determinism}
+\textbf{Impact of Determinism}
+Finally we evaluated the impact of determinism. As allready mentioned in chapter Determinism the pure barrier solution without load balancing was very slow caused by lots of idle time which can be seen in Table 3. A perfomance drop up to 60 percent can be measured compared to the oppertunistic results. Scalibility also suffers from huge idle times.
+
+The barrier solution using load balancing is working much faster. Only x percent of the execution time is lost compared to non-deterministic results. We also evaluated which number of subproblems should be solved bevor the results get processed and the worker are synchronised. Through experiments we found out that y jobs should be processed to improve performance as good as possible.
+
+\begin{table}
+\caption{Solver running in deterministic mode on various instances using barrier after each job.}
+
+\begin{tabular}{|l || c | c | c | c |} 
+ \hline
+ Instance & CBC 4x4 det & CBC 4x4 & CBC 8x4 det & CBC 8x4 \\  
+ \hline
+ OR10x250-0.75\_9 & $248$& $112$ & $215$& $77$\\
+% \hline
+% OR10x250-0.75\_3 & $627$& $-$& $495$& $-$\\
+ \hline
+ mas74 & $259$& $106$& $198$& $61$\\
+ \hline
+\end{tabular}
+\end{table}
+
+\section{Conclusion}
+
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{base}
+
+
+
+\end{document}
+\endinput
+%%
+%% End of file `sample-xelatex.tex'.

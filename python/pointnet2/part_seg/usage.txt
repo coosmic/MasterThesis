@@ -1,0 +1,13 @@
+Conda:
+
+conda activate tensorflow-15
+
+Training:
+
+python train.py --model pointnet2_part_seg --log_dir log --max_epoch 50
+
+Evaluation:
+
+python evaluate.py --model pointnet2_2048_3l --model_path ./results/u12Classes20483L/model.ckpt
+
+python evaluate.py --model pointnet2_part_seg --model_path ./results/t3_2ClassesPartSeg_1024_256/model.ckpt

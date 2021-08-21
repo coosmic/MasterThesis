@@ -170,8 +170,8 @@ void debug_showCombinedCloud(pcl::PointCloud<PointTypePCL>::Ptr cloudA, pcl::Poi
   *combinedCloud += *cloudB;
   //std::cout << "show combined cloud started" << std::endl;
   
-  //showCloud2(combinedCloud, windowName);
-  pcl::visualization::PointCloudColorHandlerRGBField<PointTypePCL> rgb(combinedCloud);
+  showCloud2(combinedCloud, windowName);
+  /*pcl::visualization::PointCloudColorHandlerRGBField<PointTypePCL> rgb(combinedCloud);
   //std::cout << "waiting for mutex" << std::endl;
   updateModelMutex.lock();
   //std::cout << "mutex taken for add or update cloud" << std::endl;
@@ -179,7 +179,7 @@ void debug_showCombinedCloud(pcl::PointCloud<PointTypePCL>::Ptr cloudA, pcl::Poi
     viewer->addPointCloud(combinedCloud, rgb, "combinedCloud");
   }
   updateModelMutex.unlock();
-  
+  */
 }
 
 void debug_showCombinedCloud(pcl::PointCloud<PointTypeRegistration>::Ptr cloudA, pcl::PointCloud<PointTypeRegistration>::Ptr cloudB, std::string windowName){

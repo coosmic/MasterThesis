@@ -10,8 +10,8 @@ FLAGS = parser.parse_args()
 
 filenames = next(walk(FLAGS.pathIn), (None, None, []))[2]
 
-#for filename in filenames:
-#    print(filename)
+prefix = 'shape_data/13371337/'
+filenames = [prefix + filename[0:-4] for filename in filenames]
 
 numberOfSamples = len(filenames)
 

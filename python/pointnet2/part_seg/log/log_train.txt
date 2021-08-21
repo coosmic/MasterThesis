@@ -1,0 +1,4807 @@
+Namespace(batch_size=4, decay_rate=0.7, decay_step=200000, gpu=0, learning_rate=0.001, log_dir='log', max_epoch=50, model='pointnet2_part_seg', momentum=0.9, num_point=16384, optimizer='adam')
+pid: 35956
+**** EPOCH 000 ****
+2021-07-27 17:46:33.386210
+ -- 010 / 284 --
+mean loss: 1.019205
+accuracy: 0.511736
+ -- 020 / 284 --
+mean loss: 0.492545
+accuracy: 0.800580
+ -- 030 / 284 --
+mean loss: 0.404716
+accuracy: 0.860753
+ -- 040 / 284 --
+mean loss: 0.297814
+accuracy: 0.895508
+ -- 050 / 284 --
+mean loss: 0.253263
+accuracy: 0.904961
+ -- 060 / 284 --
+mean loss: 0.296439
+accuracy: 0.884280
+ -- 070 / 284 --
+mean loss: 0.251983
+accuracy: 0.909607
+ -- 080 / 284 --
+mean loss: 0.255470
+accuracy: 0.907117
+ -- 090 / 284 --
+mean loss: 0.218150
+accuracy: 0.916544
+ -- 100 / 284 --
+mean loss: 0.272026
+accuracy: 0.908011
+ -- 110 / 284 --
+mean loss: 0.232642
+accuracy: 0.906769
+ -- 120 / 284 --
+mean loss: 0.236685
+accuracy: 0.905818
+ -- 130 / 284 --
+mean loss: 0.268563
+accuracy: 0.890285
+ -- 140 / 284 --
+mean loss: 0.211340
+accuracy: 0.922571
+ -- 150 / 284 --
+mean loss: 0.257049
+accuracy: 0.906526
+ -- 160 / 284 --
+mean loss: 0.250109
+accuracy: 0.900624
+ -- 170 / 284 --
+mean loss: 0.255354
+accuracy: 0.906248
+ -- 180 / 284 --
+mean loss: 0.211522
+accuracy: 0.917520
+ -- 190 / 284 --
+mean loss: 0.182818
+accuracy: 0.931454
+ -- 200 / 284 --
+mean loss: 0.217361
+accuracy: 0.910957
+ -- 210 / 284 --
+mean loss: 0.227859
+accuracy: 0.910960
+ -- 220 / 284 --
+mean loss: 0.223415
+accuracy: 0.908888
+ -- 230 / 284 --
+mean loss: 0.222708
+accuracy: 0.911528
+ -- 240 / 284 --
+mean loss: 0.241814
+accuracy: 0.910382
+ -- 250 / 284 --
+mean loss: 0.230759
+accuracy: 0.906166
+ -- 260 / 284 --
+mean loss: 0.211043
+accuracy: 0.908321
+ -- 270 / 284 --
+mean loss: 0.222074
+accuracy: 0.911929
+ -- 280 / 284 --
+mean loss: 0.231288
+accuracy: 0.913608
+2021-07-27 17:49:23.760389
+---- EPOCH 000 EVALUATION ----
+000/036
+020/036
+eval mean loss: 0.224694
+eval accuracy: 0.910657
+eval avg class acc: 0.792594
+eval mIoU of Plant:	 0.697126
+eval mean mIoU: 0.697126
+eval mean mIoU (all shapes): 0.697126
+Model saved in file: log/model.ckpt
+**** EPOCH 001 ****
+2021-07-27 17:49:42.230229
+ -- 010 / 284 --
+mean loss: 0.209618
+accuracy: 0.913411
+ -- 020 / 284 --
+mean loss: 0.205371
+accuracy: 0.922214
+ -- 030 / 284 --
+mean loss: 0.194297
+accuracy: 0.925055
+ -- 040 / 284 --
+mean loss: 0.259930
+accuracy: 0.896852
+ -- 050 / 284 --
+mean loss: 0.183273
+accuracy: 0.925882
+ -- 060 / 284 --
+mean loss: 0.199324
+accuracy: 0.918674
+ -- 070 / 284 --
+mean loss: 0.170295
+accuracy: 0.931757
+ -- 080 / 284 --
+mean loss: 0.213943
+accuracy: 0.916684
+ -- 090 / 284 --
+mean loss: 0.206868
+accuracy: 0.913626
+ -- 100 / 284 --
+mean loss: 0.193652
+accuracy: 0.924084
+ -- 110 / 284 --
+mean loss: 0.199263
+accuracy: 0.915878
+ -- 120 / 284 --
+mean loss: 0.192118
+accuracy: 0.923828
+ -- 130 / 284 --
+mean loss: 0.169298
+accuracy: 0.933426
+ -- 140 / 284 --
+mean loss: 0.205540
+accuracy: 0.915407
+ -- 150 / 284 --
+mean loss: 0.192521
+accuracy: 0.931573
+ -- 160 / 284 --
+mean loss: 0.183073
+accuracy: 0.925638
+ -- 170 / 284 --
+mean loss: 0.203533
+accuracy: 0.920703
+ -- 180 / 284 --
+mean loss: 0.185828
+accuracy: 0.932237
+ -- 190 / 284 --
+mean loss: 0.212758
+accuracy: 0.913896
+ -- 200 / 284 --
+mean loss: 0.177402
+accuracy: 0.925563
+ -- 210 / 284 --
+mean loss: 0.196903
+accuracy: 0.917863
+ -- 220 / 284 --
+mean loss: 0.184323
+accuracy: 0.922441
+ -- 230 / 284 --
+mean loss: 0.201541
+accuracy: 0.918982
+ -- 240 / 284 --
+mean loss: 0.190717
+accuracy: 0.922878
+ -- 250 / 284 --
+mean loss: 0.161201
+accuracy: 0.937927
+ -- 260 / 284 --
+mean loss: 0.165770
+accuracy: 0.926994
+ -- 270 / 284 --
+mean loss: 0.174307
+accuracy: 0.930206
+ -- 280 / 284 --
+mean loss: 0.172320
+accuracy: 0.929465
+2021-07-27 17:50:45.028891
+---- EPOCH 001 EVALUATION ----
+000/036
+020/036
+eval mean loss: 0.238708
+eval accuracy: 0.914217
+eval avg class acc: 0.771535
+eval mIoU of Plant:	 0.697587
+eval mean mIoU: 0.697587
+eval mean mIoU (all shapes): 0.697587
+**** EPOCH 002 ****
+2021-07-27 17:50:50.160485
+ -- 010 / 284 --
+mean loss: 0.188257
+accuracy: 0.927509
+ -- 020 / 284 --
+mean loss: 0.187448
+accuracy: 0.920747
+ -- 030 / 284 --
+mean loss: 0.173713
+accuracy: 0.928891
+ -- 040 / 284 --
+mean loss: 0.178170
+accuracy: 0.928958
+ -- 050 / 284 --
+mean loss: 0.174119
+accuracy: 0.928989
+ -- 060 / 284 --
+mean loss: 0.177469
+accuracy: 0.931004
+ -- 070 / 284 --
+mean loss: 0.235676
+accuracy: 0.908369
+ -- 080 / 284 --
+mean loss: 0.197063
+accuracy: 0.920944
+ -- 090 / 284 --
+mean loss: 0.155646
+accuracy: 0.940994
+ -- 100 / 284 --
+mean loss: 0.179196
+accuracy: 0.933369
+ -- 110 / 284 --
+mean loss: 0.179258
+accuracy: 0.930710
+ -- 120 / 284 --
+mean loss: 0.166310
+accuracy: 0.938503
+ -- 130 / 284 --
+mean loss: 0.173330
+accuracy: 0.928627
+ -- 140 / 284 --
+mean loss: 0.157577
+accuracy: 0.941687
+ -- 150 / 284 --
+mean loss: 0.137336
+accuracy: 0.946127
+ -- 160 / 284 --
+mean loss: 0.189898
+accuracy: 0.924174
+ -- 170 / 284 --
+mean loss: 0.152350
+accuracy: 0.944983
+ -- 180 / 284 --
+mean loss: 0.157683
+accuracy: 0.935994
+ -- 190 / 284 --
+mean loss: 0.177095
+accuracy: 0.931413
+ -- 200 / 284 --
+mean loss: 0.180449
+accuracy: 0.931909
+ -- 210 / 284 --
+mean loss: 0.183180
+accuracy: 0.927141
+ -- 220 / 284 --
+mean loss: 0.169976
+accuracy: 0.932411
+ -- 230 / 284 --
+mean loss: 0.157712
+accuracy: 0.937535
+ -- 240 / 284 --
+mean loss: 0.191613
+accuracy: 0.923547
+ -- 250 / 284 --
+mean loss: 0.141495
+accuracy: 0.946780
+ -- 260 / 284 --
+mean loss: 0.160848
+accuracy: 0.933107
+ -- 270 / 284 --
+mean loss: 0.162966
+accuracy: 0.931786
+ -- 280 / 284 --
+mean loss: 0.189868
+accuracy: 0.918205
+2021-07-27 17:51:52.525789
+---- EPOCH 002 EVALUATION ----
+000/036
+020/036
+eval mean loss: 0.221276
+eval accuracy: 0.907229
+eval avg class acc: 0.812077
+eval mIoU of Plant:	 0.692270
+eval mean mIoU: 0.692270
+eval mean mIoU (all shapes): 0.692270
+**** EPOCH 003 ****
+2021-07-27 17:51:57.698880
+ -- 010 / 284 --
+mean loss: 0.142640
+accuracy: 0.946063
+ -- 020 / 284 --
+mean loss: 0.168134
+accuracy: 0.937445
+ -- 030 / 284 --
+mean loss: 0.163621
+accuracy: 0.931100
+ -- 040 / 284 --
+mean loss: 0.162578
+accuracy: 0.931509
+ -- 050 / 284 --
+mean loss: 0.178308
+accuracy: 0.928523
+ -- 060 / 284 --
+mean loss: 0.143937
+accuracy: 0.941676
+ -- 070 / 284 --
+mean loss: 0.157047
+accuracy: 0.936993
+ -- 080 / 284 --
+mean loss: 0.163459
+accuracy: 0.934460
+ -- 090 / 284 --
+mean loss: 0.165915
+accuracy: 0.934975
+ -- 100 / 284 --
+mean loss: 0.136218
+accuracy: 0.944051
+ -- 110 / 284 --
+mean loss: 0.183319
+accuracy: 0.927475
+ -- 120 / 284 --
+mean loss: 0.157316
+accuracy: 0.941409
+ -- 130 / 284 --
+mean loss: 0.130729
+accuracy: 0.948358
+ -- 140 / 284 --
+mean loss: 0.136211
+accuracy: 0.945238
+ -- 150 / 284 --
+mean loss: 0.189130
+accuracy: 0.923911
+ -- 160 / 284 --
+mean loss: 0.175398
+accuracy: 0.926175
+ -- 170 / 284 --
+mean loss: 0.158948
+accuracy: 0.936945
+ -- 180 / 284 --
+mean loss: 0.157801
+accuracy: 0.932771
+ -- 190 / 284 --
+mean loss: 0.156064
+accuracy: 0.939146
+ -- 200 / 284 --
+mean loss: 0.119788
+accuracy: 0.953075
+ -- 210 / 284 --
+mean loss: 0.162929
+accuracy: 0.936163
+ -- 220 / 284 --
+mean loss: 0.211367
+accuracy: 0.915276
+ -- 230 / 284 --
+mean loss: 0.146690
+accuracy: 0.941034
+ -- 240 / 284 --
+mean loss: 0.151626
+accuracy: 0.940099
+ -- 250 / 284 --
+mean loss: 0.146838
+accuracy: 0.939423
+ -- 260 / 284 --
+mean loss: 0.134604
+accuracy: 0.944063
+ -- 270 / 284 --
+mean loss: 0.156976
+accuracy: 0.939430
+ -- 280 / 284 --
+mean loss: 0.166567
+accuracy: 0.935541
+2021-07-27 17:53:00.155888
+---- EPOCH 003 EVALUATION ----
+000/036
+020/036
+eval mean loss: 0.195444
+eval accuracy: 0.929639
+eval avg class acc: 0.859972
+eval mIoU of Plant:	 0.755778
+eval mean mIoU: 0.755778
+eval mean mIoU (all shapes): 0.755778
+**** EPOCH 004 ****
+2021-07-27 17:53:05.319808
+ -- 010 / 284 --
+mean loss: 0.161887
+accuracy: 0.935646
+ -- 020 / 284 --
+mean loss: 0.137275
+accuracy: 0.950191
+ -- 030 / 284 --
+mean loss: 0.127944
+accuracy: 0.947299
+ -- 040 / 284 --
+mean loss: 0.171368
+accuracy: 0.930965
+ -- 050 / 284 --
+mean loss: 0.134801
+accuracy: 0.948055
+ -- 060 / 284 --
+mean loss: 0.152694
+accuracy: 0.938023
+ -- 070 / 284 --
+mean loss: 0.144149
+accuracy: 0.941394
+ -- 080 / 284 --
+mean loss: 0.150737
+accuracy: 0.944875
+ -- 090 / 284 --
+mean loss: 0.169915
+accuracy: 0.930113
+ -- 100 / 284 --
+mean loss: 0.155079
+accuracy: 0.939639
+ -- 110 / 284 --
+mean loss: 0.174655
+accuracy: 0.931206
+ -- 120 / 284 --
+mean loss: 0.141894
+accuracy: 0.941533
+ -- 130 / 284 --
+mean loss: 0.149418
+accuracy: 0.940205
+ -- 140 / 284 --
+mean loss: 0.117914
+accuracy: 0.953635
+ -- 150 / 284 --
+mean loss: 0.139413
+accuracy: 0.942163
+ -- 160 / 284 --
+mean loss: 0.126373
+accuracy: 0.950319
+ -- 170 / 284 --
+mean loss: 0.144582
+accuracy: 0.943463
+ -- 180 / 284 --
+mean loss: 0.137188
+accuracy: 0.943988
+ -- 190 / 284 --
+mean loss: 0.121731
+accuracy: 0.952393
+ -- 200 / 284 --
+mean loss: 0.137651
+accuracy: 0.943578
+ -- 210 / 284 --
+mean loss: 0.153873
+accuracy: 0.939804
+ -- 220 / 284 --
+mean loss: 0.134262
+accuracy: 0.948746
+ -- 230 / 284 --
+mean loss: 0.134048
+accuracy: 0.950839
+ -- 240 / 284 --
+mean loss: 0.125417
+accuracy: 0.950357
+ -- 250 / 284 --
+mean loss: 0.166198
+accuracy: 0.932753
+ -- 260 / 284 --
+mean loss: 0.144509
+accuracy: 0.940843
+ -- 270 / 284 --
+mean loss: 0.117550
+accuracy: 0.955162
+ -- 280 / 284 --
+mean loss: 0.138509
+accuracy: 0.942984
+2021-07-27 17:54:07.731998
+---- EPOCH 004 EVALUATION ----
+000/036
+020/036
+eval mean loss: 0.197509
+eval accuracy: 0.934519
+eval avg class acc: 0.842502
+eval mIoU of Plant:	 0.751518
+eval mean mIoU: 0.751518
+eval mean mIoU (all shapes): 0.751518
+**** EPOCH 005 ****
+2021-07-27 17:54:12.890105
+ -- 010 / 284 --
+mean loss: 0.155059
+accuracy: 0.935516
+ -- 020 / 284 --
+mean loss: 0.113534
+accuracy: 0.953261
+ -- 030 / 284 --
+mean loss: 0.112001
+accuracy: 0.955086
+ -- 040 / 284 --
+mean loss: 0.119376
+accuracy: 0.948050
+ -- 050 / 284 --
+mean loss: 0.117110
+accuracy: 0.952892
+ -- 060 / 284 --
+mean loss: 0.114579
+accuracy: 0.953656
+ -- 070 / 284 --
+mean loss: 0.145675
+accuracy: 0.945592
+ -- 080 / 284 --
+mean loss: 0.140299
+accuracy: 0.940897
+ -- 090 / 284 --
+mean loss: 0.145071
+accuracy: 0.938341
+ -- 100 / 284 --
+mean loss: 0.109306
+accuracy: 0.956595
+ -- 110 / 284 --
+mean loss: 0.128070
+accuracy: 0.948079
+ -- 120 / 284 --
+mean loss: 0.129974
+accuracy: 0.952422
+ -- 130 / 284 --
+mean loss: 0.118014
+accuracy: 0.947569
+ -- 140 / 284 --
+mean loss: 0.140230
+accuracy: 0.943250
+ -- 150 / 284 --
+mean loss: 0.142000
+accuracy: 0.941600
+ -- 160 / 284 --
+mean loss: 0.139124
+accuracy: 0.937589
+ -- 170 / 284 --
+mean loss: 0.120485
+accuracy: 0.951672
+ -- 180 / 284 --
+mean loss: 0.145758
+accuracy: 0.937086
+ -- 190 / 284 --
+mean loss: 0.139391
+accuracy: 0.946490
+ -- 200 / 284 --
+mean loss: 0.101106
+accuracy: 0.959120
+ -- 210 / 284 --
+mean loss: 0.125133
+accuracy: 0.948131
+ -- 220 / 284 --
+mean loss: 0.123784
+accuracy: 0.950975
+ -- 230 / 284 --
+mean loss: 0.124582
+accuracy: 0.949408
+ -- 240 / 284 --
+mean loss: 0.122455
+accuracy: 0.950128
+ -- 250 / 284 --
+mean loss: 0.126597
+accuracy: 0.949051
+ -- 260 / 284 --
+mean loss: 0.119289
+accuracy: 0.951964
+ -- 270 / 284 --
+mean loss: 0.134346
+accuracy: 0.943987
+ -- 280 / 284 --
+mean loss: 0.143979
+accuracy: 0.938286
+2021-07-27 17:55:15.315859
+---- EPOCH 005 EVALUATION ----
+000/036
+020/036
+eval mean loss: 0.216856
+eval accuracy: 0.901568
+eval avg class acc: 0.894777
+eval mIoU of Plant:	 0.748325
+eval mean mIoU: 0.748325
+eval mean mIoU (all shapes): 0.748325
+**** EPOCH 006 ****
+2021-07-27 17:55:20.484444
+ -- 010 / 284 --
+mean loss: 0.111085
+accuracy: 0.957433
+ -- 020 / 284 --
+mean loss: 0.139148
+accuracy: 0.942140
+ -- 030 / 284 --
+mean loss: 0.108808
+accuracy: 0.955524
+ -- 040 / 284 --
+mean loss: 0.115618
+accuracy: 0.954866
+ -- 050 / 284 --
+mean loss: 0.119906
+accuracy: 0.951814
+ -- 060 / 284 --
+mean loss: 0.133863
+accuracy: 0.946083
+ -- 070 / 284 --
+mean loss: 0.149954
+accuracy: 0.939435
+ -- 080 / 284 --
+mean loss: 0.105975
+accuracy: 0.958966
+ -- 090 / 284 --
+mean loss: 0.142620
+accuracy: 0.939333
+ -- 100 / 284 --
+mean loss: 0.132124
+accuracy: 0.941818
+ -- 110 / 284 --
+mean loss: 0.114707
+accuracy: 0.953250
+ -- 120 / 284 --
+mean loss: 0.142239
+accuracy: 0.939876
+ -- 130 / 284 --
+mean loss: 0.122550
+accuracy: 0.951398
+ -- 140 / 284 --
+mean loss: 0.097432
+accuracy: 0.960234
+ -- 150 / 284 --
+mean loss: 0.146221
+accuracy: 0.943304
+ -- 160 / 284 --
+mean loss: 0.134766
+accuracy: 0.939175
+ -- 170 / 284 --
+mean loss: 0.132045
+accuracy: 0.947945
+ -- 180 / 284 --
+mean loss: 0.103473
+accuracy: 0.957994
+ -- 190 / 284 --
+mean loss: 0.124529
+accuracy: 0.946774
+ -- 200 / 284 --
+mean loss: 0.090382
+accuracy: 0.963579
+ -- 210 / 284 --
+mean loss: 0.127898
+accuracy: 0.945700
+ -- 220 / 284 --
+mean loss: 0.125058
+accuracy: 0.946695
+ -- 230 / 284 --
+mean loss: 0.115867
+accuracy: 0.951367
+ -- 240 / 284 --
+mean loss: 0.103674
+accuracy: 0.956679
+ -- 250 / 284 --
+mean loss: 0.114031
+accuracy: 0.955136
+ -- 260 / 284 --
+mean loss: 0.102070
+accuracy: 0.956361
+ -- 270 / 284 --
+mean loss: 0.121231
+accuracy: 0.949983
+ -- 280 / 284 --
+mean loss: 0.101134
+accuracy: 0.960059
+2021-07-27 17:56:23.060155
+---- EPOCH 006 EVALUATION ----
+000/036
+020/036
+eval mean loss: 0.150129
+eval accuracy: 0.941338
+eval avg class acc: 0.900620
+eval mIoU of Plant:	 0.807290
+eval mean mIoU: 0.807290
+eval mean mIoU (all shapes): 0.807290
+**** EPOCH 007 ****
+2021-07-27 17:56:28.183487
+ -- 010 / 284 --
+mean loss: 0.116884
+accuracy: 0.949373
+ -- 020 / 284 --
+mean loss: 0.086470
+accuracy: 0.965622
+ -- 030 / 284 --
+mean loss: 0.104764
+accuracy: 0.955901
+ -- 040 / 284 --
+mean loss: 0.099753
+accuracy: 0.959013
+ -- 050 / 284 --
+mean loss: 0.088456
+accuracy: 0.963788
+ -- 060 / 284 --
+mean loss: 0.098308
+accuracy: 0.957590
+ -- 070 / 284 --
+mean loss: 0.084445
+accuracy: 0.967282
+ -- 080 / 284 --
+mean loss: 0.105210
+accuracy: 0.956801
+ -- 090 / 284 --
+mean loss: 0.121099
+accuracy: 0.949875
+ -- 100 / 284 --
+mean loss: 0.111912
+accuracy: 0.953011
+ -- 110 / 284 --
+mean loss: 0.105115
+accuracy: 0.955641
+ -- 120 / 284 --
+mean loss: 0.100609
+accuracy: 0.958592
+ -- 130 / 284 --
+mean loss: 0.118632
+accuracy: 0.952441
+ -- 140 / 284 --
+mean loss: 0.104608
+accuracy: 0.960254
+ -- 150 / 284 --
+mean loss: 0.129511
+accuracy: 0.946523
+ -- 160 / 284 --
+mean loss: 0.117877
+accuracy: 0.953091
+ -- 170 / 284 --
+mean loss: 0.100920
+accuracy: 0.959885
+ -- 180 / 284 --
+mean loss: 0.109678
+accuracy: 0.956752
+ -- 190 / 284 --
+mean loss: 0.132766
+accuracy: 0.945187
+ -- 200 / 284 --
+mean loss: 0.110833
+accuracy: 0.956184
+ -- 210 / 284 --
+mean loss: 0.135084
+accuracy: 0.944814
+ -- 220 / 284 --
+mean loss: 0.122840
+accuracy: 0.948389
+ -- 230 / 284 --
+mean loss: 0.132023
+accuracy: 0.946457
+ -- 240 / 284 --
+mean loss: 0.127527
+accuracy: 0.946608
+ -- 250 / 284 --
+mean loss: 0.092832
+accuracy: 0.961607
+ -- 260 / 284 --
+mean loss: 0.120589
+accuracy: 0.949426
+ -- 270 / 284 --
+mean loss: 0.107619
+accuracy: 0.957260
+ -- 280 / 284 --
+mean loss: 0.108208
+accuracy: 0.955537
+2021-07-27 17:57:30.432766
+---- EPOCH 007 EVALUATION ----
+000/036
+020/036
+eval mean loss: 0.114919
+eval accuracy: 0.951830
+eval avg class acc: 0.899273
+eval mIoU of Plant:	 0.819822
+eval mean mIoU: 0.819822
+eval mean mIoU (all shapes): 0.819822
+**** EPOCH 008 ****
+2021-07-27 17:57:35.544565
+ -- 010 / 284 --
+mean loss: 0.105917
+accuracy: 0.956812
+ -- 020 / 284 --
+mean loss: 0.102660
+accuracy: 0.958473
+ -- 030 / 284 --
+mean loss: 0.076499
+accuracy: 0.968608
+ -- 040 / 284 --
+mean loss: 0.129782
+accuracy: 0.949591
+ -- 050 / 284 --
+mean loss: 0.100387
+accuracy: 0.958261
+ -- 060 / 284 --
+mean loss: 0.086689
+accuracy: 0.963409
+ -- 070 / 284 --
+mean loss: 0.087414
+accuracy: 0.964075
+ -- 080 / 284 --
+mean loss: 0.101116
+accuracy: 0.957712
+ -- 090 / 284 --
+mean loss: 0.094986
+accuracy: 0.960539
+ -- 100 / 284 --
+mean loss: 0.102360
+accuracy: 0.958827
+ -- 110 / 284 --
+mean loss: 0.103515
+accuracy: 0.957639
+ -- 120 / 284 --
+mean loss: 0.097781
+accuracy: 0.957713
+ -- 130 / 284 --
+mean loss: 0.094939
+accuracy: 0.958572
+ -- 140 / 284 --
+mean loss: 0.091752
+accuracy: 0.962831
+ -- 150 / 284 --
+mean loss: 0.098917
+accuracy: 0.957700
+ -- 160 / 284 --
+mean loss: 0.096497
+accuracy: 0.959868
+ -- 170 / 284 --
+mean loss: 0.077900
+accuracy: 0.967200
+ -- 180 / 284 --
+mean loss: 0.093743
+accuracy: 0.961702
+ -- 190 / 284 --
+mean loss: 0.089913
+accuracy: 0.962514
+ -- 200 / 284 --
+mean loss: 0.120424
+accuracy: 0.949319
+ -- 210 / 284 --
+mean loss: 0.104903
+accuracy: 0.960089
+ -- 220 / 284 --
+mean loss: 0.120811
+accuracy: 0.947856
+ -- 230 / 284 --
+mean loss: 0.094757
+accuracy: 0.963693
+ -- 240 / 284 --
+mean loss: 0.099497
+accuracy: 0.958823
+ -- 250 / 284 --
+mean loss: 0.123205
+accuracy: 0.947038
+ -- 260 / 284 --
+mean loss: 0.148527
+accuracy: 0.935139
+ -- 270 / 284 --
+mean loss: 0.133707
+accuracy: 0.944351
+ -- 280 / 284 --
+mean loss: 0.098340
+accuracy: 0.960518
+2021-07-27 17:58:37.032228
+---- EPOCH 008 EVALUATION ----
+000/036
+020/036
+eval mean loss: 0.116500
+eval accuracy: 0.954032
+eval avg class acc: 0.891169
+eval mIoU of Plant:	 0.809126
+eval mean mIoU: 0.809126
+eval mean mIoU (all shapes): 0.809126
+**** EPOCH 009 ****
+2021-07-27 17:58:42.150944
+ -- 010 / 284 --
+mean loss: 0.104094
+accuracy: 0.956001
+ -- 020 / 284 --
+mean loss: 0.079146
+accuracy: 0.967200
+ -- 030 / 284 --
+mean loss: 0.123425
+accuracy: 0.948460
+ -- 040 / 284 --
+mean loss: 0.084018
+accuracy: 0.965747
+ -- 050 / 284 --
+mean loss: 0.100150
+accuracy: 0.957088
+ -- 060 / 284 --
+mean loss: 0.085668
+accuracy: 0.965692
+ -- 070 / 284 --
+mean loss: 0.103124
+accuracy: 0.958757
+ -- 080 / 284 --
+mean loss: 0.101726
+accuracy: 0.955966
+ -- 090 / 284 --
+mean loss: 0.089339
+accuracy: 0.962375
+ -- 100 / 284 --
+mean loss: 0.098144
+accuracy: 0.960497
+ -- 110 / 284 --
+mean loss: 0.094711
+accuracy: 0.960149
+ -- 120 / 284 --
+mean loss: 0.084040
+accuracy: 0.966193
+ -- 130 / 284 --
+mean loss: 0.087085
+accuracy: 0.963806
+ -- 140 / 284 --
+mean loss: 0.137175
+accuracy: 0.946646
+ -- 150 / 284 --
+mean loss: 0.086167
+accuracy: 0.967584
+ -- 160 / 284 --
+mean loss: 0.127524
+accuracy: 0.949818
+ -- 170 / 284 --
+mean loss: 0.158546
+accuracy: 0.936163
+ -- 180 / 284 --
+mean loss: 0.101443
+accuracy: 0.961757
+ -- 190 / 284 --
+mean loss: 0.121189
+accuracy: 0.950789
+ -- 200 / 284 --
+mean loss: 0.139781
+accuracy: 0.940630
+ -- 210 / 284 --
+mean loss: 0.097458
+accuracy: 0.961545
+ -- 220 / 284 --
+mean loss: 0.105715
+accuracy: 0.956790
+ -- 230 / 284 --
+mean loss: 0.108743
+accuracy: 0.954747
+ -- 240 / 284 --
+mean loss: 0.129466
+accuracy: 0.944884
+ -- 250 / 284 --
+mean loss: 0.106174
+accuracy: 0.954984
+ -- 260 / 284 --
+mean loss: 0.083784
+accuracy: 0.964081
+ -- 270 / 284 --
+mean loss: 0.103096
+accuracy: 0.957768
+ -- 280 / 284 --
+mean loss: 0.107668
+accuracy: 0.955927
+2021-07-27 17:59:44.105436
+---- EPOCH 009 EVALUATION ----
+000/036
+020/036
+eval mean loss: 0.100851
+eval accuracy: 0.958978
+eval avg class acc: 0.890512
+eval mIoU of Plant:	 0.840572
+eval mean mIoU: 0.840572
+eval mean mIoU (all shapes): 0.840572
+**** EPOCH 010 ****
+2021-07-27 17:59:49.254901
+ -- 010 / 284 --
+mean loss: 0.093816
+accuracy: 0.961957
+ -- 020 / 284 --
+mean loss: 0.085487
+accuracy: 0.966510
+ -- 030 / 284 --
+mean loss: 0.108364
+accuracy: 0.956183
+ -- 040 / 284 --
+mean loss: 0.083467
+accuracy: 0.967197
+ -- 050 / 284 --
+mean loss: 0.106765
+accuracy: 0.957007
+ -- 060 / 284 --
+mean loss: 0.093490
+accuracy: 0.961133
+ -- 070 / 284 --
+mean loss: 0.104937
+accuracy: 0.955638
+ -- 080 / 284 --
+mean loss: 0.106820
+accuracy: 0.955247
+ -- 090 / 284 --
+mean loss: 0.091337
+accuracy: 0.963132
+ -- 100 / 284 --
+mean loss: 0.083431
+accuracy: 0.964354
+ -- 110 / 284 --
+mean loss: 0.099444
+accuracy: 0.959172
+ -- 120 / 284 --
+mean loss: 0.108978
+accuracy: 0.955322
+ -- 130 / 284 --
+mean loss: 0.066383
+accuracy: 0.975092
+ -- 140 / 284 --
+mean loss: 0.106277
+accuracy: 0.955844
+ -- 150 / 284 --
+mean loss: 0.082391
+accuracy: 0.967287
+ -- 160 / 284 --
+mean loss: 0.094356
+accuracy: 0.962582
+ -- 170 / 284 --
+mean loss: 0.115381
+accuracy: 0.951291
+ -- 180 / 284 --
+mean loss: 0.101973
+accuracy: 0.958798
+ -- 190 / 284 --
+mean loss: 0.087368
+accuracy: 0.962619
+ -- 200 / 284 --
+mean loss: 0.084003
+accuracy: 0.966814
+ -- 210 / 284 --
+mean loss: 0.115734
+accuracy: 0.953427
+ -- 220 / 284 --
+mean loss: 0.101364
+accuracy: 0.958553
+ -- 230 / 284 --
+mean loss: 0.073330
+accuracy: 0.969710
+ -- 240 / 284 --
+mean loss: 0.088857
+accuracy: 0.961745
+ -- 250 / 284 --
+mean loss: 0.085005
+accuracy: 0.964558
+ -- 260 / 284 --
+mean loss: 0.097114
+accuracy: 0.958702
+ -- 270 / 284 --
+mean loss: 0.081856
+accuracy: 0.967444
+ -- 280 / 284 --
+mean loss: 0.099910
+accuracy: 0.959229
+2021-07-27 18:00:51.764183
+---- EPOCH 010 EVALUATION ----
+000/036
+020/036
+eval mean loss: 0.116505
+eval accuracy: 0.949238
+eval avg class acc: 0.918124
+eval mIoU of Plant:	 0.827190
+eval mean mIoU: 0.827190
+eval mean mIoU (all shapes): 0.827190
+Model saved in file: log/model.ckpt
+**** EPOCH 011 ****
+2021-07-27 18:00:57.049478
+ -- 010 / 284 --
+mean loss: 0.072192
+accuracy: 0.971281
+ -- 020 / 284 --
+mean loss: 0.077539
+accuracy: 0.967848
+ -- 030 / 284 --
+mean loss: 0.071932
+accuracy: 0.971404
+ -- 040 / 284 --
+mean loss: 0.081982
+accuracy: 0.966739
+ -- 050 / 284 --
+mean loss: 0.097113
+accuracy: 0.958279
+ -- 060 / 284 --
+mean loss: 0.078656
+accuracy: 0.966872
+ -- 070 / 284 --
+mean loss: 0.072190
+accuracy: 0.969481
+ -- 080 / 284 --
+mean loss: 0.098733
+accuracy: 0.961084
+ -- 090 / 284 --
+mean loss: 0.071172
+accuracy: 0.970216
+ -- 100 / 284 --
+mean loss: 0.093665
+accuracy: 0.960420
+ -- 110 / 284 --
+mean loss: 0.083052
+accuracy: 0.964767
+ -- 120 / 284 --
+mean loss: 0.079834
+accuracy: 0.966817
+ -- 130 / 284 --
+mean loss: 0.087125
+accuracy: 0.962987
+ -- 140 / 284 --
+mean loss: 0.103321
+accuracy: 0.953941
+ -- 150 / 284 --
+mean loss: 0.082243
+accuracy: 0.964627
+ -- 160 / 284 --
+mean loss: 0.081586
+accuracy: 0.966258
+ -- 170 / 284 --
+mean loss: 0.089441
+accuracy: 0.963205
+ -- 180 / 284 --
+mean loss: 0.084177
+accuracy: 0.965543
+ -- 190 / 284 --
+mean loss: 0.087993
+accuracy: 0.963213
+ -- 200 / 284 --
+mean loss: 0.080140
+accuracy: 0.966925
+ -- 210 / 284 --
+mean loss: 0.104914
+accuracy: 0.957242
+ -- 220 / 284 --
+mean loss: 0.097776
+accuracy: 0.959052
+ -- 230 / 284 --
+mean loss: 0.087093
+accuracy: 0.964122
+ -- 240 / 284 --
+mean loss: 0.107927
+accuracy: 0.954141
+ -- 250 / 284 --
+mean loss: 0.076970
+accuracy: 0.967805
+ -- 260 / 284 --
+mean loss: 0.064603
+accuracy: 0.975542
+ -- 270 / 284 --
+mean loss: 0.098647
+accuracy: 0.958170
+ -- 280 / 284 --
+mean loss: 0.073659
+accuracy: 0.968457
+2021-07-27 18:01:59.495514
+---- EPOCH 011 EVALUATION ----
+000/036
+020/036
+eval mean loss: 0.082971
+eval accuracy: 0.966734
+eval avg class acc: 0.924662
+eval mIoU of Plant:	 0.851603
+eval mean mIoU: 0.851603
+eval mean mIoU (all shapes): 0.851603
+**** EPOCH 012 ****
+2021-07-27 18:02:04.686369
+ -- 010 / 284 --
+mean loss: 0.070559
+accuracy: 0.970638
+ -- 020 / 284 --
+mean loss: 0.074451
+accuracy: 0.968889
+ -- 030 / 284 --
+mean loss: 0.088049
+accuracy: 0.962720
+ -- 040 / 284 --
+mean loss: 0.099849
+accuracy: 0.959314
+ -- 050 / 284 --
+mean loss: 0.098866
+accuracy: 0.960068
+ -- 060 / 284 --
+mean loss: 0.079898
+accuracy: 0.967093
+ -- 070 / 284 --
+mean loss: 0.093794
+accuracy: 0.961316
+ -- 080 / 284 --
+mean loss: 0.093391
+accuracy: 0.960487
+ -- 090 / 284 --
+mean loss: 0.087774
+accuracy: 0.962051
+ -- 100 / 284 --
+mean loss: 0.080815
+accuracy: 0.964326
+ -- 110 / 284 --
+mean loss: 0.078880
+accuracy: 0.965707
+ -- 120 / 284 --
+mean loss: 0.081011
+accuracy: 0.964828
+ -- 130 / 284 --
+mean loss: 0.068241
+accuracy: 0.972144
+ -- 140 / 284 --
+mean loss: 0.099179
+accuracy: 0.959338
+ -- 150 / 284 --
+mean loss: 0.073302
+accuracy: 0.970425
+ -- 160 / 284 --
+mean loss: 0.091378
+accuracy: 0.961365
+ -- 170 / 284 --
+mean loss: 0.071577
+accuracy: 0.968835
+ -- 180 / 284 --
+mean loss: 0.073803
+accuracy: 0.969832
+ -- 190 / 284 --
+mean loss: 0.087661
+accuracy: 0.965479
+ -- 200 / 284 --
+mean loss: 0.087143
+accuracy: 0.962930
+ -- 210 / 284 --
+mean loss: 0.075716
+accuracy: 0.968140
+ -- 220 / 284 --
+mean loss: 0.079520
+accuracy: 0.966777
+ -- 230 / 284 --
+mean loss: 0.067768
+accuracy: 0.971350
+ -- 240 / 284 --
+mean loss: 0.088310
+accuracy: 0.962947
+ -- 250 / 284 --
+mean loss: 0.086549
+accuracy: 0.965317
+ -- 260 / 284 --
+mean loss: 0.083321
+accuracy: 0.965791
+ -- 270 / 284 --
+mean loss: 0.080607
+accuracy: 0.965317
+ -- 280 / 284 --
+mean loss: 0.089200
+accuracy: 0.963660
+2021-07-27 18:03:07.384488
+---- EPOCH 012 EVALUATION ----
+000/036
+020/036
+eval mean loss: 0.110219
+eval accuracy: 0.954399
+eval avg class acc: 0.919241
+eval mIoU of Plant:	 0.840717
+eval mean mIoU: 0.840717
+eval mean mIoU (all shapes): 0.840717
+**** EPOCH 013 ****
+2021-07-27 18:03:12.556860
+ -- 010 / 284 --
+mean loss: 0.090416
+accuracy: 0.962445
+ -- 020 / 284 --
+mean loss: 0.080377
+accuracy: 0.967538
+ -- 030 / 284 --
+mean loss: 0.067951
+accuracy: 0.971460
+ -- 040 / 284 --
+mean loss: 0.083225
+accuracy: 0.964192
+ -- 050 / 284 --
+mean loss: 0.060171
+accuracy: 0.975378
+ -- 060 / 284 --
+mean loss: 0.061032
+accuracy: 0.975256
+ -- 070 / 284 --
+mean loss: 0.085199
+accuracy: 0.964272
+ -- 080 / 284 --
+mean loss: 0.071366
+accuracy: 0.970604
+ -- 090 / 284 --
+mean loss: 0.078684
+accuracy: 0.968231
+ -- 100 / 284 --
+mean loss: 0.082611
+accuracy: 0.966008
+ -- 110 / 284 --
+mean loss: 0.072645
+accuracy: 0.969070
+ -- 120 / 284 --
+mean loss: 0.074455
+accuracy: 0.970052
+ -- 130 / 284 --
+mean loss: 0.081459
+accuracy: 0.964748
+ -- 140 / 284 --
+mean loss: 0.069818
+accuracy: 0.970583
+ -- 150 / 284 --
+mean loss: 0.058477
+accuracy: 0.975673
+ -- 160 / 284 --
+mean loss: 0.055639
+accuracy: 0.977089
+ -- 170 / 284 --
+mean loss: 0.078771
+accuracy: 0.966705
+ -- 180 / 284 --
+mean loss: 0.094120
+accuracy: 0.960121
+ -- 190 / 284 --
+mean loss: 0.079275
+accuracy: 0.967688
+ -- 200 / 284 --
+mean loss: 0.083765
+accuracy: 0.963339
+ -- 210 / 284 --
+mean loss: 0.067024
+accuracy: 0.972043
+ -- 220 / 284 --
+mean loss: 0.071089
+accuracy: 0.969633
+ -- 230 / 284 --
+mean loss: 0.070464
+accuracy: 0.971294
+ -- 240 / 284 --
+mean loss: 0.087175
+accuracy: 0.963855
+ -- 250 / 284 --
+mean loss: 0.069531
+accuracy: 0.970659
+ -- 260 / 284 --
+mean loss: 0.073758
+accuracy: 0.969485
+ -- 270 / 284 --
+mean loss: 0.119854
+accuracy: 0.950710
+ -- 280 / 284 --
+mean loss: 0.101006
+accuracy: 0.960925
+2021-07-27 18:04:15.272015
+---- EPOCH 013 EVALUATION ----
+000/036
+020/036
+eval mean loss: 0.106518
+eval accuracy: 0.956520
+eval avg class acc: 0.936445
+eval mIoU of Plant:	 0.844675
+eval mean mIoU: 0.844675
+eval mean mIoU (all shapes): 0.844675
+**** EPOCH 014 ****
+2021-07-27 18:04:20.439122
+ -- 010 / 284 --
+mean loss: 0.085300
+accuracy: 0.965591
+ -- 020 / 284 --
+mean loss: 0.067508
+accuracy: 0.972446
+ -- 030 / 284 --
+mean loss: 0.077414
+accuracy: 0.968137
+ -- 040 / 284 --
+mean loss: 0.077991
+accuracy: 0.967525
+ -- 050 / 284 --
+mean loss: 0.081532
+accuracy: 0.966640
+ -- 060 / 284 --
+mean loss: 0.094548
+accuracy: 0.958908
+ -- 070 / 284 --
+mean loss: 0.074902
+accuracy: 0.969933
+ -- 080 / 284 --
+mean loss: 0.052788
+accuracy: 0.978285
+ -- 090 / 284 --
+mean loss: 0.078790
+accuracy: 0.969389
+ -- 100 / 284 --
+mean loss: 0.079808
+accuracy: 0.967326
+ -- 110 / 284 --
+mean loss: 0.076378
+accuracy: 0.967773
+ -- 120 / 284 --
+mean loss: 0.088286
+accuracy: 0.963805
+ -- 130 / 284 --
+mean loss: 0.064115
+accuracy: 0.974144
+ -- 140 / 284 --
+mean loss: 0.079925
+accuracy: 0.966591
+ -- 150 / 284 --
+mean loss: 0.074388
+accuracy: 0.970734
+ -- 160 / 284 --
+mean loss: 0.052925
+accuracy: 0.980130
+ -- 170 / 284 --
+mean loss: 0.098109
+accuracy: 0.958978
+ -- 180 / 284 --
+mean loss: 0.066180
+accuracy: 0.973482
+ -- 190 / 284 --
+mean loss: 0.080890
+accuracy: 0.966920
+ -- 200 / 284 --
+mean loss: 0.090811
+accuracy: 0.962250
+ -- 210 / 284 --
+mean loss: 0.065570
+accuracy: 0.973375
+ -- 220 / 284 --
+mean loss: 0.115981
+accuracy: 0.958301
+ -- 230 / 284 --
+mean loss: 0.083656
+accuracy: 0.966881
+ -- 240 / 284 --
+mean loss: 0.084497
+accuracy: 0.967200
+ -- 250 / 284 --
+mean loss: 0.080990
+accuracy: 0.966444
+ -- 260 / 284 --
+mean loss: 0.091897
+accuracy: 0.963281
+ -- 270 / 284 --
+mean loss: 0.086116
+accuracy: 0.964182
+ -- 280 / 284 --
+mean loss: 0.077502
+accuracy: 0.969191
+2021-07-27 18:05:23.178856
+---- EPOCH 014 EVALUATION ----
+000/036
+020/036
+eval mean loss: 0.272245
+eval accuracy: 0.903197
+eval avg class acc: 0.926287
+eval mIoU of Plant:	 0.758431
+eval mean mIoU: 0.758431
+eval mean mIoU (all shapes): 0.758431
+**** EPOCH 015 ****
+2021-07-27 18:05:28.313171
+ -- 010 / 284 --
+mean loss: 0.096211
+accuracy: 0.958247
+ -- 020 / 284 --
+mean loss: 0.101089
+accuracy: 0.957655
+ -- 030 / 284 --
+mean loss: 0.089468
+accuracy: 0.962634
+ -- 040 / 284 --
+mean loss: 0.082363
+accuracy: 0.965361
+ -- 050 / 284 --
+mean loss: 0.068139
+accuracy: 0.971973
+ -- 060 / 284 --
+mean loss: 0.067371
+accuracy: 0.971516
+ -- 070 / 284 --
+mean loss: 0.089552
+accuracy: 0.961850
+ -- 080 / 284 --
+mean loss: 0.096601
+accuracy: 0.958878
+ -- 090 / 284 --
+mean loss: 0.059480
+accuracy: 0.975740
+ -- 100 / 284 --
+mean loss: 0.058812
+accuracy: 0.976306
+ -- 110 / 284 --
+mean loss: 0.070253
+accuracy: 0.971394
+ -- 120 / 284 --
+mean loss: 0.087597
+accuracy: 0.962523
+ -- 130 / 284 --
+mean loss: 0.079167
+accuracy: 0.967220
+ -- 140 / 284 --
+mean loss: 0.066427
+accuracy: 0.973427
+ -- 150 / 284 --
+mean loss: 0.060283
+accuracy: 0.975739
+ -- 160 / 284 --
+mean loss: 0.081871
+accuracy: 0.965909
+ -- 170 / 284 --
+mean loss: 0.084512
+accuracy: 0.966177
+ -- 180 / 284 --
+mean loss: 0.067891
+accuracy: 0.971519
+ -- 190 / 284 --
+mean loss: 0.080745
+accuracy: 0.967047
+ -- 200 / 284 --
+mean loss: 0.089500
+accuracy: 0.962199
+ -- 210 / 284 --
+mean loss: 0.054132
+accuracy: 0.978087
+ -- 220 / 284 --
+mean loss: 0.078238
+accuracy: 0.968764
+ -- 230 / 284 --
+mean loss: 0.062155
+accuracy: 0.974568
+ -- 240 / 284 --
+mean loss: 0.053840
+accuracy: 0.979152
+ -- 250 / 284 --
+mean loss: 0.059161
+accuracy: 0.976471
+ -- 260 / 284 --
+mean loss: 0.069501
+accuracy: 0.972061
+ -- 270 / 284 --
+mean loss: 0.066030
+accuracy: 0.972862
+ -- 280 / 284 --
+mean loss: 0.058243
+accuracy: 0.976352
+2021-07-27 18:06:31.017836
+---- EPOCH 015 EVALUATION ----
+000/036
+020/036
+eval mean loss: 0.070544
+eval accuracy: 0.970716
+eval avg class acc: 0.937167
+eval mIoU of Plant:	 0.889894
+eval mean mIoU: 0.889894
+eval mean mIoU (all shapes): 0.889894
+**** EPOCH 016 ****
+2021-07-27 18:06:36.179458
+ -- 010 / 284 --
+mean loss: 0.051436
+accuracy: 0.978830
+ -- 020 / 284 --
+mean loss: 0.059485
+accuracy: 0.975201
+ -- 030 / 284 --
+mean loss: 0.061138
+accuracy: 0.974495
+ -- 040 / 284 --
+mean loss: 0.073415
+accuracy: 0.968610
+ -- 050 / 284 --
+mean loss: 0.072805
+accuracy: 0.969196
+ -- 060 / 284 --
+mean loss: 0.074260
+accuracy: 0.969070
+ -- 070 / 284 --
+mean loss: 0.059142
+accuracy: 0.976703
+ -- 080 / 284 --
+mean loss: 0.048144
+accuracy: 0.981194
+ -- 090 / 284 --
+mean loss: 0.082845
+accuracy: 0.963446
+ -- 100 / 284 --
+mean loss: 0.069922
+accuracy: 0.972523
+ -- 110 / 284 --
+mean loss: 0.070291
+accuracy: 0.971323
+ -- 120 / 284 --
+mean loss: 0.053659
+accuracy: 0.979163
+ -- 130 / 284 --
+mean loss: 0.080074
+accuracy: 0.968355
+ -- 140 / 284 --
+mean loss: 0.073476
+accuracy: 0.970313
+ -- 150 / 284 --
+mean loss: 0.050042
+accuracy: 0.979869
+ -- 160 / 284 --
+mean loss: 0.077680
+accuracy: 0.967960
+ -- 170 / 284 --
+mean loss: 0.072324
+accuracy: 0.969534
+ -- 180 / 284 --
+mean loss: 0.067472
+accuracy: 0.972948
+ -- 190 / 284 --
+mean loss: 0.069492
+accuracy: 0.970439
+ -- 200 / 284 --
+mean loss: 0.071283
+accuracy: 0.971217
+ -- 210 / 284 --
+mean loss: 0.087275
+accuracy: 0.964679
+ -- 220 / 284 --
+mean loss: 0.086160
+accuracy: 0.963475
+ -- 230 / 284 --
+mean loss: 0.074848
+accuracy: 0.971468
+ -- 240 / 284 --
+mean loss: 0.078690
+accuracy: 0.966348
+ -- 250 / 284 --
+mean loss: 0.090543
+accuracy: 0.963268
+ -- 260 / 284 --
+mean loss: 0.065550
+accuracy: 0.973940
+ -- 270 / 284 --
+mean loss: 0.076694
+accuracy: 0.968018
+ -- 280 / 284 --
+mean loss: 0.092239
+accuracy: 0.960785
+2021-07-27 18:07:38.898020
+---- EPOCH 016 EVALUATION ----
+000/036
+020/036
+eval mean loss: 0.066603
+eval accuracy: 0.971641
+eval avg class acc: 0.929307
+eval mIoU of Plant:	 0.886780
+eval mean mIoU: 0.886780
+eval mean mIoU (all shapes): 0.886780
+**** EPOCH 017 ****
+2021-07-27 18:07:44.073975
+ -- 010 / 284 --
+mean loss: 0.080490
+accuracy: 0.966853
+ -- 020 / 284 --
+mean loss: 0.044897
+accuracy: 0.982353
+ -- 030 / 284 --
+mean loss: 0.068048
+accuracy: 0.971187
+ -- 040 / 284 --
+mean loss: 0.070106
+accuracy: 0.970432
+ -- 050 / 284 --
+mean loss: 0.078525
+accuracy: 0.967688
+ -- 060 / 284 --
+mean loss: 0.054090
+accuracy: 0.976820
+ -- 070 / 284 --
+mean loss: 0.096395
+accuracy: 0.958449
+ -- 080 / 284 --
+mean loss: 0.078996
+accuracy: 0.967183
+ -- 090 / 284 --
+mean loss: 0.062535
+accuracy: 0.973117
+ -- 100 / 284 --
+mean loss: 0.069375
+accuracy: 0.973375
+ -- 110 / 284 --
+mean loss: 0.060659
+accuracy: 0.975659
+ -- 120 / 284 --
+mean loss: 0.089660
+accuracy: 0.962294
+ -- 130 / 284 --
+mean loss: 0.060920
+accuracy: 0.975749
+ -- 140 / 284 --
+mean loss: 0.083265
+accuracy: 0.964742
+ -- 150 / 284 --
+mean loss: 0.072732
+accuracy: 0.969861
+ -- 160 / 284 --
+mean loss: 0.077984
+accuracy: 0.966965
+ -- 170 / 284 --
+mean loss: 0.072567
+accuracy: 0.969370
+ -- 180 / 284 --
+mean loss: 0.067789
+accuracy: 0.973169
+ -- 190 / 284 --
+mean loss: 0.071083
+accuracy: 0.971223
+ -- 200 / 284 --
+mean loss: 0.076047
+accuracy: 0.967850
+ -- 210 / 284 --
+mean loss: 0.055039
+accuracy: 0.976968
+ -- 220 / 284 --
+mean loss: 0.067852
+accuracy: 0.973601
+ -- 230 / 284 --
+mean loss: 0.057098
+accuracy: 0.977171
+ -- 240 / 284 --
+mean loss: 0.062008
+accuracy: 0.974582
+ -- 250 / 284 --
+mean loss: 0.064865
+accuracy: 0.972830
+ -- 260 / 284 --
+mean loss: 0.039291
+accuracy: 0.984477
+ -- 270 / 284 --
+mean loss: 0.065806
+accuracy: 0.972446
+ -- 280 / 284 --
+mean loss: 0.066137
+accuracy: 0.973404
+2021-07-27 18:08:46.122476
+---- EPOCH 017 EVALUATION ----
+000/036
+020/036
+eval mean loss: 0.080390
+eval accuracy: 0.966804
+eval avg class acc: 0.932548
+eval mIoU of Plant:	 0.880136
+eval mean mIoU: 0.880136
+eval mean mIoU (all shapes): 0.880136
+**** EPOCH 018 ****
+2021-07-27 18:08:51.218092
+ -- 010 / 284 --
+mean loss: 0.048346
+accuracy: 0.980508
+ -- 020 / 284 --
+mean loss: 0.078481
+accuracy: 0.969649
+ -- 030 / 284 --
+mean loss: 0.053548
+accuracy: 0.977890
+ -- 040 / 284 --
+mean loss: 0.077301
+accuracy: 0.968066
+ -- 050 / 284 --
+mean loss: 0.066494
+accuracy: 0.972531
+ -- 060 / 284 --
+mean loss: 0.083070
+accuracy: 0.965617
+ -- 070 / 284 --
+mean loss: 0.080562
+accuracy: 0.966289
+ -- 080 / 284 --
+mean loss: 0.061864
+accuracy: 0.973842
+ -- 090 / 284 --
+mean loss: 0.078384
+accuracy: 0.966447
+ -- 100 / 284 --
+mean loss: 0.048620
+accuracy: 0.979706
+ -- 110 / 284 --
+mean loss: 0.054447
+accuracy: 0.978625
+ -- 120 / 284 --
+mean loss: 0.063970
+accuracy: 0.972542
+ -- 130 / 284 --
+mean loss: 0.063879
+accuracy: 0.973364
+ -- 140 / 284 --
+mean loss: 0.062480
+accuracy: 0.974298
+ -- 150 / 284 --
+mean loss: 0.070565
+accuracy: 0.971703
+ -- 160 / 284 --
+mean loss: 0.064158
+accuracy: 0.974086
+ -- 170 / 284 --
+mean loss: 0.079007
+accuracy: 0.965942
+ -- 180 / 284 --
+mean loss: 0.052894
+accuracy: 0.977966
+ -- 190 / 284 --
+mean loss: 0.072644
+accuracy: 0.970564
+ -- 200 / 284 --
+mean loss: 0.049536
+accuracy: 0.980205
+ -- 210 / 284 --
+mean loss: 0.070481
+accuracy: 0.972427
+ -- 220 / 284 --
+mean loss: 0.076534
+accuracy: 0.969577
+ -- 230 / 284 --
+mean loss: 0.087995
+accuracy: 0.962654
+ -- 240 / 284 --
+mean loss: 0.046388
+accuracy: 0.981595
+ -- 250 / 284 --
+mean loss: 0.084754
+accuracy: 0.966206
+ -- 260 / 284 --
+mean loss: 0.058466
+accuracy: 0.976834
+ -- 270 / 284 --
+mean loss: 0.060311
+accuracy: 0.975821
+ -- 280 / 284 --
+mean loss: 0.072792
+accuracy: 0.970268
+2021-07-27 18:09:52.782585
+---- EPOCH 018 EVALUATION ----
+000/036
+020/036
+eval mean loss: 0.068374
+eval accuracy: 0.972580
+eval avg class acc: 0.933736
+eval mIoU of Plant:	 0.879185
+eval mean mIoU: 0.879185
+eval mean mIoU (all shapes): 0.879185
+**** EPOCH 019 ****
+2021-07-27 18:09:57.959410
+ -- 010 / 284 --
+mean loss: 0.062891
+accuracy: 0.973737
+ -- 020 / 284 --
+mean loss: 0.054994
+accuracy: 0.977103
+ -- 030 / 284 --
+mean loss: 0.060728
+accuracy: 0.974922
+ -- 040 / 284 --
+mean loss: 0.052832
+accuracy: 0.977567
+ -- 050 / 284 --
+mean loss: 0.091079
+accuracy: 0.963971
+ -- 060 / 284 --
+mean loss: 0.081696
+accuracy: 0.965657
+ -- 070 / 284 --
+mean loss: 0.076355
+accuracy: 0.970377
+ -- 080 / 284 --
+mean loss: 0.056153
+accuracy: 0.978793
+ -- 090 / 284 --
+mean loss: 0.070117
+accuracy: 0.971175
+ -- 100 / 284 --
+mean loss: 0.077493
+accuracy: 0.967969
+ -- 110 / 284 --
+mean loss: 0.072329
+accuracy: 0.970245
+ -- 120 / 284 --
+mean loss: 0.050710
+accuracy: 0.980536
+ -- 130 / 284 --
+mean loss: 0.070593
+accuracy: 0.969882
+ -- 140 / 284 --
+mean loss: 0.070015
+accuracy: 0.970969
+ -- 150 / 284 --
+mean loss: 0.077911
+accuracy: 0.966806
+ -- 160 / 284 --
+mean loss: 0.062819
+accuracy: 0.974126
+ -- 170 / 284 --
+mean loss: 0.062333
+accuracy: 0.976445
+ -- 180 / 284 --
+mean loss: 0.067923
+accuracy: 0.971884
+ -- 190 / 284 --
+mean loss: 0.058413
+accuracy: 0.975549
+ -- 200 / 284 --
+mean loss: 0.084677
+accuracy: 0.965077
+ -- 210 / 284 --
+mean loss: 0.054079
+accuracy: 0.979015
+ -- 220 / 284 --
+mean loss: 0.066861
+accuracy: 0.972910
+ -- 230 / 284 --
+mean loss: 0.073412
+accuracy: 0.969366
+ -- 240 / 284 --
+mean loss: 0.067979
+accuracy: 0.972069
+ -- 250 / 284 --
+mean loss: 0.043040
+accuracy: 0.983032
+ -- 260 / 284 --
+mean loss: 0.104624
+accuracy: 0.958299
+ -- 270 / 284 --
+mean loss: 0.065746
+accuracy: 0.973616
+ -- 280 / 284 --
+mean loss: 0.055947
+accuracy: 0.977341
+2021-07-27 18:11:00.636814
+---- EPOCH 019 EVALUATION ----
+000/036
+020/036
+eval mean loss: 0.173907
+eval accuracy: 0.943057
+eval avg class acc: 0.945375
+eval mIoU of Plant:	 0.839862
+eval mean mIoU: 0.839862
+eval mean mIoU (all shapes): 0.839862
+**** EPOCH 020 ****
+2021-07-27 18:11:05.837521
+ -- 010 / 284 --
+mean loss: 0.067140
+accuracy: 0.972655
+ -- 020 / 284 --
+mean loss: 0.053226
+accuracy: 0.977509
+ -- 030 / 284 --
+mean loss: 0.062720
+accuracy: 0.974396
+ -- 040 / 284 --
+mean loss: 0.076635
+accuracy: 0.968121
+ -- 050 / 284 --
+mean loss: 0.046392
+accuracy: 0.981194
+ -- 060 / 284 --
+mean loss: 0.058062
+accuracy: 0.975961
+ -- 070 / 284 --
+mean loss: 0.083064
+accuracy: 0.965833
+ -- 080 / 284 --
+mean loss: 0.046948
+accuracy: 0.981506
+ -- 090 / 284 --
+mean loss: 0.045492
+accuracy: 0.982088
+ -- 100 / 284 --
+mean loss: 0.053200
+accuracy: 0.977934
+ -- 110 / 284 --
+mean loss: 0.082556
+accuracy: 0.965546
+ -- 120 / 284 --
+mean loss: 0.071228
+accuracy: 0.970934
+ -- 130 / 284 --
+mean loss: 0.077638
+accuracy: 0.968509
+ -- 140 / 284 --
+mean loss: 0.063664
+accuracy: 0.973407
+ -- 150 / 284 --
+mean loss: 0.064396
+accuracy: 0.972174
+ -- 160 / 284 --
+mean loss: 0.056073
+accuracy: 0.976717
+ -- 170 / 284 --
+mean loss: 0.070708
+accuracy: 0.970937
+ -- 180 / 284 --
+mean loss: 0.049866
+accuracy: 0.980293
+ -- 190 / 284 --
+mean loss: 0.067468
+accuracy: 0.971291
+ -- 200 / 284 --
+mean loss: 0.054864
+accuracy: 0.977267
+ -- 210 / 284 --
+mean loss: 0.087467
+accuracy: 0.963335
+ -- 220 / 284 --
+mean loss: 0.049549
+accuracy: 0.980188
+ -- 230 / 284 --
+mean loss: 0.060839
+accuracy: 0.974174
+ -- 240 / 284 --
+mean loss: 0.055320
+accuracy: 0.977240
+ -- 250 / 284 --
+mean loss: 0.065120
+accuracy: 0.972417
+ -- 260 / 284 --
+mean loss: 0.057837
+accuracy: 0.975923
+ -- 270 / 284 --
+mean loss: 0.066039
+accuracy: 0.971744
+ -- 280 / 284 --
+mean loss: 0.043745
+accuracy: 0.981964
+2021-07-27 18:12:08.567899
+---- EPOCH 020 EVALUATION ----
+000/036
+020/036
+eval mean loss: 0.063746
+eval accuracy: 0.974916
+eval avg class acc: 0.934053
+eval mIoU of Plant:	 0.893438
+eval mean mIoU: 0.893438
+eval mean mIoU (all shapes): 0.893438
+Model saved in file: log/model.ckpt
+**** EPOCH 021 ****
+2021-07-27 18:12:13.882735
+ -- 010 / 284 --
+mean loss: 0.049231
+accuracy: 0.980272
+ -- 020 / 284 --
+mean loss: 0.054460
+accuracy: 0.976869
+ -- 030 / 284 --
+mean loss: 0.043728
+accuracy: 0.982382
+ -- 040 / 284 --
+mean loss: 0.054708
+accuracy: 0.977214
+ -- 050 / 284 --
+mean loss: 0.059528
+accuracy: 0.974422
+ -- 060 / 284 --
+mean loss: 0.063833
+accuracy: 0.972984
+ -- 070 / 284 --
+mean loss: 0.063533
+accuracy: 0.973265
+ -- 080 / 284 --
+mean loss: 0.054682
+accuracy: 0.977644
+ -- 090 / 284 --
+mean loss: 0.055003
+accuracy: 0.977470
+ -- 100 / 284 --
+mean loss: 0.054232
+accuracy: 0.978096
+ -- 110 / 284 --
+mean loss: 0.055951
+accuracy: 0.976164
+ -- 120 / 284 --
+mean loss: 0.063930
+accuracy: 0.973064
+ -- 130 / 284 --
+mean loss: 0.059705
+accuracy: 0.976712
+ -- 140 / 284 --
+mean loss: 0.080390
+accuracy: 0.967050
+ -- 150 / 284 --
+mean loss: 0.047259
+accuracy: 0.981664
+ -- 160 / 284 --
+mean loss: 0.083685
+accuracy: 0.965239
+ -- 170 / 284 --
+mean loss: 0.072954
+accuracy: 0.971147
+ -- 180 / 284 --
+mean loss: 0.062347
+accuracy: 0.975017
+ -- 190 / 284 --
+mean loss: 0.047582
+accuracy: 0.980936
+ -- 200 / 284 --
+mean loss: 0.060486
+accuracy: 0.974586
+ -- 210 / 284 --
+mean loss: 0.049642
+accuracy: 0.979153
+ -- 220 / 284 --
+mean loss: 0.059413
+accuracy: 0.975021
+ -- 230 / 284 --
+mean loss: 0.075069
+accuracy: 0.968214
+ -- 240 / 284 --
+mean loss: 0.054593
+accuracy: 0.977806
+ -- 250 / 284 --
+mean loss: 0.066752
+accuracy: 0.971175
+ -- 260 / 284 --
+mean loss: 0.067032
+accuracy: 0.971509
+ -- 270 / 284 --
+mean loss: 0.073860
+accuracy: 0.968275
+ -- 280 / 284 --
+mean loss: 0.067876
+accuracy: 0.972150
+2021-07-27 18:13:16.299373
+---- EPOCH 021 EVALUATION ----
+000/036
+020/036
+eval mean loss: 0.066292
+eval accuracy: 0.971869
+eval avg class acc: 0.941205
+eval mIoU of Plant:	 0.892350
+eval mean mIoU: 0.892350
+eval mean mIoU (all shapes): 0.892350
+**** EPOCH 022 ****
+2021-07-27 18:13:21.415933
+ -- 010 / 284 --
+mean loss: 0.073180
+accuracy: 0.968663
+ -- 020 / 284 --
+mean loss: 0.057739
+accuracy: 0.976274
+ -- 030 / 284 --
+mean loss: 0.051569
+accuracy: 0.978354
+ -- 040 / 284 --
+mean loss: 0.060726
+accuracy: 0.975273
+ -- 050 / 284 --
+mean loss: 0.058895
+accuracy: 0.975024
+ -- 060 / 284 --
+mean loss: 0.037711
+accuracy: 0.985170
+ -- 070 / 284 --
+mean loss: 0.038202
+accuracy: 0.984950
+ -- 080 / 284 --
+mean loss: 0.046704
+accuracy: 0.980318
+ -- 090 / 284 --
+mean loss: 0.064347
+accuracy: 0.973460
+ -- 100 / 284 --
+mean loss: 0.058684
+accuracy: 0.974500
+ -- 110 / 284 --
+mean loss: 0.069350
+accuracy: 0.970358
+ -- 120 / 284 --
+mean loss: 0.051560
+accuracy: 0.979182
+ -- 130 / 284 --
+mean loss: 0.088204
+accuracy: 0.962538
+ -- 140 / 284 --
+mean loss: 0.053821
+accuracy: 0.977318
+ -- 150 / 284 --
+mean loss: 0.047538
+accuracy: 0.980540
+ -- 160 / 284 --
+mean loss: 0.057900
+accuracy: 0.976233
+ -- 170 / 284 --
+mean loss: 0.053188
+accuracy: 0.978337
+ -- 180 / 284 --
+mean loss: 0.052227
+accuracy: 0.978473
+ -- 190 / 284 --
+mean loss: 0.048315
+accuracy: 0.981348
+ -- 200 / 284 --
+mean loss: 0.055458
+accuracy: 0.976582
+ -- 210 / 284 --
+mean loss: 0.054264
+accuracy: 0.977771
+ -- 220 / 284 --
+mean loss: 0.067307
+accuracy: 0.971320
+ -- 230 / 284 --
+mean loss: 0.070588
+accuracy: 0.970401
+ -- 240 / 284 --
+mean loss: 0.054808
+accuracy: 0.977039
+ -- 250 / 284 --
+mean loss: 0.055664
+accuracy: 0.978862
+ -- 260 / 284 --
+mean loss: 0.073825
+accuracy: 0.968536
+ -- 270 / 284 --
+mean loss: 0.063038
+accuracy: 0.974487
+ -- 280 / 284 --
+mean loss: 0.064027
+accuracy: 0.974725
+2021-07-27 18:14:22.769710
+---- EPOCH 022 EVALUATION ----
+000/036
+020/036
+eval mean loss: 0.075441
+eval accuracy: 0.967382
+eval avg class acc: 0.947079
+eval mIoU of Plant:	 0.881695
+eval mean mIoU: 0.881695
+eval mean mIoU (all shapes): 0.881695
+**** EPOCH 023 ****
+2021-07-27 18:14:27.883865
+ -- 010 / 284 --
+mean loss: 0.056975
+accuracy: 0.976289
+ -- 020 / 284 --
+mean loss: 0.058171
+accuracy: 0.975952
+ -- 030 / 284 --
+mean loss: 0.076233
+accuracy: 0.966956
+ -- 040 / 284 --
+mean loss: 0.061078
+accuracy: 0.974240
+ -- 050 / 284 --
+mean loss: 0.039919
+accuracy: 0.983945
+ -- 060 / 284 --
+mean loss: 0.066461
+accuracy: 0.971570
+ -- 070 / 284 --
+mean loss: 0.059304
+accuracy: 0.974780
+ -- 080 / 284 --
+mean loss: 0.040840
+accuracy: 0.982600
+ -- 090 / 284 --
+mean loss: 0.042714
+accuracy: 0.982994
+ -- 100 / 284 --
+mean loss: 0.052546
+accuracy: 0.980609
+ -- 110 / 284 --
+mean loss: 0.046499
+accuracy: 0.981367
+ -- 120 / 284 --
+mean loss: 0.069815
+accuracy: 0.970041
+ -- 130 / 284 --
+mean loss: 0.077601
+accuracy: 0.966945
+ -- 140 / 284 --
+mean loss: 0.056737
+accuracy: 0.976607
+ -- 150 / 284 --
+mean loss: 0.062945
+accuracy: 0.974292
+ -- 160 / 284 --
+mean loss: 0.068143
+accuracy: 0.970758
+ -- 170 / 284 --
+mean loss: 0.050441
+accuracy: 0.978992
+ -- 180 / 284 --
+mean loss: 0.051440
+accuracy: 0.978894
+ -- 190 / 284 --
+mean loss: 0.055015
+accuracy: 0.977165
+ -- 200 / 284 --
+mean loss: 0.058612
+accuracy: 0.975920
+ -- 210 / 284 --
+mean loss: 0.051873
+accuracy: 0.979173
+ -- 220 / 284 --
+mean loss: 0.048477
+accuracy: 0.980609
+ -- 230 / 284 --
+mean loss: 0.043529
+accuracy: 0.981821
+ -- 240 / 284 --
+mean loss: 0.049856
+accuracy: 0.979167
+ -- 250 / 284 --
+mean loss: 0.050554
+accuracy: 0.979074
+ -- 260 / 284 --
+mean loss: 0.049304
+accuracy: 0.979536
+ -- 270 / 284 --
+mean loss: 0.064791
+accuracy: 0.973347
+ -- 280 / 284 --
+mean loss: 0.052043
+accuracy: 0.977994
+2021-07-27 18:15:29.274088
+---- EPOCH 023 EVALUATION ----
+000/036
+020/036
+eval mean loss: 0.059761
+eval accuracy: 0.975717
+eval avg class acc: 0.958687
+eval mIoU of Plant:	 0.909445
+eval mean mIoU: 0.909445
+eval mean mIoU (all shapes): 0.909445
+**** EPOCH 024 ****
+2021-07-27 18:15:34.382886
+ -- 010 / 284 --
+mean loss: 0.043431
+accuracy: 0.981851
+ -- 020 / 284 --
+mean loss: 0.052608
+accuracy: 0.977130
+ -- 030 / 284 --
+mean loss: 0.052394
+accuracy: 0.978261
+ -- 040 / 284 --
+mean loss: 0.047673
+accuracy: 0.980357
+ -- 050 / 284 --
+mean loss: 0.075783
+accuracy: 0.968059
+ -- 060 / 284 --
+mean loss: 0.058188
+accuracy: 0.976463
+ -- 070 / 284 --
+mean loss: 0.047947
+accuracy: 0.980029
+ -- 080 / 284 --
+mean loss: 0.037917
+accuracy: 0.984425
+ -- 090 / 284 --
+mean loss: 0.060798
+accuracy: 0.974318
+ -- 100 / 284 --
+mean loss: 0.052453
+accuracy: 0.979176
+ -- 110 / 284 --
+mean loss: 0.048456
+accuracy: 0.979274
+ -- 120 / 284 --
+mean loss: 0.065649
+accuracy: 0.972380
+ -- 130 / 284 --
+mean loss: 0.058474
+accuracy: 0.975467
+ -- 140 / 284 --
+mean loss: 0.063133
+accuracy: 0.973183
+ -- 150 / 284 --
+mean loss: 0.052060
+accuracy: 0.978511
+ -- 160 / 284 --
+mean loss: 0.045706
+accuracy: 0.981795
+ -- 170 / 284 --
+mean loss: 0.061002
+accuracy: 0.974187
+ -- 180 / 284 --
+mean loss: 0.069115
+accuracy: 0.970090
+ -- 190 / 284 --
+mean loss: 0.048358
+accuracy: 0.980217
+ -- 200 / 284 --
+mean loss: 0.063373
+accuracy: 0.972523
+ -- 210 / 284 --
+mean loss: 0.105782
+accuracy: 0.969739
+ -- 220 / 284 --
+mean loss: 0.072632
+accuracy: 0.971786
+ -- 230 / 284 --
+mean loss: 0.085826
+accuracy: 0.966615
+ -- 240 / 284 --
+mean loss: 0.059595
+accuracy: 0.976491
+ -- 250 / 284 --
+mean loss: 0.080769
+accuracy: 0.967061
+ -- 260 / 284 --
+mean loss: 0.064827
+accuracy: 0.973221
+ -- 270 / 284 --
+mean loss: 0.080907
+accuracy: 0.967805
+ -- 280 / 284 --
+mean loss: 0.059619
+accuracy: 0.975832
+2021-07-27 18:16:35.781120
+---- EPOCH 024 EVALUATION ----
+000/036
+020/036
+eval mean loss: 0.124443
+eval accuracy: 0.956938
+eval avg class acc: 0.917893
+eval mIoU of Plant:	 0.858912
+eval mean mIoU: 0.858912
+eval mean mIoU (all shapes): 0.858912
+**** EPOCH 025 ****
+2021-07-27 18:16:40.908294
+ -- 010 / 284 --
+mean loss: 0.064828
+accuracy: 0.972496
+ -- 020 / 284 --
+mean loss: 0.065468
+accuracy: 0.972758
+ -- 030 / 284 --
+mean loss: 0.057056
+accuracy: 0.975720
+ -- 040 / 284 --
+mean loss: 0.039452
+accuracy: 0.984427
+ -- 050 / 284 --
+mean loss: 0.058971
+accuracy: 0.975665
+ -- 060 / 284 --
+mean loss: 0.060629
+accuracy: 0.974886
+ -- 070 / 284 --
+mean loss: 0.052948
+accuracy: 0.978127
+ -- 080 / 284 --
+mean loss: 0.081634
+accuracy: 0.966010
+ -- 090 / 284 --
+mean loss: 0.056373
+accuracy: 0.976117
+ -- 100 / 284 --
+mean loss: 0.060968
+accuracy: 0.975356
+ -- 110 / 284 --
+mean loss: 0.059837
+accuracy: 0.975471
+ -- 120 / 284 --
+mean loss: 0.041302
+accuracy: 0.983788
+ -- 130 / 284 --
+mean loss: 0.045822
+accuracy: 0.981462
+ -- 140 / 284 --
+mean loss: 0.039622
+accuracy: 0.983734
+ -- 150 / 284 --
+mean loss: 0.047912
+accuracy: 0.980968
+ -- 160 / 284 --
+mean loss: 0.055766
+accuracy: 0.977271
+ -- 170 / 284 --
+mean loss: 0.056654
+accuracy: 0.976634
+ -- 180 / 284 --
+mean loss: 0.074283
+accuracy: 0.970352
+ -- 190 / 284 --
+mean loss: 0.062902
+accuracy: 0.973309
+ -- 200 / 284 --
+mean loss: 0.056816
+accuracy: 0.976346
+ -- 210 / 284 --
+mean loss: 0.051897
+accuracy: 0.979153
+ -- 220 / 284 --
+mean loss: 0.053997
+accuracy: 0.977631
+ -- 230 / 284 --
+mean loss: 0.063561
+accuracy: 0.973413
+ -- 240 / 284 --
+mean loss: 0.064770
+accuracy: 0.972997
+ -- 250 / 284 --
+mean loss: 0.055795
+accuracy: 0.976894
+ -- 260 / 284 --
+mean loss: 0.053048
+accuracy: 0.977586
+ -- 270 / 284 --
+mean loss: 0.058886
+accuracy: 0.975775
+ -- 280 / 284 --
+mean loss: 0.060951
+accuracy: 0.973843
+2021-07-27 18:17:42.320744
+---- EPOCH 025 EVALUATION ----
+000/036
+020/036
+eval mean loss: 0.068816
+eval accuracy: 0.972031
+eval avg class acc: 0.919549
+eval mIoU of Plant:	 0.889107
+eval mean mIoU: 0.889107
+eval mean mIoU (all shapes): 0.889107
+**** EPOCH 026 ****
+2021-07-27 18:17:47.450780
+ -- 010 / 284 --
+mean loss: 0.056874
+accuracy: 0.976070
+ -- 020 / 284 --
+mean loss: 0.054516
+accuracy: 0.976849
+ -- 030 / 284 --
+mean loss: 0.065161
+accuracy: 0.972098
+ -- 040 / 284 --
+mean loss: 0.050089
+accuracy: 0.979099
+ -- 050 / 284 --
+mean loss: 0.054248
+accuracy: 0.976639
+ -- 060 / 284 --
+mean loss: 0.058303
+accuracy: 0.976366
+ -- 070 / 284 --
+mean loss: 0.044834
+accuracy: 0.982115
+ -- 080 / 284 --
+mean loss: 0.060053
+accuracy: 0.973981
+ -- 090 / 284 --
+mean loss: 0.060031
+accuracy: 0.974750
+ -- 100 / 284 --
+mean loss: 0.046641
+accuracy: 0.981183
+ -- 110 / 284 --
+mean loss: 0.042328
+accuracy: 0.981920
+ -- 120 / 284 --
+mean loss: 0.042890
+accuracy: 0.982031
+ -- 130 / 284 --
+mean loss: 0.049347
+accuracy: 0.979083
+ -- 140 / 284 --
+mean loss: 0.064373
+accuracy: 0.973007
+ -- 150 / 284 --
+mean loss: 0.049691
+accuracy: 0.979555
+ -- 160 / 284 --
+mean loss: 0.052076
+accuracy: 0.978189
+ -- 170 / 284 --
+mean loss: 0.062097
+accuracy: 0.973526
+ -- 180 / 284 --
+mean loss: 0.052723
+accuracy: 0.977701
+ -- 190 / 284 --
+mean loss: 0.045772
+accuracy: 0.981299
+ -- 200 / 284 --
+mean loss: 0.041581
+accuracy: 0.983333
+ -- 210 / 284 --
+mean loss: 0.044817
+accuracy: 0.981079
+ -- 220 / 284 --
+mean loss: 0.049905
+accuracy: 0.979169
+ -- 230 / 284 --
+mean loss: 0.058653
+accuracy: 0.975967
+ -- 240 / 284 --
+mean loss: 0.057778
+accuracy: 0.975070
+ -- 250 / 284 --
+mean loss: 0.059564
+accuracy: 0.974568
+ -- 260 / 284 --
+mean loss: 0.043913
+accuracy: 0.981435
+ -- 270 / 284 --
+mean loss: 0.057533
+accuracy: 0.975272
+ -- 280 / 284 --
+mean loss: 0.056772
+accuracy: 0.976781
+2021-07-27 18:18:48.789515
+---- EPOCH 026 EVALUATION ----
+000/036
+020/036
+eval mean loss: 0.056229
+eval accuracy: 0.976348
+eval avg class acc: 0.953488
+eval mIoU of Plant:	 0.903255
+eval mean mIoU: 0.903255
+eval mean mIoU (all shapes): 0.903255
+**** EPOCH 027 ****
+2021-07-27 18:18:53.898100
+ -- 010 / 284 --
+mean loss: 0.068058
+accuracy: 0.970642
+ -- 020 / 284 --
+mean loss: 0.045685
+accuracy: 0.981621
+ -- 030 / 284 --
+mean loss: 0.042525
+accuracy: 0.983266
+ -- 040 / 284 --
+mean loss: 0.048048
+accuracy: 0.980301
+ -- 050 / 284 --
+mean loss: 0.052024
+accuracy: 0.978738
+ -- 060 / 284 --
+mean loss: 0.053759
+accuracy: 0.976538
+ -- 070 / 284 --
+mean loss: 0.048911
+accuracy: 0.979817
+ -- 080 / 284 --
+mean loss: 0.040763
+accuracy: 0.982928
+ -- 090 / 284 --
+mean loss: 0.056092
+accuracy: 0.976663
+ -- 100 / 284 --
+mean loss: 0.043790
+accuracy: 0.982297
+ -- 110 / 284 --
+mean loss: 0.042140
+accuracy: 0.982220
+ -- 120 / 284 --
+mean loss: 0.053391
+accuracy: 0.978748
+ -- 130 / 284 --
+mean loss: 0.055902
+accuracy: 0.976382
+ -- 140 / 284 --
+mean loss: 0.061421
+accuracy: 0.975305
+ -- 150 / 284 --
+mean loss: 0.062771
+accuracy: 0.973776
+ -- 160 / 284 --
+mean loss: 0.043930
+accuracy: 0.981619
+ -- 170 / 284 --
+mean loss: 0.045570
+accuracy: 0.980904
+ -- 180 / 284 --
+mean loss: 0.058292
+accuracy: 0.976096
+ -- 190 / 284 --
+mean loss: 0.060275
+accuracy: 0.975137
+ -- 200 / 284 --
+mean loss: 0.058656
+accuracy: 0.975626
+ -- 210 / 284 --
+mean loss: 0.042718
+accuracy: 0.983092
+ -- 220 / 284 --
+mean loss: 0.052057
+accuracy: 0.978256
+ -- 230 / 284 --
+mean loss: 0.056527
+accuracy: 0.975566
+ -- 240 / 284 --
+mean loss: 0.062410
+accuracy: 0.973599
+ -- 250 / 284 --
+mean loss: 0.052450
+accuracy: 0.978183
+ -- 260 / 284 --
+mean loss: 0.062401
+accuracy: 0.973616
+ -- 270 / 284 --
+mean loss: 0.062989
+accuracy: 0.973018
+ -- 280 / 284 --
+mean loss: 0.052994
+accuracy: 0.977728
+2021-07-27 18:19:54.989895
+---- EPOCH 027 EVALUATION ----
+000/036
+020/036
+eval mean loss: 0.052440
+eval accuracy: 0.977553
+eval avg class acc: 0.956441
+eval mIoU of Plant:	 0.911738
+eval mean mIoU: 0.911738
+eval mean mIoU (all shapes): 0.911738
+**** EPOCH 028 ****
+2021-07-27 18:20:00.096439
+ -- 010 / 284 --
+mean loss: 0.049264
+accuracy: 0.979520
+ -- 020 / 284 --
+mean loss: 0.043044
+accuracy: 0.982358
+ -- 030 / 284 --
+mean loss: 0.049894
+accuracy: 0.978990
+ -- 040 / 284 --
+mean loss: 0.045852
+accuracy: 0.980460
+ -- 050 / 284 --
+mean loss: 0.055177
+accuracy: 0.976480
+ -- 060 / 284 --
+mean loss: 0.041590
+accuracy: 0.982567
+ -- 070 / 284 --
+mean loss: 0.054109
+accuracy: 0.977812
+ -- 080 / 284 --
+mean loss: 0.043736
+accuracy: 0.982048
+ -- 090 / 284 --
+mean loss: 0.078379
+accuracy: 0.966219
+ -- 100 / 284 --
+mean loss: 0.056440
+accuracy: 0.976265
+ -- 110 / 284 --
+mean loss: 0.042336
+accuracy: 0.982307
+ -- 120 / 284 --
+mean loss: 0.063389
+accuracy: 0.973306
+ -- 130 / 284 --
+mean loss: 0.051507
+accuracy: 0.977826
+ -- 140 / 284 --
+mean loss: 0.054610
+accuracy: 0.976994
+ -- 150 / 284 --
+mean loss: 0.056473
+accuracy: 0.976308
+ -- 160 / 284 --
+mean loss: 0.040586
+accuracy: 0.984004
+ -- 170 / 284 --
+mean loss: 0.039688
+accuracy: 0.983321
+ -- 180 / 284 --
+mean loss: 0.052560
+accuracy: 0.978279
+ -- 190 / 284 --
+mean loss: 0.054818
+accuracy: 0.977098
+ -- 200 / 284 --
+mean loss: 0.060834
+accuracy: 0.973444
+ -- 210 / 284 --
+mean loss: 0.060654
+accuracy: 0.974454
+ -- 220 / 284 --
+mean loss: 0.036811
+accuracy: 0.985501
+ -- 230 / 284 --
+mean loss: 0.044418
+accuracy: 0.981699
+ -- 240 / 284 --
+mean loss: 0.052593
+accuracy: 0.977467
+ -- 250 / 284 --
+mean loss: 0.057360
+accuracy: 0.976840
+ -- 260 / 284 --
+mean loss: 0.045180
+accuracy: 0.981725
+ -- 270 / 284 --
+mean loss: 0.047917
+accuracy: 0.981334
+ -- 280 / 284 --
+mean loss: 0.063925
+accuracy: 0.973190
+2021-07-27 18:21:01.265073
+---- EPOCH 028 EVALUATION ----
+000/036
+020/036
+eval mean loss: 0.061147
+eval accuracy: 0.974935
+eval avg class acc: 0.951971
+eval mIoU of Plant:	 0.902866
+eval mean mIoU: 0.902866
+eval mean mIoU (all shapes): 0.902866
+**** EPOCH 029 ****
+2021-07-27 18:21:06.380965
+ -- 010 / 284 --
+mean loss: 0.042789
+accuracy: 0.983086
+ -- 020 / 284 --
+mean loss: 0.056459
+accuracy: 0.976561
+ -- 030 / 284 --
+mean loss: 0.054077
+accuracy: 0.977875
+ -- 040 / 284 --
+mean loss: 0.054513
+accuracy: 0.976564
+ -- 050 / 284 --
+mean loss: 0.047056
+accuracy: 0.980136
+ -- 060 / 284 --
+mean loss: 0.077385
+accuracy: 0.968109
+ -- 070 / 284 --
+mean loss: 0.076679
+accuracy: 0.968588
+ -- 080 / 284 --
+mean loss: 0.061702
+accuracy: 0.975154
+ -- 090 / 284 --
+mean loss: 0.072957
+accuracy: 0.968642
+ -- 100 / 284 --
+mean loss: 0.061382
+accuracy: 0.974089
+ -- 110 / 284 --
+mean loss: 0.056042
+accuracy: 0.976767
+ -- 120 / 284 --
+mean loss: 0.067996
+accuracy: 0.971202
+ -- 130 / 284 --
+mean loss: 0.057572
+accuracy: 0.976398
+ -- 140 / 284 --
+mean loss: 0.063990
+accuracy: 0.973473
+ -- 150 / 284 --
+mean loss: 0.052353
+accuracy: 0.979329
+ -- 160 / 284 --
+mean loss: 0.054103
+accuracy: 0.977914
+ -- 170 / 284 --
+mean loss: 0.053564
+accuracy: 0.977309
+ -- 180 / 284 --
+mean loss: 0.044486
+accuracy: 0.981892
+ -- 190 / 284 --
+mean loss: 0.043527
+accuracy: 0.982451
+ -- 200 / 284 --
+mean loss: 0.036533
+accuracy: 0.985669
+ -- 210 / 284 --
+mean loss: 0.051244
+accuracy: 0.978987
+ -- 220 / 284 --
+mean loss: 0.038626
+accuracy: 0.984641
+ -- 230 / 284 --
+mean loss: 0.056078
+accuracy: 0.977008
+ -- 240 / 284 --
+mean loss: 0.059957
+accuracy: 0.975130
+ -- 250 / 284 --
+mean loss: 0.056108
+accuracy: 0.976772
+ -- 260 / 284 --
+mean loss: 0.040819
+accuracy: 0.983234
+ -- 270 / 284 --
+mean loss: 0.061695
+accuracy: 0.973557
+ -- 280 / 284 --
+mean loss: 0.053603
+accuracy: 0.978821
+2021-07-27 18:22:07.531621
+---- EPOCH 029 EVALUATION ----
+000/036
+020/036
+eval mean loss: 0.049883
+eval accuracy: 0.979275
+eval avg class acc: 0.948458
+eval mIoU of Plant:	 0.910251
+eval mean mIoU: 0.910251
+eval mean mIoU (all shapes): 0.910251
+**** EPOCH 030 ****
+2021-07-27 18:22:12.644187
+ -- 010 / 284 --
+mean loss: 0.054292
+accuracy: 0.977835
+ -- 020 / 284 --
+mean loss: 0.053952
+accuracy: 0.978122
+ -- 030 / 284 --
+mean loss: 0.048681
+accuracy: 0.980110
+ -- 040 / 284 --
+mean loss: 0.046743
+accuracy: 0.980595
+ -- 050 / 284 --
+mean loss: 0.054025
+accuracy: 0.977289
+ -- 060 / 284 --
+mean loss: 0.048633
+accuracy: 0.980252
+ -- 070 / 284 --
+mean loss: 0.049300
+accuracy: 0.979733
+ -- 080 / 284 --
+mean loss: 0.051565
+accuracy: 0.978104
+ -- 090 / 284 --
+mean loss: 0.045070
+accuracy: 0.981744
+ -- 100 / 284 --
+mean loss: 0.061155
+accuracy: 0.974490
+ -- 110 / 284 --
+mean loss: 0.057693
+accuracy: 0.975519
+ -- 120 / 284 --
+mean loss: 0.048613
+accuracy: 0.979324
+ -- 130 / 284 --
+mean loss: 0.054587
+accuracy: 0.977274
+ -- 140 / 284 --
+mean loss: 0.058980
+accuracy: 0.974530
+ -- 150 / 284 --
+mean loss: 0.058764
+accuracy: 0.974774
+ -- 160 / 284 --
+mean loss: 0.057324
+accuracy: 0.975134
+ -- 170 / 284 --
+mean loss: 0.039066
+accuracy: 0.984140
+ -- 180 / 284 --
+mean loss: 0.055963
+accuracy: 0.977530
+ -- 190 / 284 --
+mean loss: 0.046235
+accuracy: 0.980685
+ -- 200 / 284 --
+mean loss: 0.048468
+accuracy: 0.980086
+ -- 210 / 284 --
+mean loss: 0.037780
+accuracy: 0.984013
+ -- 220 / 284 --
+mean loss: 0.042789
+accuracy: 0.982106
+ -- 230 / 284 --
+mean loss: 0.047646
+accuracy: 0.980101
+ -- 240 / 284 --
+mean loss: 0.047271
+accuracy: 0.980177
+ -- 250 / 284 --
+mean loss: 0.028216
+accuracy: 0.988837
+ -- 260 / 284 --
+mean loss: 0.045587
+accuracy: 0.980708
+ -- 270 / 284 --
+mean loss: 0.053921
+accuracy: 0.976707
+ -- 280 / 284 --
+mean loss: 0.063086
+accuracy: 0.973534
+2021-07-27 18:23:13.759491
+---- EPOCH 030 EVALUATION ----
+000/036
+020/036
+eval mean loss: 0.048587
+eval accuracy: 0.978838
+eval avg class acc: 0.951185
+eval mIoU of Plant:	 0.919928
+eval mean mIoU: 0.919928
+eval mean mIoU (all shapes): 0.919928
+Model saved in file: log/model.ckpt
+**** EPOCH 031 ****
+2021-07-27 18:23:19.024212
+ -- 010 / 284 --
+mean loss: 0.057242
+accuracy: 0.976144
+ -- 020 / 284 --
+mean loss: 0.062581
+accuracy: 0.973851
+ -- 030 / 284 --
+mean loss: 0.048954
+accuracy: 0.979680
+ -- 040 / 284 --
+mean loss: 0.056808
+accuracy: 0.975937
+ -- 050 / 284 --
+mean loss: 0.043133
+accuracy: 0.982863
+ -- 060 / 284 --
+mean loss: 0.044681
+accuracy: 0.981015
+ -- 070 / 284 --
+mean loss: 0.046358
+accuracy: 0.980591
+ -- 080 / 284 --
+mean loss: 0.034108
+accuracy: 0.985864
+ -- 090 / 284 --
+mean loss: 0.059273
+accuracy: 0.974974
+ -- 100 / 284 --
+mean loss: 0.046047
+accuracy: 0.980602
+ -- 110 / 284 --
+mean loss: 0.048000
+accuracy: 0.980365
+ -- 120 / 284 --
+mean loss: 0.047919
+accuracy: 0.980162
+ -- 130 / 284 --
+mean loss: 0.056423
+accuracy: 0.975832
+ -- 140 / 284 --
+mean loss: 0.051216
+accuracy: 0.978914
+ -- 150 / 284 --
+mean loss: 0.057986
+accuracy: 0.976570
+ -- 160 / 284 --
+mean loss: 0.059207
+accuracy: 0.978581
+ -- 170 / 284 --
+mean loss: 0.073620
+accuracy: 0.971181
+ -- 180 / 284 --
+mean loss: 0.072150
+accuracy: 0.972354
+ -- 190 / 284 --
+mean loss: 0.074692
+accuracy: 0.968777
+ -- 200 / 284 --
+mean loss: 0.063407
+accuracy: 0.974324
+ -- 210 / 284 --
+mean loss: 0.079283
+accuracy: 0.965671
+ -- 220 / 284 --
+mean loss: 0.054195
+accuracy: 0.977899
+ -- 230 / 284 --
+mean loss: 0.064720
+accuracy: 0.972519
+ -- 240 / 284 --
+mean loss: 0.050870
+accuracy: 0.978687
+ -- 250 / 284 --
+mean loss: 0.054370
+accuracy: 0.977991
+ -- 260 / 284 --
+mean loss: 0.056377
+accuracy: 0.976399
+ -- 270 / 284 --
+mean loss: 0.050789
+accuracy: 0.979549
+ -- 280 / 284 --
+mean loss: 0.052363
+accuracy: 0.978305
+2021-07-27 18:24:20.176098
+---- EPOCH 031 EVALUATION ----
+000/036
+020/036
+eval mean loss: 0.058243
+eval accuracy: 0.976771
+eval avg class acc: 0.939771
+eval mIoU of Plant:	 0.901407
+eval mean mIoU: 0.901407
+eval mean mIoU (all shapes): 0.901407
+**** EPOCH 032 ****
+2021-07-27 18:24:25.278717
+ -- 010 / 284 --
+mean loss: 0.050495
+accuracy: 0.979382
+ -- 020 / 284 --
+mean loss: 0.054532
+accuracy: 0.977556
+ -- 030 / 284 --
+mean loss: 0.043784
+accuracy: 0.981908
+ -- 040 / 284 --
+mean loss: 0.053553
+accuracy: 0.977310
+ -- 050 / 284 --
+mean loss: 0.050557
+accuracy: 0.979037
+ -- 060 / 284 --
+mean loss: 0.043955
+accuracy: 0.981522
+ -- 070 / 284 --
+mean loss: 0.045123
+accuracy: 0.981459
+ -- 080 / 284 --
+mean loss: 0.064851
+accuracy: 0.972763
+ -- 090 / 284 --
+mean loss: 0.048469
+accuracy: 0.979898
+ -- 100 / 284 --
+mean loss: 0.044073
+accuracy: 0.983679
+ -- 110 / 284 --
+mean loss: 0.054750
+accuracy: 0.977980
+ -- 120 / 284 --
+mean loss: 0.059364
+accuracy: 0.975934
+ -- 130 / 284 --
+mean loss: 0.046165
+accuracy: 0.981210
+ -- 140 / 284 --
+mean loss: 0.044263
+accuracy: 0.981586
+ -- 150 / 284 --
+mean loss: 0.055926
+accuracy: 0.976646
+ -- 160 / 284 --
+mean loss: 0.044956
+accuracy: 0.981708
+ -- 170 / 284 --
+mean loss: 0.039963
+accuracy: 0.983556
+ -- 180 / 284 --
+mean loss: 0.045949
+accuracy: 0.980408
+ -- 190 / 284 --
+mean loss: 0.052376
+accuracy: 0.977597
+ -- 200 / 284 --
+mean loss: 0.069605
+accuracy: 0.970358
+ -- 210 / 284 --
+mean loss: 0.052743
+accuracy: 0.977632
+ -- 220 / 284 --
+mean loss: 0.036349
+accuracy: 0.985104
+ -- 230 / 284 --
+mean loss: 0.040442
+accuracy: 0.983742
+ -- 240 / 284 --
+mean loss: 0.060987
+accuracy: 0.974210
+ -- 250 / 284 --
+mean loss: 0.030218
+accuracy: 0.987465
+ -- 260 / 284 --
+mean loss: 0.041016
+accuracy: 0.982964
+ -- 270 / 284 --
+mean loss: 0.056921
+accuracy: 0.976671
+ -- 280 / 284 --
+mean loss: 0.066105
+accuracy: 0.971552
+2021-07-27 18:25:26.444766
+---- EPOCH 032 EVALUATION ----
+000/036
+020/036
+eval mean loss: 0.064826
+eval accuracy: 0.974006
+eval avg class acc: 0.952787
+eval mIoU of Plant:	 0.905851
+eval mean mIoU: 0.905851
+eval mean mIoU (all shapes): 0.905851
+**** EPOCH 033 ****
+2021-07-27 18:25:31.561837
+ -- 010 / 284 --
+mean loss: 0.038085
+accuracy: 0.984326
+ -- 020 / 284 --
+mean loss: 0.054304
+accuracy: 0.978191
+ -- 030 / 284 --
+mean loss: 0.056177
+accuracy: 0.976181
+ -- 040 / 284 --
+mean loss: 0.043933
+accuracy: 0.981725
+ -- 050 / 284 --
+mean loss: 0.063936
+accuracy: 0.972302
+ -- 060 / 284 --
+mean loss: 0.061872
+accuracy: 0.973753
+ -- 070 / 284 --
+mean loss: 0.036277
+accuracy: 0.985156
+ -- 080 / 284 --
+mean loss: 0.043597
+accuracy: 0.982445
+ -- 090 / 284 --
+mean loss: 0.051638
+accuracy: 0.978748
+ -- 100 / 284 --
+mean loss: 0.052522
+accuracy: 0.978371
+ -- 110 / 284 --
+mean loss: 0.044660
+accuracy: 0.981096
+ -- 120 / 284 --
+mean loss: 0.038865
+accuracy: 0.984000
+ -- 130 / 284 --
+mean loss: 0.040375
+accuracy: 0.983574
+ -- 140 / 284 --
+mean loss: 0.035562
+accuracy: 0.985695
+ -- 150 / 284 --
+mean loss: 0.037195
+accuracy: 0.984996
+ -- 160 / 284 --
+mean loss: 0.055540
+accuracy: 0.976927
+ -- 170 / 284 --
+mean loss: 0.042280
+accuracy: 0.982477
+ -- 180 / 284 --
+mean loss: 0.054053
+accuracy: 0.977316
+ -- 190 / 284 --
+mean loss: 0.040686
+accuracy: 0.983430
+ -- 200 / 284 --
+mean loss: 0.083769
+accuracy: 0.967978
+ -- 210 / 284 --
+mean loss: 0.063265
+accuracy: 0.975243
+ -- 220 / 284 --
+mean loss: 0.070219
+accuracy: 0.971054
+ -- 230 / 284 --
+mean loss: 0.048079
+accuracy: 0.979845
+ -- 240 / 284 --
+mean loss: 0.057072
+accuracy: 0.975758
+ -- 250 / 284 --
+mean loss: 0.032890
+accuracy: 0.986931
+ -- 260 / 284 --
+mean loss: 0.034665
+accuracy: 0.985283
+ -- 270 / 284 --
+mean loss: 0.050997
+accuracy: 0.979594
+ -- 280 / 284 --
+mean loss: 0.050610
+accuracy: 0.978696
+2021-07-27 18:26:32.669027
+---- EPOCH 033 EVALUATION ----
+000/036
+020/036
+eval mean loss: 0.044240
+eval accuracy: 0.981105
+eval avg class acc: 0.957939
+eval mIoU of Plant:	 0.923360
+eval mean mIoU: 0.923360
+eval mean mIoU (all shapes): 0.923360
+**** EPOCH 034 ****
+2021-07-27 18:26:37.773515
+ -- 010 / 284 --
+mean loss: 0.046774
+accuracy: 0.980638
+ -- 020 / 284 --
+mean loss: 0.066057
+accuracy: 0.975613
+ -- 030 / 284 --
+mean loss: 0.046580
+accuracy: 0.980424
+ -- 040 / 284 --
+mean loss: 0.044661
+accuracy: 0.981232
+ -- 050 / 284 --
+mean loss: 0.060087
+accuracy: 0.974652
+ -- 060 / 284 --
+mean loss: 0.053322
+accuracy: 0.977859
+ -- 070 / 284 --
+mean loss: 0.036270
+accuracy: 0.985680
+ -- 080 / 284 --
+mean loss: 0.057203
+accuracy: 0.976324
+ -- 090 / 284 --
+mean loss: 0.038275
+accuracy: 0.985022
+ -- 100 / 284 --
+mean loss: 0.046940
+accuracy: 0.980658
+ -- 110 / 284 --
+mean loss: 0.054145
+accuracy: 0.977461
+ -- 120 / 284 --
+mean loss: 0.048639
+accuracy: 0.979431
+ -- 130 / 284 --
+mean loss: 0.061008
+accuracy: 0.973990
+ -- 140 / 284 --
+mean loss: 0.064635
+accuracy: 0.972626
+ -- 150 / 284 --
+mean loss: 0.049580
+accuracy: 0.978975
+ -- 160 / 284 --
+mean loss: 0.049301
+accuracy: 0.978983
+ -- 170 / 284 --
+mean loss: 0.047274
+accuracy: 0.980527
+ -- 180 / 284 --
+mean loss: 0.055466
+accuracy: 0.976518
+ -- 190 / 284 --
+mean loss: 0.037992
+accuracy: 0.985068
+ -- 200 / 284 --
+mean loss: 0.050011
+accuracy: 0.979718
+ -- 210 / 284 --
+mean loss: 0.055074
+accuracy: 0.976752
+ -- 220 / 284 --
+mean loss: 0.033927
+accuracy: 0.985905
+ -- 230 / 284 --
+mean loss: 0.039369
+accuracy: 0.983817
+ -- 240 / 284 --
+mean loss: 0.041828
+accuracy: 0.983174
+ -- 250 / 284 --
+mean loss: 0.065997
+accuracy: 0.972937
+ -- 260 / 284 --
+mean loss: 0.052747
+accuracy: 0.977443
+ -- 270 / 284 --
+mean loss: 0.036115
+accuracy: 0.985281
+ -- 280 / 284 --
+mean loss: 0.053771
+accuracy: 0.977661
+2021-07-27 18:27:38.870291
+---- EPOCH 034 EVALUATION ----
+000/036
+020/036
+eval mean loss: 0.055156
+eval accuracy: 0.976903
+eval avg class acc: 0.939734
+eval mIoU of Plant:	 0.905582
+eval mean mIoU: 0.905582
+eval mean mIoU (all shapes): 0.905582
+**** EPOCH 035 ****
+2021-07-27 18:27:43.977978
+ -- 010 / 284 --
+mean loss: 0.053545
+accuracy: 0.977632
+ -- 020 / 284 --
+mean loss: 0.045919
+accuracy: 0.980940
+ -- 030 / 284 --
+mean loss: 0.060971
+accuracy: 0.975195
+ -- 040 / 284 --
+mean loss: 0.047228
+accuracy: 0.980243
+ -- 050 / 284 --
+mean loss: 0.050269
+accuracy: 0.979179
+ -- 060 / 284 --
+mean loss: 0.057768
+accuracy: 0.975369
+ -- 070 / 284 --
+mean loss: 0.047272
+accuracy: 0.980132
+ -- 080 / 284 --
+mean loss: 0.044164
+accuracy: 0.981691
+ -- 090 / 284 --
+mean loss: 0.044510
+accuracy: 0.981267
+ -- 100 / 284 --
+mean loss: 0.048037
+accuracy: 0.980545
+ -- 110 / 284 --
+mean loss: 0.063996
+accuracy: 0.972342
+ -- 120 / 284 --
+mean loss: 0.052638
+accuracy: 0.978316
+ -- 130 / 284 --
+mean loss: 0.043183
+accuracy: 0.982152
+ -- 140 / 284 --
+mean loss: 0.037662
+accuracy: 0.984828
+ -- 150 / 284 --
+mean loss: 0.034727
+accuracy: 0.985519
+ -- 160 / 284 --
+mean loss: 0.062795
+accuracy: 0.972507
+ -- 170 / 284 --
+mean loss: 0.048506
+accuracy: 0.979494
+ -- 180 / 284 --
+mean loss: 0.043785
+accuracy: 0.981369
+ -- 190 / 284 --
+mean loss: 0.038257
+accuracy: 0.983813
+ -- 200 / 284 --
+mean loss: 0.051549
+accuracy: 0.978134
+ -- 210 / 284 --
+mean loss: 0.052364
+accuracy: 0.977171
+ -- 220 / 284 --
+mean loss: 0.042817
+accuracy: 0.983638
+ -- 230 / 284 --
+mean loss: 0.035175
+accuracy: 0.985770
+ -- 240 / 284 --
+mean loss: 0.035778
+accuracy: 0.985983
+ -- 250 / 284 --
+mean loss: 0.066848
+accuracy: 0.973515
+ -- 260 / 284 --
+mean loss: 0.043900
+accuracy: 0.981688
+ -- 270 / 284 --
+mean loss: 0.046082
+accuracy: 0.981079
+ -- 280 / 284 --
+mean loss: 0.046779
+accuracy: 0.980295
+2021-07-27 18:28:45.152204
+---- EPOCH 035 EVALUATION ----
+000/036
+020/036
+eval mean loss: 0.044960
+eval accuracy: 0.980994
+eval avg class acc: 0.955429
+eval mIoU of Plant:	 0.920512
+eval mean mIoU: 0.920512
+eval mean mIoU (all shapes): 0.920512
+**** EPOCH 036 ****
+2021-07-27 18:28:50.247248
+ -- 010 / 284 --
+mean loss: 0.042519
+accuracy: 0.982430
+ -- 020 / 284 --
+mean loss: 0.047393
+accuracy: 0.980482
+ -- 030 / 284 --
+mean loss: 0.032217
+accuracy: 0.986594
+ -- 040 / 284 --
+mean loss: 0.046285
+accuracy: 0.979875
+ -- 050 / 284 --
+mean loss: 0.045355
+accuracy: 0.981030
+ -- 060 / 284 --
+mean loss: 0.044479
+accuracy: 0.981067
+ -- 070 / 284 --
+mean loss: 0.047559
+accuracy: 0.979800
+ -- 080 / 284 --
+mean loss: 0.053199
+accuracy: 0.977504
+ -- 090 / 284 --
+mean loss: 0.040584
+accuracy: 0.983575
+ -- 100 / 284 --
+mean loss: 0.043651
+accuracy: 0.982164
+ -- 110 / 284 --
+mean loss: 0.036066
+accuracy: 0.985046
+ -- 120 / 284 --
+mean loss: 0.064945
+accuracy: 0.972119
+ -- 130 / 284 --
+mean loss: 0.043349
+accuracy: 0.981615
+ -- 140 / 284 --
+mean loss: 0.055395
+accuracy: 0.975772
+ -- 150 / 284 --
+mean loss: 0.050884
+accuracy: 0.978462
+ -- 160 / 284 --
+mean loss: 0.035316
+accuracy: 0.985159
+ -- 170 / 284 --
+mean loss: 0.037857
+accuracy: 0.984196
+ -- 180 / 284 --
+mean loss: 0.042065
+accuracy: 0.982112
+ -- 190 / 284 --
+mean loss: 0.051942
+accuracy: 0.978065
+ -- 200 / 284 --
+mean loss: 0.036787
+accuracy: 0.984172
+ -- 210 / 284 --
+mean loss: 0.046208
+accuracy: 0.980383
+ -- 220 / 284 --
+mean loss: 0.082119
+accuracy: 0.969743
+ -- 230 / 284 --
+mean loss: 0.070601
+accuracy: 0.970514
+ -- 240 / 284 --
+mean loss: 0.056450
+accuracy: 0.978903
+ -- 250 / 284 --
+mean loss: 0.065612
+accuracy: 0.973827
+ -- 260 / 284 --
+mean loss: 0.075121
+accuracy: 0.968292
+ -- 270 / 284 --
+mean loss: 0.055553
+accuracy: 0.976727
+ -- 280 / 284 --
+mean loss: 0.060943
+accuracy: 0.974706
+2021-07-27 18:29:51.371570
+---- EPOCH 036 EVALUATION ----
+000/036
+020/036
+eval mean loss: 0.066973
+eval accuracy: 0.974296
+eval avg class acc: 0.956637
+eval mIoU of Plant:	 0.905024
+eval mean mIoU: 0.905024
+eval mean mIoU (all shapes): 0.905024
+**** EPOCH 037 ****
+2021-07-27 18:29:56.478575
+ -- 010 / 284 --
+mean loss: 0.061198
+accuracy: 0.974727
+ -- 020 / 284 --
+mean loss: 0.056200
+accuracy: 0.977408
+ -- 030 / 284 --
+mean loss: 0.044640
+accuracy: 0.981992
+ -- 040 / 284 --
+mean loss: 0.048213
+accuracy: 0.980247
+ -- 050 / 284 --
+mean loss: 0.051101
+accuracy: 0.978255
+ -- 060 / 284 --
+mean loss: 0.040566
+accuracy: 0.982468
+ -- 070 / 284 --
+mean loss: 0.056558
+accuracy: 0.976077
+ -- 080 / 284 --
+mean loss: 0.051698
+accuracy: 0.979500
+ -- 090 / 284 --
+mean loss: 0.050646
+accuracy: 0.979781
+ -- 100 / 284 --
+mean loss: 0.051001
+accuracy: 0.977911
+ -- 110 / 284 --
+mean loss: 0.058550
+accuracy: 0.975330
+ -- 120 / 284 --
+mean loss: 0.055139
+accuracy: 0.976662
+ -- 130 / 284 --
+mean loss: 0.039671
+accuracy: 0.983588
+ -- 140 / 284 --
+mean loss: 0.045008
+accuracy: 0.981021
+ -- 150 / 284 --
+mean loss: 0.041890
+accuracy: 0.982640
+ -- 160 / 284 --
+mean loss: 0.044265
+accuracy: 0.981860
+ -- 170 / 284 --
+mean loss: 0.056645
+accuracy: 0.976535
+ -- 180 / 284 --
+mean loss: 0.028881
+accuracy: 0.988393
+ -- 190 / 284 --
+mean loss: 0.050184
+accuracy: 0.978842
+ -- 200 / 284 --
+mean loss: 0.037458
+accuracy: 0.984352
+ -- 210 / 284 --
+mean loss: 0.054356
+accuracy: 0.977776
+ -- 220 / 284 --
+mean loss: 0.064113
+accuracy: 0.972609
+ -- 230 / 284 --
+mean loss: 0.060288
+accuracy: 0.973378
+ -- 240 / 284 --
+mean loss: 0.041944
+accuracy: 0.982738
+ -- 250 / 284 --
+mean loss: 0.042898
+accuracy: 0.982335
+ -- 260 / 284 --
+mean loss: 0.041191
+accuracy: 0.982732
+ -- 270 / 284 --
+mean loss: 0.041013
+accuracy: 0.983456
+ -- 280 / 284 --
+mean loss: 0.053334
+accuracy: 0.977013
+2021-07-27 18:30:57.579520
+---- EPOCH 037 EVALUATION ----
+000/036
+020/036
+eval mean loss: 0.056693
+eval accuracy: 0.976906
+eval avg class acc: 0.948675
+eval mIoU of Plant:	 0.910628
+eval mean mIoU: 0.910628
+eval mean mIoU (all shapes): 0.910628
+**** EPOCH 038 ****
+2021-07-27 18:31:02.683653
+ -- 010 / 284 --
+mean loss: 0.035586
+accuracy: 0.985489
+ -- 020 / 284 --
+mean loss: 0.040398
+accuracy: 0.983414
+ -- 030 / 284 --
+mean loss: 0.057662
+accuracy: 0.978641
+ -- 040 / 284 --
+mean loss: 0.039294
+accuracy: 0.984209
+ -- 050 / 284 --
+mean loss: 0.044632
+accuracy: 0.982156
+ -- 060 / 284 --
+mean loss: 0.038704
+accuracy: 0.984401
+ -- 070 / 284 --
+mean loss: 0.043131
+accuracy: 0.982613
+ -- 080 / 284 --
+mean loss: 0.045562
+accuracy: 0.980434
+ -- 090 / 284 --
+mean loss: 0.037824
+accuracy: 0.984511
+ -- 100 / 284 --
+mean loss: 0.058793
+accuracy: 0.974855
+ -- 110 / 284 --
+mean loss: 0.052254
+accuracy: 0.977446
+ -- 120 / 284 --
+mean loss: 0.045558
+accuracy: 0.980771
+ -- 130 / 284 --
+mean loss: 0.054211
+accuracy: 0.976918
+ -- 140 / 284 --
+mean loss: 0.039731
+accuracy: 0.983662
+ -- 150 / 284 --
+mean loss: 0.046454
+accuracy: 0.980511
+ -- 160 / 284 --
+mean loss: 0.043884
+accuracy: 0.981653
+ -- 170 / 284 --
+mean loss: 0.044981
+accuracy: 0.981340
+ -- 180 / 284 --
+mean loss: 0.044465
+accuracy: 0.981235
+ -- 190 / 284 --
+mean loss: 0.040440
+accuracy: 0.982977
+ -- 200 / 284 --
+mean loss: 0.056475
+accuracy: 0.975288
+ -- 210 / 284 --
+mean loss: 0.052553
+accuracy: 0.978223
+ -- 220 / 284 --
+mean loss: 0.042158
+accuracy: 0.981825
+ -- 230 / 284 --
+mean loss: 0.039798
+accuracy: 0.983299
+ -- 240 / 284 --
+mean loss: 0.041753
+accuracy: 0.982544
+ -- 250 / 284 --
+mean loss: 0.049274
+accuracy: 0.979463
+ -- 260 / 284 --
+mean loss: 0.049873
+accuracy: 0.978787
+ -- 270 / 284 --
+mean loss: 0.054742
+accuracy: 0.976266
+ -- 280 / 284 --
+mean loss: 0.044175
+accuracy: 0.981534
+2021-07-27 18:32:03.809292
+---- EPOCH 038 EVALUATION ----
+000/036
+020/036
+eval mean loss: 0.044604
+eval accuracy: 0.981703
+eval avg class acc: 0.966115
+eval mIoU of Plant:	 0.928399
+eval mean mIoU: 0.928399
+eval mean mIoU (all shapes): 0.928399
+**** EPOCH 039 ****
+2021-07-27 18:32:08.926956
+ -- 010 / 284 --
+mean loss: 0.053410
+accuracy: 0.977144
+ -- 020 / 284 --
+mean loss: 0.041394
+accuracy: 0.982999
+ -- 030 / 284 --
+mean loss: 0.038358
+accuracy: 0.983916
+ -- 040 / 284 --
+mean loss: 0.046559
+accuracy: 0.980115
+ -- 050 / 284 --
+mean loss: 0.039011
+accuracy: 0.984381
+ -- 060 / 284 --
+mean loss: 0.037801
+accuracy: 0.984030
+ -- 070 / 284 --
+mean loss: 0.037050
+accuracy: 0.984554
+ -- 080 / 284 --
+mean loss: 0.047163
+accuracy: 0.980118
+ -- 090 / 284 --
+mean loss: 0.052132
+accuracy: 0.977756
+ -- 100 / 284 --
+mean loss: 0.047350
+accuracy: 0.980089
+ -- 110 / 284 --
+mean loss: 0.055166
+accuracy: 0.975894
+ -- 120 / 284 --
+mean loss: 0.038424
+accuracy: 0.983733
+ -- 130 / 284 --
+mean loss: 0.030504
+accuracy: 0.987758
+ -- 140 / 284 --
+mean loss: 0.049326
+accuracy: 0.979588
+ -- 150 / 284 --
+mean loss: 0.045574
+accuracy: 0.980388
+ -- 160 / 284 --
+mean loss: 0.051488
+accuracy: 0.977878
+ -- 170 / 284 --
+mean loss: 0.037033
+accuracy: 0.984631
+ -- 180 / 284 --
+mean loss: 0.044710
+accuracy: 0.980768
+ -- 190 / 284 --
+mean loss: 0.053670
+accuracy: 0.977184
+ -- 200 / 284 --
+mean loss: 0.050009
+accuracy: 0.979964
+ -- 210 / 284 --
+mean loss: 0.049554
+accuracy: 0.980153
+ -- 220 / 284 --
+mean loss: 0.052141
+accuracy: 0.977695
+ -- 230 / 284 --
+mean loss: 0.038661
+accuracy: 0.983839
+ -- 240 / 284 --
+mean loss: 0.050406
+accuracy: 0.978598
+ -- 250 / 284 --
+mean loss: 0.040632
+accuracy: 0.982899
+ -- 260 / 284 --
+mean loss: 0.045726
+accuracy: 0.980847
+ -- 270 / 284 --
+mean loss: 0.028917
+accuracy: 0.988161
+ -- 280 / 284 --
+mean loss: 0.036303
+accuracy: 0.984908
+2021-07-27 18:33:10.062506
+---- EPOCH 039 EVALUATION ----
+000/036
+020/036
+eval mean loss: 0.048408
+eval accuracy: 0.979335
+eval avg class acc: 0.952757
+eval mIoU of Plant:	 0.919241
+eval mean mIoU: 0.919241
+eval mean mIoU (all shapes): 0.919241
+**** EPOCH 040 ****
+2021-07-27 18:33:15.184316
+ -- 010 / 284 --
+mean loss: 0.047681
+accuracy: 0.980043
+ -- 020 / 284 --
+mean loss: 0.051145
+accuracy: 0.978235
+ -- 030 / 284 --
+mean loss: 0.030228
+accuracy: 0.987752
+ -- 040 / 284 --
+mean loss: 0.037120
+accuracy: 0.984431
+ -- 050 / 284 --
+mean loss: 0.034295
+accuracy: 0.986143
+ -- 060 / 284 --
+mean loss: 0.033050
+accuracy: 0.986516
+ -- 070 / 284 --
+mean loss: 0.045290
+accuracy: 0.980598
+ -- 080 / 284 --
+mean loss: 0.056688
+accuracy: 0.976294
+ -- 090 / 284 --
+mean loss: 0.037499
+accuracy: 0.984306
+ -- 100 / 284 --
+mean loss: 0.045178
+accuracy: 0.981041
+ -- 110 / 284 --
+mean loss: 0.044082
+accuracy: 0.980869
+ -- 120 / 284 --
+mean loss: 0.036434
+accuracy: 0.985553
+ -- 130 / 284 --
+mean loss: 0.038730
+accuracy: 0.983899
+ -- 140 / 284 --
+mean loss: 0.043619
+accuracy: 0.981834
+ -- 150 / 284 --
+mean loss: 0.052090
+accuracy: 0.977803
+ -- 160 / 284 --
+mean loss: 0.043962
+accuracy: 0.981516
+ -- 170 / 284 --
+mean loss: 0.048557
+accuracy: 0.979294
+ -- 180 / 284 --
+mean loss: 0.064616
+accuracy: 0.971857
+ -- 190 / 284 --
+mean loss: 0.048424
+accuracy: 0.979800
+ -- 200 / 284 --
+mean loss: 0.043840
+accuracy: 0.982007
+ -- 210 / 284 --
+mean loss: 0.040226
+accuracy: 0.982919
+ -- 220 / 284 --
+mean loss: 0.045618
+accuracy: 0.981436
+ -- 230 / 284 --
+mean loss: 0.041171
+accuracy: 0.982677
+ -- 240 / 284 --
+mean loss: 0.043982
+accuracy: 0.980991
+ -- 250 / 284 --
+mean loss: 0.054261
+accuracy: 0.976622
+ -- 260 / 284 --
+mean loss: 0.036206
+accuracy: 0.985100
+ -- 270 / 284 --
+mean loss: 0.032366
+accuracy: 0.987341
+ -- 280 / 284 --
+mean loss: 0.031227
+accuracy: 0.986934
+2021-07-27 18:34:16.354266
+---- EPOCH 040 EVALUATION ----
+000/036
+020/036
+eval mean loss: 0.055979
+eval accuracy: 0.977279
+eval avg class acc: 0.954875
+eval mIoU of Plant:	 0.925618
+eval mean mIoU: 0.925618
+eval mean mIoU (all shapes): 0.925618
+Model saved in file: log/model.ckpt
+**** EPOCH 041 ****
+2021-07-27 18:34:21.631970
+ -- 010 / 284 --
+mean loss: 0.041526
+accuracy: 0.982332
+ -- 020 / 284 --
+mean loss: 0.038749
+accuracy: 0.984311
+ -- 030 / 284 --
+mean loss: 0.055408
+accuracy: 0.977290
+ -- 040 / 284 --
+mean loss: 0.033863
+accuracy: 0.986368
+ -- 050 / 284 --
+mean loss: 0.049462
+accuracy: 0.978807
+ -- 060 / 284 --
+mean loss: 0.041244
+accuracy: 0.982803
+ -- 070 / 284 --
+mean loss: 0.040406
+accuracy: 0.983229
+ -- 080 / 284 --
+mean loss: 0.047368
+accuracy: 0.980151
+ -- 090 / 284 --
+mean loss: 0.045135
+accuracy: 0.981161
+ -- 100 / 284 --
+mean loss: 0.039454
+accuracy: 0.983369
+ -- 110 / 284 --
+mean loss: 0.032196
+accuracy: 0.986555
+ -- 120 / 284 --
+mean loss: 0.036635
+accuracy: 0.984706
+ -- 130 / 284 --
+mean loss: 0.047536
+accuracy: 0.979617
+ -- 140 / 284 --
+mean loss: 0.043793
+accuracy: 0.981870
+ -- 150 / 284 --
+mean loss: 0.032066
+accuracy: 0.987086
+ -- 160 / 284 --
+mean loss: 0.035103
+accuracy: 0.985870
+ -- 170 / 284 --
+mean loss: 0.056939
+accuracy: 0.975674
+ -- 180 / 284 --
+mean loss: 0.050376
+accuracy: 0.977853
+ -- 190 / 284 --
+mean loss: 0.041975
+accuracy: 0.982219
+ -- 200 / 284 --
+mean loss: 0.052948
+accuracy: 0.977460
+ -- 210 / 284 --
+mean loss: 0.045999
+accuracy: 0.980495
+ -- 220 / 284 --
+mean loss: 0.042071
+accuracy: 0.982063
+ -- 230 / 284 --
+mean loss: 0.032822
+accuracy: 0.986462
+ -- 240 / 284 --
+mean loss: 0.040293
+accuracy: 0.983203
+ -- 250 / 284 --
+mean loss: 0.040707
+accuracy: 0.982640
+ -- 260 / 284 --
+mean loss: 0.052991
+accuracy: 0.977133
+ -- 270 / 284 --
+mean loss: 0.039787
+accuracy: 0.983015
+ -- 280 / 284 --
+mean loss: 0.052403
+accuracy: 0.978214
+2021-07-27 18:35:22.786697
+---- EPOCH 041 EVALUATION ----
+000/036
+020/036
+eval mean loss: 0.043171
+eval accuracy: 0.980967
+eval avg class acc: 0.965330
+eval mIoU of Plant:	 0.927196
+eval mean mIoU: 0.927196
+eval mean mIoU (all shapes): 0.927196
+**** EPOCH 042 ****
+2021-07-27 18:35:27.887514
+ -- 010 / 284 --
+mean loss: 0.049611
+accuracy: 0.979137
+ -- 020 / 284 --
+mean loss: 0.062785
+accuracy: 0.972942
+ -- 030 / 284 --
+mean loss: 0.054533
+accuracy: 0.977351
+ -- 040 / 284 --
+mean loss: 0.088129
+accuracy: 0.969356
+ -- 050 / 284 --
+mean loss: 0.056679
+accuracy: 0.978690
+ -- 060 / 284 --
+mean loss: 0.064668
+accuracy: 0.973492
+ -- 070 / 284 --
+mean loss: 0.053618
+accuracy: 0.977594
+ -- 080 / 284 --
+mean loss: 0.039764
+accuracy: 0.983879
+ -- 090 / 284 --
+mean loss: 0.045872
+accuracy: 0.980910
+ -- 100 / 284 --
+mean loss: 0.040419
+accuracy: 0.983890
+ -- 110 / 284 --
+mean loss: 0.053316
+accuracy: 0.977499
+ -- 120 / 284 --
+mean loss: 0.049185
+accuracy: 0.979240
+ -- 130 / 284 --
+mean loss: 0.045010
+accuracy: 0.981363
+ -- 140 / 284 --
+mean loss: 0.041093
+accuracy: 0.982416
+ -- 150 / 284 --
+mean loss: 0.043762
+accuracy: 0.981024
+ -- 160 / 284 --
+mean loss: 0.055543
+accuracy: 0.976886
+ -- 170 / 284 --
+mean loss: 0.049156
+accuracy: 0.980653
+ -- 180 / 284 --
+mean loss: 0.040574
+accuracy: 0.983141
+ -- 190 / 284 --
+mean loss: 0.049048
+accuracy: 0.979489
+ -- 200 / 284 --
+mean loss: 0.041886
+accuracy: 0.982430
+ -- 210 / 284 --
+mean loss: 0.039173
+accuracy: 0.983693
+ -- 220 / 284 --
+mean loss: 0.044383
+accuracy: 0.982350
+ -- 230 / 284 --
+mean loss: 0.032057
+accuracy: 0.987378
+ -- 240 / 284 --
+mean loss: 0.037883
+accuracy: 0.984232
+ -- 250 / 284 --
+mean loss: 0.053299
+accuracy: 0.977219
+ -- 260 / 284 --
+mean loss: 0.045937
+accuracy: 0.980864
+ -- 270 / 284 --
+mean loss: 0.045946
+accuracy: 0.980589
+ -- 280 / 284 --
+mean loss: 0.046166
+accuracy: 0.981499
+2021-07-27 18:36:29.062200
+---- EPOCH 042 EVALUATION ----
+000/036
+020/036
+eval mean loss: 0.051137
+eval accuracy: 0.978884
+eval avg class acc: 0.955692
+eval mIoU of Plant:	 0.918542
+eval mean mIoU: 0.918542
+eval mean mIoU (all shapes): 0.918542
+**** EPOCH 043 ****
+2021-07-27 18:36:34.163772
+ -- 010 / 284 --
+mean loss: 0.053331
+accuracy: 0.977501
+ -- 020 / 284 --
+mean loss: 0.052212
+accuracy: 0.977943
+ -- 030 / 284 --
+mean loss: 0.039658
+accuracy: 0.983693
+ -- 040 / 284 --
+mean loss: 0.043766
+accuracy: 0.981578
+ -- 050 / 284 --
+mean loss: 0.048937
+accuracy: 0.978580
+ -- 060 / 284 --
+mean loss: 0.057797
+accuracy: 0.975089
+ -- 070 / 284 --
+mean loss: 0.044923
+accuracy: 0.981731
+ -- 080 / 284 --
+mean loss: 0.043388
+accuracy: 0.981558
+ -- 090 / 284 --
+mean loss: 0.049496
+accuracy: 0.978787
+ -- 100 / 284 --
+mean loss: 0.051795
+accuracy: 0.978130
+ -- 110 / 284 --
+mean loss: 0.035906
+accuracy: 0.985193
+ -- 120 / 284 --
+mean loss: 0.047212
+accuracy: 0.980127
+ -- 130 / 284 --
+mean loss: 0.040935
+accuracy: 0.982532
+ -- 140 / 284 --
+mean loss: 0.043664
+accuracy: 0.981293
+ -- 150 / 284 --
+mean loss: 0.049808
+accuracy: 0.979057
+ -- 160 / 284 --
+mean loss: 0.037185
+accuracy: 0.983902
+ -- 170 / 284 --
+mean loss: 0.021712
+accuracy: 0.991283
+ -- 180 / 284 --
+mean loss: 0.035780
+accuracy: 0.984816
+ -- 190 / 284 --
+mean loss: 0.037159
+accuracy: 0.984686
+ -- 200 / 284 --
+mean loss: 0.049638
+accuracy: 0.978944
+ -- 210 / 284 --
+mean loss: 0.040379
+accuracy: 0.983250
+ -- 220 / 284 --
+mean loss: 0.036054
+accuracy: 0.985709
+ -- 230 / 284 --
+mean loss: 0.036101
+accuracy: 0.984679
+ -- 240 / 284 --
+mean loss: 0.043563
+accuracy: 0.981213
+ -- 250 / 284 --
+mean loss: 0.038606
+accuracy: 0.984125
+ -- 260 / 284 --
+mean loss: 0.040037
+accuracy: 0.983067
+ -- 270 / 284 --
+mean loss: 0.040439
+accuracy: 0.982964
+ -- 280 / 284 --
+mean loss: 0.041133
+accuracy: 0.982635
+2021-07-27 18:37:35.344081
+---- EPOCH 043 EVALUATION ----
+000/036
+020/036
+eval mean loss: 0.042752
+eval accuracy: 0.982816
+eval avg class acc: 0.964700
+eval mIoU of Plant:	 0.935927
+eval mean mIoU: 0.935927
+eval mean mIoU (all shapes): 0.935927
+**** EPOCH 044 ****
+2021-07-27 18:37:40.449476
+ -- 010 / 284 --
+mean loss: 0.036740
+accuracy: 0.984795
+ -- 020 / 284 --
+mean loss: 0.031786
+accuracy: 0.986433
+ -- 030 / 284 --
+mean loss: 0.036763
+accuracy: 0.984497
+ -- 040 / 284 --
+mean loss: 0.048811
+accuracy: 0.979015
+ -- 050 / 284 --
+mean loss: 0.041903
+accuracy: 0.981950
+ -- 060 / 284 --
+mean loss: 0.054619
+accuracy: 0.976967
+ -- 070 / 284 --
+mean loss: 0.038237
+accuracy: 0.984557
+ -- 080 / 284 --
+mean loss: 0.039971
+accuracy: 0.983672
+ -- 090 / 284 --
+mean loss: 0.037365
+accuracy: 0.983769
+ -- 100 / 284 --
+mean loss: 0.045804
+accuracy: 0.980920
+ -- 110 / 284 --
+mean loss: 0.031832
+accuracy: 0.986649
+ -- 120 / 284 --
+mean loss: 0.034972
+accuracy: 0.985207
+ -- 130 / 284 --
+mean loss: 0.051465
+accuracy: 0.977856
+ -- 140 / 284 --
+mean loss: 0.037803
+accuracy: 0.984128
+ -- 150 / 284 --
+mean loss: 0.045249
+accuracy: 0.981197
+ -- 160 / 284 --
+mean loss: 0.045743
+accuracy: 0.979877
+ -- 170 / 284 --
+mean loss: 0.044172
+accuracy: 0.981332
+ -- 180 / 284 --
+mean loss: 0.037691
+accuracy: 0.984053
+ -- 190 / 284 --
+mean loss: 0.030178
+accuracy: 0.987540
+ -- 200 / 284 --
+mean loss: 0.044442
+accuracy: 0.981535
+ -- 210 / 284 --
+mean loss: 0.034095
+accuracy: 0.985764
+ -- 220 / 284 --
+mean loss: 0.042017
+accuracy: 0.982602
+ -- 230 / 284 --
+mean loss: 0.050536
+accuracy: 0.978305
+ -- 240 / 284 --
+mean loss: 0.043741
+accuracy: 0.981726
+ -- 250 / 284 --
+mean loss: 0.047081
+accuracy: 0.979857
+ -- 260 / 284 --
+mean loss: 0.053972
+accuracy: 0.976448
+ -- 270 / 284 --
+mean loss: 0.046454
+accuracy: 0.980641
+ -- 280 / 284 --
+mean loss: 0.043308
+accuracy: 0.981772
+2021-07-27 18:38:41.602891
+---- EPOCH 044 EVALUATION ----
+000/036
+020/036
+eval mean loss: 0.072135
+eval accuracy: 0.975160
+eval avg class acc: 0.955091
+eval mIoU of Plant:	 0.926055
+eval mean mIoU: 0.926055
+eval mean mIoU (all shapes): 0.926055
+**** EPOCH 045 ****
+2021-07-27 18:38:46.714097
+ -- 010 / 284 --
+mean loss: 0.041517
+accuracy: 0.982520
+ -- 020 / 284 --
+mean loss: 0.048844
+accuracy: 0.979776
+ -- 030 / 284 --
+mean loss: 0.043143
+accuracy: 0.982603
+ -- 040 / 284 --
+mean loss: 0.044134
+accuracy: 0.981186
+ -- 050 / 284 --
+mean loss: 0.043082
+accuracy: 0.981677
+ -- 060 / 284 --
+mean loss: 0.043474
+accuracy: 0.981696
+ -- 070 / 284 --
+mean loss: 0.059994
+accuracy: 0.973964
+ -- 080 / 284 --
+mean loss: 0.031700
+accuracy: 0.986804
+ -- 090 / 284 --
+mean loss: 0.043227
+accuracy: 0.981400
+ -- 100 / 284 --
+mean loss: 0.038672
+accuracy: 0.983589
+ -- 110 / 284 --
+mean loss: 0.035966
+accuracy: 0.985004
+ -- 120 / 284 --
+mean loss: 0.024354
+accuracy: 0.990208
+ -- 130 / 284 --
+mean loss: 0.037356
+accuracy: 0.984686
+ -- 140 / 284 --
+mean loss: 0.043355
+accuracy: 0.981331
+ -- 150 / 284 --
+mean loss: 0.049763
+accuracy: 0.978658
+ -- 160 / 284 --
+mean loss: 0.047094
+accuracy: 0.979871
+ -- 170 / 284 --
+mean loss: 0.038528
+accuracy: 0.983502
+ -- 180 / 284 --
+mean loss: 0.053338
+accuracy: 0.977396
+ -- 190 / 284 --
+mean loss: 0.031904
+accuracy: 0.987201
+ -- 200 / 284 --
+mean loss: 0.032870
+accuracy: 0.986113
+ -- 210 / 284 --
+mean loss: 0.043405
+accuracy: 0.982083
+ -- 220 / 284 --
+mean loss: 0.036981
+accuracy: 0.984708
+ -- 230 / 284 --
+mean loss: 0.037746
+accuracy: 0.984503
+ -- 240 / 284 --
+mean loss: 0.056230
+accuracy: 0.975668
+ -- 250 / 284 --
+mean loss: 0.048276
+accuracy: 0.979253
+ -- 260 / 284 --
+mean loss: 0.043435
+accuracy: 0.981917
+ -- 270 / 284 --
+mean loss: 0.029266
+accuracy: 0.987625
+ -- 280 / 284 --
+mean loss: 0.030738
+accuracy: 0.987210
+2021-07-27 18:39:47.869420
+---- EPOCH 045 EVALUATION ----
+000/036
+020/036
+eval mean loss: 0.041535
+eval accuracy: 0.982647
+eval avg class acc: 0.969857
+eval mIoU of Plant:	 0.935081
+eval mean mIoU: 0.935081
+eval mean mIoU (all shapes): 0.935081
+**** EPOCH 046 ****
+2021-07-27 18:39:52.981486
+ -- 010 / 284 --
+mean loss: 0.045810
+accuracy: 0.980728
+ -- 020 / 284 --
+mean loss: 0.046939
+accuracy: 0.979970
+ -- 030 / 284 --
+mean loss: 0.040890
+accuracy: 0.982594
+ -- 040 / 284 --
+mean loss: 0.042200
+accuracy: 0.982076
+ -- 050 / 284 --
+mean loss: 0.046337
+accuracy: 0.979866
+ -- 060 / 284 --
+mean loss: 0.031671
+accuracy: 0.987059
+ -- 070 / 284 --
+mean loss: 0.037038
+accuracy: 0.984554
+ -- 080 / 284 --
+mean loss: 0.056390
+accuracy: 0.975616
+ -- 090 / 284 --
+mean loss: 0.029003
+accuracy: 0.987979
+ -- 100 / 284 --
+mean loss: 0.037667
+accuracy: 0.984567
+ -- 110 / 284 --
+mean loss: 0.038448
+accuracy: 0.984145
+ -- 120 / 284 --
+mean loss: 0.043692
+accuracy: 0.981857
+ -- 130 / 284 --
+mean loss: 0.037740
+accuracy: 0.984187
+ -- 140 / 284 --
+mean loss: 0.036122
+accuracy: 0.985330
+ -- 150 / 284 --
+mean loss: 0.039886
+accuracy: 0.983124
+ -- 160 / 284 --
+mean loss: 0.035618
+accuracy: 0.984990
+ -- 170 / 284 --
+mean loss: 0.039562
+accuracy: 0.983812
+ -- 180 / 284 --
+mean loss: 0.041126
+accuracy: 0.982462
+ -- 190 / 284 --
+mean loss: 0.046729
+accuracy: 0.979822
+ -- 200 / 284 --
+mean loss: 0.044326
+accuracy: 0.981552
+ -- 210 / 284 --
+mean loss: 0.046837
+accuracy: 0.980217
+ -- 220 / 284 --
+mean loss: 0.049035
+accuracy: 0.979025
+ -- 230 / 284 --
+mean loss: 0.033438
+accuracy: 0.986270
+ -- 240 / 284 --
+mean loss: 0.054382
+accuracy: 0.977130
+ -- 250 / 284 --
+mean loss: 0.041329
+accuracy: 0.982648
+ -- 260 / 284 --
+mean loss: 0.044278
+accuracy: 0.981189
+ -- 270 / 284 --
+mean loss: 0.034501
+accuracy: 0.985168
+ -- 280 / 284 --
+mean loss: 0.047063
+accuracy: 0.980360
+2021-07-27 18:40:54.073489
+---- EPOCH 046 EVALUATION ----
+000/036
+020/036
+eval mean loss: 0.049618
+eval accuracy: 0.979517
+eval avg class acc: 0.962521
+eval mIoU of Plant:	 0.927748
+eval mean mIoU: 0.927748
+eval mean mIoU (all shapes): 0.927748
+**** EPOCH 047 ****
+2021-07-27 18:40:59.188712
+ -- 010 / 284 --
+mean loss: 0.046890
+accuracy: 0.980138
+ -- 020 / 284 --
+mean loss: 0.043948
+accuracy: 0.981201
+ -- 030 / 284 --
+mean loss: 0.049145
+accuracy: 0.978984
+ -- 040 / 284 --
+mean loss: 0.032926
+accuracy: 0.986674
+ -- 050 / 284 --
+mean loss: 0.047272
+accuracy: 0.979993
+ -- 060 / 284 --
+mean loss: 0.046393
+accuracy: 0.979961
+ -- 070 / 284 --
+mean loss: 0.042121
+accuracy: 0.982336
+ -- 080 / 284 --
+mean loss: 0.046843
+accuracy: 0.980376
+ -- 090 / 284 --
+mean loss: 0.052765
+accuracy: 0.977473
+ -- 100 / 284 --
+mean loss: 0.045841
+accuracy: 0.980293
+ -- 110 / 284 --
+mean loss: 0.049347
+accuracy: 0.978584
+ -- 120 / 284 --
+mean loss: 0.035281
+accuracy: 0.985497
+ -- 130 / 284 --
+mean loss: 0.031215
+accuracy: 0.987495
+ -- 140 / 284 --
+mean loss: 0.037860
+accuracy: 0.984557
+ -- 150 / 284 --
+mean loss: 0.043939
+accuracy: 0.981430
+ -- 160 / 284 --
+mean loss: 0.042727
+accuracy: 0.982373
+ -- 170 / 284 --
+mean loss: 0.038451
+accuracy: 0.984056
+ -- 180 / 284 --
+mean loss: 0.034873
+accuracy: 0.985667
+ -- 190 / 284 --
+mean loss: 0.034584
+accuracy: 0.985522
+ -- 200 / 284 --
+mean loss: 0.041226
+accuracy: 0.982561
+ -- 210 / 284 --
+mean loss: 0.035167
+accuracy: 0.985074
+ -- 220 / 284 --
+mean loss: 0.058268
+accuracy: 0.974901
+ -- 230 / 284 --
+mean loss: 0.032462
+accuracy: 0.986168
+ -- 240 / 284 --
+mean loss: 0.032989
+accuracy: 0.986183
+ -- 250 / 284 --
+mean loss: 0.039092
+accuracy: 0.983398
+ -- 260 / 284 --
+mean loss: 0.027720
+accuracy: 0.988809
+ -- 270 / 284 --
+mean loss: 0.042986
+accuracy: 0.981781
+ -- 280 / 284 --
+mean loss: 0.037052
+accuracy: 0.984207
+2021-07-27 18:42:00.328366
+---- EPOCH 047 EVALUATION ----
+000/036
+020/036
+eval mean loss: 0.063595
+eval accuracy: 0.978034
+eval avg class acc: 0.960223
+eval mIoU of Plant:	 0.931362
+eval mean mIoU: 0.931362
+eval mean mIoU (all shapes): 0.931362
+**** EPOCH 048 ****
+2021-07-27 18:42:05.439937
+ -- 010 / 284 --
+mean loss: 0.039468
+accuracy: 0.983182
+ -- 020 / 284 --
+mean loss: 0.037521
+accuracy: 0.984042
+ -- 030 / 284 --
+mean loss: 0.051202
+accuracy: 0.978032
+ -- 040 / 284 --
+mean loss: 0.039095
+accuracy: 0.983437
+ -- 050 / 284 --
+mean loss: 0.036475
+accuracy: 0.984599
+ -- 060 / 284 --
+mean loss: 0.035253
+accuracy: 0.985013
+ -- 070 / 284 --
+mean loss: 0.022958
+accuracy: 0.990967
+ -- 080 / 284 --
+mean loss: 0.045109
+accuracy: 0.980611
+ -- 090 / 284 --
+mean loss: 0.059873
+accuracy: 0.974934
+ -- 100 / 284 --
+mean loss: 0.032327
+accuracy: 0.987267
+ -- 110 / 284 --
+mean loss: 0.049455
+accuracy: 0.979395
+ -- 120 / 284 --
+mean loss: 0.038425
+accuracy: 0.984471
+ -- 130 / 284 --
+mean loss: 0.041276
+accuracy: 0.982788
+ -- 140 / 284 --
+mean loss: 0.051627
+accuracy: 0.977937
+ -- 150 / 284 --
+mean loss: 0.038542
+accuracy: 0.983667
+ -- 160 / 284 --
+mean loss: 0.030462
+accuracy: 0.987579
+ -- 170 / 284 --
+mean loss: 0.044497
+accuracy: 0.981564
+ -- 180 / 284 --
+mean loss: 0.043927
+accuracy: 0.981824
+ -- 190 / 284 --
+mean loss: 0.038036
+accuracy: 0.984738
+ -- 200 / 284 --
+mean loss: 0.036361
+accuracy: 0.985011
+ -- 210 / 284 --
+mean loss: 0.040849
+accuracy: 0.982846
+ -- 220 / 284 --
+mean loss: 0.052308
+accuracy: 0.977876
+ -- 230 / 284 --
+mean loss: 0.042259
+accuracy: 0.982486
+ -- 240 / 284 --
+mean loss: 0.031337
+accuracy: 0.986816
+ -- 250 / 284 --
+mean loss: 0.046346
+accuracy: 0.979889
+ -- 260 / 284 --
+mean loss: 0.035980
+accuracy: 0.985344
+ -- 270 / 284 --
+mean loss: 0.056267
+accuracy: 0.976190
+ -- 280 / 284 --
+mean loss: 0.041930
+accuracy: 0.982312
+2021-07-27 18:43:06.497228
+---- EPOCH 048 EVALUATION ----
+000/036
+020/036
+eval mean loss: 0.045067
+eval accuracy: 0.981825
+eval avg class acc: 0.963350
+eval mIoU of Plant:	 0.932319
+eval mean mIoU: 0.932319
+eval mean mIoU (all shapes): 0.932319
+**** EPOCH 049 ****
+2021-07-27 18:43:11.598488
+ -- 010 / 284 --
+mean loss: 0.041283
+accuracy: 0.982835
+ -- 020 / 284 --
+mean loss: 0.043586
+accuracy: 0.981242
+ -- 030 / 284 --
+mean loss: 0.048774
+accuracy: 0.979480
+ -- 040 / 284 --
+mean loss: 0.044018
+accuracy: 0.981726
+ -- 050 / 284 --
+mean loss: 0.034780
+accuracy: 0.985835
+ -- 060 / 284 --
+mean loss: 0.038456
+accuracy: 0.983928
+ -- 070 / 284 --
+mean loss: 0.045836
+accuracy: 0.980394
+ -- 080 / 284 --
+mean loss: 0.037966
+accuracy: 0.983443
+ -- 090 / 284 --
+mean loss: 0.046659
+accuracy: 0.980150
+ -- 100 / 284 --
+mean loss: 0.030120
+accuracy: 0.987654
+ -- 110 / 284 --
+mean loss: 0.045813
+accuracy: 0.980602
+ -- 120 / 284 --
+mean loss: 0.038529
+accuracy: 0.983501
+ -- 130 / 284 --
+mean loss: 0.031126
+accuracy: 0.986790
+ -- 140 / 284 --
+mean loss: 0.036733
+accuracy: 0.985071
+ -- 150 / 284 --
+mean loss: 0.032779
+accuracy: 0.986118
+ -- 160 / 284 --
+mean loss: 0.024835
+accuracy: 0.989720
+ -- 170 / 284 --
+mean loss: 0.030509
+accuracy: 0.987343
+ -- 180 / 284 --
+mean loss: 0.045842
+accuracy: 0.980775
+ -- 190 / 284 --
+mean loss: 0.041899
+accuracy: 0.982089
+ -- 200 / 284 --
+mean loss: 0.046791
+accuracy: 0.979214
+ -- 210 / 284 --
+mean loss: 0.036669
+accuracy: 0.984644
+ -- 220 / 284 --
+mean loss: 0.053276
+accuracy: 0.977489
+ -- 230 / 284 --
+mean loss: 0.056753
+accuracy: 0.975293
+ -- 240 / 284 --
+mean loss: 0.042781
+accuracy: 0.981924
+ -- 250 / 284 --
+mean loss: 0.031365
+accuracy: 0.986722
+ -- 260 / 284 --
+mean loss: 0.041288
+accuracy: 0.982553
+ -- 270 / 284 --
+mean loss: 0.046206
+accuracy: 0.980846
+ -- 280 / 284 --
+mean loss: 0.038159
+accuracy: 0.984254
+2021-07-27 18:44:12.740439
+---- EPOCH 049 EVALUATION ----
+000/036
+020/036
+eval mean loss: 0.052284
+eval accuracy: 0.979166
+eval avg class acc: 0.966701
+eval mIoU of Plant:	 0.933570
+eval mean mIoU: 0.933570
+eval mean mIoU (all shapes): 0.933570

@@ -1,0 +1,282 @@
+%\documentclass[sigconf, titlepage, twoside]{acmart}
+\documentclass[12pt,titlepage,twoside]{article}
+%\usepackage{titlesec}
+
+% language stuff
+\usepackage{german}           % deutsche Überschriften etc.
+\usepackage[utf8]{inputenc} % direkte Einbgabe von Umlauten
+
+% Layout-Einstellungen
+\usepackage{parskip}          % Abstand statt Einrückung
+\frenchspacing                % no extra space after periods
+\usepackage{parskip}          % paragraph gaps instead of indentation
+\usepackage{times}            % default font Times
+\tolerance=9000               % avoid words across right border
+
+% miscellaneous
+\usepackage{graphicx}         % graphics
+\usepackage{hhline}           % double lines in tables
+\usepackage{amsfonts}         % real numbers etc.
+\usepackage[rightcaption]{sidecap} % figure captions on the right (optional)
+\usepackage{hyperref}         % for URLs
+\usepackage{listings}         % for code samples
+\usepackage{fancyhdr}         % for header line
+%\usepackage{lastpage}         % for last page count
+
+% Hier bei Bedarf die Seitenränder einstellen
+\usepackage{geometry}
+%\geometry{a4paper}
+\geometry{a4paper,left=25mm,right=25mm, top=3.5cm, bottom=2.5cm} 
+
+% Kopf- und Fußzeile
+\fancyhead{} % clear all header fields
+\fancyhead[RO,LE]{\leftmark}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+
+%-------------------------------------------------------------
+\begin{titlepage}
+%-------------------------------------------------------------
+\begin{center}
+{\Large\bf Analyse von Pflanzenwachstum auf Basis von 3D-Punkwolken}\\[3cm]
+
+{\bf Masterarbeit}\\
+zur Erlangung des Grades {\em Master of Science}\\[1.5cm]
+
+an der\\
+Hochschule Niederrhein\\
+Fachbereich Elektrotechnik und Informatik\\
+Studiengang {\em Informatik}\\[3cm]
+
+vorgelegt von\\
+Jakob Görner\\
+1003660\\[3cm]
+Datum: \today\\[3cm]
+
+Prüfer: Prof.~Dr.~Regina Pohle-Fröhlich\\
+Zweitprüfer: Prof.~Dr.~Christoph Dalitz
+
+\end{center}
+\end{titlepage}
+
+\pagestyle{empty}
+\cleardoublepage
+
+\newpage
+
+
+%-------------------------------------------------------------
+\section*{Eidesstattliche Erklärung}
+%-------------------------------------------------------------
+\begin{tabbing}
+Name: \hspace{4em}\= Jakob Görner\\
+Matrikelnr.: \> 1003660\\
+Titel: \> Analyse von Pflanzenwachstum auf Basis von 3D-Punkwolken
+\end{tabbing}
+
+Ich versichere durch meine Unterschrift, dass die vorliegende
+Arbeit ausschließlich von mir verfasst wurde.
+Es wurden keine anderen als die von mir angegebenen Quellen und Hilfsmittel
+benutzt.
+
+Die Arbeit besteht aus \pageref{LastPage} Seiten.
+
+\vspace{8ex}
+\begin{tabbing}
+\underline{\hspace{14em}} \hspace{3em}\= \underline{\hspace{14em}} \\
+Mönchengladbach, \today \> Unterschrift
+\end{tabbing}
+
+\newpage
+%\begin{abstract}
+%-------------------------------------------------------------
+\section*{Zusammenfassung}
+%-------------------------------------------------------------
+Entwicklung einer Anwendung zum Analysieren von Pflanzen-Wachstum und weiteren Merkmalen des Wachstumsprozesses einer Pflanze. Es wird aus einer Reihe Bilder einer Pflanze eine Punkwolke erzeugt. 
+Aus der Punktwolke werden die Punkte die zur Pflanze gehören extrahiert. Die extrahierten Punkte werden zur weiteren Analyse in Stamm und Blatt Punkte segmentiert. 
+Die Anwendung soll mit möglichst wenig Bildern auskommen um den Datentransfer zu minimieren. 
+
+\setcounter{page}{1}
+%-------------------------------------------------------------
+\section*{Abstract}
+%-------------------------------------------------------------
+Here follows an English translation of the preceding
+``Zusammenfassung''.
+%\end{abstract}
+\newpage
+
+\pagestyle{plain}
+\tableofcontents
+\newpage
+
+%-------------------------------------------------------------
+% default a), b), c) numbering
+\renewcommand{\labelenumi}{\alph{enumi})} 
+
+%=============================================================
+
+
+\section{Motivation}
+%-------------------------------------------------------------
+\label{sec:einleitung}
+Diese Arbeit wird im Rahmen eines Projekts mit der Universität xx durchgeführt. Die Anwendung soll mit nicht invasiven Methoden zur Unterstützung bei der selektiven Züchtung eingesetzt werden.
+Ziel ist es eine Software zu schaffen die es ermöglicht aus Bildern von Pflanzen 3D Punktwolken(Punktwolken) zu generieren und diese zu Analysieren.
+Es soll mit der zu entwickelnden Anwendung möglich sein Aussagen über das Wachstum über Zeit, die Entwicklung der Blätter und der Stämme zu treffen. 
+Mit diesen Daten sind Analysen möglich die auf das Wachstum einer Pflanze unter bestimmten Bedingungen schließen lassen.
+Der Prozess der Datengewinnung und Betrieb soll dabei einfach und kostengünstig sein. Insbesondere die Übertragung großer Datenmengen soll vermieden werden.
+Der Prozess der Datengewinnung sollte des weiteren mit einem Mobiltelefon oder einer anderen Kamera möglich sein. Spezielle Aufnahmegeräte wie ein LIDAR-Scanner sollten nicht nötig sein.
+
+
+\newpage
+\section{Stand der Technik}
+%-------------------------------------------------------------
+\label{sec:stand}
+%Hier müssen Sie beschreiben wie die Situation vor Ihrem Beitrag war.
+%Dazu gehören die Vorarbeiten anderer, auf denen Sie aufsetzen, die
+%bisher eingesetzte Software oder Hardware und allgemeine
+%bekannte Techniken, die in Ihrer Arbeit zum Einsatz kamen.
+%
+%In diesen Abschnitt gehören alle Aspekte, die zum Verständnis der
+%Arbeit erforderlich sind, aber einem mit der Aufgabenstellugn nicht vertrauten
+%fachkundigen Leser nicht zwangsweise bekannt sind.
+
+Es gibt einige Verfahren um aus Bildern 3D Punktwolken zu generieren. Einige Verfahren benötigen genaue Informationen über die Kamera Position, Ausrichtung und andere Angaben wie die Brennweite der Linse etc.  
+
+Bei der Analyse von Pflanzen in Form von 3D Punktwolken gibt es einige von nicht gelernte Lösungen die das segmentieren von 3D Punktwolken von Pflanzen in Stiele und Blätter behandeln, viele dieser Ansätze haben aber das Problem, dass sie nur unter Laborbedingungen gute Ergebnisse liefern. 
+Insbesondere die hohe Qualität der Punktwolken die meist mit einem LIDAR-Scanner oder einem vergleichbaren Gerät erzielt wird, kann mit bildbasierten Methoden nicht oder nur mit sehr großen Datenmengen erreicht werden. 
+Ein weiteres Problem das viele Lösungen haben ist, dass der Hintergrund manuell entfernt wird und erst auf der freigestellten Pflanze der eigentliche Ansatz ausgeführt wird. 
+Um diese Lösungen dennoch in einer voll automatischen Pipeline nutzen zu können muss das freistellen der Pflanzen erst automatisiert werden.
+Es gibt weitere Lösungen, basierend auf Neuronalen Netzen, die mit einer angelernten Netzarchitektur bestimmte Objekte erkennen und Teile davon segmentieren. Diese Ansätze können auch auf Pflanzen angewandt werden. Dazu müssen die Architekturen auf Punktwolken von Pflanzen trainiert werden.  
+
+Die am weiten verbreitete Method zur Registrierung von 3D Punktwolken ist Iterative Closest Points (ICP). ICP basiert auf dem Ansatz das zwei Punktwolken iterativ aneinander angenähert werden und bei jeder Iteration der Abstand minimiert wird.
+Die meisten Implementierungen von ICP beachten aber nicht die Skalierung der Punktwolken. Es gibt einige wenige Ansätze für dieses Problem. 
+Ein weiteres Problem bei ICP ist, dass es in lokalen Minima Lösungen finden kann. Daher muss eine gute Initiale Transformation gefunden werden. Dieses Problem kann durch globale ICP gelöst werden. Hierbei wird der zu durchsuchend Suchraum SO(3) mittels Branch \& Bound Verfahren durchsucht.
+Auch für das Registrierung-Problem gibt es Lösungen die auf Neuronal Netzen basieren, aber auch hier gibt es das Problem, dass es nur wenige Ansätze gibt die mit Skalierung umgehen können.
+
+\newpage
+\section{Realisierung}
+%-------------------------------------------------------------
+\label{sec:realisierung}
+Es müssen vier Teilprobleme berücksichtigt werden. Zu Beginn muss aus einer Reihe Bilder eine Punktwolke generiert werden. Hauptziel hierbei ist es möglichst wenig Bilder zu benötigen. 
+Trotzdem müssen Aspekte wie die Qualität der Punkwolken berücksichtigt werden. 
+
+Ein zweites Problem ist die Ausrichtung zweier Punktwolken einer Pflanze zu verschiedenen Zeitpunkten um diese Vergleichen zu können. 
+Hierbei gilt es die ideale Transformation $T$ bestehend aus Rotation, Skalierung und Translation zu finden um die beiden Punktwolken so realitätsnah wie möglich aneinander aus zu richten.
+Es werden drei Ansätze überprüft dieses Problem zu lösen. 
+Der erste Ansatz basiert auf der Idee, beim Beginn einer neuen Zeitserie zur Analyse eines Wachstumsprozesses, eine Punktwolke des Hintergrunds zu erstellen und die Punktwolken der einzelnen Zeitpunkte mit diesem Hintegrund zu registrieren. So wird ein Verhältnis geschaffen das dem der realität entspricht.
+Der zweite Ansatz basiert darauf das die Registrierung direkt zwischen zwei Zeitpunkten erfolgt. Hierbei kann es zu Abweichungen von der Realität kommen, wenn die Pflanzen skaliert werden müssen für die Registrierung.
+Der letzte Ansatz soll überprüfen ob es mittels eines platziertem Objekts möglich ist die skalierung der Punktwolke zu ermitteln und so das Problem beim direkten Vergleich zweier Szenen lösen soll.
+
+Das dritte Problem ist die Segmentierung der Punktwolke in Stamm, Blätter und Hintergrund. Hier gibt es viele Ansätze dieses Problem zu lösen. Allerdings ist es schwer eine allgemein gültigen Lösung zu finden. 
+Ziel ist es daher eine Lösung zu finden die auf möglichst vielen Varianten von Pflanzen funktioniert. 
+Das Problem der Segmentierung ist essentiell für die weitere Analyse einer Zeitserien. Ohne die Information welche Punkte zu Stamm und Blättern gehören kann nicht auf die Entwicklung von Blättern und Stielen geschlossen werden.
+
+Zuletzt müssen aus den bisherigen Problemen in geeignete Pipelines zusammengefasst werden und durch einen Server angesteuert werden. Hier muss die Lastverteilung und Datenhaltung beachtet werden. 
+Sicherheits-Aspekte müssen vor einer Inbetriebnahme der Software sichergestellt werden. Dies ist aber nicht Teil dieser Arbeit, da hier nur die Machbarkeit gezeigt werden soll.
+
+\subsection{Architektur}
+%-------------------------------------------------------------
+\label{sec:realisierung:architektur}
+%Zwingend erforderlich ist ein Überblick über die Komponenten Ihrer Lösung
+%und deren Zusammenspiel. Dazu gehört in der Regel auch ein Diagramm
+%der Systemarchitektur.
+
+Die Anwendung soll über eine REST-API angesteuert werden können. Es soll möglich sein eine neue Messreihe anzulegen. Dazu müssen die Bilder für die Initiale Punkwolke auf den Server übertragen werden. 
+Es soll möglich sein weitere Messpunkte zu einer Messreihe hinzuzufügen. Zu einer Messreihe sollen Auswertungen zur Verfügung gestellt werden. 
+
+\subsection{Umsetzung Generierung einer Punktwolke aus Bildern}
+%-------------------------------------------------------------
+\label{sec:realisierung:implementierung1}
+%Dies ist in der Regel nicht nur ein Abschnitt, sondern mehrere Abschnitte
+%mit Ihrem Projekt angemessenen Überschriften. Hierhin gehört {\em nicht}
+%der Sourcecode Ihrer Lösung, sondern eine textuelle und grafische
+%(z.B.~Klassendiagramm) Beschreibung. Bei Quellcode beschränken Sie Sich
+%bitte auf kurze, aussagekräftige Ausschnitte.
+
+\subsection{Umsetzung Registrierung zweier Punktwolken}
+%-------------------------------------------------------------
+\label{sec:realisierung:implementierung2}
+
+Es wurden mehrere Verfahren und Implementierungen mit einander verglichen. Durch den Vergleich (siehe ''Ergebnisse'') Es wurde versucht ein Pipeline zu erstellen die eine gute Initiale Lösung findet ohne den ganzen Suchraum SO(3) zu durchsuchen.
+Die Pipeline sucht nach einer Ebene in der Punkwolke und richtet die Punkwolke so aus, dass die Ebene auf der Ebene liegt, die die x und y Achse bilden. Danach werden einige wiederholte ICP Schritte und andere Registrierungsmethoden angewandt.
+
+Ein weiterer Ansatz war es DCP so abzuwandeln das statt Translations-Vektor und Rotations-Matrix direkt die ganze Transformations-Matrix geschätzt wird. Dazu muss nur SVD-Head angepasst werden 
+und bei der Eingabe eine weitere Dimension hinzugefügt werden. Wenn man nun die Singulärwert-Zerlegung von H das nun 4x4 groß ist also die richtige Dimension hat weg lässt, kann man H als schätzung für die Transformation interpretieren.
+
+
+\subsection{Umsetzung Segmentierung}
+%-------------------------------------------------------------
+\label{sec:realisierung:implementierung2}
+
+Zur Segmentierung der Pflanzen-Punktwolke in Stamm und Blätter wurde ein Ansatz verfolgt, der mittels der Hauptkrümmung eines Punktes ermitteln soll ob es sich um ein Blatt oder einen Stiel handelt. 
+Hierbei wurde eine einfache Entscheidungsregel mittels eines Schwellwerts genutzt: Ist die Krümmung des Punktes höher als der Schwellwert handelt es sich um einen Stiel da diese einen größere Krümmung haben als Blätter.
+Die Schwierigkeit ist es einen guten Schwellwert zu finden und eine  gute Kennzahl für die Stärke der Krümmung.
+
+In einem weiteren Ansatz wurde eine angepasste Implementierung von PointNet auf einem Datensatz von Pflanzen-Punktwolken trainiert um so einen geeigneten Classifier zu trainieren.
+Auch wurde eine verbesserte Version von PointNet auf dem Datensatz trainiert. Diese wurde mit und ohne Normalen, mit 2 Labelen ohne Hintergrund und mit 3 Labeln mit Hintergrund getestet. 
+
+\subsection{Umsetzung Pipelines und Server}
+%-------------------------------------------------------------
+\label{sec:realisierung:implementierung2}
+Der Server ist mit dem Python-Framework Flask erstellt wurden. Flask bietet eine Schlanke API um neue Endpunkte zu erstellen und Daten vom Netzwerk anzunehmen.
+
+
+\newpage
+\section{Ergebnisse}
+%-------------------------------------------------------------
+\label{sec:ergebnisse}
+%Hierhin gehört eine Beschreibung der von Ihnen durchgeführten Tests zur
+%Verifikation bzw.~Qualitätssicherung Ihrer Lösung. Wenn Sie Messungen
+%durchgeführt haben, so stellen Sie die Ergebnisse hier in Tabellen und
+%Diagrammen dar.
+%
+%Auch die Diskussion der Messergebnisse oder der Besonderheiten der
+%Testergebnisse gehört hierher.
+
+\subsection{Vergleich von Verfahren zur Generierung von 3D-Punktwolken auf Basis von Bildern}
+
+\subsection{Vergleich von Verfahren zur Registrierung 3D-Punkwolken}
+
+\subsection{Vergleich von Verfahren zur Segmentierung von Pflanzen auf 3D-Punkwolken}
+
+\newpage
+\section{Fazit und Ausblick}
+%-------------------------------------------------------------
+\label{sec:fazit}
+%Am Ende der Arbeit muss ein Fazit dessen was geleistet wurde
+%und wie es weitergehen kann. Dazu gehört auch wie der aktuelle
+%Stand Ihrer Implementierung ist: ist Ihre Lösung z.B. bereits
+%produktiv im Einsatz? Welche wesentlichen Punkte müssen noch
+%umgesetzt werden?
+%
+%Insbesondere müssen hier die Schwachpunkte
+%Ihrer Lösung erwähnt werden, also was Sie anders machen würden,
+%wenn Sie dieselbe Aufgabe noch einmal bekämen. Auch nicht gelöste
+%oder sich im Laufe der Arbeit neu ergebene Fragen müssen hier zur
+%Sprache kommen.
+
+
+
+
+
+\newpage
+% Literaturverzeichnis
+%-------------------------------------------------------------
+\addcontentsline{toc}{section}{Literatur}
+\begin{thebibliography}{99}
+\raggedright
+\bibitem{buch} Autor(en): {\em Titel eines Buchs.}
+  Verlag, Auflage, Jahr
+\bibitem{artikel} Autor(en): {\em Überschrift eines Artikels.}
+  Zeitschriftennamen, Ausgabe, Seiten xx-yy, Jahr
+\bibitem{webseite} Autor(en): {\em Titel einer Webseite.}
+  \url{url}, Jahr/Datum der Erstellung\footnote{Nicht zitierfähige Webseiten sollten Sie nicht im Literaturverzeichnis auflisten, sondern als Fußnoten im laufenden Text als Quellen angeben.}
+\bibitem{opensource} Autor(en): {\em Name einer Software.}
+  Version, Datum, \url{url}
+\end{thebibliography}
+
+
+\end{document}
+

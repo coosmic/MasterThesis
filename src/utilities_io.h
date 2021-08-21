@@ -51,7 +51,30 @@ bool loadAsciCloud(std::string filename, pcl::PointCloud<PointTypePCL>::Ptr clou
     return cloud->size() > 0;
 }
 
-bool writeShapenetFormat2(Cloud::Ptr cloud, std::string outPath, std::string name){
+bool writeRegistrationFormat(Cloud::Ptr cloud, std::string outPath, std::string name){
+    ofstream file;
+
+    file.open(outPath+name+".txt");
+
+    if(!file.is_open() ){
+        std::cout << "could not open file "<< outPath<<name<<".txt" <<std::endl;
+        return false;
+    }
+
+    for(int i=0; i<cloud->size(); ++i){
+        file << cloud->points[i].x << " " 
+        << cloud->points[i].y << " " 
+        << cloud->points[i].z << "\n";
+    }
+
+    file.close();
+
+    std::cout << "Registration Format written to location " << outPath << name << ".txt\n";
+
+    return true;
+}
+
+bool writeShapenetFormat2(Cloud::Ptr cloud, std::string outPath, std::string name, float ignoreBackground=false){
     ofstream filePoints, fileLabel;
     filePoints.open(outPath+"points/"+name+".pts");
     fileLabel.open(outPath+"points_label/"+name+".seg");
@@ -63,7 +86,7 @@ bool writeShapenetFormat2(Cloud::Ptr cloud, std::string outPath, std::string nam
     int colorCode;
     for(int i=0; i<cloud->size(); ++i){
         colorCode = colorToCode(cloud->points[i]);
-        if(colorCode != 3){
+        if(colorCode != BackgroundLabel && !ignoreBackground){
             filePoints << cloud->points[i].x << " " 
             << cloud->points[i].y << " " 
             << cloud->points[i].z << "\n";
@@ -76,7 +99,7 @@ bool writeShapenetFormat2(Cloud::Ptr cloud, std::string outPath, std::string nam
     return true;
 }
 
-bool writeShapenetFormat(Cloud::Ptr cloud, std::string outPath){
+bool writeShapenetFormat(Cloud::Ptr cloud, std::string outPath, bool removeBackground){
     ofstream file;
     file.open(outPath+".txt");
     if(!file.is_open()){
@@ -84,7 +107,8 @@ bool writeShapenetFormat(Cloud::Ptr cloud, std::string outPath){
     }
 
     int colorCode;
-    for(int i=0; i<cloud->size(); ++i){
+    if(removeBackground){
+        for(int i=0; i<cloud->size(); ++i){
         colorCode = colorToCode(cloud->points[i]);
         if(colorCode != BackgroundLabel)
             file << cloud->points[i].x << " " 
@@ -94,7 +118,19 @@ bool writeShapenetFormat(Cloud::Ptr cloud, std::string outPath){
             <<  cloud->points[i].normal_y << " " 
             <<  cloud->points[i].normal_z << " " 
             << colorCode << "\n";
+        }
     }
+    else
+        for(int i=0; i<cloud->size(); ++i){
+            colorCode = colorToCode(cloud->points[i]);
+            file << cloud->points[i].x << " " 
+                << cloud->points[i].y << " " 
+                << cloud->points[i].z << " " 
+                <<  cloud->points[i].normal_x << " " 
+                <<  cloud->points[i].normal_y << " " 
+                <<  cloud->points[i].normal_z << " " 
+                << colorCode << "\n";
+        }
 
     file.close();
 

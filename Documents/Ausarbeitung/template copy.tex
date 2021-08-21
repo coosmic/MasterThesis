@@ -1,0 +1,245 @@
+%\documentclass[sigconf]{acmart}
+\documentclass[12pt,titlepage,twoside]{article}
+%\usepackage{titlesec}
+
+% language stuff
+\usepackage{german}           % deutsche Überschriften etc.
+\usepackage[utf8]{inputenc} % direkte Einbgabe von Umlauten
+
+% Layout-Einstellungen
+\usepackage{parskip}          % Abstand statt Einrückung
+\frenchspacing                % no extra space after periods
+\usepackage{parskip}          % paragraph gaps instead of indentation
+\usepackage{times}            % default font Times
+\tolerance=9000               % avoid words across right border
+
+% miscellaneous
+\usepackage{graphicx}         % graphics
+\usepackage{hhline}           % double lines in tables
+\usepackage{amsfonts}         % real numbers etc.
+\usepackage[rightcaption]{sidecap} % figure captions on the right (optional)
+\usepackage{hyperref}         % for URLs
+\usepackage{listings}         % for code samples
+\usepackage{fancyhdr}         % for header line
+%\usepackage{lastpage}         % for last page count
+
+% Hier bei Bedarf die Seitenränder einstellen
+\usepackage{geometry}
+%\geometry{a4paper}
+\geometry{a4paper,left=25mm,right=25mm, top=3.5cm, bottom=2.5cm} 
+
+% Kopf- und Fußzeile
+\fancyhead{} % clear all header fields
+\fancyhead[RO,LE]{\leftmark}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+
+%-------------------------------------------------------------
+\begin{titlepage}
+%-------------------------------------------------------------
+\begin{center}
+{\Large\bf Analyse von Pflanzenwachstum auf Basis von 3D-Punkwolken}\\[3cm]
+
+{\bf Masterarbeit}\\
+zur Erlangung des Grades {\em Master of Science}\\[1.5cm]
+
+an der\\
+Hochschule Niederrhein\\
+Fachbereich Elektrotechnik und Informatik\\
+Studiengang {\em Informatik}\\[3cm]
+
+vorgelegt von\\
+Jakob Görner\\
+1003660\\[3cm]
+Datum: \today\\[3cm]
+
+Prüfer: Prof.~Dr.~Regina Pohle-Fröhlich\\
+Zweitprüfer: Prof.~Dr.~Christoph Dalitz
+
+\end{center}
+\end{titlepage}
+
+\pagestyle{empty}
+\cleardoublepage
+
+\newpage
+
+%-------------------------------------------------------------
+\section*{Eidesstattliche Erklärung}
+%-------------------------------------------------------------
+\begin{tabbing}
+Name: \hspace{4em}\= Jakob Görner\\
+Matrikelnr.: \> 1003660\\
+Titel: \> Analyse von Pflanzenwachstum auf Basis von 3D-Punkwolken
+\end{tabbing}
+
+Ich versichere durch meine Unterschrift, dass die vorliegende
+Arbeit ausschließlich von mir verfasst wurde.
+Es wurden keine anderen als die von mir angegebenen Quellen und Hilfsmittel
+benutzt.
+
+Die Arbeit besteht aus \pageref{LastPage} Seiten.
+
+\vspace{8ex}
+\begin{tabbing}
+\underline{\hspace{14em}} \hspace{3em}\= \underline{\hspace{14em}} \\
+Mönchengladbach, \today \> Unterschrift
+\end{tabbing}
+
+\newpage
+
+%-------------------------------------------------------------
+\section*{Zusammenfassung}
+%-------------------------------------------------------------
+Entwicklung einer Anwendung zum Analysieren von Pflanzen-Wachstum und weiteren Merkmalen des Wachstumsprozesses einer Pflanze. Es wird aus einer Reihe Bilder einer Pflanze eine Aufnahme erzeugt. 
+Aus der Punktwolke werden die Punkte die zur Pflanze gehören extrahiert. Die extrahierten Punkte werden in Stamm und Blatt Punkte segmentiert zur weiteren Analyse. 
+Die Anwendung soll mit möglichst wenig Bildern auskommen um den Datentransfer zu minimieren. 
+
+\setcounter{page}{1}
+%-------------------------------------------------------------
+\section*{Abstract}
+%-------------------------------------------------------------
+Here follows an English translation of the preceding
+``Zusammenfassung''.
+
+\newpage
+
+\pagestyle{plain}
+\tableofcontents
+\newpage
+
+%-------------------------------------------------------------
+% default a), b), c) numbering
+\renewcommand{\labelenumi}{\alph{enumi})} 
+
+%=============================================================
+
+
+\section{Einleitung}
+%-------------------------------------------------------------
+\label{sec:einleitung}
+Die Arbeit muss mit einer Einleitung beginnen, die einen Überblick über die
+Themenstellung gibt und diese in einen größeren Kontext stellt. Dabei soll
+klar werden, welche Gründe zur Bearbeitung des Themas geführt
+haben. Ferner soll die Aufgabenstellung so beschrieben werden, dass
+sie ein mit dem Thema nicht vertrauter durchschnittlicher Informatiker
+(oder Elektrotechniker) versteht.
+
+
+\newpage
+\section{Stand der Technik}
+%-------------------------------------------------------------
+\label{sec:stand}
+Hier müssen Sie beschreiben wie die Situation vor Ihrem Beitrag war.
+Dazu gehören die Vorarbeiten anderer, auf denen Sie aufsetzen, die
+bisher eingesetzte Software oder Hardware und allgemeine
+bekannte Techniken, die in Ihrer Arbeit zum Einsatz kamen.
+
+In diesen Abschnitt gehören alle Aspekte, die zum Verständnis der
+Arbeit erforderlich sind, aber einem mit der Aufgabenstellugn nicht vertrauten
+fachkundigen Leser nicht zwangsweise bekannt sind.
+
+\newpage
+\section{Realisierung}
+%-------------------------------------------------------------
+\label{sec:realisierung}
+Es müssen vier Teilprobleme berücksichtigt werden. Zu Beginn muss aus einer Reihe Bilder eine Punktwolke generiert werden. Hauptziel hierbei ist es möglichst wenig Bilder zu benötigen. 
+Trotzdem müssen Aspekte wie die Qualität der Punkwolken berücksichtigt werden. 
+
+Ein zweites Problem ist die Ausrichtung zweier Punktwolken einer Pflanze zu verschiedenen Zeitpunkten um diese Vergleichen zu können. 
+Hierbei gilt es die ideale Transformation $T$ bestehend aus Rotation, Skalierung und Translation zu finden um die beiden Punktwolken so realitätsnah wie möglich aneinander aus zu richten.
+Es werden drei Ansätze überprüft dieses Problem zu lösen. 
+Der erste Ansatz basiert auf der Idee, beim Beginn einer neuen Zeitserie zur Analyse eines Wachstumsprozesses, eine Punktwolke des Hintergrunds zu erstellen und die Punktwolken der einzelnen Zeitpunkte mit diesem Hintegrund zu registrieren. So wird ein Verhältnis geschaffen das dem der realität entspricht.
+Der zweite Ansatz basiert darauf das die Registrierung direkt zwischen zwei Zeitpunkten erfolgt. Hierbei kann es zu Abweichungen von der Realität kommen, wenn die Pflanzen skaliert werden müssen für die Registrierung.
+Der letzte Ansatz soll überprüfen ob es mittels eines platziertem Objekts möglich ist die skalierung der Punktwolke zu ermitteln und so das Problem beim direkten Vergleich zweier Szenen lösen soll.
+
+Das dritte Problem ist die Segmentierung der Punktwolke in Stamm, Blätter und Hintergrund. Hier gibt es viele Ansätze dieses Problem zu lösen. Allerdings ist es schwer eine allgemein gültigen Lösung zu finden. 
+Ziel ist es daher eine Lösung zu finden die auf möglichst vielen Varianten von Pflanzen funktioniert. 
+Das Problem der Segmentierung ist essentiell für die weitere Analyse einer Zeitserien. Ohne die Information welche Punkte zu Stamm und Blättern gehören kann nicht auf die Entwicklung von Blättern und Stielen geschlossen werden.
+
+Zuletzt müssen aus den bisherigen Problemen in geeignete Pipelines zusammengefasst werden und durch einen Server angesteuert werden. Hier muss die Lastverteilung und Datenhaltung beachtet werden. 
+Sicherheits-Aspekte müssen vor einer Inbetriebnahme der Software sichergestellt werden. Dies ist aber nicht Teil dieser Arbeit, da hier nur die Machbarkeit gezeigt werden soll.
+
+\subsection{Architektur}
+%-------------------------------------------------------------
+\label{sec:realisierung:architektur}
+Zwingend erforderlich ist ein Überblick über die Komponenten Ihrer Lösung
+und deren Zusammenspiel. Dazu gehört in der Regel auch ein Diagramm
+der Systemarchitektur.
+
+\subsection{Umsetzung Generierung einer Punktwolke aus Bildern}
+%-------------------------------------------------------------
+\label{sec:realisierung:implementierung1}
+Dies ist in der Regel nicht nur ein Abschnitt, sondern mehrere Abschnitte
+mit Ihrem Projekt angemessenen Überschriften. Hierhin gehört {\em nicht}
+der Sourcecode Ihrer Lösung, sondern eine textuelle und grafische
+(z.B.~Klassendiagramm) Beschreibung. Bei Quellcode beschränken Sie Sich
+bitte auf kurze, aussagekräftige Ausschnitte.
+
+\subsection{Umsetzung Registrierung zweier Punktwolken}
+%-------------------------------------------------------------
+\label{sec:realisierung:implementierung2}
+...
+
+\subsection{Umsetzung Segmentierung}
+%-------------------------------------------------------------
+\label{sec:realisierung:implementierung2}
+...
+
+\subsection{Umsetzung Pipelines und Server}
+%-------------------------------------------------------------
+\label{sec:realisierung:implementierung2}
+...
+
+
+\newpage
+\section{Ergebnisse}
+%-------------------------------------------------------------
+\label{sec:ergebnisse}
+Hierhin gehört eine Beschreibung der von Ihnen durchgeführten Tests zur
+Verifikation bzw.~Qualitätssicherung Ihrer Lösung. Wenn Sie Messungen
+durchgeführt haben, so stellen Sie die Ergebnisse hier in Tabellen und
+Diagrammen dar.
+
+Auch die Diskussion der Messergebnisse oder der Besonderheiten der
+Testergebnisse gehört hierher.
+
+\newpage
+\section{Fazit und Ausblick}
+%-------------------------------------------------------------
+\label{sec:fazit}
+Am Ende der Arbeit muss ein Fazit dessen was geleistet wurde
+und wie es weitergehen kann. Dazu gehört auch wie der aktuelle
+Stand Ihrer Implementierung ist: ist Ihre Lösung z.B. bereits
+produktiv im Einsatz? Welche wesentlichen Punkte müssen noch
+umgesetzt werden?
+
+Insbesondere müssen hier die Schwachpunkte
+Ihrer Lösung erwähnt werden, also was Sie anders machen würden,
+wenn Sie dieselbe Aufgabe noch einmal bekämen. Auch nicht gelöste
+oder sich im Laufe der Arbeit neu ergebene Fragen müssen hier zur
+Sprache kommen.
+
+
+
+\newpage
+% Literaturverzeichnis
+%-------------------------------------------------------------
+\addcontentsline{toc}{section}{Literatur}
+\begin{thebibliography}{99}
+\raggedright
+\bibitem{buch} Autor(en): {\em Titel eines Buchs.}
+  Verlag, Auflage, Jahr
+\bibitem{artikel} Autor(en): {\em Überschrift eines Artikels.}
+  Zeitschriftennamen, Ausgabe, Seiten xx-yy, Jahr
+\bibitem{webseite} Autor(en): {\em Titel einer Webseite.}
+  \url{url}, Jahr/Datum der Erstellung\footnote{Nicht zitierfähige Webseiten sollten Sie nicht im Literaturverzeichnis auflisten, sondern als Fußnoten im laufenden Text als Quellen angeben.}
+\bibitem{opensource} Autor(en): {\em Name einer Software.}
+  Version, Datum, \url{url}
+\end{thebibliography}
+
+
+\end{document}
+

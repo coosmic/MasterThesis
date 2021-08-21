@@ -433,13 +433,14 @@ void removeBackgroundPointsShapenet(Cloud::Ptr cloud){
 
 }
 
-void transformToShapenetFormat(Cloud::Ptr cloud){
+void transformToShapenetFormat(Cloud::Ptr cloud, Eigen::Matrix4f &translation, Eigen::Matrix4f &scale){
   
   PointTypePCL min, max;
   pcl::getMinMax3D(*cloud, min, max);
 
   Eigen::Affine3f transform(Eigen::Translation3f(-min.x,-min.y,-min.z));
   Eigen::Matrix4f matrix = transform.matrix();
+  translation = matrix;
   pcl::transformPointCloud (*cloud, *cloud, matrix);
   //showCloud2(cloud, "translation");
 
@@ -450,7 +451,9 @@ void transformToShapenetFormat(Cloud::Ptr cloud){
 
   Eigen::Transform <float , 3, Eigen::Affine > t = Eigen::Transform <float , 3, Eigen::Affine >::Identity ();
   t.scale( scaleFactor );
+  
   matrix = t.matrix();
+  scale = matrix;
   pcl::transformPointCloud (*cloud, *cloud, matrix);
 }
 

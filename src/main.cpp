@@ -558,7 +558,8 @@ int convertToShapenetFormat2(po::variables_map vm){
   //showCloud2(cloudPlant, "Labeled Cloud");
   removeBackgroundPointsShapenet(cloudPlant);
   //showCloud2(cloudPlant, "Cloud Without Background");
-  transformToShapenetFormat(cloudPlant);
+  Eigen::Matrix4f t,s;
+  transformToShapenetFormat(cloudPlant, t,s);
   //showCloud2(cloudPlant, "Shapenet Formatted Cloud");
 
   writeShapenetFormat2(cloudPlant, pathToShapenetFormatResult, nameTxt);
@@ -566,7 +567,23 @@ int convertToShapenetFormat2(po::variables_map vm){
   return 0;
 }
 
-int convertToShapenetFormat(std::string pathToPlant, std::string pathToShapenetFormatResult){
+int convertToShapenetFormat(po::variables_map vm){
+
+  if(!vm.count("snin")){
+    cout << "Missing parameter snin\n";
+    return 1;
+  }
+  if(!vm.count("snout")){
+    cout << "Missing parameter snout\n";
+    return 1;
+  }
+  if(!vm.count("RemoveBackground")){
+    cout << "Missing parameter snout\n";
+    return 1;
+  }
+  std::string pathToPlant = vm["snin"].as<std::string>();
+  std::string pathToShapenetFormatResult = vm["snout"].as<std::string>();
+  bool removeBackground = vm["RemoveBackground"].as<bool>();
 
   cout << "Converting file saved under "<< pathToPlant  << " to Shapenet format\n";
 
@@ -586,9 +603,13 @@ int convertToShapenetFormat(std::string pathToPlant, std::string pathToShapenetF
   //showCloud2(cloudPlant, "rotation");
 
   //showCloud2(cloudPlant, "Labeled Cloud");
-  removeBackgroundPointsShapenet(cloudPlant);
+  if(removeBackground){
+    removeBackgroundPointsShapenet(cloudPlant);
+  }
+  
   //showCloud2(cloudPlant, "Cloud Without Background");
-  transformToShapenetFormat(cloudPlant);
+  Eigen::Matrix4f t,s;
+  transformToShapenetFormat(cloudPlant, t,s);
   //showCloud2(cloudPlant, "Shapenet Formatted Cloud");
 
   int createdSubsamplesCount = 0;
@@ -598,12 +619,135 @@ int convertToShapenetFormat(std::string pathToPlant, std::string pathToShapenetF
 
     assert(subsampledCloud->size() == numOfPointsPerSubsample);
 
-    writeShapenetFormat(subsampledCloud, pathToShapenetFormatResult+"SS"+std::to_string(createdSubsamplesCount));
+    writeShapenetFormat(subsampledCloud, pathToShapenetFormatResult+"SS"+std::to_string(createdSubsamplesCount), removeBackground);
 
     cout << "remaining points in org cloud: "<<std::to_string(cloudPlant->size())<<endl;
   }
 
   //writeShapenetFormat(cloudPlant, pathToShapenetFormatResult);
+
+  return 0;
+}
+
+int iterativeScaleRegistration(po::variables_map vm){
+
+  if(!vm.count("SourceCloudPath")){
+    cout << "Missing Parameter SourceCloudPath\n";
+    return 1;
+  }
+
+  if(!vm.count("TargetCloudPath")){
+    cout << "Missing Parameter TargetCloudPath\n";
+    return 1;
+  }
+
+  if(!vm.count("SubsampleCount")){
+    cout << "Missing Parameter SubsampleCount\n";
+    return 1;
+  }
+
+  std::string srcCloudPath = vm["SourceCloudPath"].as<std::string>();
+  std::string tgtCloudPath = vm["TargetCloudPath"].as<std::string>();
+  int subsampleCount = vm["SubsampleCount"].as<int>();
+
+  pcl::PointCloud<PointTypePCL>::Ptr cloudSrc(new pcl::PointCloud<PointTypePCL>);
+
+  if( pcl::io::loadPLYFile(srcCloudPath, *cloudSrc) == -1){
+
+    PCL_ERROR ("Couldn't read ply file\n");
+    return (-1);
+  }
+
+  pcl::PointCloud<PointTypePCL>::Ptr cloudTgt(new pcl::PointCloud<PointTypePCL>);
+
+  if( pcl::io::loadPLYFile(tgtCloudPath, *cloudTgt) == -1){
+
+    PCL_ERROR ("Couldn't read ply file\n");
+    return (-1);
+  }
+
+  pcl::ModelCoefficients::Ptr coefficientsA (new pcl::ModelCoefficients);
+  pcl::PointIndices::Ptr inliersA (new pcl::PointIndices);
+  findPlaneInCloud(cloudSrc, coefficientsA, inliersA);
+  rotateCloud(cloudSrc, coefficientsA);
+  findPlaneInCloud(cloudTgt, coefficientsA, inliersA);
+  rotateCloud(cloudTgt, coefficientsA);
+
+  extractCenterOfCloud(cloudSrc, 0.3);
+  extractCenterOfCloud(cloudTgt, 0.3);
+
+  pcl::PointCloud<PointTypePCL>::Ptr cloudSrcSubsampled = subSampleCloudRandom(cloudSrc, subsampleCount);
+  pcl::PointCloud<PointTypePCL>::Ptr cloudTgtSubsampled = subSampleCloudRandom(cloudTgt, subsampleCount);
+  setColorChannelExclusive(cloudSrcSubsampled, ColorChannel::r, 255);
+  setColorChannelExclusive(cloudSrcSubsampled, ColorChannel::g, 0);
+  setColorChannelExclusive(cloudSrcSubsampled, ColorChannel::b, 0);
+
+  setColorChannelExclusive(cloudTgtSubsampled, ColorChannel::r, 0);
+  setColorChannelExclusive(cloudTgtSubsampled, ColorChannel::g, 0);
+  setColorChannelExclusive(cloudTgtSubsampled, ColorChannel::b, 255);
+
+  Eigen::Matrix4f ts,ss,tt,st;
+  transformToShapenetFormat(cloudTgtSubsampled, tt,st);
+  transformToShapenetFormat(cloudSrcSubsampled, ts,ss); 
+  //debug_showCombinedCloud(cloudSrcSubsampled, cloudTgtSubsampled, "ShapenetFormat");
+
+  double bestScore = DBL_MAX;
+  float scaleFactor = 0.01;
+  int bestScaleStep = 0;
+  Eigen::Matrix4f bestTransformation;
+  Eigen::Matrix4f scaleMatrix = Eigen::Matrix4f::Zero();
+  scaleMatrix(0,0) = scaleFactor;
+  scaleMatrix(1,1) = scaleFactor;
+  scaleMatrix(2,2) = scaleFactor;
+  scaleMatrix(3,3) = 1.0;
+  for(int i=50; i<200; ++i){
+    pcl::PointCloud<PointTypePCL>::Ptr cloudSrcSubsampledICP = pcl::PointCloud<PointTypePCL>().makeShared();
+    pcl::IterativeClosestPoint<PointTypePCL, PointTypePCL> icp;
+    pcl::transformPointCloud (*cloudSrcSubsampled, *cloudSrcSubsampledICP, scaleMatrix*(float)i);
+    icp.setInputSource(cloudTgtSubsampled);
+    icp.setInputTarget(cloudSrcSubsampledICP);
+
+    pcl::PointCloud<PointTypePCL> Unused;
+    icp.align(Unused);
+
+    pcl::transformPointCloud (*cloudSrcSubsampledICP, *cloudSrcSubsampledICP, icp.getFinalTransformation().inverse());
+    //if(i % 10 == 0)
+      //debug_showCombinedCloud(cloudSrcSubsampledICP, cloudTgtSubsampled, "ShapenetFormat");
+    double score = icp.getFitnessScore();
+    std::cout << "Score: " << score << std::endl;
+    if(score < bestScore){
+      bestTransformation = icp.getFinalTransformation().inverse();
+      bestScore = score;
+      bestScaleStep = i;
+    }
+  }
+
+  pcl::PointCloud<PointTypePCL>::Ptr cloudSrcResultTmp = pcl::PointCloud<PointTypePCL>().makeShared();
+
+  //transform subsamped src to subsampeled target
+  pcl::transformPointCloud (*cloudSrcSubsampled, *cloudSrcSubsampled, scaleMatrix*(float)bestScaleStep);
+  pcl::transformPointCloud (*cloudSrcSubsampled, *cloudSrcSubsampled, bestTransformation);
+  debug_showCombinedCloud(cloudSrcSubsampled, cloudTgtSubsampled, "Subsample ICP Result with best Scale");
+
+  //transform src to subsampled target
+  pcl::transformPointCloud (*cloudSrc, *cloudSrcResultTmp, ts);
+  pcl::transformPointCloud (*cloudSrcResultTmp, *cloudSrcResultTmp, ss);
+  pcl::transformPointCloud (*cloudSrcResultTmp, *cloudSrcResultTmp, scaleMatrix*(float)bestScaleStep);
+  pcl::transformPointCloud (*cloudSrcResultTmp, *cloudSrcResultTmp, bestTransformation);
+  //transform target to subsampled target
+  pcl::PointCloud<PointTypePCL>::Ptr cloudTargetResultTmp = pcl::PointCloud<PointTypePCL>().makeShared();
+  pcl::transformPointCloud (*cloudTgt, *cloudTargetResultTmp, tt);
+  pcl::transformPointCloud (*cloudTargetResultTmp, *cloudTargetResultTmp, st);
+  debug_showCombinedCloud(cloudSrcResultTmp, cloudTargetResultTmp, "ICP Result with best Scale");
+
+  /*pcl::IterativeClosestPoint<PointTypePCL, PointTypePCL> icp;
+  icp.setInputSource(cloudSrcSubsampled);
+  icp.setInputTarget(cloudTgtSubsampled);
+
+  pcl::PointCloud<PointTypePCL> Unused;
+  icp.align(Unused);
+  pcl::transformPointCloud (*cloudSrcResultTmp, *cloudSrcResultTmp, icp.getFinalTransformation());
+  debug_showCombinedCloud(cloudSrcResultTmp, cloudTargetResultTmp, "Final ICP Result");*/
 
   return 0;
 }
@@ -631,6 +775,68 @@ int showCloudWithNormals(po::variables_map vm){
 
   return 0;
 
+}
+
+int convertToRegistrationFormat(po::variables_map vm){
+  if(!vm.count("SourceCloudPath")){
+    cout << "Missing Parameter SourceCloudPath\n";
+    return 1;
+  }
+
+  if(!vm.count("TargetCloudPath")){
+    cout << "Missing Parameter TargetCloudPath\n";
+    return 1;
+  }
+
+  if(!vm.count("OutputFolder")){
+    cout << "Missing Parameter OutputFolder\n";
+    return 1;
+  }
+
+  std::string srcCloudPath = vm["SourceCloudPath"].as<std::string>();
+  std::string tgtCloudPath = vm["TargetCloudPath"].as<std::string>();
+  std::string outFolderPath = vm["OutputFolder"].as<std::string>();
+
+  pcl::PointCloud<PointTypePCL>::Ptr cloudSrc(new pcl::PointCloud<PointTypePCL>);
+
+  if( pcl::io::loadPLYFile(srcCloudPath, *cloudSrc) == -1){
+
+    PCL_ERROR ("Couldn't read ply file\n");
+    return (-1);
+
+  }
+
+  pcl::PointCloud<PointTypePCL>::Ptr cloudTgt(new pcl::PointCloud<PointTypePCL>);
+
+  if( pcl::io::loadPLYFile(tgtCloudPath, *cloudTgt) == -1){
+
+    PCL_ERROR ("Couldn't read ply file\n");
+    return (-1);
+
+  }
+
+  pcl::ModelCoefficients::Ptr coefficientsA (new pcl::ModelCoefficients);
+  pcl::PointIndices::Ptr inliersA (new pcl::PointIndices);
+  findPlaneInCloud(cloudSrc, coefficientsA, inliersA);
+  rotateCloud(cloudSrc, coefficientsA);
+  findPlaneInCloud(cloudTgt, coefficientsA, inliersA);
+  rotateCloud(cloudTgt, coefficientsA);
+
+  extractCenterOfCloud(cloudSrc, 0.3);
+  extractCenterOfCloud(cloudTgt, 0.3);
+
+  pcl::PointCloud<PointTypePCL>::Ptr cloudSrcSubsampled = subSampleCloudRandom(cloudSrc, 1024);
+  pcl::PointCloud<PointTypePCL>::Ptr cloudTgtSubsampled = subSampleCloudRandom(cloudTgt, 1024);
+
+  Eigen::Matrix4f t,s;
+  transformToShapenetFormat(cloudSrcSubsampled, t,s);
+  transformToShapenetFormat(cloudTgtSubsampled, t,s);
+  debug_showCombinedCloud(cloudSrcSubsampled, cloudTgtSubsampled, "ShapenetFormat");
+
+  writeRegistrationFormat(cloudSrcSubsampled, outFolderPath, "SrcCloud");
+  writeRegistrationFormat(cloudTgtSubsampled, outFolderPath, "TgtCloud");
+
+  return 0;
 }
 
 int computeAndShowNormals(po::variables_map vm){
@@ -677,6 +883,8 @@ enum JobName {
   Shapenet2,
   ShowCloudWithNormals,
   ComputeAndShowNormals,
+  RegistrationFormat,
+  IterativeScaleRegistration,
   UnknownJob
 };
 
@@ -685,6 +893,8 @@ JobName jobStringToEnum(std::string jobString){
   if(jobString == "Shapenet2") return Shapenet2;
   if(jobString == "ShowCloudWithNormals") return ShowCloudWithNormals;
   if(jobString == "ComputeAndShowNormals") return ComputeAndShowNormals;
+  if(jobString == "RegistrationFormat") return RegistrationFormat;
+  if(jobString == "IterativeScaleRegistration") return IterativeScaleRegistration;
   return UnknownJob;
 }
 
@@ -705,6 +915,11 @@ int main (int argc, char** argv)
     ("PointCloudName", po::value<std::string>(), "Name of the PointCloud that should be converted to Shapenet format")
     ("PointCloudPlant", po::value<std::string>(), "Path to Plant Point Cloud")
     ("NormalEsitmationSearchRadius", po::value<float>(), "Radius that should be used in Normal Estimation")
+    ("SourceCloudPath", po::value<std::string>(), "Source cloud path for DCP Format transformation")
+    ("TargetCloudPath", po::value<std::string>(), "Target cloud path for DCP Format transformation")
+    ("OutputFolder", po::value<std::string>(), "Path to Folder where DCP Format should be saved")
+    ("SubsampleCount", po::value<int>(), "Amount of Points that should be used for subsampling")
+    ("RemoveBackground", po::value<bool>(), "Remove background when converting to shapnet format")
   ;
 
   po::variables_map vm;
@@ -725,15 +940,7 @@ int main (int argc, char** argv)
 
     switch(jobName){
       case Shapenet:
-        if(!vm.count("snin")){
-          cout << "Missing parameter snin\n";
-          return 1;
-        }
-        if(!vm.count("snout")){
-          cout << "Missing parameter snout\n";
-          return 1;
-        }
-        convertToShapenetFormat(vm["snin"].as<std::string>(), vm["snout"].as<std::string>());
+        convertToShapenetFormat(vm);
         break;
       case Shapenet2:
         return convertToShapenetFormat2(vm);
@@ -742,6 +949,10 @@ int main (int argc, char** argv)
         return showCloudWithNormals(vm);
       case ComputeAndShowNormals:
         return computeAndShowNormals(vm);
+      case RegistrationFormat:
+        return convertToRegistrationFormat(vm);
+      case IterativeScaleRegistration:
+        return iterativeScaleRegistration(vm);
       case UnknownJob:
         cout << "Job " << vm["job"].as<std::string>() << " is unknown.\n";
         return 1;

@@ -1,1 +1,4 @@
 build/
+data/
+python/data/
+python/pointnet2/data/
