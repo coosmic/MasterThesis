@@ -4,10 +4,16 @@ conda activate tensorflow-15
 
 Training:
 
-python train.py --model pointnet2_part_seg --log_dir log --max_epoch 50
+python train.py --model pointnet2_part_seg --log_dir log --max_epoch 50 --num_classes 2 --batch_size 4
+
+python train.py --model pointnet2_part_seg3C --log_dir log --max_epoch 50 --num_classes 3 --batch_size 4
 
 Evaluation:
 
 python evaluate.py --model pointnet2_2048_3l --model_path ./results/u12Classes20483L/model.ckpt
 
-python evaluate.py --model pointnet2_part_seg --model_path ./results/t3_2ClassesPartSeg_1024_256/model.ckpt
+python evaluate.py --model pointnet2_part_seg --model_path ./results/t3_2ClassesPartSeg_1024_256/model.ckpt --log_dir log_eval --pred_dir pred_eval
+
+python evaluate.py --model pointnet2_part_seg3C --model_path ./results/t5_3ClassesPartSeg3C/model.ckpt --log_dir log_eval --pred_dir pred_eval
+
+python evaluate.py --model pointnet2_part_seg --model_path ./results/t6_2ClassesPartSeg/model.ckpt --log_dir log_eval --pred_dir pred_eval

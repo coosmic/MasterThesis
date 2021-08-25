@@ -47,7 +47,7 @@ class SingleFileDataset():
         return point_set, normal
 
 class PartNormalDataset():
-    def __init__(self, root, npoints = 2500, classification = False, split='train', normalize=True, return_cls_label = False):
+    def __init__(self, root, seg_classes = {'Plant': [0, 1] }, npoints = 2500, classification = False, split='train', normalize=True, return_cls_label = False):
         self.npoints = npoints
         self.root = root
         self.catfile = os.path.join(self.root, 'synsetoffset2category.txt')
@@ -111,7 +111,7 @@ class PartNormalDataset():
         self.classes = dict(zip(self.cat, range(len(self.cat))))  
         # Mapping from category ('Chair') to a list of int [10,11,12,13] as segmentation labels
         #self.seg_classes = {'Earphone': [16, 17, 18], 'Motorbike': [30, 31, 32, 33, 34, 35], 'Rocket': [41, 42, 43], 'Car': [8, 9, 10, 11], 'Laptop': [28, 29], 'Cap': [6, 7], 'Skateboard': [44, 45, 46], 'Mug': [36, 37], 'Guitar': [19, 20, 21], 'Bag': [4, 5], 'Lamp': [24, 25, 26, 27], 'Table': [47, 48, 49], 'Airplane': [0, 1, 2, 3], 'Pistol': [38, 39, 40], 'Chair': [12, 13, 14, 15], 'Knife': [22, 23], 'Plant': [0, 1] }
-        self.seg_classes = {'Plant': [0, 1] }
+        self.seg_classes = seg_classes
         
 
         for cat in sorted(self.seg_classes.keys()):

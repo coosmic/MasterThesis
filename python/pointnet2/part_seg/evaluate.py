@@ -29,7 +29,6 @@ FLAGS = parser.parse_args()
 
 VOTE_NUM = 12
 
-
 EPOCH_CNT = 0
 
 BATCH_SIZE = FLAGS.batch_size
@@ -51,7 +50,7 @@ PRED_DIR = FLAGS.pred_dir
 
 # Shapenet official train/test split
 DATA_PATH = os.path.join(ROOT_DIR, 'data', 'shapenetcore_partanno_segmentation_benchmark_v0_normal')
-TEST_DATASET = part_dataset_all_normal.PartNormalDataset(root=DATA_PATH, npoints=NUM_POINT, classification=False, split='val')
+TEST_DATASET = part_dataset_all_normal.PartNormalDataset(root=DATA_PATH, npoints=NUM_POINT, classification=False, split='val', normalize=False, seg_classes={'Plant': [0, 1] } )
 
 def log_string(out_str):
     LOG_FOUT.write(out_str+'\n')
@@ -129,7 +128,7 @@ def eval_one_epoch(sess, ops):
         end_idx = min(len(TEST_DATASET), (batch_idx+1) * BATCH_SIZE)
         cur_batch_size = end_idx-start_idx
         cur_batch_data, cur_batch_label = get_batch(TEST_DATASET, test_idxs, start_idx, end_idx)
-        print("Batch-Data.shape: ",cur_batch_data.shape)
+        #print("Batch-Data.shape: ",cur_batch_data.shape)
         if cur_batch_size == BATCH_SIZE:
             batch_data = cur_batch_data
             batch_label = cur_batch_label
@@ -140,6 +139,7 @@ def eval_one_epoch(sess, ops):
         # ---------------------------------------------------------------------
         loss_val = 0
         pred_val = np.zeros((BATCH_SIZE, NUM_POINT, NUM_CLASSES))
+        #print("pred_val.shape", pred_val.shape)
         for _ in range(VOTE_NUM):
             feed_dict = {ops['pointclouds_pl']: batch_data,
                          ops['labels_pl']: batch_label,
@@ -155,7 +155,9 @@ def eval_one_epoch(sess, ops):
         # Constrain pred to the groundtruth classes (selected by seg_classes[cat])
         cur_pred_val_logits = cur_pred_val
         cur_pred_val = np.zeros((cur_batch_size, NUM_POINT)).astype(np.int32)
+        #print("seg_label_to_cat: ",seg_label_to_cat)
         for i in range(cur_batch_size):
+            #print("cur_batch_label[i,0]: ",cur_batch_label[i,0])
             cat = seg_label_to_cat[cur_batch_label[i,0]]
             logits = cur_pred_val_logits[i,:,:]
             cur_pred_val[i,:] = np.argmax(logits[:,seg_classes[cat]], 1) + seg_classes[cat][0]

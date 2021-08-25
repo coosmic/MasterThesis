@@ -312,6 +312,43 @@ void centerCloud(Cloud::Ptr cloud){
   pcl::transformPointCloud (*cloud, *cloud, matrix);
 }
 
+void getPointsNearCloudFromOtherCloud(pcl::PointCloud<PointTypePCL>::Ptr cloud, pcl::PointCloud<PointTypePCL>::Ptr otherCloud, float radius){
+  pcl::KdTreeFLANN<PointTypePCL> kdtree;
+  kdtree.setInputCloud (otherCloud);
+
+  std::vector<int> indicesToBeTaken; 
+
+  for(int i=0; i<cloud->points.size(); ++i){
+    std::vector<int> neighborIndices; //to store index of surrounding points 
+    //pcl::PointIndices::Ptr neighborIndices (new pcl::PointIndices);
+    std::vector<float> pointRadiusSquaredDistance; // to store distance to surrounding
+    kdtree.radiusSearch(cloud->points[i], radius, neighborIndices, pointRadiusSquaredDistance);
+
+    //indicesToBeRemoved[i] = neighborIndices;
+    indicesToBeTaken.insert(indicesToBeTaken.end(), neighborIndices.begin(), neighborIndices.end());
+  }
+
+  std::vector<int>::iterator itr = indicesToBeTaken.begin();
+  std::unordered_set<int> s;
+ 
+  for (auto curr = indicesToBeTaken.begin(); curr != indicesToBeTaken.end(); ++curr)
+  {
+      if (s.insert(*curr).second) {
+          *itr++ = *curr;
+      }
+  }
+  indicesToBeTaken.erase(itr, indicesToBeTaken.end());
+
+  pcl::PointIndices::Ptr inliers(new pcl::PointIndices);
+  inliers->indices = indicesToBeTaken;
+
+  pcl::ExtractIndices<PointTypePCL> extract;
+  extract.setInputCloud(otherCloud);
+  extract.setIndices(inliers);
+  extract.setNegative(false);
+  extract.filter(*otherCloud);
+}
+
 void substractCloudFromOtherCloud(pcl::PointCloud<PointTypePCL>::Ptr cloud, pcl::PointCloud<PointTypePCL>::Ptr otherCloud, float radius){
 
   pcl::KdTreeFLANN<PointTypePCL> kdtree;
@@ -417,7 +454,10 @@ int colorToCode(PointTypePCL point){
     return LeaveLabel;
 }
 
-void removeBackgroundPointsShapenet(Cloud::Ptr cloud){
+/**
+ * Removes background points from cloud by color. Returns a new pointcloud containing the background
+ */
+Cloud::Ptr removeBackgroundPointsShapenet(Cloud::Ptr cloud){
   pcl::PointIndices::Ptr backgroundIndicies(new pcl::PointIndices());
   for(int i=0; i<cloud->size(); ++i){
     if(colorToCode(cloud->points[i]) == BackgroundLabel){
@@ -425,11 +465,17 @@ void removeBackgroundPointsShapenet(Cloud::Ptr cloud){
     }
   }
 
+  Cloud::Ptr background (new Cloud);
+
   pcl::ExtractIndices<PointTypePCL> extract;
   extract.setInputCloud(cloud);
   extract.setIndices(backgroundIndicies);
+  extract.filter(*background);
+
   extract.setNegative(true);
   extract.filter(*cloud);
+
+  return background;
 
 }
 

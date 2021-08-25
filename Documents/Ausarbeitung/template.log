@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2021) (preloaded format=pdflatex 2021.8.18)  19 AUG 2021 18:43
+This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2021) (preloaded format=pdflatex 2021.8.18)  24 AUG 2021 17:20
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -283,9 +283,12 @@ Package: ifvtex 2019/10/25 v1.7 ifvtex legacy package. Use iftex instead.
 \Gm@layoutvoffset=\dimen161
 \Gm@dimlist=\toks21
 )
+
+Package fancyhdr Warning: \fancyhead's `E' option without twoside option is use
+less on input line 33.
+
 LaTeX Font Info:    Trying to load font information for OT1+ptm on input line 3
 6.
-
 (/usr/local/texlive/2021/texmf-dist/tex/latex/psnfss/ot1ptm.fd
 File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
 )
@@ -391,7 +394,7 @@ LaTeX Info: Redefining \nameref on input line 36.
 * paper: a4paper
 * layout: <same size as paper>
 * layoutoffset:(h,v)=(0.0pt,0.0pt)
-* modes: twoside 
+* modes: 
 * h-part:(L,W,R)=(71.13188pt, 455.24411pt, 71.13188pt)
 * v-part:(T,H,B)=(99.58464pt, 674.33032pt, 71.13188pt)
 * \paperwidth=597.50787pt
@@ -405,7 +408,7 @@ LaTeX Info: Redefining \nameref on input line 36.
 * \headsep=25.0pt
 * \topskip=12.0pt
 * \footskip=30.0pt
-* \marginparwidth=95.0pt
+* \marginparwidth=44.0pt
 * \marginparsep=10.0pt
 * \columnsep=10.0pt
 * \skip\footins=10.8pt plus 4.0pt minus 2.0pt
@@ -413,19 +416,16 @@ LaTeX Info: Redefining \nameref on input line 36.
 * \voffset=0.0pt
 * \mag=1000
 * \@twocolumnfalse
-* \@twosidetrue
-* \@mparswitchtrue
+* \@twosidefalse
+* \@mparswitchfalse
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
 [1
 
 {/usr/local/texlive/2021/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-[2
 
-]
-
-LaTeX Warning: Reference `LastPage' on page 3 undefined on input line 84.
+LaTeX Warning: Reference `LastPage' on page 1 undefined on input line 84.
 
 LaTeX Font Info:    Trying to load font information for U+msa on input line 88.
 
@@ -437,8 +437,15 @@ LaTeX Font Info:    Trying to load font information for U+msb on input line 88.
 
 (/usr/local/texlive/2021/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
-) [3]pdfTeX warning (ext4): destination with the same identifier (name{page.1})
- has been already used, duplicate ignored
+)pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has
+ been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.92 \newpage
+              [1
+
+]pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has
+ been already used, duplicate ignored
 <to be read again> 
                    \relax 
 l.108 \newpage
@@ -446,24 +453,7 @@ l.108 \newpage
 \tf@toc=\write4
 \openout4 = `template.toc'.
 
-pdfTeX warning (ext4): destination with the same identifier (name{page.2}) has 
-been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.112 \newpage
-               [2]pdfTeX warning (ext4): destination with the same identifier (
-name{page.3}) has been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.132 \newpage
-               [3] [4] [5] [6] [7] [8]
-LaTeX Font Info:    Trying to load font information for OT1+pcr on input line 2
-75.
-
-(/usr/local/texlive/2021/texmf-dist/tex/latex/psnfss/ot1pcr.fd
-File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
-) [9]
-(./template.aux)
+ [2] [3] [4] [5] [6] [7] [8] (./template.bbl) [9] (./template.aux)
 
 LaTeX Warning: There were undefined references.
 
@@ -474,23 +464,22 @@ Package rerunfilecheck Info: File `template.out' has not changed.
 (rerunfilecheck)             Checksum: A73B51EE75E60710D58A3D4D1DCBADD3;3031.
  ) 
 Here is how much of TeX's memory you used:
- 10837 strings out of 478542
- 159904 string characters out of 5850401
- 477637 words of memory out of 5000000
- 28581 multiletter control sequences out of 15000+600000
- 424205 words of font info for 73 fonts, out of 8000000 for 9000
+ 10781 strings out of 478542
+ 159190 string characters out of 5850401
+ 477494 words of memory out of 5000000
+ 28536 multiletter control sequences out of 15000+600000
+ 417236 words of font info for 57 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 60i,8n,66p,563b,342s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 60i,6n,66p,563b,342s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2021/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/t
 exlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/local/te
-xlive/2021/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/local/texlive/20
-21/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2021/texmf-d
-ist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2021/texmf-dist/fonts/
-type1/urw/times/utmri8a.pfb>
-Output written on template.pdf (12 pages, 76942 bytes).
+xlive/2021/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2021
+/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2021/texmf-dis
+t/fonts/type1/urw/times/utmri8a.pfb>
+Output written on template.pdf (11 pages, 69587 bytes).
 PDF statistics:
- 173 PDF objects out of 1000 (max. 8388607)
- 147 compressed objects within 2 object streams
- 33 named destinations out of 1000 (max. 500000)
+ 158 PDF objects out of 1000 (max. 8388607)
+ 135 compressed objects within 2 object streams
+ 29 named destinations out of 1000 (max. 500000)
  113 words of extra memory for PDF output out of 10000 (max. 10000000)
 

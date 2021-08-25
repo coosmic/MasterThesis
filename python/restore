@@ -1,0 +1,2 @@
+#!/bin/bash
+sudo apt-get install nvidia-utils-460-server libnvidia-compute-460-server

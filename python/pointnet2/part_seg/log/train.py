@@ -24,12 +24,13 @@ parser.add_argument('--model', default='model', help='Model name [default: model
 parser.add_argument('--log_dir', default='log', help='Log dir [default: log]')
 parser.add_argument('--num_point', type=int, default=16384, help='Point Number [default: 2048]')
 parser.add_argument('--max_epoch', type=int, default=201, help='Epoch to run [default: 201]')
-parser.add_argument('--batch_size', type=int, default=8, help='Batch Size during training [default: 32]')
+parser.add_argument('--batch_size', type=int, default=4, help='Batch Size during training [default: 32]')
 parser.add_argument('--learning_rate', type=float, default=0.001, help='Initial learning rate [default: 0.001]')
 parser.add_argument('--momentum', type=float, default=0.9, help='Initial learning rate [default: 0.9]')
 parser.add_argument('--optimizer', default='adam', help='adam or momentum [default: adam]')
 parser.add_argument('--decay_step', type=int, default=200000, help='Decay step for lr decay [default: 200000]')
 parser.add_argument('--decay_rate', type=float, default=0.7, help='Decay rate for lr decay [default: 0.7]')
+parser.add_argument('--num_classes', type=int, default=2, help='Count of Classes in test and train data')
 FLAGS = parser.parse_args()
 
 EPOCH_CNT = 0
@@ -60,12 +61,12 @@ BN_DECAY_CLIP = 0.99
 
 HOSTNAME = socket.gethostname()
 
-NUM_CLASSES = 2
+NUM_CLASSES = FLAGS.num_classes
 
 # Shapenet official train/test split
 DATA_PATH = os.path.join(ROOT_DIR, 'data', 'shapenetcore_partanno_segmentation_benchmark_v0_normal')
-TRAIN_DATASET = part_dataset_all_normal.PartNormalDataset(root=DATA_PATH, npoints=NUM_POINT, classification=False, split='train')
-TEST_DATASET = part_dataset_all_normal.PartNormalDataset(root=DATA_PATH, npoints=NUM_POINT, classification=False, split='test')
+TRAIN_DATASET = part_dataset_all_normal.PartNormalDataset(root=DATA_PATH, npoints=NUM_POINT, classification=False, split='train', seg_classes={'Plant' : [0,1]}, normalize=False )
+TEST_DATASET = part_dataset_all_normal.PartNormalDataset(root=DATA_PATH, npoints=NUM_POINT, classification=False, split='test', seg_classes={'Plant' : [0,1]}, normalize=False )
 
 def log_string(out_str):
     LOG_FOUT.write(out_str+'\n')

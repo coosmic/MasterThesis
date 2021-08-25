@@ -7,6 +7,7 @@ import signal
 import sys
 from pointnet2.part_seg import estimate
 import jobs
+import utilities
 
 from flask import Flask, request
 app = Flask(__name__)
@@ -18,25 +19,48 @@ class ServiceExit(Exception):
     """
     pass
 
+global mutexJobQueue
 mutexJobQueue = Lock()
+global serverRunning
 serverRunning = True
+global jobqueue
 jobqueue = []
+
+global mutexImageQueue
+mutexImageQueue = Lock()
+
+global serverState
+serverState = {}
+global mutexServerState
+mutexServerState = Lock()
 
 def jobProcessingThread():
     while serverRunning:
-        mutexJobQueue.acquire()
+        
         #print("thread waked up")
         #print(len(jobqueue))
         if(len(jobqueue) != 0):
             #print("processing job")
             try:
-                jobqueue[0]["job"](jobqueue[0]["data"])
+                mutexJobQueue.acquire()
+                job = jobqueue[0]
+                mutexJobQueue.release()
+
+                job["job"](job["data"])
+
+                mutexJobQueue.acquire()
                 del jobqueue[0]
+                mutexJobQueue.release()
+                mutexServerState.acquire()
+                serverState = utilities.updateState(serverState, job)
+                mutexServerState.release()
             except Exception as e:
                 print(e)
-                mutexJobQueue.release()
+                if mutexServerState.locked():
+                    mutexServerState.release()
+                if mutexJobQueue.locked():
+                    mutexJobQueue.release()
                 raise e
-        mutexJobQueue.release()
         time.sleep(1.0)
     print("cleanup job processing queue")
     #TODO
@@ -69,6 +93,9 @@ def startBackgroundThreads():
 
     atexit.register(atExitBackgroundThreads)
     signal.signal(signal.SIGINT, tearDownBackgroundThreads)
+    global serverState
+    serverState = utilities.restoreState( os.path.join(os.path.abspath(os.getcwd()), "data") )
+    print(serverState)
     print("background jobs started")
 
 @app.route('/')
@@ -87,20 +114,29 @@ def test():
 @app.route('/data/<testSet>/<timeStamp>', methods=['GET','POST', 'PUT'])
 def data(testSet, timeStamp):
     if request.method == 'POST':
+        mutexImageQueue.acquire()
         print(request.files.keys())
+        if "images" not in request.files.keys():
+            return ("Bad Request. You have to provide field images! ", 400)
         uploaded_files = request.files.getlist("images")
+        print(uploaded_files)
         image_folder_path = os.path.join(os.path.abspath(os.getcwd()), "data", testSet, timeStamp, "images")
-        base_folder_path = os.path.join(os.path.abspath(os.getcwd()), "data", )
+        
         if not os.path.isdir(image_folder_path):
             os.makedirs(image_folder_path)
         for file in uploaded_files:
             filePath = os.path.join(image_folder_path, file.filename)
             #print(filePath)
             file.save(filePath)
-        
-        job = {"job" : jobs.jobGeneratePointCloud, "data" : {"baseFolderPath" : base_folder_path, "testSet" : testSet, "timeStamp" : timeStamp}}
+
+        job1 = { "jobName" : "SaveImages", "data" : {"testSet" : testSet, "timeStamp" : timeStamp}}
+
+        mutexImageQueue.release()
+
+        base_folder_path = os.path.join(os.path.abspath(os.getcwd()), "data", )
+        job2 = {"job" : jobs.jobGeneratePointCloud, "jobName" : "GeneratePointCloud", "data" : {"baseFolderPath" : base_folder_path, "testSet" : testSet, "timeStamp" : timeStamp}}
         mutexJobQueue.acquire()
-        jobqueue.append(job)
+        jobqueue.append(job2)
         mutexJobQueue.release()
         #makePointCloudCommand = f"docker run -ti --rm -v {base_folder_path}/{testSet}:/{testSet} --gpus all opendronemap/odm:gpu --rerun-all -e  odm_filterpoints --project-path /{testSet} {timeStamp}"
         #print(makePointCloudCommand)
@@ -109,15 +145,22 @@ def data(testSet, timeStamp):
     elif request.method == 'GET':
         #serve login page
         print(testSet, timeStamp)
-        return("OK")
+        mutexServerState.acquire()
+        if testSet in serverState:
+            if timeStamp in serverState[testSet]:
+                mutexServerState.release()
+                return serverState[testSet][timeStamp]
+        mutexServerState.release()
+        return("Not Found", 404)
     elif request.method == 'PUT':
         print(f"Updating {testSet}/{timeStamp}")
         if request.is_json:
             payloadR = request.get_json()
             jobList = payloadR["jobs"]
             for job in jobList:
-                print(f"Job with name {job['jobName']} will be started")
-                job = {"job" : jobs.genericJob, "data" : {"jobName": job['jobName'], "jobParameter": job['jobParameter'],"testSet" : testSet, "timeStamp" : timeStamp}}
+                #print(f"Job with name {job['jobName']} will be started")
+                #job = {"job" : jobs.genericJob, "data" : {"jobName": job['jobName'], "jobParameter": job['jobParameter'],"testSet" : testSet, "timeStamp" : timeStamp}}
+                job = jobs.getJob(job['jobName'], testSet, timeStamp)
                 mutexJobQueue.acquire()
                 jobqueue.append(job)
                 mutexJobQueue.release()

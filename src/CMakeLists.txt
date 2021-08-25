@@ -24,6 +24,8 @@ include_directories(${PCL_INCLUDE_DIRS})
 link_directories(${PCL_LIBRARY_DIRS})
 add_definitions(${PCL_DEFINITIONS})
 
+#add_library(mypythonbinding, )
+
 add_executable(pgm main.cpp)
 target_link_libraries(pgm ${PCL_LIBRARIES})
 target_link_libraries(pgm CGAL::CGAL CGAL::pointmatcher_support CGAL::OpenGR_support)

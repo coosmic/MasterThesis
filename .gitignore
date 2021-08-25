@@ -1,4 +1,6 @@
 build/
+build_python_binding/
 data/
 python/data/
 python/pointnet2/data/
+python/pointnet2/part_seg/pred_eval/

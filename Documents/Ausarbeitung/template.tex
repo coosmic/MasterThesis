@@ -1,5 +1,5 @@
 %\documentclass[sigconf, titlepage, twoside]{acmart}
-\documentclass[12pt,titlepage,twoside]{article}
+\documentclass[12pt,titlepage]{article}
 %\usepackage{titlesec}
 
 % language stuff
@@ -222,6 +222,7 @@ Auch wurde eine verbesserte Version von PointNet auf dem Datensatz trainiert. Di
 \label{sec:realisierung:implementierung2}
 Der Server ist mit dem Python-Framework Flask erstellt wurden. Flask bietet eine Schlanke API um neue Endpunkte zu erstellen und Daten vom Netzwerk anzunehmen.
 
+something need to be cited \cite{ThreeBasics}
 
 \newpage
 \section{Ergebnisse}
@@ -237,7 +238,15 @@ Der Server ist mit dem Python-Framework Flask erstellt wurden. Flask bietet eine
 
 \subsection{Vergleich von Verfahren zur Generierung von 3D-Punktwolken auf Basis von Bildern}
 
+Um eine geeignete Software zur Generierung von 3D-Punktwolken auszuwählen muss erst entschieden werden nach welchen Gütekriterien verschiedene Anwendungen betrachtet werden sollen und wie wichtig diese sind.
+Bei dieser Arbeit ist die nötige Anzahl der Bilder die zur Generierung einer Punktwolke mit genug Information das wichtigste Kriterium. Um dieses Kriterium zu messen muss ein Goldstandart der fotografierten Szene als 3D-Punktwolke existieren.
+Dieser Goldstandart kann erstellt werden, indem alle Fotografien genutzt werden die zur Verfügung stehen um die best mögliche Punktwolke zu erstellen. 
+Nun kann mit weniger Bildern aus dem selben Datensatz ein weitere Punktwolke generiert werden und die Distanz der Punkte der Goldstandart-Punktwolke zum jeweils nächsten Punkt der erstellten Punktwolke gemessen werden.
+Die Summe dieser Abstände kann als Fehlermaß genutzt werden.
+
 \subsection{Vergleich von Verfahren zur Registrierung 3D-Punkwolken}
+
+
 
 \subsection{Vergleich von Verfahren zur Segmentierung von Pflanzen auf 3D-Punkwolken}
 
@@ -265,18 +274,20 @@ Der Server ist mit dem Python-Framework Flask erstellt wurden. Flask bietet eine
 % Literaturverzeichnis
 %-------------------------------------------------------------
 \addcontentsline{toc}{section}{Literatur}
-\begin{thebibliography}{99}
-\raggedright
-\bibitem{buch} Autor(en): {\em Titel eines Buchs.}
-  Verlag, Auflage, Jahr
-\bibitem{artikel} Autor(en): {\em Überschrift eines Artikels.}
-  Zeitschriftennamen, Ausgabe, Seiten xx-yy, Jahr
-\bibitem{webseite} Autor(en): {\em Titel einer Webseite.}
-  \url{url}, Jahr/Datum der Erstellung\footnote{Nicht zitierfähige Webseiten sollten Sie nicht im Literaturverzeichnis auflisten, sondern als Fußnoten im laufenden Text als Quellen angeben.}
-\bibitem{opensource} Autor(en): {\em Name einer Software.}
-  Version, Datum, \url{url}
-\end{thebibliography}
+%\begin{thebibliography}{99}
+%\raggedright
+%\bibitem{buch} Autor(en): {\em Titel eines Buchs.}
+%  Verlag, Auflage, Jahr
+%\bibitem{artikel} Autor(en): {\em Überschrift eines Artikels.}
+%  Zeitschriftennamen, Ausgabe, Seiten xx-yy, Jahr
+%\bibitem{webseite} Autor(en): {\em Titel einer Webseite.}
+%  \url{url}, Jahr/Datum der Erstellung\footnote{Nicht zitierfähige Webseiten sollten Sie nicht im Literaturverzeichnis auflisten, sondern als Fußnoten im laufenden Text als Quellen angeben.}
+%\bibitem{opensource} Autor(en): {\em Name einer Software.}
+%  Version, Datum, \url{url}
+%\end{thebibliography}
 
+\bibliographystyle{ieeetr}
+\bibliography{./bibleografie.bib}
 
 \end{document}
 

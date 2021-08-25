@@ -8,7 +8,6 @@
 #include "utilities.h"
 #include "utilities_io.h"
 
-
 #include <iostream>
 #include <thread>
 #include <unordered_set>
@@ -581,6 +580,17 @@ int convertToShapenetFormat(po::variables_map vm){
     cout << "Missing parameter snout\n";
     return 1;
   }
+
+  int maxSubsample = 20;
+  if(vm.count("MaxSubsample")){
+    maxSubsample = vm["MaxSubsample"].as<int>();
+  }
+
+  int numOfPointsPerSubsample = 16384;
+  if(vm.count("SubsamplePointCount")){
+    numOfPointsPerSubsample = vm["SubsamplePointCount"].as<int>();
+  }
+
   std::string pathToPlant = vm["snin"].as<std::string>();
   std::string pathToShapenetFormatResult = vm["snout"].as<std::string>();
   bool removeBackground = vm["RemoveBackground"].as<bool>();
@@ -593,9 +603,7 @@ int convertToShapenetFormat(po::variables_map vm){
     PCL_ERROR ("Couldn't read ply file\n");
     return (-1);
   }
-
-  int numOfPointsPerSubsample = 16384;
-
+  
   pcl::ModelCoefficients::Ptr coefficientsA (new pcl::ModelCoefficients);
   pcl::PointIndices::Ptr inliersA (new pcl::PointIndices);
   findPlaneInCloud(cloudPlant, coefficientsA, inliersA);
@@ -613,18 +621,20 @@ int convertToShapenetFormat(po::variables_map vm){
   //showCloud2(cloudPlant, "Shapenet Formatted Cloud");
 
   int createdSubsamplesCount = 0;
-  while(cloudPlant->size() > numOfPointsPerSubsample && createdSubsamplesCount < 20){
+  while(cloudPlant->size() > numOfPointsPerSubsample && createdSubsamplesCount < maxSubsample){
     Cloud::Ptr subsampledCloud = subSampleCloudRandom(cloudPlant, numOfPointsPerSubsample);
     createdSubsamplesCount++;
 
     assert(subsampledCloud->size() == numOfPointsPerSubsample);
-
+    printMinMax(subsampledCloud);
     writeShapenetFormat(subsampledCloud, pathToShapenetFormatResult+"SS"+std::to_string(createdSubsamplesCount), removeBackground);
 
-    cout << "remaining points in org cloud: "<<std::to_string(cloudPlant->size())<<endl;
+    //cout << "remaining points in org cloud: "<<std::to_string(cloudPlant->size())<<endl;
   }
 
-  //writeShapenetFormat(cloudPlant, pathToShapenetFormatResult);
+
+  //writeShapenetFormat(cloudPlant, pathToShapenetFormatResult, false);
+  pcl::io::savePLYFileBinary(pathToShapenetFormatResult+".ply", *cloudPlant);
 
   return 0;
 }
@@ -641,14 +651,14 @@ int iterativeScaleRegistration(po::variables_map vm){
     return 1;
   }
 
-  if(!vm.count("SubsampleCount")){
-    cout << "Missing Parameter SubsampleCount\n";
+  if(!vm.count("SubsamplePointCount")){
+    cout << "Missing Parameter SubsamplePointCount\n";
     return 1;
   }
 
   std::string srcCloudPath = vm["SourceCloudPath"].as<std::string>();
   std::string tgtCloudPath = vm["TargetCloudPath"].as<std::string>();
-  int subsampleCount = vm["SubsampleCount"].as<int>();
+  int subsampleCount = vm["SubsamplePointCount"].as<int>();
 
   pcl::PointCloud<PointTypePCL>::Ptr cloudSrc(new pcl::PointCloud<PointTypePCL>);
 
@@ -878,6 +888,60 @@ int computeAndShowNormals(po::variables_map vm){
 
 }
 
+int backgroundRemovalPipeline(po::variables_map vm){
+  if(!vm.count("SourceCloudPath")){
+    cout << "Missing Parameter SourceCloudPath\n";
+    return 1;
+  }
+
+  if(!vm.count("TargetCloudPath")){
+    cout << "Missing Parameter TargetCloudPath\n";
+    return 1;
+  }
+
+  if(!vm.count("OutputFolder")){
+    cout << "Missing Parameter OutputFolder\n";
+    return 1;
+  }
+
+  float searchRadius = 0.0125;
+  if(vm.count("SearchRadius")){
+    searchRadius = vm["SearchRadius"].as<float>();
+  }
+
+  std::string srcCloudPath = vm["SourceCloudPath"].as<std::string>();
+  std::string tgtCloudPath = vm["TargetCloudPath"].as<std::string>();
+  std::string outFolderPath = vm["OutputFolder"].as<std::string>();
+
+  pcl::PointCloud<PointTypePCL>::Ptr cloudSrc(new pcl::PointCloud<PointTypePCL>);
+
+  if( pcl::io::loadPCDFile(srcCloudPath, *cloudSrc) == -1){
+
+    PCL_ERROR ("Couldn't read pcd file\n");
+    return (-1);
+  }
+
+  pcl::PointCloud<PointTypePCL>::Ptr cloudTgt(new pcl::PointCloud<PointTypePCL>);
+
+  if( pcl::io::loadPLYFile(tgtCloudPath, *cloudTgt) == -1){
+
+    PCL_ERROR ("Couldn't read ply file\n");
+    return (-1);
+  }
+  //showCloud2(cloudSrc, "Cloud with Background");
+  std::cout << "removing background by shapnet label" << std::endl;
+  Cloud::Ptr background = removeBackgroundPointsShapenet(cloudSrc);
+
+  //showCloud2(cloudSrc, "Cloud without Background");
+  //showCloud2(background, "Background");
+  //debug_showCombinedCloud(background, cloudTgt, "Background with cloudTgt");
+  getPointsNearCloudFromOtherCloud(cloudSrc, cloudTgt, searchRadius);
+  //showCloud2(cloudTgt, "No Background");
+  pcl::io::savePLYFile(outFolderPath+"/CloudWithoutBackground.ply", *cloudTgt);
+  //debug_showCombinedCloud(background, cloudTgt, "Background with cloudTgt");
+  return 0;
+}
+
 enum JobName {
   Shapenet,
   Shapenet2,
@@ -885,6 +949,7 @@ enum JobName {
   ComputeAndShowNormals,
   RegistrationFormat,
   IterativeScaleRegistration,
+  BackgroundRemovalPipeline,
   UnknownJob
 };
 
@@ -895,6 +960,7 @@ JobName jobStringToEnum(std::string jobString){
   if(jobString == "ComputeAndShowNormals") return ComputeAndShowNormals;
   if(jobString == "RegistrationFormat") return RegistrationFormat;
   if(jobString == "IterativeScaleRegistration") return IterativeScaleRegistration;
+  if(jobString == "BackgroundRemovalPipeline") return BackgroundRemovalPipeline;
   return UnknownJob;
 }
 
@@ -918,8 +984,10 @@ int main (int argc, char** argv)
     ("SourceCloudPath", po::value<std::string>(), "Source cloud path for DCP Format transformation")
     ("TargetCloudPath", po::value<std::string>(), "Target cloud path for DCP Format transformation")
     ("OutputFolder", po::value<std::string>(), "Path to Folder where DCP Format should be saved")
-    ("SubsampleCount", po::value<int>(), "Amount of Points that should be used for subsampling")
+    ("SubsamplePointCount", po::value<int>(), "Amount of Points that should be used for subsampling")
     ("RemoveBackground", po::value<bool>(), "Remove background when converting to shapnet format")
+    ("MaxSubsample", po::value<int>(), "Maximum Subsample that should be created")
+    ("SearchRadius", po::value<float>(), "Radius that should be used for nearest neighbor search")
   ;
 
   po::variables_map vm;
@@ -953,6 +1021,8 @@ int main (int argc, char** argv)
         return convertToRegistrationFormat(vm);
       case IterativeScaleRegistration:
         return iterativeScaleRegistration(vm);
+      case BackgroundRemovalPipeline:
+        return backgroundRemovalPipeline(vm);
       case UnknownJob:
         cout << "Job " << vm["job"].as<std::string>() << " is unknown.\n";
         return 1;
