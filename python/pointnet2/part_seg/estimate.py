@@ -19,8 +19,8 @@ import debug
 parser = argparse.ArgumentParser()
 parser.add_argument('--gpu', type=int, default=0, help='GPU to use [default: GPU 0]')
 parser.add_argument('--model', default='pointnet2_part_seg', help='Model name [default: pointnet2_part_seg]')
-parser.add_argument('--model_path2', default='./pointnet2/part_seg/results/t3_2ClassesPartSeg_1024_256/model.ckpt', help='model checkpoint file path [default: log/model.ckpt]')
-parser.add_argument('--model_path3', default='./pointnet2/part_seg/results/t4_3ClassesPartSeg/model.ckpt', help='model checkpoint file path [default: log/model.ckpt]')
+parser.add_argument('--model_path2', default='./pointnet2/part_seg/results/training/t3_2ClassesPartSeg_1024_256/model.ckpt', help='model checkpoint file path [default: log/model.ckpt]')
+parser.add_argument('--model_path3', default='./pointnet2/part_seg/results/training/t4_3ClassesPartSeg/model.ckpt', help='model checkpoint file path [default: log/model.ckpt]')
 parser.add_argument('--log_dir', default='./pointnet2/part_seg/log_eval', help='Log dir [default: log_eval]')
 parser.add_argument('--num_point', type=int, default=16384, help='Point Number [default: 2048]')
 parser.add_argument('--batch_size', type=int, default=1, help='Batch Size during training [default: 32]')
@@ -62,7 +62,7 @@ FLAGS = parser.parse_args()
 #DATALOADER_2C = None
 
 class Pointnet2PartSegmentation2:
-    def __init__(self,  model="pointnet2_part_seg", model_path="./pointnet2/part_seg/results/t3_2ClassesPartSeg_1024_256/model.ckpt", segmentationClasses = {'Plant': [0, 1] } ):
+    def __init__(self,  model="pointnet2_part_seg", model_path="./pointnet2/part_seg/results/training/t3_2ClassesPartSeg_1024_256/model.ckpt", segmentationClasses = {'Plant': [0, 1] } ):
 
         self.VOTE_NUM = 12
 

@@ -19,13 +19,14 @@ import part_dataset_all_normal
 parser = argparse.ArgumentParser()
 parser.add_argument('--gpu', type=int, default=0, help='GPU to use [default: GPU 0]')
 parser.add_argument('--model', default='pointnet2_part_seg', help='Model name [default: pointnet2_part_seg]')
-parser.add_argument('--model_path', default='./pointnet2/part_seg/results/t3_2ClassesPartSeg_1024_256/model.ckpt', help='model checkpoint file path [default: log/model.ckpt]')
+parser.add_argument('--model_path', default='./pointnet2/part_seg/results/training/t3_2ClassesPartSeg_1024_256/model.ckpt', help='model checkpoint file path [default: log/model.ckpt]')
 parser.add_argument('--log_dir', default='./pointnet2/part_seg/log_eval', help='Log dir [default: log_eval]')
 parser.add_argument('--num_point', type=int, default=16384, help='Point Number [default: 2048]')
 parser.add_argument('--batch_size', type=int, default=10, help='Batch Size during training [default: 32]')
 parser.add_argument('--pred_dir', default='./pointnet2/part_seg/pred_eval/', help='Directory where predictions should be saved to')
+parser.add_argument('--num_classes', type=int, default=2, help='Number of Classes in Test Data [2,3]')
+parser.add_argument('--normalize', type=bool, default=False, help='Should the input point clouds be normalized? Default False')
 FLAGS = parser.parse_args()
-
 
 VOTE_NUM = 12
 
@@ -44,13 +45,21 @@ os.system('cp %s %s' % (MODEL_FILE, LOG_DIR)) # bkp of model def
 os.system('cp train.py %s' % (LOG_DIR)) # bkp of train procedure
 LOG_FOUT = open(os.path.join(LOG_DIR, 'log_train.txt'), 'w')
 LOG_FOUT.write(str(FLAGS)+'\n')
-NUM_CLASSES = 2
+NUM_CLASSES = FLAGS.num_classes
+
+SEG_CLASSES = {}
+if NUM_CLASSES == 2:
+    SEG_CLASSES = {'Plant': [0, 1] }
+elif NUM_CLASSES == 3:
+    SEG_CLASSES = {'Plant': [0, 1, 2] }
 
 PRED_DIR = FLAGS.pred_dir
 
+NORMALIZE = FLAGS.normalize
+
 # Shapenet official train/test split
 DATA_PATH = os.path.join(ROOT_DIR, 'data', 'shapenetcore_partanno_segmentation_benchmark_v0_normal')
-TEST_DATASET = part_dataset_all_normal.PartNormalDataset(root=DATA_PATH, npoints=NUM_POINT, classification=False, split='val', normalize=False, seg_classes={'Plant': [0, 1] } )
+TEST_DATASET = part_dataset_all_normal.PartNormalDataset(root=DATA_PATH, npoints=NUM_POINT, classification=False, split='val', normalize=NORMALIZE, seg_classes=SEG_CLASSES )
 
 def log_string(out_str):
     LOG_FOUT.write(out_str+'\n')
@@ -170,6 +179,7 @@ def eval_one_epoch(sess, ops):
             total_seen_class[l] += np.sum(cur_batch_label==l)
             total_correct_class[l] += (np.sum((cur_pred_val==l) & (cur_batch_label==l)))
 
+        current_batch_iou = 0 
         for i in range(cur_batch_size):
             segp = cur_pred_val[i,:]
             segl = cur_batch_label[i,:] 
@@ -181,16 +191,18 @@ def eval_one_epoch(sess, ops):
                 else:
                     part_ious[l-seg_classes[cat][0]] = np.sum((segl==l) & (segp==l)) / float(np.sum((segl==l) | (segp==l)))
             shape_ious[cat].append(np.mean(part_ious))
+            current_batch_iou += np.mean(part_ious)
             points = cur_batch_data[i, :, :6]
             # write the predictions (segp) to a file
             #print(cat)
             file_path = TEST_DATASET.meta[cat][start_idx + i]
             file_name = os.path.basename(file_path)
-            print(file_name)
+            log_string(file_name)
             with open(os.path.join("./"+PRED_DIR, cat, file_name), "w") as prediction_file:
                 # iterate over segp (cur_pred_val) as those are only the valid data
                 for i in range(len(segp)):
                     prediction_file.write(" ".join([str(x) for x in [*points[i], str(segp[i])]]) + "\n")
+        log_string(f"Batch {batch_idx} mean mIoU: {current_batch_iou/cur_batch_size}")
 
     all_shape_ious = []
     for cat in shape_ious.keys():
@@ -201,7 +213,7 @@ def eval_one_epoch(sess, ops):
     mean_shape_ious = np.mean(list(shape_ious.values()))
     log_string('eval mean loss: %f' % (loss_sum / float(len(TEST_DATASET)/BATCH_SIZE)))
     log_string('eval accuracy: %f'% (total_correct / float(total_seen)))
-    log_string('eval avg class acc: %f' % (np.mean(np.array(total_correct_class)/np.array(total_seen_class,dtype=np.float))))
+    log_string('eval avg class acc: %f' % (np.mean(np.array(total_correct_class)/np.array(total_seen_class,dtype=float))))
     for cat in sorted(shape_ious.keys()):
         log_string('eval mIoU of %s:\t %f'%(cat, shape_ious[cat]))
     log_string('eval mean mIoU: %f' % (mean_shape_ious))

@@ -2,6 +2,9 @@ import open3d as o3d
 import numpy as np
 from scipy.spatial import KDTree
 import os
+import psutil
+import random
+import json
 
 def getPipelineStatus(folderPath):
     pipelineStatus  = {
@@ -9,9 +12,12 @@ def getPipelineStatus(folderPath):
         "PointCloudGenerated" : False,
         "ShapenetFormat" : False,
         "BackgroundSegmented" : False,
-        "LeavesSegmented" : False
+        "LeavesSegmented" : False,
+        "LeaveStemSplit" : False,
+        "CountLeaves" : False,
+        "BackgroundRegistration" : False
     }
-    print(folderPath)
+    #print(folderPath)
     if os.path.isdir(os.path.join(folderPath, "images")) and len(os.listdir(os.path.join( folderPath, "images"))) != 0:
         pipelineStatus["ImagesUploaded"] = True
     if os.path.isfile(os.path.join( folderPath, "odm_filterpoints", "point_cloud.ply")):
@@ -24,6 +30,10 @@ def getPipelineStatus(folderPath):
         pipelineStatus["BackgroundSegmented"] = True
     if os.path.isfile(os.path.join( folderPath, "shapenet", "point_cloudSS1LeavePrediction.pcd")):
         pipelineStatus["LeavesSegmented"] = True
+    if os.path.isfile(os.path.join( folderPath, "shapenet", "stem.txt")) and os.path.isfile(os.path.join( folderPath, "shapenet", "leaves.txt")):
+        pipelineStatus["LeaveStemSplit"] = True
+    if os.path.isfile(os.path.join( folderPath, "shapenet", "leavesSegmented.pcd")):
+        pipelineStatus["CountLeaves"] = True
     return pipelineStatus
 
 def getPipelineStatusBackground(folderPath):
@@ -51,7 +61,7 @@ def restoreState(dataPath):
             currentTimestamps = dirs = [name for name in os.listdir(currentDirPath) if os.path.isdir(os.path.join(currentDirPath,name))]
             state[d] = {}
             for t in currentTimestamps:
-                print(os.path.join(currentDirPath,t))
+                #print(os.path.join(currentDirPath,t))
                 if t != "background":
                     state[d][t] = getPipelineStatus(os.path.join(currentDirPath,t))
                 else:
@@ -59,8 +69,8 @@ def restoreState(dataPath):
     return state
 
 def updateState(currentState, stateUpdate):
-    dataSet = stateUpdate["jobParameter"]["testSet"]
-    timeStamp = stateUpdate["jobParameter"]["timeStamp"]
+    dataSet = stateUpdate["data"]["testSet"]
+    timeStamp = stateUpdate["data"]["timeStamp"]
 
     if dataSet not in currentState:
         currentState[dataSet] = {}
@@ -71,7 +81,10 @@ def updateState(currentState, stateUpdate):
                     "PointCloudGenerated" : False,
                     "ShapenetFormat" : False,
                     "BackgroundSegmented" : False,
-                    "LeavesSegmented" : False
+                    "LeavesSegmented" : False,
+                    "LeaveStemSplit" : False,
+                    "CountLeaves" : False,
+                    "BackgroundRegistration" : False
                 }
             else:
                 currentState[dataSet][timeStamp] = {
@@ -89,8 +102,27 @@ def updateState(currentState, stateUpdate):
         currentState[dataSet][timeStamp]["LeavesSegmented"] = True
     if stateUpdate["jobName"] == "SegmentBackground":
         currentState[dataSet][timeStamp]["BackgroundSegmented"] = True
+    if stateUpdate["jobName"] == "LeaveStemSplit":
+        currentState[dataSet][timeStamp]["LeaveStemSplit"] = True
+    if stateUpdate["jobName"] == "CountLeaves":
+        currentState[dataSet][timeStamp]["CountLeaves"] = True
+    if stateUpdate["jobName"] == "BackgroundRegistration":
+        currentState[dataSet][timeStamp]["BackgroundRegistration"] = True
 
     return currentState
+
+def createResultObject(path):
+    result = {
+        "LeaveCount" : -1,
+        "Height" : -1,
+        "Volume" : -1,
+        "grothSinceLastSnapshot" : -1
+    }
+
+    with open(os.path.join(path, "result.json"), 'w') as f:
+        json.dump(result, f)
+
+
 
 def predictionToColor(points, predictions, path):
     #print("points.shape ",points.shape)
@@ -164,3 +196,36 @@ def improveBackgroundPrediction(points, predictions):
                 changesOccured = True
         maxIterCount +=1 
     return predictions
+
+def floodFill3D(points, distance=0.0075, startIndex=0):
+    kdtree=KDTree(points[:, 0:3])
+
+    #remainingIndicies = np.arange(0, len(points), 1)
+    foundIndicies = []
+    currentIndices = [startIndex]
+    while len(currentIndices) > 0:
+        dist,neighborIndices = kdtree.query(points[currentIndices[0], 0:3], k=len(points), p=2, distance_upper_bound=distance, workers=psutil.cpu_count(logical=False))
+        #print("dist.len", len(dist))
+        #print("neighborIndices.len", len(neighborIndices))
+        #print(len(dist[neighborIndices] <= distance))
+        filterRes = dist <= distance
+        #print(filterRes)
+        distanceFilteredNeighborIndices = neighborIndices[filterRes]
+        filteredNeighborIndices = distanceFilteredNeighborIndices[np.in1d(distanceFilteredNeighborIndices[:], foundIndicies, invert=True)]
+
+        currentIndices = np.delete(currentIndices, 0, 0)
+        currentIndices = np.append(currentIndices, filteredNeighborIndices)
+        foundIndicies = np.append(foundIndicies, filteredNeighborIndices)
+
+    #print("found indices: ",foundIndicies)
+    #print("found indices len: ",len(foundIndicies))
+    return foundIndicies.astype(int)
+
+def saveLeavePredictions(leaves, path):
+    pcd_combined = o3d.geometry.PointCloud()
+    for leavePoints in leaves:
+        pcd = o3d.geometry.PointCloud()
+        pcd.points = o3d.utility.Vector3dVector(leavePoints[:,0:3])
+        pcd.paint_uniform_color([random.uniform(0,1), random.uniform(0,1), random.uniform(0,1)])
+        pcd_combined += pcd
+    o3d.io.write_point_cloud(path, pcd_combined, False, True, False)

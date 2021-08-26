@@ -1,5 +1,5 @@
 %\documentclass[sigconf, titlepage, twoside]{acmart}
-\documentclass[12pt,titlepage]{article}
+\documentclass[12pt,titlepage, twoside]{article}
 %\usepackage{titlesec}
 
 % language stuff
@@ -21,7 +21,7 @@
 \usepackage{hyperref}         % for URLs
 \usepackage{listings}         % for code samples
 \usepackage{fancyhdr}         % for header line
-%\usepackage{lastpage}         % for last page count
+\usepackage{lastpage}         % for last page count
 
 % Hier bei Bedarf die Seitenränder einstellen
 \usepackage{geometry}
@@ -121,7 +121,8 @@ Here follows an English translation of the preceding
 \section{Motivation}
 %-------------------------------------------------------------
 \label{sec:einleitung}
-Diese Arbeit wird im Rahmen eines Projekts mit der Universität xx durchgeführt. Die Anwendung soll mit nicht invasiven Methoden zur Unterstützung bei der selektiven Züchtung eingesetzt werden.
+%Diese Arbeit wird im Rahmen eines Projekts mit der Universität xx durchgeführt. 
+Die Anwendung soll mit nicht invasiven Methoden zur Unterstützung bei der selektiven Züchtung eingesetzt werden.
 Ziel ist es eine Software zu schaffen die es ermöglicht aus Bildern von Pflanzen 3D Punktwolken(Punktwolken) zu generieren und diese zu Analysieren.
 Es soll mit der zu entwickelnden Anwendung möglich sein Aussagen über das Wachstum über Zeit, die Entwicklung der Blätter und der Stämme zu treffen. 
 Mit diesen Daten sind Analysen möglich die auf das Wachstum einer Pflanze unter bestimmten Bedingungen schließen lassen.
@@ -142,9 +143,13 @@ Der Prozess der Datengewinnung sollte des weiteren mit einem Mobiltelefon oder e
 %Arbeit erforderlich sind, aber einem mit der Aufgabenstellugn nicht vertrauten
 %fachkundigen Leser nicht zwangsweise bekannt sind.
 
-Es gibt einige Verfahren um aus Bildern 3D Punktwolken zu generieren. Einige Verfahren benötigen genaue Informationen über die Kamera Position, Ausrichtung und andere Angaben wie die Brennweite der Linse etc.  
+Drei Kernprobleme müssen betrachtet werden. Zuerst muss aus einer Menge an Bilder eine Punkwolke generiert werden. Danach muss die Punktwolke Segmentiert werden um den Hintergrund zu entfernen und die einzelnen Teile der Pflanze zu analysieren. 
+Zuletzt müssen zwei Punktwolken einer Pflanze zu verschiedenen Zeitpunkten miteinander registriert werden um Aussagen über das Wachstum einer Pflanze treffen zu können.
 
-Bei der Analyse von Pflanzen in Form von 3D Punktwolken gibt es einige von nicht gelernte Lösungen die das segmentieren von 3D Punktwolken von Pflanzen in Stiele und Blätter behandeln, viele dieser Ansätze haben aber das Problem, dass sie nur unter Laborbedingungen gute Ergebnisse liefern. 
+Es gibt einige Verfahren um aus Bildern 3D Punktwolken zu generieren. Einige Verfahren benötigen genaue Informationen über die Kamera Position, Ausrichtung und andere Angaben wie die Brennweite der Linse etc. 
+%TODO Verfahren auflisten SIFT, RANSAC?, 
+
+Bei der Analyse von Pflanzen in Form von 3D Punktwolken gibt es einige nicht gelernte Lösungen \cite{ThreeBasics} \cite{RegionGrowing} die das segmentieren von 3D Punktwolken von Pflanzen in Stiele und Blätter behandeln, viele dieser Ansätze haben aber das Problem, dass sie nur unter Laborbedingungen gute Ergebnisse liefern. 
 Insbesondere die hohe Qualität der Punktwolken die meist mit einem LIDAR-Scanner oder einem vergleichbaren Gerät erzielt wird, kann mit bildbasierten Methoden nicht oder nur mit sehr großen Datenmengen erreicht werden. 
 Ein weiteres Problem das viele Lösungen haben ist, dass der Hintergrund manuell entfernt wird und erst auf der freigestellten Pflanze der eigentliche Ansatz ausgeführt wird. 
 Um diese Lösungen dennoch in einer voll automatischen Pipeline nutzen zu können muss das freistellen der Pflanzen erst automatisiert werden.
@@ -162,7 +167,7 @@ Auch für das Registrierung-Problem gibt es Lösungen die auf Neuronal Netzen ba
 Es müssen vier Teilprobleme berücksichtigt werden. Zu Beginn muss aus einer Reihe Bilder eine Punktwolke generiert werden. Hauptziel hierbei ist es möglichst wenig Bilder zu benötigen. 
 Trotzdem müssen Aspekte wie die Qualität der Punkwolken berücksichtigt werden. 
 
-Ein zweites Problem ist die Ausrichtung zweier Punktwolken einer Pflanze zu verschiedenen Zeitpunkten um diese Vergleichen zu können. 
+Ein zweites Problem ist die Registrierung zweier Punktwolken einer Pflanze zu verschiedenen Zeitpunkten um diese Vergleichen zu können. 
 Hierbei gilt es die ideale Transformation $T$ bestehend aus Rotation, Skalierung und Translation zu finden um die beiden Punktwolken so realitätsnah wie möglich aneinander aus zu richten.
 Es werden drei Ansätze überprüft dieses Problem zu lösen. 
 Der erste Ansatz basiert auf der Idee, beim Beginn einer neuen Zeitserie zur Analyse eines Wachstumsprozesses, eine Punktwolke des Hintergrunds zu erstellen und die Punktwolken der einzelnen Zeitpunkte mit diesem Hintegrund zu registrieren. So wird ein Verhältnis geschaffen das dem der realität entspricht.
@@ -173,8 +178,7 @@ Das dritte Problem ist die Segmentierung der Punktwolke in Stamm, Blätter und H
 Ziel ist es daher eine Lösung zu finden die auf möglichst vielen Varianten von Pflanzen funktioniert. 
 Das Problem der Segmentierung ist essentiell für die weitere Analyse einer Zeitserien. Ohne die Information welche Punkte zu Stamm und Blättern gehören kann nicht auf die Entwicklung von Blättern und Stielen geschlossen werden.
 
-Zuletzt müssen aus den bisherigen Problemen in geeignete Pipelines zusammengefasst werden und durch einen Server angesteuert werden. Hier muss die Lastverteilung und Datenhaltung beachtet werden. 
-Sicherheits-Aspekte müssen vor einer Inbetriebnahme der Software sichergestellt werden. Dies ist aber nicht Teil dieser Arbeit, da hier nur die Machbarkeit gezeigt werden soll.
+Zuletzt müssen aus den bisherigen Problemen in geeignete Pipelines zusammengefasst werden und durch einen Server angesteuert werden. Hier muss die Lastverteilung und Datenhaltung beachtet werden.
 
 \subsection{Architektur}
 %-------------------------------------------------------------
@@ -185,6 +189,7 @@ Sicherheits-Aspekte müssen vor einer Inbetriebnahme der Software sichergestellt
 
 Die Anwendung soll über eine REST-API angesteuert werden können. Es soll möglich sein eine neue Messreihe anzulegen. Dazu müssen die Bilder für die Initiale Punkwolke auf den Server übertragen werden. 
 Es soll möglich sein weitere Messpunkte zu einer Messreihe hinzuzufügen. Zu einer Messreihe sollen Auswertungen zur Verfügung gestellt werden. 
+Zu jeder Messreihe soll ein Status abgerufen werden können, da die einzelnen Pipelines im Hintergrund ausgeführt werden. 
 
 \subsection{Umsetzung Generierung einer Punktwolke aus Bildern}
 %-------------------------------------------------------------
@@ -199,30 +204,37 @@ Es soll möglich sein weitere Messpunkte zu einer Messreihe hinzuzufügen. Zu ei
 %-------------------------------------------------------------
 \label{sec:realisierung:implementierung2}
 
-Es wurden mehrere Verfahren und Implementierungen mit einander verglichen. Durch den Vergleich (siehe ''Ergebnisse'') Es wurde versucht ein Pipeline zu erstellen die eine gute Initiale Lösung findet ohne den ganzen Suchraum SO(3) zu durchsuchen.
+Es wurden mehrere Verfahren und Implementierungen mit einander verglichen. Es wurde versucht ein Pipeline zu erstellen die eine gute Initiale Lösung findet ohne den ganzen Suchraum SO(3) zu durchsuchen.
 Die Pipeline sucht nach einer Ebene in der Punkwolke und richtet die Punkwolke so aus, dass die Ebene auf der Ebene liegt, die die x und y Achse bilden. Danach werden einige wiederholte ICP Schritte und andere Registrierungsmethoden angewandt.
 
 Ein weiterer Ansatz war es DCP so abzuwandeln das statt Translations-Vektor und Rotations-Matrix direkt die ganze Transformations-Matrix geschätzt wird. Dazu muss nur SVD-Head angepasst werden 
 und bei der Eingabe eine weitere Dimension hinzugefügt werden. Wenn man nun die Singulärwert-Zerlegung von H das nun 4x4 groß ist also die richtige Dimension hat weg lässt, kann man H als schätzung für die Transformation interpretieren.
 
+Eine weitere Version die ICP nutzt ist es einen gewissen Bereich an Skalierungen zu durchlaufen und in jedem Schritt einen ICP mit der Skalierung zu starten und auf Basis der Ergebnisse der ICP Durchläufe die beste Skalierung zu wählen. 
 
 \subsection{Umsetzung Segmentierung}
 %-------------------------------------------------------------
-\label{sec:realisierung:implementierung2}
+\label{sec:realisierung:implementierung3}
 
 Zur Segmentierung der Pflanzen-Punktwolke in Stamm und Blätter wurde ein Ansatz verfolgt, der mittels der Hauptkrümmung eines Punktes ermitteln soll ob es sich um ein Blatt oder einen Stiel handelt. 
 Hierbei wurde eine einfache Entscheidungsregel mittels eines Schwellwerts genutzt: Ist die Krümmung des Punktes höher als der Schwellwert handelt es sich um einen Stiel da diese einen größere Krümmung haben als Blätter.
-Die Schwierigkeit ist es einen guten Schwellwert zu finden und eine  gute Kennzahl für die Stärke der Krümmung.
+Die Schwierigkeit ist es einen guten Schwellwert zu finden und eine gute Kennzahl für die Stärke der Krümmung.
 
-In einem weiteren Ansatz wurde eine angepasste Implementierung von PointNet auf einem Datensatz von Pflanzen-Punktwolken trainiert um so einen geeigneten Classifier zu trainieren.
-Auch wurde eine verbesserte Version von PointNet auf dem Datensatz trainiert. Diese wurde mit und ohne Normalen, mit 2 Labelen ohne Hintergrund und mit 3 Labeln mit Hintergrund getestet. 
+In einem weiteren Ansatz wurde eine Implementierung von PointNet auf einem Datensatz von Pflanzen-Punktwolken trainiert um so einen geeigneten Classifier zu trainieren. 
+Der Classifier soll für jeden Punkt einer Punktwolke bestehend aus Position und Normalen eine Schätzung liefern was der Punkt repräsentiert. Mögliche Repräsentationen können Stamm, Blatt oder Hintergrund sein.
+Weitere denkbare Repräsentationen können die Früchte und Blüten der Pflanzen. Wird die Farbe der Punkwolke mit einbezogen, können auch Krankheitsbilder wie vertrocknende Blätter in die Repräsentation eingeschlossen werden.  
+Da die Ergebnisse für PointNet nicht gut genug waren wurde eine verbesserte Version PointNet++ auf dem Datensatz trainiert. Diese wurde mit und ohne Normalen, mit 2 Labelen ohne Hintergrund und mit 3 Labeln mit Hintergrund trainiert.
+
+Nach der Segmentierung wird das Ergebnis noch einmal überarbeitet. Für jedem Punkt werden die $k$ ($k=10$) nächsten Nachbarn bestimmt und aus den Repräsentationen eine Histogramm erzeugt. 
+Die Schätzung mit dem höchsten Histogramm-Wert wird als neue Schätzung für den Punkt genutzt. Dieser Vorgang wird für alle Punkte solange wiederholt bis es bei den Punkten zu keinen Änderungen mehr kommt oder eine maximale Itartions-Obergrenze erreicht wurde.
+
 
 \subsection{Umsetzung Pipelines und Server}
 %-------------------------------------------------------------
-\label{sec:realisierung:implementierung2}
-Der Server ist mit dem Python-Framework Flask erstellt wurden. Flask bietet eine Schlanke API um neue Endpunkte zu erstellen und Daten vom Netzwerk anzunehmen.
-
-something need to be cited \cite{ThreeBasics}
+\label{sec:realisierung:implementierung4}
+Der Server ist mit dem Python-Framework Flask erstellt wurden. Flask bietet eine Schlanke API um neue Endpunkte zu erstellen und Daten vom Client anzunehmen. 
+Ein Hintergrund-Prozess startet die einzelnen Jobs und sorgt für den Lastausgleich. Die Anfragen an den Server werden asynchron verarbeitet ausser das Speichern der Bilder. 
+Diese müssen direkt auf der Platte abgelegt werden, da nach einem Request die Datei-Streams automatisch geschlossen werden.
 
 \newpage
 \section{Ergebnisse}
@@ -239,16 +251,63 @@ something need to be cited \cite{ThreeBasics}
 \subsection{Vergleich von Verfahren zur Generierung von 3D-Punktwolken auf Basis von Bildern}
 
 Um eine geeignete Software zur Generierung von 3D-Punktwolken auszuwählen muss erst entschieden werden nach welchen Gütekriterien verschiedene Anwendungen betrachtet werden sollen und wie wichtig diese sind.
-Bei dieser Arbeit ist die nötige Anzahl der Bilder die zur Generierung einer Punktwolke mit genug Information das wichtigste Kriterium. Um dieses Kriterium zu messen muss ein Goldstandart der fotografierten Szene als 3D-Punktwolke existieren.
-Dieser Goldstandart kann erstellt werden, indem alle Fotografien genutzt werden die zur Verfügung stehen um die best mögliche Punktwolke zu erstellen. 
+Bei dieser Arbeit ist die nötige Anzahl der Bilder die zur Generierung einer Punktwolke mit genug Information nötig sind das wichtigste Kriterium. 
+Um dieses Kriterium zu messen muss ein Goldstandart von der fotografierten Szene als 3D-Punktwolke erstellt werden mit dem Verglichen werden kann.
+Dieser Goldstandart kann erstellt werden, indem alle Fotografien genutzt werden die zur Verfügung stehen und damit alle Verfahren eine Punktwolke erstellen zu lassen. 
+Unter den erstellten Punktwolken kann dann die ausgesucht werden die die Szene am besten repräsentiert. 
+Als Maß der Güte der Repräsentation kann die Anzahl der Punkte in der Wolke oder die Dichte der Punkte in der normalisierten Punktwolke genutzt werden.
 Nun kann mit weniger Bildern aus dem selben Datensatz ein weitere Punktwolke generiert werden und die Distanz der Punkte der Goldstandart-Punktwolke zum jeweils nächsten Punkt der erstellten Punktwolke gemessen werden.
-Die Summe dieser Abstände kann als Fehlermaß genutzt werden.
+Die Summe dieser Abstände kann als Fehlermaß genutzt werden. Bei der Berechnung der Abstände muss beachtet werden, dass die Punkwolken mit dem Goldstandart registriert ist.
+
 
 \subsection{Vergleich von Verfahren zur Registrierung 3D-Punkwolken}
 
+Vergleich DCP /  PointNetLK
 
+Verleich NN / ICP
 
 \subsection{Vergleich von Verfahren zur Segmentierung von Pflanzen auf 3D-Punkwolken}
+
+Vergleich Training mit/ohne Hintergrund
+    Mit Hintergrund -> lohnt es sich nur das Zentrum zu betrachten?
+
+Vergleich Training mit/ohne Normalen
+
+Vergleich Training mit/ohne Normalisierung (Einsatz von nicht normalisierten Punkten trotz Normalisierung im Training möglich?)
+
+Evaluations-Ergebnisse auf nicht normalisierten Daten für Training (t5) mit normalisiertem Datensatz:
+
+eval mean loss: 0.174850
+
+eval accuracy: 0.945604
+
+eval avg class acc: 0.784519
+
+eval mIoU of Plant:	 0.683556
+
+eval mean mIoU: 0.683556
+
+eval mean mIoU (all shapes): 0.683556
+
+
+
+Evaluations-Ergebnisse auf normalisierten Daten für Training (t5) mit normalisiertem Datensatz:
+
+eval mean loss: 0.038411
+
+eval accuracy: 0.985966
+
+eval avg class acc: 0.949488
+
+eval mIoU of Plant:	 0.840759
+
+eval mean mIoU: 0.840759
+
+eval mean mIoU (all shapes): 0.840759
+
+
+
+Erkenntnis das PointNet++ anfällig für die Ausrichtung von Punktwolken ist. 
 
 \newpage
 \section{Fazit und Ausblick}
@@ -266,9 +325,9 @@ Die Summe dieser Abstände kann als Fehlermaß genutzt werden.
 %oder sich im Laufe der Arbeit neu ergebene Fragen müssen hier zur
 %Sprache kommen.
 
+Problem bei Registrierung mit unterschiedlich skalierten Punktwolken. Lösung Nutzung von GEO-Koordinaten bei der Generierung der Punktwolken?
 
-
-
+%Weitere Analyse der Daten
 
 \newpage
 % Literaturverzeichnis

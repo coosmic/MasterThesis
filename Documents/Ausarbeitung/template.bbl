@@ -5,4 +5,9 @@ I.~Ziamtsov and S.~Navlakha, ``{Machine Learning Approaches to Improve Three
   Basic Plant Phenotyping Tasks Using Three-Dimensional Point Clouds1[OPEN]},''
   {\em Plant Physiology}, vol.~181, pp.~1425--1440, 10 2019.
 
+\bibitem{RegionGrowing}
+D.~Li, Y.~Cao, G.~Shi, X.~Cai, Y.~Chen, S.~Wang, and S.~Yan, ``An
+  overlapping-free leaf segmentation method for plant point clouds,'' {\em IEEE
+  Access}, vol.~7, pp.~129054--129070, 2019.
+
 \end{thebibliography}

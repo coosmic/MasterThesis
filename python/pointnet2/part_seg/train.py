@@ -31,6 +31,7 @@ parser.add_argument('--optimizer', default='adam', help='adam or momentum [defau
 parser.add_argument('--decay_step', type=int, default=200000, help='Decay step for lr decay [default: 200000]')
 parser.add_argument('--decay_rate', type=float, default=0.7, help='Decay rate for lr decay [default: 0.7]')
 parser.add_argument('--num_classes', type=int, default=2, help='Count of Classes in test and train data')
+parser.add_argument('--normalize', type=bool, default=False, help='Should the input point clouds be normalized? Default False')
 FLAGS = parser.parse_args()
 
 EPOCH_CNT = 0
@@ -63,10 +64,18 @@ HOSTNAME = socket.gethostname()
 
 NUM_CLASSES = FLAGS.num_classes
 
+SEG_CLASSES = {}
+if NUM_CLASSES == 2:
+    SEG_CLASSES = {'Plant': [0, 1] }
+elif NUM_CLASSES == 3:
+    SEG_CLASSES = {'Plant': [0, 1, 2] }
+
+NORMALIZE = FLAGS.normalize
+
 # Shapenet official train/test split
 DATA_PATH = os.path.join(ROOT_DIR, 'data', 'shapenetcore_partanno_segmentation_benchmark_v0_normal')
-TRAIN_DATASET = part_dataset_all_normal.PartNormalDataset(root=DATA_PATH, npoints=NUM_POINT, classification=False, split='train', seg_classes={'Plant' : [0,1]}, normalize=False )
-TEST_DATASET = part_dataset_all_normal.PartNormalDataset(root=DATA_PATH, npoints=NUM_POINT, classification=False, split='test', seg_classes={'Plant' : [0,1]}, normalize=False )
+TRAIN_DATASET = part_dataset_all_normal.PartNormalDataset(root=DATA_PATH, npoints=NUM_POINT, classification=False, split='train', seg_classes=SEG_CLASSES, normalize=NORMALIZE )
+TEST_DATASET = part_dataset_all_normal.PartNormalDataset(root=DATA_PATH, npoints=NUM_POINT, classification=False, split='test', seg_classes=SEG_CLASSES, normalize=NORMALIZE )
 
 def log_string(out_str):
     LOG_FOUT.write(out_str+'\n')

@@ -34,7 +34,7 @@ class SingleFileDataset():
 
         for k,v in self.cat.items():
             self.cat_names.append(k)
-        print("Cat names: ", self.cat_names)
+        #print("Cat names: ", self.cat_names)
         self.meta = {}
         self.seg_classes = segClasses
 
@@ -67,7 +67,7 @@ class PartNormalDataset():
         #self.cat_names = {k for k,v in self.cat.items()}
         for k,v in self.cat.items():
             self.cat_names.append(k)
-        print("Cat names: ", self.cat_names)
+        #print("Cat names: ", self.cat_names)
         self.meta = {}
         with open(os.path.join(self.root, 'train_test_split', 'shuffled_train_file_list.json'), 'r') as f:
             train_ids = set([str(d.split('/')[2]) for d in json.load(f)])
@@ -77,7 +77,7 @@ class PartNormalDataset():
             test_ids = set([str(d.split('/')[2]) for d in json.load(f)])
         #print('Train IDs: ',train_ids)
         for item in self.cat:
-            print('category ', item)
+            #print('category ', item)
             self.meta[item] = []
             dir_point = os.path.join(self.root, self.cat[item])
             fns = sorted(os.listdir(dir_point))
@@ -114,8 +114,8 @@ class PartNormalDataset():
         self.seg_classes = seg_classes
         
 
-        for cat in sorted(self.seg_classes.keys()):
-            print(cat, self.seg_classes[cat])
+        #for cat in sorted(self.seg_classes.keys()):
+        #    print(cat, self.seg_classes[cat])
         
         self.cache = {} # from index to (point_set, cls, seg) tuple
         self.cache_size = 20000

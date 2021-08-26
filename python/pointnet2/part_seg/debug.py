@@ -1,6 +1,6 @@
 import open3d as o3d
 import numpy as np
-
+import random
 
 def showCloudTransformation(src, tgt, rotation, translation, showOrgSrc = False):
     pcdTgt = o3d.geometry.PointCloud()
@@ -79,3 +79,13 @@ def showSegmentation(points, predictions):
         #print(pcd.colors[i])
 
     o3d.visualization.draw_geometries([pcd])
+
+def showColoredLeaves(leaves):
+    allLeavePointClouds = []
+    for leavePoints in leaves:
+        print(leavePoints.shape)
+        pcd = o3d.geometry.PointCloud()
+        pcd.points = o3d.utility.Vector3dVector(leavePoints[:,0:3])
+        pcd.paint_uniform_color([random.uniform(0,1), random.uniform(0,1), random.uniform(0,1)])
+        allLeavePointClouds.append(pcd)
+    o3d.visualization.draw_geometries(allLeavePointClouds)

@@ -604,10 +604,13 @@ int convertToShapenetFormat(po::variables_map vm){
     return (-1);
   }
   
-  pcl::ModelCoefficients::Ptr coefficientsA (new pcl::ModelCoefficients);
-  pcl::PointIndices::Ptr inliersA (new pcl::PointIndices);
-  findPlaneInCloud(cloudPlant, coefficientsA, inliersA);
-  rotateCloud(cloudPlant, coefficientsA);
+  if(!vm["NoPlaneAlignment"].as<bool>()){
+    std::cout << "Plane Alignment started" <<std::endl;
+    pcl::ModelCoefficients::Ptr coefficientsA (new pcl::ModelCoefficients);
+    pcl::PointIndices::Ptr inliersA (new pcl::PointIndices);
+    findPlaneInCloud(cloudPlant, coefficientsA, inliersA);
+    rotateCloud(cloudPlant, coefficientsA);
+  }
   //showCloud2(cloudPlant, "rotation");
 
   //showCloud2(cloudPlant, "Labeled Cloud");
@@ -626,7 +629,6 @@ int convertToShapenetFormat(po::variables_map vm){
     createdSubsamplesCount++;
 
     assert(subsampledCloud->size() == numOfPointsPerSubsample);
-    printMinMax(subsampledCloud);
     writeShapenetFormat(subsampledCloud, pathToShapenetFormatResult+"SS"+std::to_string(createdSubsamplesCount), removeBackground);
 
     //cout << "remaining points in org cloud: "<<std::to_string(cloudPlant->size())<<endl;
@@ -662,9 +664,9 @@ int iterativeScaleRegistration(po::variables_map vm){
 
   pcl::PointCloud<PointTypePCL>::Ptr cloudSrc(new pcl::PointCloud<PointTypePCL>);
 
-  if( pcl::io::loadPLYFile(srcCloudPath, *cloudSrc) == -1){
+  if( pcl::io::loadPCDFile(srcCloudPath, *cloudSrc) == -1){
 
-    PCL_ERROR ("Couldn't read ply file\n");
+    PCL_ERROR ("Couldn't read pcd file\n");
     return (-1);
   }
 
@@ -680,13 +682,20 @@ int iterativeScaleRegistration(po::variables_map vm){
   pcl::PointIndices::Ptr inliersA (new pcl::PointIndices);
   findPlaneInCloud(cloudSrc, coefficientsA, inliersA);
   rotateCloud(cloudSrc, coefficientsA);
+  //removePointsInCloud(cloudSrc, inliersA);
   findPlaneInCloud(cloudTgt, coefficientsA, inliersA);
   rotateCloud(cloudTgt, coefficientsA);
+  //removePointsInCloud(cloudTgt, inliersA);
+
+  
 
   extractCenterOfCloud(cloudSrc, 0.3);
   extractCenterOfCloud(cloudTgt, 0.3);
 
-  pcl::PointCloud<PointTypePCL>::Ptr cloudSrcSubsampled = subSampleCloudRandom(cloudSrc, subsampleCount);
+  Cloud::Ptr backgroundSrc = removeBackgroundPointsShapenet(cloudSrc);
+  //showCloud2(backgroundSrc, "Background Src");
+
+  pcl::PointCloud<PointTypePCL>::Ptr cloudSrcSubsampled = subSampleCloudRandom(backgroundSrc, subsampleCount);
   pcl::PointCloud<PointTypePCL>::Ptr cloudTgtSubsampled = subSampleCloudRandom(cloudTgt, subsampleCount);
   setColorChannelExclusive(cloudSrcSubsampled, ColorChannel::r, 255);
   setColorChannelExclusive(cloudSrcSubsampled, ColorChannel::g, 0);
@@ -714,6 +723,7 @@ int iterativeScaleRegistration(po::variables_map vm){
     pcl::PointCloud<PointTypePCL>::Ptr cloudSrcSubsampledICP = pcl::PointCloud<PointTypePCL>().makeShared();
     pcl::IterativeClosestPoint<PointTypePCL, PointTypePCL> icp;
     pcl::transformPointCloud (*cloudSrcSubsampled, *cloudSrcSubsampledICP, scaleMatrix*(float)i);
+    icp.setRANSACOutlierRejectionThreshold(0.001);
     icp.setInputSource(cloudTgtSubsampled);
     icp.setInputTarget(cloudSrcSubsampledICP);
 
@@ -723,8 +733,8 @@ int iterativeScaleRegistration(po::variables_map vm){
     pcl::transformPointCloud (*cloudSrcSubsampledICP, *cloudSrcSubsampledICP, icp.getFinalTransformation().inverse());
     //if(i % 10 == 0)
       //debug_showCombinedCloud(cloudSrcSubsampledICP, cloudTgtSubsampled, "ShapenetFormat");
-    double score = icp.getFitnessScore();
-    std::cout << "Score: " << score << std::endl;
+    double score = icp.getFitnessScore(0.1);
+    std::cout<< i << " Score: " << score << " " << icp.getFitnessScore(0.9) << std::endl;
     if(score < bestScore){
       bestTransformation = icp.getFinalTransformation().inverse();
       bestScore = score;
@@ -988,6 +998,7 @@ int main (int argc, char** argv)
     ("RemoveBackground", po::value<bool>(), "Remove background when converting to shapnet format")
     ("MaxSubsample", po::value<int>(), "Maximum Subsample that should be created")
     ("SearchRadius", po::value<float>(), "Radius that should be used for nearest neighbor search")
+    ("NoPlaneAlignment", po::bool_switch()->default_value(false), "Ignore plane alignment step")
   ;
 
   po::variables_map vm;

@@ -52,6 +52,7 @@ def jobProcessingThread():
                 del jobqueue[0]
                 mutexJobQueue.release()
                 mutexServerState.acquire()
+                global serverState
                 serverState = utilities.updateState(serverState, job)
                 mutexServerState.release()
             except Exception as e:
@@ -95,7 +96,7 @@ def startBackgroundThreads():
     signal.signal(signal.SIGINT, tearDownBackgroundThreads)
     global serverState
     serverState = utilities.restoreState( os.path.join(os.path.abspath(os.getcwd()), "data") )
-    print(serverState)
+    #print(serverState)
     print("background jobs started")
 
 @app.route('/')
@@ -132,6 +133,7 @@ def data(testSet, timeStamp):
         job1 = { "jobName" : "SaveImages", "data" : {"testSet" : testSet, "timeStamp" : timeStamp}}
 
         mutexImageQueue.release()
+        utilities.createResultObject(os.path.join(os.path.abspath(os.getcwd()), "data", testSet, timeStamp))
 
         base_folder_path = os.path.join(os.path.abspath(os.getcwd()), "data", )
         job2 = {"job" : jobs.jobGeneratePointCloud, "jobName" : "GeneratePointCloud", "data" : {"baseFolderPath" : base_folder_path, "testSet" : testSet, "timeStamp" : timeStamp}}
@@ -160,7 +162,7 @@ def data(testSet, timeStamp):
             for job in jobList:
                 #print(f"Job with name {job['jobName']} will be started")
                 #job = {"job" : jobs.genericJob, "data" : {"jobName": job['jobName'], "jobParameter": job['jobParameter'],"testSet" : testSet, "timeStamp" : timeStamp}}
-                job = jobs.getJob(job['jobName'], testSet, timeStamp)
+                job = jobs.getJob(job['jobName'], testSet, timeStamp, job['jobParameter'])
                 mutexJobQueue.acquire()
                 jobqueue.append(job)
                 mutexJobQueue.release()
