@@ -4,7 +4,7 @@ conda activate tensorflow-15
 
 Training:
 
-python train.py --model pointnet2_part_seg --log_dir log --max_epoch 50 --num_classes 2 --batch_size 4
+python train.py --model pointnet2_part_seg --log_dir log --max_epoch 50 --num_classes 2 --batch_size 4 --normalize True
 
 python train.py --model pointnet2_part_seg3C --log_dir log --max_epoch 50 --num_classes 3 --batch_size 4
 
@@ -19,4 +19,6 @@ python evaluate.py --model pointnet2_part_seg3C --model_path ./results/training/
 python evaluate.py --model pointnet2_part_seg --model_path ./results/training/t6_2ClassesPartSeg/model.ckpt --log_dir log_eval --pred_dir pred_eval
 
 python evaluate.py --model pointnet2_part_seg3C --model_path ./results/training/t7_3ClassesPartSegNoNorm/model.ckpt --log_dir ./results/evaluation/t7_without_normalization/ --pred_dir pred_eval --num_classes 3
+
+python evaluate.py --model pointnet2_part_seg3C --model_path ./results/training/t6_2ClassesPartSeg/model.ckpt --log_dir ./results/evaluation/t7_without_normalization/ --pred_dir pred_eval --num_classes 3
 

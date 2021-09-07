@@ -4,6 +4,7 @@ import utilities
 import numpy as np
 import json
 import psutil
+import constants
 
 PARTSEG2 = None
 PARTSEG3 = None
@@ -21,9 +22,11 @@ def jobGeneratePointCloud(jobParameter):
     cpus = cpus - 2 # spare two cores for system and server
     if cpus < 1:
         cpus = 1
-    makePointCloudCommand = f"docker run -ti --rm -v {jobParameter['baseFolderPath']}/{jobParameter['testSet']}:/{jobParameter['testSet']} --cpus {cpus} --gpus all opendronemap/odm:gpu --rerun-all -e  odm_filterpoints --project-path /{jobParameter['testSet']} {jobParameter['timeStamp']}"
+    makePointCloudCommand = f'docker run -ti --rm --user "$(id -u):$(id -g)" -v {os.path.join(os.path.abspath(os.getcwd()), "data" )}/{jobParameter["testSet"]}:/{jobParameter["testSet"]} --cpus {cpus} --gpus all opendronemap/odm:gpu --rerun-all -e  odm_filterpoints --project-path /{jobParameter["testSet"]} {jobParameter["timeStamp"]}'
+    print("starting ", makePointCloudCommand)
     os.system(makePointCloudCommand)
-    print("pc job started ", makePointCloudCommand)
+    return {"Status": constants.statusDone}
+
 
 def jobLeavesSegmentation(jobParameter):
     basePath = os.path.join(os.path.abspath(os.getcwd()), 'data', jobParameter['testSet'], jobParameter['timeStamp'] )
@@ -52,9 +55,11 @@ def jobLeavesSegmentation(jobParameter):
         #predictions = utilities.improveBackgroundPrediction(sampledCloud, predictions)
         #predictionPath = os.path.join(os.path.abspath(os.getcwd()), 'data', jobParameter['testSet'], jobParameter['timeStamp'], 'shapenet', "point_cloudSS1LeavePrediction.pcd" )
         #utilities.predictionToColor(sampledCloud, predictions, predictionPath)
+        return {"Status": constants.statusDone}
     else:
         print(f"File {pointCloudPath} is not existing")
         #TODO Error handling
+        return {"Status": constants.statusFailed, "Reason": f"File {pointCloudPath} is not existing"}
 
 def jobBackgroundSegmentation(jobParameter):
     basePath = os.path.join(os.path.abspath(os.getcwd()), 'data', jobParameter['testSet'], jobParameter['timeStamp'] )
@@ -91,10 +96,12 @@ def jobBackgroundSegmentation(jobParameter):
         toShapenetFormatCommand = f"../build/pgm -J Shapenet --snin {os.path.join(basePath, 'shapenet', 'CloudWithoutBackground.ply')} --snout {os.path.join(basePath, 'shapenet', 'CloudWithoutBackground')} --RemoveBackground false --MaxSubsample 1 --NoPlaneAlignment"
         #print(toShapenetFormatCommand)
         os.system(toShapenetFormatCommand)
+        return {"Status": constants.statusDone}
         
     else:
         print(f"File {pointCloudPath} is not existing")
         #TODO Error handling
+        return {"Status": constants.statusFailed, "Reason": f"File {pointCloudPath} is not existing"}
 
 def jobToShapenetFormat(jobParameter):
     print("convert to shapenet started")
@@ -105,7 +112,7 @@ def jobToShapenetFormat(jobParameter):
     
     print(toShapenetFormatCommand)
     os.system(toShapenetFormatCommand)
-    pass
+    return {"Status": constants.statusDone}
 
 def jobLeaveStemSplit(jobParameter):
     #point_cloudSS1LeavePrediction.txt
@@ -122,6 +129,7 @@ def jobLeaveStemSplit(jobParameter):
 
     np.savetxt(stemPath, stemPoints)
     np.savetxt(leavesPath, leavePoints)
+    return {"Status": constants.statusDone}
 
 def jobCountLeaves(jobParameter):
     pointCloudPath = os.path.join(os.path.abspath(os.getcwd()), 'data', jobParameter['testSet'], jobParameter['timeStamp'], "shapenet", "leaves.txt")
@@ -143,6 +151,10 @@ def jobCountLeaves(jobParameter):
     print(f"Found {leaveCount} leaves")
     utilities.saveLeavePredictions(leavePoints, os.path.join(os.path.abspath(os.getcwd()), 'data', jobParameter['testSet'], jobParameter['timeStamp'], "shapenet", "leavesSegmented.pcd"))
 
+    #resultsPath = os.path.join(os.path.abspath(os.getcwd()), 'data', jobParameter['testSet'], jobParameter['timeStamp'], "results.json")
+
+    return {"Status": constants.statusDone, "Results": {"JobName": "LeaveCount", "Value": leaveCount}}
+
 def jobBackgroundRegistration(jobParameter):
     folderPath = os.path.join(os.path.abspath(os.getcwd()), 'data', jobParameter['testSet'], jobParameter['timeStamp'])
     backgroundCloudPath = os.path.join(os.path.abspath(os.getcwd()), 'data', jobParameter['testSet'], "background", "odm_filterpoints", "point_cloud.ply")
@@ -152,9 +164,11 @@ def jobBackgroundRegistration(jobParameter):
     
     print(backgroundRegistrationCommand)
     os.system(backgroundRegistrationCommand)
+    return {"Status": constants.statusDone}
 
 
 knownJobs = {
+        "GeneratePointCloud" : jobGeneratePointCloud,
         "ConvertToShapenet" : jobToShapenetFormat,
         "SegmentLeaves" : jobLeavesSegmentation,
         "SegmentBackground" : jobBackgroundSegmentation,

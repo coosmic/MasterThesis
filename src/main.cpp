@@ -611,6 +611,7 @@ int convertToShapenetFormat(po::variables_map vm){
     findPlaneInCloud(cloudPlant, coefficientsA, inliersA);
     rotateCloud(cloudPlant, coefficientsA);
   }
+
   //showCloud2(cloudPlant, "rotation");
 
   //showCloud2(cloudPlant, "Labeled Cloud");
@@ -629,6 +630,16 @@ int convertToShapenetFormat(po::variables_map vm){
     createdSubsamplesCount++;
 
     assert(subsampledCloud->size() == numOfPointsPerSubsample);
+    if(vm["RotateRandom"].as<bool>()){
+      Eigen::Affine3f rotation = Eigen::Affine3f::Identity();
+      float theta = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+      rotation.rotate(Eigen::AngleAxisf (theta, Eigen::Vector3f::UnitZ()));
+      theta = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+      rotation.rotate(Eigen::AngleAxisf (theta, Eigen::Vector3f::UnitX()));
+      theta = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+      rotation.rotate(Eigen::AngleAxisf (theta, Eigen::Vector3f::UnitY()));
+      pcl::transformPointCloud (*subsampledCloud, *subsampledCloud, rotation);
+    }
     writeShapenetFormat(subsampledCloud, pathToShapenetFormatResult+"SS"+std::to_string(createdSubsamplesCount), removeBackground);
 
     //cout << "remaining points in org cloud: "<<std::to_string(cloudPlant->size())<<endl;
@@ -999,6 +1010,7 @@ int main (int argc, char** argv)
     ("MaxSubsample", po::value<int>(), "Maximum Subsample that should be created")
     ("SearchRadius", po::value<float>(), "Radius that should be used for nearest neighbor search")
     ("NoPlaneAlignment", po::bool_switch()->default_value(false), "Ignore plane alignment step")
+    ("RotateRandom", po::bool_switch()->default_value(false), "Rotate cloud randomly")
   ;
 
   po::variables_map vm;

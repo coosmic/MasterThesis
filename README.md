@@ -20,10 +20,10 @@ cmake -S ./src -B ./build_python_binding
 
 ## Usage
 
+### BusyBox
+
 ``` shell
 ./pgm -J RegistrationFormat --SourceCloudPath <PATH> --TargetCloudPath <PATH> --OutputFolder <PATH>
-
-```
 
 ./pgm -J Shapenet --snin /home/solomon/Thesis/MasterThesis/python/data/avocado/background/odm_filterpoints/point_cloud.ply --snout /home/solomon/Thesis/MasterThesis/python/data/avocado/background/shapenet/point_cloud --RemoveBackground false --MaxSubsample 1
 
@@ -37,4 +37,20 @@ cmake -S ./src -B ./build_python_binding
 
 ./pgm -J BackgroundRemovalPipeline --SourceCloudPath ~/Thesis/MasterThesis/python/data/avocado/background/shapenet/point_cloudSS1BackgroundPrediction.pcd --TargetCloudPath ~/Thesis/MasterThesis/python/data/avocado/background/shapenet/point_cloud.ply --OutputFolder ~/Thesis/MasterThesis/python/data/avocado/background/ --SearchRadius 0.0125
 
+```
+
+### Convert ply to Shapenet format
+``` shell
 ./ConvertLabeledPlyToShapenet.sh ~/Thesis/python/data/plants/labeled/ ~/Thesis/python/data/plants/shapenet/
+
+./ConvertLabeledPlyToShapenet.sh ~/Thesis/python/data/plants/labeled/ ~/Thesis/python/data/plants/shapenet/withRotationWithoutBackground/
+```
+### Plot Generation
+``` shell
+python reportPointNetpp.py --pathIn /home/solomon/Thesis/MasterThesis/python/pointnet2/part_seg/results/training/t8_2Classes_PartSeg_NoNorm_RandRot/log_train.txt --plotName T8_2C_PS_NN_RR
+python reportPointNetpp.py --pathIn /home/solomon/Thesis/MasterThesis/python/pointnet2/part_seg/results/training/t7_3ClassesPartSegNoNorm/log_train.txt --plotName T7_3C_PS_NN_NR
+python reportPointNetpp.py --pathIn /home/solomon/Thesis/MasterThesis/python/pointnet2/part_seg/results/training/t6_2ClassesPartSeg/log_train.txt --plotName T6_2C_PS_NN_NR
+python reportPointNetpp.py --pathIn /home/solomon/Thesis/MasterThesis/python/pointnet2/part_seg/results/training/t5_3ClassesPartSeg3C/log_train.txt --plotName T5_3C_PS_WN_NR
+python reportPointNetpp.py --pathIn /home/solomon/Thesis/MasterThesis/python/pointnet2/part_seg/results/training/t4_3ClassesPartSeg/log_train.txt --plotName T4_3C_PS_WN_NR
+
+```

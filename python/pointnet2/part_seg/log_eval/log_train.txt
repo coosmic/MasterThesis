@@ -1,0 +1,1 @@
+Namespace(batch_size=10, gpu=0, log_dir='./pointnet2/part_seg/log_eval', model='pointnet2_part_seg', model_path='./pointnet2/part_seg/results/training/t6_2ClassesPartSeg/model.ckpt', num_point=16384, pred_dir='./data/predictions/background')

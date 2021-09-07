@@ -122,7 +122,22 @@ def createResultObject(path):
     with open(os.path.join(path, "result.json"), 'w') as f:
         json.dump(result, f)
 
+def updateResultObject(path, resultUpdate):
+    if not os.path.isfile(os.path.join(path, "result.json")):
+        raise Exception("Missing Result File for " + path)
+    with open(os.path.join(path, "result.json"), 'r') as f:
+        result = json.load(f)
+        print(resultUpdate)
+        if resultUpdate["JobName"] in result:
+            result[resultUpdate["JobName"]] = resultUpdate["Value"]
+        with open(os.path.join(path, "result.json"), 'w') as fs:
+            json.dump(result, fs)
 
+def getResultObject(path):
+    if not os.path.isfile(os.path.join(path, "result.json")):
+        raise Exception("Missing Result File for " + path)
+    with open(os.path.join(path, "result.json"), 'r') as f:
+        return json.load(f)
 
 def predictionToColor(points, predictions, path):
     #print("points.shape ",points.shape)
@@ -182,6 +197,10 @@ def improveBackgroundPrediction(points, predictions):
                     #zib[j][1] = zib[j][1] * 0.5
                     lst = list(zib[j])
                     lst[1] = lst[1] * 0.5
+                    zib[j] = tuple(lst)
+                if(zib[j][0] == 1):
+                    lst = list(zib[j])
+                    lst[1] = lst[1] * 1.5
                     zib[j] = tuple(lst)
 
             zib.sort(key=lambda x:x[1], reverse=True)

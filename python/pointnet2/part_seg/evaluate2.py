@@ -19,7 +19,7 @@ import part_dataset_all_normal
 parser = argparse.ArgumentParser()
 parser.add_argument('--gpu', type=int, default=0, help='GPU to use [default: GPU 0]')
 parser.add_argument('--model', default='pointnet2_part_seg', help='Model name [default: pointnet2_part_seg]')
-parser.add_argument('--model_path', default='./pointnet2/part_seg/results/t6_2ClassesPartSeg/model.ckpt', help='model checkpoint file path [default: log/model.ckpt]')
+parser.add_argument('--model_path', default='./pointnet2/part_seg/results/training/t6_2ClassesPartSeg/model.ckpt', help='model checkpoint file path [default: log/model.ckpt]')
 parser.add_argument('--log_dir', default='./pointnet2/part_seg/log_eval', help='Log dir [default: log_eval]')
 parser.add_argument('--num_point', type=int, default=16384, help='Point Number [default: 2048]')
 parser.add_argument('--batch_size', type=int, default=10, help='Batch Size during training [default: 32]')

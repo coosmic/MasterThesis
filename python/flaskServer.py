@@ -8,6 +8,11 @@ import sys
 from pointnet2.part_seg import estimate
 import jobs
 import utilities
+import state
+import traceback
+
+import multiprocessing
+from multiprocessing.managers import BaseManager
 
 from flask import Flask, request
 app = Flask(__name__)
@@ -18,6 +23,15 @@ class ServiceExit(Exception):
     of all running threads and the main program.
     """
     pass
+
+class StateManager(BaseManager): pass
+
+def Manager():
+    m = StateManager()
+    m.start()
+    return m
+
+StateManager.register('State', state.State)
 
 global mutexJobQueue
 mutexJobQueue = Lock()
@@ -34,7 +48,14 @@ serverState = {}
 global mutexServerState
 mutexServerState = Lock()
 
-def jobProcessingThread():
+
+global mutexResult
+mutexResult = Lock()
+
+def jobProcessingThread(state):
+
+    print("Job Processing Thread started")
+
     while serverRunning:
         
         #print("thread waked up")
@@ -46,28 +67,40 @@ def jobProcessingThread():
                 job = jobqueue[0]
                 mutexJobQueue.release()
 
-                job["job"](job["data"])
+                result = job["job"](job["data"])
+                mutexServerState.acquire()
+                state.updateState(job, result)
+                mutexServerState.release()
+
+                if("Results" in result):
+                    mutexResult.acquire()
+                    utilities.updateResultObject(os.path.join(os.path.abspath(os.getcwd()), "data", job["data"]["testSet"], job["data"]["timeStamp"]), result["Results"])
+                    mutexResult.release()
 
                 mutexJobQueue.acquire()
                 del jobqueue[0]
                 mutexJobQueue.release()
-                mutexServerState.acquire()
-                global serverState
-                serverState = utilities.updateState(serverState, job)
-                mutexServerState.release()
+                
             except Exception as e:
-                print(e)
+                mutexServerState.acquire()
+                state.updateState(job, {"Status": "NOK", "Reason": "Exception Occurred", "Details" : str(e)})
+                mutexServerState.release()
+                traceback.format_exc()
                 if mutexServerState.locked():
                     mutexServerState.release()
                 if mutexJobQueue.locked():
                     mutexJobQueue.release()
-                raise e
+                if mutexResult.locked():
+                    mutexResult.release()
+                    raise e
+                
+                #raise e
         time.sleep(1.0)
     print("cleanup job processing queue")
     #TODO
     print("jobProcessingThread stopped")
 
-jobProcessingThread = threading.Thread(target=jobProcessingThread)
+jobProcessingThreadInstance = threading.Thread(target=jobProcessingThread)
 
 #x = threading.Thread(target=jobThread)
 #x.start()
@@ -80,23 +113,34 @@ def tearDownBackgroundThreads(sig, frame):
     print("background jobs stopping")
     global serverRunning
     serverRunning = False
-    jobProcessingThread.join()
+    jobProcessingThreadInstance.join()
     print("background jobs stopped")
     #raise ServiceExit
     sys.exit(0)
 
 def startBackgroundThreads():
     print("background jobs starting")
-    
-    jobProcessingThread.start()
+
+    manager = Manager()
+    state = manager.State()
+    state.restoreState( os.path.join(os.path.abspath(os.getcwd()), "data") )
+    global serverState
+    serverState = state
+
+    global jobProcessingThread
+    jobProcessingThreadInstance = threading.Thread(target=jobProcessingThread, args=(serverState,))
+    jobProcessingThreadInstance.start()
 
     jobs.startPartSegPipelines()
 
     atexit.register(atExitBackgroundThreads)
     signal.signal(signal.SIGINT, tearDownBackgroundThreads)
-    global serverState
-    serverState = utilities.restoreState( os.path.join(os.path.abspath(os.getcwd()), "data") )
+    #global serverState
+    #serverState = utilities.restoreState( os.path.join(os.path.abspath(os.getcwd()), "data") )
     #print(serverState)
+
+    
+
     print("background jobs started")
 
 @app.route('/')
@@ -111,6 +155,30 @@ def test():
     jobqueue.append(job)
     mutexJobQueue.release()
     return("OK")
+
+@app.route('/listings/<testSet>', methods=['GET'])
+def listing(testSet):
+    mutexServerState.acquire()
+
+    state = serverState.getTestSetState(testSet)
+    if not state is None:
+        mutexServerState.release()
+        return state
+
+    mutexServerState.release()
+    return("Not Found", 404)
+
+@app.route('/results/<testSet>/<timeStamp>', methods=['GET'])
+def results(testSet, timeStamp):
+    path = os.path.join(os.path.abspath(os.getcwd()), "data", testSet, timeStamp)
+    mutexResult.acquire()
+    try:
+        result = utilities.getResultObject(path)
+        mutexResult.release()
+        return(result, 200)
+    except Exception as e:
+        mutexResult.release()
+        return("Not Found", 404)
 
 @app.route('/data/<testSet>/<timeStamp>', methods=['GET','POST', 'PUT'])
 def data(testSet, timeStamp):
@@ -130,13 +198,10 @@ def data(testSet, timeStamp):
             #print(filePath)
             file.save(filePath)
 
-        job1 = { "jobName" : "SaveImages", "data" : {"testSet" : testSet, "timeStamp" : timeStamp}}
-
         mutexImageQueue.release()
         utilities.createResultObject(os.path.join(os.path.abspath(os.getcwd()), "data", testSet, timeStamp))
 
-        base_folder_path = os.path.join(os.path.abspath(os.getcwd()), "data", )
-        job2 = {"job" : jobs.jobGeneratePointCloud, "jobName" : "GeneratePointCloud", "data" : {"baseFolderPath" : base_folder_path, "testSet" : testSet, "timeStamp" : timeStamp}}
+        job2 = {"job" : jobs.jobGeneratePointCloud, "jobName" : "GeneratePointCloud", "data" : {"testSet" : testSet, "timeStamp" : timeStamp}}
         mutexJobQueue.acquire()
         jobqueue.append(job2)
         mutexJobQueue.release()
@@ -148,10 +213,12 @@ def data(testSet, timeStamp):
         #serve login page
         print(testSet, timeStamp)
         mutexServerState.acquire()
-        if testSet in serverState:
-            if timeStamp in serverState[testSet]:
-                mutexServerState.release()
-                return serverState[testSet][timeStamp]
+
+        state = serverState.getTimeStampState(testSet, timeStamp)
+        if not state is None:
+            mutexServerState.release()
+            return state
+
         mutexServerState.release()
         return("Not Found", 404)
     elif request.method == 'PUT':
