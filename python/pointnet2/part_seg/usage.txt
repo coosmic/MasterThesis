@@ -6,7 +6,7 @@ Training:
 
 python train.py --model pointnet2_part_seg --log_dir log --max_epoch 50 --num_classes 2 --batch_size 4 --normalize True
 
-python train.py --model pointnet2_part_seg3C --log_dir log --max_epoch 50 --num_classes 3 --batch_size 4
+python train.py --model pointnet2_part_seg3C --log_dir log --max_epoch 50 --num_classes 3 --batch_size 4 --normalize True
 
 Evaluation:
 

@@ -1,5 +1,19 @@
 \begin{thebibliography}{1}
 
+\bibitem{lidar}
+N.~Mehendale and S.~Neoge, ``Review on lidar technology,'' {\em ssrn preprint
+  ssrn:3604309}, 2020.
+
+\bibitem{Sift3D}
+R.~Hänsch, T.~Weber, and O.~Hellwich, ``Comparison of 3d interest point
+  detectors and descriptors for point cloud fusion,'' {\em ISPRS Annals of
+  Photogrammetry, Remote Sensing and Spatial Information Sciences}, vol.~II-3,
+  09 2014.
+
+\bibitem{ODM}
+pierotofy, ``Open drone map - a command line toolkit to generate maps, point
+  clouds, 3d models and dems from drone, balloon or kite images.,'' 2020.
+
 \bibitem{ThreeBasics}
 I.~Ziamtsov and S.~Navlakha, ``{Machine Learning Approaches to Improve Three
   Basic Plant Phenotyping Tasks Using Three-Dimensional Point Clouds1[OPEN]},''
@@ -9,5 +23,16 @@ I.~Ziamtsov and S.~Navlakha, ``{Machine Learning Approaches to Improve Three
 D.~Li, Y.~Cao, G.~Shi, X.~Cai, Y.~Chen, S.~Wang, and S.~Yan, ``An
   overlapping-free leaf segmentation method for plant point clouds,'' {\em IEEE
   Access}, vol.~7, pp.~129054--129070, 2019.
+
+\bibitem{qi2017pointnet}
+C.~R. Qi, H.~Su, K.~Mo, and L.~J. Guibas, ``Pointnet: Deep learning on point
+  sets for 3d classification and segmentation,'' in {\em Proceedings of the
+  IEEE conference on computer vision and pattern recognition}, pp.~652--660,
+  2017.
+
+\bibitem{qi2017pointnet++}
+C.~R. Qi, L.~Yi, H.~Su, and L.~J. Guibas, ``Pointnet++: Deep hierarchical
+  feature learning on point sets in a metric space,'' {\em arXiv preprint
+  arXiv:1706.02413}, 2017.
 
 \end{thebibliography}

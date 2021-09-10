@@ -47,10 +47,13 @@ cmake -S ./src -B ./build_python_binding
 ```
 ### Plot Generation
 ``` shell
+python reportPointNetpp.py --pathIn /home/solomon/Thesis/MasterThesis/python/pointnet2/part_seg/results/training/t10_2Classes_PartSeg_WitNorm_WithRotation/log_train.txt --plotName T10_2C_PS_WN_RR
+python reportPointNetpp.py --pathIn /home/solomon/Thesis/MasterThesis/python/pointnet2/part_seg/results/training/t9_3Classes_PartSeg_WitNorm_WithRotation/log_train.txt --plotName T9_3C_PS_WN_RR
 python reportPointNetpp.py --pathIn /home/solomon/Thesis/MasterThesis/python/pointnet2/part_seg/results/training/t8_2Classes_PartSeg_NoNorm_RandRot/log_train.txt --plotName T8_2C_PS_NN_RR
 python reportPointNetpp.py --pathIn /home/solomon/Thesis/MasterThesis/python/pointnet2/part_seg/results/training/t7_3ClassesPartSegNoNorm/log_train.txt --plotName T7_3C_PS_NN_NR
 python reportPointNetpp.py --pathIn /home/solomon/Thesis/MasterThesis/python/pointnet2/part_seg/results/training/t6_2ClassesPartSeg/log_train.txt --plotName T6_2C_PS_NN_NR
 python reportPointNetpp.py --pathIn /home/solomon/Thesis/MasterThesis/python/pointnet2/part_seg/results/training/t5_3ClassesPartSeg3C/log_train.txt --plotName T5_3C_PS_WN_NR
 python reportPointNetpp.py --pathIn /home/solomon/Thesis/MasterThesis/python/pointnet2/part_seg/results/training/t4_3ClassesPartSeg/log_train.txt --plotName T4_3C_PS_WN_NR
+
 
 ```

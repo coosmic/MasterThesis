@@ -154,13 +154,13 @@ Zuletzt müssen zwei Punktwolken einer Pflanze zu verschiedenen Zeitpunkten mite
 
 Generell kann man zwischen zwei Methoden der Generierung von Punktwolken unterscheiden, die jeweils verschiedene Verfahren beziehungsweise Techniken anwenden.
 
-Die erste Methode nutzt Hardware wie LIDAR-Scanner um Punkwolken direkt zu erzeugen. Es gibt eine Reihe von Sensoren die das ermöglichen. Da der Großteil der Sensoren aus kostengrünen nicht in Frage kommt sei hier nur noch der RGB-D erwähnt. 
+Die erste Methode nutzt Hardware wie LIDAR-Scanner \cite{lidar} um Punkwolken direkt zu erzeugen. Es gibt eine Reihe von Sensoren die das ermöglichen. Da der Großteil der Sensoren aus kostengrünen nicht in Frage kommt sei hier nur noch der RGB-D erwähnt. 
 Dieser liefert neben den Farbwerten für ein Bild auch noch eine Tiefeninformation für jeden Pixel. In einigen Smartphone-Modellen wird bereits ein solcher Sensor verbaut.
 
-Die andere Methode ist die Photgeometrie, bei der die Punktwolke aus Bildern, einer Szene aus verschiedenen Perspektiven, generiert wird. Eine der bekanntesten Algorithmen ist SIFT \cite{Sift}.
-Einige Verfahren benötigen genaue Informationen über die Kamera Position, Ausrichtung und andere Angaben wie die Brennweite der Linse etc. andere wiederrum lesen diese Informationen aus den Bildern direkt aus oder schätzen diese.
+Die andere Methode ist die Photgeometrie, bei der die Punktwolke aus Bildern, einer Szene aus verschiedenen Perspektiven, generiert wird. Eine der bekanntesten Algorithmen ist SIFT \cite{Sift3D}.
+Einige Verfahren benötigen genaue Informationen über die Kamera Position, Ausrichtung und andere Angaben wie die Brennweite der Linse etc. andere wiederrum lesen diese Informationen aus den Bildern direkt aus oder schätzen diese \cite{ODM}.
 
-Es wurden in den letzten Jahren auch NN entwickelt, die darauf trainiert wurden aus einem Bild eine 3D Punktwolke zu generieren.
+Es wurden in den letzten Jahren große Fortschritte im Bereich Deep Learning auf 3D-Punkwolken gemacht, zur Gewinnung von 3D-Punkwolken.
 
 %TODO Verfahren auflisten SIFT, RANSAC?, 
 
@@ -171,7 +171,7 @@ Bei der Analyse von Pflanzen in Form von 3D Punktwolken gibt es einige nicht gel
 Insbesondere die hohe Qualität der Punktwolken die meist mit einem LIDAR-Scanner oder einem vergleichbaren Gerät erzielt wird, kann mit bildbasierten Methoden nicht oder nur mit sehr großen Datenmengen erreicht werden. 
 Ein weiteres Problem das viele Lösungen haben ist, dass der Hintergrund manuell entfernt wird und erst auf der freigestellten Pflanze der eigentliche Ansatz ausgeführt wird. 
 Um diese Lösungen dennoch in einer voll automatischen Pipeline nutzen zu können muss das freistellen der Pflanzen erst automatisiert werden.
-Es gibt weitere Lösungen, basierend auf Neuronalen Netzen, die mit einer angelernten Netzarchitektur bestimmte Objekte erkennen und Teile davon segmentieren. Diese Ansätze können auch auf Pflanzen angewandt werden. Dazu müssen die Architekturen auf Punktwolken von Pflanzen trainiert werden.  
+Auch im Bereich Segmentierung wurden große Fortschritte im Bereich Deep Learning auf 3D-Punkwolken gemacht, die mit einer angelernten Netzarchitektur bestimmte Objekte erkennen und Teile davon segmentieren. Diese Ansätze können auch auf Pflanzen angewandt werden. Dazu müssen Architekturen wie PointNet\cite{qi2017pointnet}/PointNet++\cite{qi2017pointnet++} auf Punktwolken von Pflanzen trainiert werden.  
 
 \subsection{Registrierung von 3D Punkwolken}
 \label{sec:stand:registrierung}
@@ -244,21 +244,44 @@ Wurden alle Skalierungen getestet wird die mit dem besten Ergebnis übernommen.
 %-------------------------------------------------------------
 \label{sec:realisierung:implementierung3}
 
-Zur Segmentierung der Pflanzen-Punktwolke in Stamm und Blätter wurde ein Ansatz verfolgt, der mittels der Hauptkrümmung eines Punktes ermitteln soll ob es sich um ein Blatt oder einen Stiel handelt. 
+Zur Segmentierung der Pflanzen-Punktwolke in Stamm und Blätter wurde ein Ansatz verfolgt der an den in \cite{ThreeBasics} angelehnt ist, der mittels der Hauptkrümmung eines Punktes ermitteln soll ob es sich um ein Blatt oder einen Stiel handelt. 
 Hierbei wird eine einfache Entscheidungsregel $f(x)$ mittels eines Schwellwerts $T_k$ genutzt: Ist die Stärke der Krümmung $k(x)$ des Punktes höher als der Schwellwert handelt es sich um einen Stiel da diese einen größere Krümmung haben als Blätter.
 Die Schwierigkeit ist es einen guten Schwellwert und eine gute Kennzahl für die Stärke der Krümmung zu finden.
 
+Die Hauptkrümmung eines Punktes $p_i$ kann über die Normalen des Punktes und der $k$ nächsten Nachbarpunkte $P_i$ berechnet werden.
+
 \begin{equation}
-\label{eq:manuell_classifier}
-k(x) = ??????
+\label{eq:hauptkruemmung:1}
+\vec{m}_j = (I - \vec{n}_i \otimes \vec{n}_i ) \cdot \vec{n}_j
 \end{equation}
 
+Aus den Abbildungen $\vec{m}_j$ für alle $P_i$ kann die Kovarianzmatrix $C_i$ berechnet werden.
+
+\begin{equation}
+\label{eq:hauptkruemmung:2}
+C_i = \frac{1}{k} \sum_{j=1}^k{(\vec{m}_j - \vec{\bar{m}}) \otimes (\vec{m}_j - \vec{\bar{m}})}
+\end{equation}
+
+Die Hauptkrümmung kann aus den Eigenwerten $0 \leq \lambda_1 \leq \lambda_2 \leq \lambda_3$ von $C_i$ bestimmt werden. $\lambda_3$ ist die stärkste Krümmung und $\lambda_2$ die schwächste Krümmung.
+
+Einige untersuchte Ansätze für eine Funktion $k(p_i)$ sind in \ref{eq:hauptkruemmung:3} zu finden. 
+
+\begin{equation}
+\label{eq:hauptkruemmung:3}
+\begin{array}{ll}
+k_1(p_i) = \lambda_3 \\
+k_2(p_i) = \lambda_2 \\
+k_3(p_i) = (\lambda_3 + \lambda_2) / 2 
+\end{array}{}
+\end{equation}
+
+Je höher der Wert der Funktion $f(p_i)$ aus \ref{eq:manuell_classifier} ist desto Wahrscheinlicher gehört ein Punkt zum Stiel einer Pflanze. Ein guter Wert für den Schwellwert $T_k$ muss in Experimenten für die Funktionen $k_1$, $k_2$ und $k_3$ gefunden werden.
 
 \begin{equation}
 \label{eq:manuell_classifier}
-f(x) = \left\{
+f(p_i) = \left\{
 \begin{array}{ll}
-1 & k(x) \geq T_k \\
+1 & k(p_i) \geq T_k \\
 0 & \, \textrm{sonst} \\
 \end{array}
 \right. 
@@ -269,14 +292,20 @@ Der Classifier soll für jeden Punkt einer Punktwolke bestehend aus Position und
 Weitere denkbare Repräsentationen können die Früchte und Blüten der Pflanzen sein. Wird die Farbe der Punkwolke mit einbezogen, können auch Krankheitsbilder wie vertrocknende Blätter in die Repräsentation eingeschlossen werden.  
 Da die Ergebnisse für PointNet nicht gut genug waren wurde eine verbesserte Version PointNet++ auf dem Datensatz trainiert. Diese wurde mit und ohne Normalen, mit 2 Labelen ohne Hintergrund und mit 3 Labeln mit Hintergrund trainiert.
 
-Nach der Segmentierung wird das Ergebnis noch einmal überarbeitet. Für jedem Punkt $i$ werden die $k$ ($k=10$) nächsten Nachbarn $N_i$ bestimmt und aus deren Repräsentationens-Schätzungen ein Histogramm $H_i$ erzeugt. 
+Nach der Segmentierung wird das Ergebnis noch einmal überarbeitet. Für jedem Punkt $i$ werden die Schätzungen $N_i$ der $k$ ($k=10$) nächsten Nachbarn bestimmt und aus deren Repräsentationens-Schätzungen ein Histogramm $H_i$ erzeugt. 
 Die Schätzung mit dem höchsten Histogramm-Wert wird als neue Schätzung $s_i$ für den Punkt genutzt \ref{eq:improve_score}. Dieser Vorgang wird für alle Punkte solange wiederholt bis es bei den Punkten zu keinen Änderungen mehr kommt oder eine maximale Itartions-Obergrenze erreicht wurde.
 
 \begin{equation}
 \label{eq:improve_score}
 \begin{array}{l}
 L =  \{0,1,2\}\\
-H_i(x) = \sum_{j=0}^{k}{(1 | N_i(j) = x)}\\
+w(x) = \left\{
+\begin{array}{ll}
+0,5 & x = 2 \\
+1 & \, \textrm{sonst} 
+\end{array}
+\right.\\ 
+H_i(x) = \sum_{j=0}^{k}{(w(x) | N_{ij} = x)}\\
 x \in L\\
 s_i = argmax_x(H_i(x))
 \end{array}
@@ -330,8 +359,20 @@ Verleich NN / ICP
 
 \subsection{Vergleich von Verfahren zur Segmentierung von Pflanzen auf 3D-Punkwolken}
 
+Als Datenbasis wurden 144 handgelabelte Punkwolken von verschiedenen Pflanzen gewählt. Darunter sind Tomaten, Mais, Paprika, Avocado, Bananen und weitere nicht bekannte Sorten. 
+Da diese Datenbasis für das Training eines Neuronalen Netz recht klein ist wurde aus jeder einzelnen Punktwolke bis zu 20 Subsample erstellt. Diese wurden so erstellt, dass zufällig $n$ Punkte aus einer Punktwolke gezogen und entfernt wurden.
+Des weiteren sind die Daten so aufbereitet das der Boden der Punktwolke an der XY-Ebene ausgerichtet ist und der Stiel bei geradem Wachstum richtung z-Achse zeigt. Des weiteren sind die Punkte in der Punktwolke auf 1 normiert. 
+Das heißt sie liegen in dem quadratischen Raum den die beiden Punkte $(0,0,0)$ und $(1,1,1)$ aufspannen. Die Daten werden in einem Verhältnis 80 zu 10 zu 10 in Trainings-, Test- und Evaluations-Datensatz aufgeteilt.
+
 Vergleich Training mit/ohne Hintergrund
     Mit Hintergrund -> lohnt es sich nur das Zentrum zu betrachten?
+
+\begin{figure}
+    \centering
+        \includegraphics{./Images/T4_3C_PS_WN_NR.png}
+    \caption{PointNet++ Trainings-Ergebnisse pro Epoche mit 3 Klassen und Normalisierung ohne zufällige Rotationen}
+\end{figure}
+
 
 Vergleich Training mit/ohne Normalen
 
@@ -351,8 +392,6 @@ eval mean mIoU: 0.683556
 
 eval mean mIoU (all shapes): 0.683556
 
-
-
 Evaluations-Ergebnisse auf normalisierten Daten für Training (t5) mit normalisiertem Datensatz:
 
 eval mean loss: 0.038411
@@ -367,17 +406,39 @@ eval mean mIoU: 0.840759
 
 eval mean mIoU (all shapes): 0.840759
 
-\includegraphics{./Images/T4_3C_PS_WN_NR.png}
+\begin{figure}
+    \centering
+        \includegraphics{./Images/T6_2C_PS_NN_NR.png}
+    \caption{PointNet++ Trainings-Ergebnisse pro Epoche mit 2 Klassen, ohne Normalisierung und ohne zufällige Rotationen }
+\end{figure}
 
-\includegraphics{./Images/T5_3C_PS_WN_NR.png}
+\begin{figure}
+    \centering
+        \includegraphics{./Images/T7_3C_PS_NN_NR.png}
+    \caption{PointNet++ Trainings-Ergebnisse pro Epoche mit 3 Klassen, ohne Normalisierung und ohne zufällige Rotationen}
+    \label{fig:T7_3C_PS_NN_NR}
+\end{figure}
 
-\includegraphics{./Images/T6_2C_PS_NN_NR.png}
+Die Tests des Servers haben gezeigt, das es bei der Segmentierung der freigestellten Pflanzen zu starken Fehlern kommt, wenn diese rotiert sind. 
+Das hat zu der Erkenntnis geführt, dass PointNet++ anfällig für die Ausrichtung von Punktwolken ist. 
+Aus diesem Grund wurde das Training für das zwei und drei Klassen-Netz mit zufälligen Rotationen wiederholt um ein Robustheit gegen Rotationen anzutrainieren.
+Die Ergebnisse für zwei Klassen-Netz ist in Abbildung ~\ref{fig:10_2C_PS_WN_RR} zu sehen. Die Ergebnisse für das 3 Klassen-Netz in Abbildung ~\ref{fig:9_3C_PS_WN_RR}. 
+Beim Training von dem Netz mit drei Klassen sind starke Ausreißer in den Loss-Werten zu erkennen die sich auch in der Accuracy und dem IoU wiederspiegeln.
 
-\includegraphics{./Images/T7_3C_PS_NN_NR.png}
 
-\includegraphics{./Images/T8_2C_PS_NN_RR.png}
+\begin{figure}
+    \centering
+        \includegraphics{./Images/10_2C_PS_WN_RR.png}
+    \caption{PointNet++ Trainings-Ergebnisse pro Epoche mit 2 Klassen, mit Normalisierung und zufälliger Rotationen}
+    \label{fig:10_2C_PS_WN_RR}
+\end{figure}
 
-Erkenntnis das PointNet++ anfällig für die Ausrichtung von Punktwolken ist. 
+\begin{figure}
+    \centering
+        \includegraphics{./Images/9_3C_PS_WN_RR.png}
+    \caption{PointNet++ Trainings-Ergebnisse pro Epoche mit 3 Klassen, mit Normalisierung und zufälliger Rotationen}
+    \label{fig:9_3C_PS_WN_RR}
+\end{figure}
 
 \newpage
 \section{Fazit und Ausblick}

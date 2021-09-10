@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2021) (preloaded format=pdflatex 2021.8.18)  8 SEP 2021 01:45
+This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2021) (preloaded format=pdflatex 2021.8.18)  10 SEP 2021 02:44
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -297,11 +297,7 @@ File: l3backend-pdftex.def 2021-08-04 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count279
 \l__pdf_internal_box=\box53
 )
-(./template.aux
-
-LaTeX Warning: Label `eq:manuell_classifier' multiply defined.
-
-)
+(./template.aux)
 \openout1 = `template.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 36.
@@ -322,7 +318,8 @@ LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 36.
 LaTeX Font Info:    ... okay on input line 36.
 LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 36.
 LaTeX Font Info:    ... okay on input line 36.
- (/usr/local/texlive/2021/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
+
+(/usr/local/texlive/2021/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count280
 \scratchdimen=\dimen162
@@ -457,93 +454,77 @@ name{page.3}) has been already used, duplicate ignored
                    \relax 
 l.136 \newpage
                [3]
+Underfull \vbox (badness 3009) has occurred while \output is active []
 
-LaTeX Warning: Citation `Sift' on page 4 undefined on input line 160.
-
-[4] [5] [6] [7] [8] [9]
-<./Images/T4_3C_PS_WN_NR.png, id=160, 462.528pt x 346.896pt>
+ [4]
+[5] [6] [7] [8] [9] [10]
+<./Images/T4_3C_PS_WN_NR.png, id=180, 462.528pt x 346.896pt>
 File: ./Images/T4_3C_PS_WN_NR.png Graphic file (type png)
 <use ./Images/T4_3C_PS_WN_NR.png>
-Package pdftex.def Info: ./Images/T4_3C_PS_WN_NR.png  used on input line 370.
-(pdftex.def)             Requested size: 462.52686pt x 346.89514pt.
-
-Overfull \hbox (7.28275pt too wide) in paragraph at lines 370--371
-[][] 
- []
-
-<./Images/T5_3C_PS_WN_NR.png, id=162, 462.528pt x 346.896pt>
-File: ./Images/T5_3C_PS_WN_NR.png Graphic file (type png)
-<use ./Images/T5_3C_PS_WN_NR.png>
-Package pdftex.def Info: ./Images/T5_3C_PS_WN_NR.png  used on input line 372.
+Package pdftex.def Info: ./Images/T4_3C_PS_WN_NR.png  used on input line 372.
 (pdftex.def)             Requested size: 462.52686pt x 346.89514pt.
 
 Overfull \hbox (7.28275pt too wide) in paragraph at lines 372--373
-[][] 
+ [][] 
  []
 
-[10 <./Images/T4_3C_PS_WN_NR.png>]
-<./Images/T6_2C_PS_NN_NR.png, id=169, 462.528pt x 346.896pt>
+[11 <./Images/T4_3C_PS_WN_NR.png>]
+<./Images/T6_2C_PS_NN_NR.png, id=188, 462.528pt x 346.896pt>
 File: ./Images/T6_2C_PS_NN_NR.png Graphic file (type png)
 <use ./Images/T6_2C_PS_NN_NR.png>
-Package pdftex.def Info: ./Images/T6_2C_PS_NN_NR.png  used on input line 374.
+Package pdftex.def Info: ./Images/T6_2C_PS_NN_NR.png  used on input line 411.
 (pdftex.def)             Requested size: 462.52686pt x 346.89514pt.
 
-Overfull \hbox (7.28275pt too wide) in paragraph at lines 374--375
-[][] 
+Overfull \hbox (7.28275pt too wide) in paragraph at lines 411--412
+ [][] 
  []
 
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [11 <./Images/T5_3C_PS_WN_NR.png>]
-<./Images/T7_3C_PS_NN_NR.png, id=175, 462.528pt x 346.896pt>
+<./Images/T7_3C_PS_NN_NR.png, id=189, 462.528pt x 346.896pt>
 File: ./Images/T7_3C_PS_NN_NR.png Graphic file (type png)
 <use ./Images/T7_3C_PS_NN_NR.png>
-Package pdftex.def Info: ./Images/T7_3C_PS_NN_NR.png  used on input line 376.
+Package pdftex.def Info: ./Images/T7_3C_PS_NN_NR.png  used on input line 417.
 (pdftex.def)             Requested size: 462.52686pt x 346.89514pt.
 
-Overfull \hbox (7.28275pt too wide) in paragraph at lines 376--377
-[][] 
+Overfull \hbox (7.28275pt too wide) in paragraph at lines 417--418
+ [][] 
  []
 
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [12 <./Images/T6_2C_PS_NN_NR.png>]
-<./Images/T8_2C_PS_NN_RR.png, id=180, 462.528pt x 346.896pt>
-File: ./Images/T8_2C_PS_NN_RR.png Graphic file (type png)
-<use ./Images/T8_2C_PS_NN_RR.png>
-Package pdftex.def Info: ./Images/T8_2C_PS_NN_RR.png  used on input line 378.
+<./Images/10_2C_PS_WN_RR.png, id=192, 462.528pt x 346.896pt>
+File: ./Images/10_2C_PS_WN_RR.png Graphic file (type png)
+<use ./Images/10_2C_PS_WN_RR.png>
+Package pdftex.def Info: ./Images/10_2C_PS_WN_RR.png  used on input line 431.
 (pdftex.def)             Requested size: 462.52686pt x 346.89514pt.
 
-Overfull \hbox (7.28275pt too wide) in paragraph at lines 378--379
-[][] 
+Overfull \hbox (7.28275pt too wide) in paragraph at lines 431--432
+ [][] 
  []
 
+[12 <./Images/T6_2C_PS_NN_NR.png>] [13 <./Images/T7_3C_PS_NN_NR.png>]
+<./Images/9_3C_PS_WN_RR.png, id=207, 462.528pt x 346.896pt>
+File: ./Images/9_3C_PS_WN_RR.png Graphic file (type png)
+<use ./Images/9_3C_PS_WN_RR.png>
+Package pdftex.def Info: ./Images/9_3C_PS_WN_RR.png  used on input line 438.
+(pdftex.def)             Requested size: 462.52686pt x 346.89514pt.
 
-Underfull \vbox (badness 10000) has occurred while \output is active []
+Overfull \hbox (7.28275pt too wide) in paragraph at lines 438--439
+ [][] 
+ []
 
- [13 <./Images/T7_3C_PS_NN_NR.png>] [14 <./Images/T8_2C_PS_NN_RR.png>] [15]
+[14 <./Images/10_2C_PS_WN_RR.png>] [15 <./Images/9_3C_PS_WN_RR.png>] [16]
 (./template.bbl) 
 AED: lastpage setting LastPage
-[16] (./template.aux)
-
-LaTeX Warning: There were undefined references.
-
-
-LaTeX Warning: There were multiply-defined labels.
-
+[17] (./template.aux)
 Package rerunfilecheck Info: File `template.out' has not changed.
 (rerunfilecheck)             Checksum: 8C751DE6D1A09F4D0457FF9CD40DF7E9;3776.
  ) 
 Here is how much of TeX's memory you used:
- 10879 strings out of 478542
- 161367 string characters out of 5850401
- 481617 words of memory out of 5000000
- 28609 multiletter control sequences out of 15000+600000
+ 10904 strings out of 478542
+ 161687 string characters out of 5850401
+ 483263 words of memory out of 5000000
+ 28621 multiletter control sequences out of 15000+600000
  417236 words of font info for 57 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 60i,8n,66p,557b,342s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 60i,13n,66p,557b,364s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2021/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/t
 exlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/te
 xlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/local/tex
@@ -554,10 +535,10 @@ ve/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive
 1/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2021/texmf-di
 st/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2021/texmf-dist/fonts/t
 ype1/urw/times/utmri8a.pfb>
-Output written on template.pdf (19 pages, 298437 bytes).
+Output written on template.pdf (20 pages, 294277 bytes).
 PDF statistics:
- 255 PDF objects out of 1000 (max. 8388607)
- 203 compressed objects within 3 object streams
- 43 named destinations out of 1000 (max. 500000)
+ 283 PDF objects out of 1000 (max. 8388607)
+ 230 compressed objects within 3 object streams
+ 56 named destinations out of 1000 (max. 500000)
  162 words of extra memory for PDF output out of 10000 (max. 10000000)
 
