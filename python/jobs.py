@@ -2,9 +2,11 @@ from pointnet2.part_seg import estimate, evaluate2, debug
 import os
 import utilities
 import numpy as np
-import json
 import psutil
 import constants
+import time
+
+from Learning3D.registration import runWithDifferentScales, loadRawDataWithoutArgs
 
 PARTSEG2 = None
 PARTSEG3 = None
@@ -62,13 +64,16 @@ def jobLeavesSegmentation(jobParameter):
         return {"Status": constants.statusFailed, "Reason": f"File {pointCloudPath} is not existing"}
 
 def jobBackgroundSegmentation(jobParameter):
+    print(f"started background segmentation for {jobParameter['testSet']}/{jobParameter['timeStamp']}")
     basePath = os.path.join(os.path.abspath(os.getcwd()), 'data', jobParameter['testSet'], jobParameter['timeStamp'] )
     pointCloudPath = os.path.join(basePath, 'shapenet', "point_cloudSS1.txt" )
     if os.path.isfile(pointCloudPath):
         print("Background Segmentation started")
         estimationLocation = os.path.join(os.path.abspath(os.getcwd()), 'data', 'predictions/background/13371337/point_cloudSS1.txt' )
         copyCommand = f"cp {pointCloudPath} {estimationLocation}"
+        print(copyCommand)
         os.system(copyCommand)
+        time.sleep(0.25)
 
         PARTSEG3.predict()
 
@@ -76,6 +81,8 @@ def jobBackgroundSegmentation(jobParameter):
         estimationLocation = os.path.join(os.path.abspath(os.getcwd()), 'data', 'predictions/background/Plant/point_cloudSS1.txt' )
         copyCommand = f"cp {estimationLocation} {pointCloudPath}"
         os.system(copyCommand)
+        print(copyCommand)
+        time.sleep(0.25)
 
         predictionPath = os.path.join(os.path.abspath(os.getcwd()), 'data', jobParameter['testSet'], jobParameter['timeStamp'], 'shapenet', "point_cloudSS1BackgroundPrediction.pcd" )
         data = np.loadtxt(pointCloudPath).astype(np.float32)
@@ -93,7 +100,7 @@ def jobBackgroundSegmentation(jobParameter):
         os.system(removeBackgroundCommand)
 
 
-        toShapenetFormatCommand = f"../build/pgm -J Shapenet --snin {os.path.join(basePath, 'shapenet', 'CloudWithoutBackground.ply')} --snout {os.path.join(basePath, 'shapenet', 'CloudWithoutBackground')} --RemoveBackground false --MaxSubsample 1 --NoPlaneAlignment"
+        toShapenetFormatCommand = f"../build/pgm -J Shapenet --in {os.path.join(basePath, 'shapenet', 'CloudWithoutBackground.ply')} --out {os.path.join(basePath, 'shapenet', 'CloudWithoutBackground')} --RemoveBackground false --MaxSubsample 1 --NoPlaneAlignment"
         #print(toShapenetFormatCommand)
         os.system(toShapenetFormatCommand)
         return {"Status": constants.statusDone}
@@ -108,7 +115,7 @@ def jobToShapenetFormat(jobParameter):
     basePath = os.path.join(os.path.abspath(os.getcwd()), 'data', jobParameter['testSet'], jobParameter['timeStamp'] )
     if not os.path.isdir(os.path.join(basePath, 'shapenet')):
         os.makedirs(os.path.join(basePath, 'shapenet'))
-    toShapenetFormatCommand = f"../build/pgm -J Shapenet --snin {os.path.join(basePath, 'odm_filterpoints', 'point_cloud.ply')} --snout {os.path.join(basePath, 'shapenet', 'point_cloud')} --RemoveBackground false --MaxSubsample 1"
+    toShapenetFormatCommand = f"../build/pgm -J Shapenet --in {os.path.join(basePath, 'odm_filterpoints', 'point_cloud.ply')} --out {os.path.join(basePath, 'shapenet', 'point_cloud')} --RemoveBackground false --MaxSubsample 1"
     
     print(toShapenetFormatCommand)
     os.system(toShapenetFormatCommand)
@@ -157,14 +164,124 @@ def jobCountLeaves(jobParameter):
 
 def jobBackgroundRegistration(jobParameter):
     folderPath = os.path.join(os.path.abspath(os.getcwd()), 'data', jobParameter['testSet'], jobParameter['timeStamp'])
-    backgroundCloudPath = os.path.join(os.path.abspath(os.getcwd()), 'data', jobParameter['testSet'], "background", "odm_filterpoints", "point_cloud.ply")
-    SourceCloudPath = os.path.join(folderPath, "shapenet", "point_cloudSS1BackgroundPrediction.pcd")
-    
-    backgroundRegistrationCommand = f"../build/pgm -J IterativeScaleRegistration --SourceCloudPath {SourceCloudPath} --TargetCloudPath {backgroundCloudPath} --SubsamplePointCount 4096"
-    
-    print(backgroundRegistrationCommand)
-    os.system(backgroundRegistrationCommand)
+    srcPath = os.path.join(folderPath, 'shapenet', 'registrationFormat.txt')
+    targetPath = os.path.join(os.path.abspath(os.getcwd()), 'data', jobParameter['testSet'], 'background', 'shapenet', 'registrationFormat.txt')
+
+    data = loadRawDataWithoutArgs(srcPath, targetPath, 1024)
+
+    transformation, scale = runWithDifferentScales(data, show=False)
+    print(type(transformation))
+    return {"Status": constants.statusDone, "Results" : {"JobName": "BackgroundRegistration", "Value": {"Transformation" : transformation.tolist(), "Scale" : scale}} }
+
+def jobConvertToBackground(jobParameter):
+    folderPath = os.path.join(os.path.abspath(os.getcwd()), 'data', jobParameter['testSet'], jobParameter['timeStamp'])
+    inPath = os.path.join(folderPath, 'odm_filterpoints', "point_cloud.ply")
+    outPath = os.path.join(folderPath, 'shapenet', "registrationFormat.txt")
+
+    if not os.path.isdir(os.path.join(folderPath, 'shapenet')):
+        os.makedirs(os.path.join(folderPath, 'shapenet'))
+
+    registrationFormatCommand = f"../build/pgm -J RegistrationFormat --in {inPath} --out {outPath}"
+    os.system(registrationFormatCommand)
     return {"Status": constants.statusDone}
+
+def jobCalculateSizes(jobParameter):
+    timestamp = jobParameter['timeStamp']
+    if timestamp == "background":
+        return {"Status": constants.statusNotAllowed}
+    
+    baseFolderPath = os.path.join(os.path.abspath(os.getcwd()), 'data', jobParameter['testSet'], timestamp)
+    pathToFile = os.path.join(baseFolderPath, 'shapenet', 'point_cloudSS1BackgroundPrediction.txt')
+
+    try:
+        results = utilities.getResultObject(baseFolderPath)
+    except Exception as e:
+        return {"Status": constants.statusFailed, "Details": "Result is missing. Run BackgroundRegistration"}
+    if "BackgroundRegistration" not in results:
+        return {"Status": constants.statusFailed, "Details": "BackgroundRegistration Result is missing. Run BackgroundRegistration"}
+    
+    bgRegistrationResult = results['BackgroundRegistration']
+
+    scale = bgRegistrationResult['Scale']
+    if scale == -1:
+        return {"Status": constants.statusFailed, "Details": "BackgroundRegistration Result is invalid. Run BackgroundRegistration"}
+
+    transformation = np.asarray(bgRegistrationResult['Transformation'])
+    
+    pointsWithLabels = np.loadtxt(pathToFile).astype(np.float32)
+
+    isBackgroundPoint = pointsWithLabels[:,6] != 2.0
+    points = pointsWithLabels[isBackgroundPoint][:,0:3]
+    print(points.shape)
+
+    # Scale Point Cloud
+    points = points * scale
+    
+    # Transform Point Cloud
+    pointsTMP = np.hstack((points, np.ones((points.shape[0], 1))))  #(nx3)->(nx4)
+    points_t = pointsTMP.dot(transformation.T)[:,:-1]
+
+    print(points_t.shape)
+
+    # Get Box Dimensions => Volume
+    minX = np.min(points_t[:,0])
+    maxX = np.max(points_t[:,0])
+
+    minY = np.min(points_t[:,1])
+    maxY = np.max(points_t[:,1])
+
+    minZ = np.min(points_t[:,2])
+    maxZ = np.max(points_t[:,2])
+
+    lengthX = abs(minX) + maxX if minX < 0.0 else maxX - minX
+    lengthY = abs(minY) + maxY if minY < 0.0 else maxY - minY
+    lengthZ = abs(minZ) + maxZ if minZ < 0.0 else maxZ - minZ
+
+    volume = lengthY * lengthX * lengthZ
+    
+    # Get Max Z => Height
+    heigth = maxZ
+
+    # Update Result
+    utilities.updateResultObject(baseFolderPath, {'JobName': 'Height', 'Value' : heigth})
+    utilities.updateResultObject(baseFolderPath, {'JobName': 'Volume', 'Value' : volume})
+
+    return {"Status": constants.statusDone}
+
+def jobCalculateGrowth(jobParameter):
+    timestamp = jobParameter['timeStamp']
+    if timestamp == "background":
+        return {"Status": constants.statusNotAllowed}
+    
+    baseFolderPath = os.path.join(os.path.abspath(os.getcwd()), 'data', jobParameter['testSet'])
+    if timestamp != "t1":
+        lastTimestamp = "t"+int(timestamp.replace("t", ""))
+        inPathThis = os.path.join(baseFolderPath, timestamp, 'shapenet', 'tbd')
+        inPathLast = os.path.join(baseFolderPath, lastTimestamp, 'shapenet', 'tbd')
+
+        try:
+            resultsThis = utilities.getResultObject(os.path.join(baseFolderPath, timestamp))
+        except Exception as e:
+            return {"Status": constants.statusFailed, "Details": "Result for this missing. Run BackgroundRegistration"}
+        try:
+            resultsLast = utilities.getResultObject(os.path.join(baseFolderPath, lastTimestamp))
+        except Exception as e:
+            return {"Status": constants.statusFailed, "Details": f"Result for last ({lastTimestamp}) missing. Run BackgroundRegistration for {lastTimestamp}"}
+        if "BackgroundRegistration" not in resultsThis:
+            return {"Status": constants.statusFailed, "Details": "BackgroundRegistration Result is missing for this. Run BackgroundRegistration"}
+        if "BackgroundRegistration" not in resultsLast:
+            return {"Status": constants.statusFailed, "Details": "BackgroundRegistration Result is missing for this. Run BackgroundRegistration"}
+
+        # load This via inPathThis
+        # load Last via inPathLast
+        # Transform This and Last with there Background Results respectivly.
+        # Compare Height
+        # 
+        # Maybe split this. First find Height, Volume and so on of Cloud after Background Registration.
+        # Then run Comparison of PointCloud in different Size
+    return {"Status": constants.statusDone}
+
+        
 
 
 knownJobs = {
@@ -174,7 +291,9 @@ knownJobs = {
         "SegmentBackground" : jobBackgroundSegmentation,
         "LeaveStemSplit" : jobLeaveStemSplit,
         "CountLeaves" : jobCountLeaves,
-        "BackgroundRegistration" : jobBackgroundRegistration
+        "BackgroundRegistration" : jobBackgroundRegistration,
+        "ConvertToRegistration" : jobConvertToBackground,
+        "CalculateSize" : jobCalculateSizes
 }
 
 def genericJob(jobParameter):

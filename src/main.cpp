@@ -525,19 +525,19 @@ int convertToShapenetFormat2(po::variables_map vm){
     return 1;
   }
 
-  if(!vm.count("snin")){
-    cout << "Missing parameter snin\n";
+  if(!vm.count("in")){
+    cout << "Missing parameter in\n";
     return 1;
   }
-  if(!vm.count("snout")){
-    cout << "Missing parameter snout\n";
+  if(!vm.count("out")){
+    cout << "Missing parameter out\n";
     return 1;
   }
 
   std::string namePly = vm["PointCloudName"].as<std::string>()+".ply";
   std::string nameTxt = vm["PointCloudName"].as<std::string>()+".txt";
-  std::string pathToShapenetFormatResult = vm["snout"].as<std::string>();
-  std::string pathToPlant = vm["snin"].as<std::string>()+namePly;
+  std::string pathToShapenetFormatResult = vm["out"].as<std::string>();
+  std::string pathToPlant = vm["in"].as<std::string>()+namePly;
 
   pcl::PointCloud<PointTypePCL>::Ptr cloudPlant(new pcl::PointCloud<PointTypePCL>);
 
@@ -568,16 +568,16 @@ int convertToShapenetFormat2(po::variables_map vm){
 
 int convertToShapenetFormat(po::variables_map vm){
 
-  if(!vm.count("snin")){
-    cout << "Missing parameter snin\n";
+  if(!vm.count("in")){
+    cout << "Missing parameter in\n";
     return 1;
   }
-  if(!vm.count("snout")){
-    cout << "Missing parameter snout\n";
+  if(!vm.count("out")){
+    cout << "Missing parameter out\n";
     return 1;
   }
   if(!vm.count("RemoveBackground")){
-    cout << "Missing parameter snout\n";
+    cout << "Missing parameter out\n";
     return 1;
   }
 
@@ -591,8 +591,8 @@ int convertToShapenetFormat(po::variables_map vm){
     numOfPointsPerSubsample = vm["SubsamplePointCount"].as<int>();
   }
 
-  std::string pathToPlant = vm["snin"].as<std::string>();
-  std::string pathToShapenetFormatResult = vm["snout"].as<std::string>();
+  std::string pathToPlant = vm["in"].as<std::string>();
+  std::string pathToShapenetFormatResult = vm["out"].as<std::string>();
   bool removeBackground = vm["RemoveBackground"].as<bool>();
 
   cout << "Converting file saved under "<< pathToPlant  << " to Shapenet format\n";
@@ -809,13 +809,48 @@ int showCloudWithNormals(po::variables_map vm){
 }
 
 int convertToRegistrationFormat(po::variables_map vm){
-  if(!vm.count("SourceCloudPath")){
-    cout << "Missing Parameter SourceCloudPath\n";
+  if(!vm.count("in")){
+    cout << "Missing Parameter in\n";
     return 1;
   }
 
-  if(!vm.count("TargetCloudPath")){
-    cout << "Missing Parameter TargetCloudPath\n";
+  if(!vm.count("out")){
+    cout << "Missing Parameter out\n";
+    return 1;
+  }
+
+  std::string inPath = vm["in"].as<std::string>();
+  std::string outPath = vm["out"].as<std::string>();
+
+  pcl::PointCloud<PointTypePCL>::Ptr cloudSrc(new pcl::PointCloud<PointTypePCL>);
+
+  if( pcl::io::loadPLYFile(inPath, *cloudSrc) == -1){
+
+    PCL_ERROR ("Couldn't read ply file\n");
+    return (-1);
+
+  }
+
+  pcl::ModelCoefficients::Ptr coefficientsA (new pcl::ModelCoefficients);
+  pcl::PointIndices::Ptr inliersA (new pcl::PointIndices);
+  findPlaneInCloud(cloudSrc, coefficientsA, inliersA);
+  rotateCloud(cloudSrc, coefficientsA);
+
+  extractCenterOfCloud(cloudSrc, 0.3);
+
+  pcl::PointCloud<PointTypePCL>::Ptr cloudSrcSubsampled = subSampleCloudRandom(cloudSrc, 1024);
+
+  Eigen::Matrix4f t,s;
+  transformToShapenetFormat(cloudSrcSubsampled, t,s);
+
+  writeRegistrationFormat(cloudSrcSubsampled, outPath);
+
+  return 0;
+}
+
+int convertBothToRegistrationFormat(po::variables_map vm){
+  if(!vm.count("SourceCloudPath")){
+    cout << "Missing Parameter SourceCloudPath\n";
     return 1;
   }
 
@@ -864,8 +899,9 @@ int convertToRegistrationFormat(po::variables_map vm){
   transformToShapenetFormat(cloudTgtSubsampled, t,s);
   debug_showCombinedCloud(cloudSrcSubsampled, cloudTgtSubsampled, "ShapenetFormat");
 
-  writeRegistrationFormat(cloudSrcSubsampled, outFolderPath, "SrcCloud");
-  writeRegistrationFormat(cloudTgtSubsampled, outFolderPath, "TgtCloud");
+  //TODO: Fix and add to busybox
+  //writeRegistrationFormat(cloudSrcSubsampled, outFolderPath, "SrcCloud");
+  //writeRegistrationFormat(cloudTgtSubsampled, outFolderPath, "TgtCloud");
 
   return 0;
 }
@@ -997,8 +1033,8 @@ int main (int argc, char** argv)
   desc.add_options()
     ("help", "produce help message")
     ("job,J", po::value<std::string>(), "Job that should be performed")
-    ("snin", po::value<std::string>(), "Path to ply file or folder that should be converted to Shapenet format")
-    ("snout", po::value<std::string>(), "Path to file or folder where converted Shapenet format should be saved")
+    ("in", po::value<std::string>(), "Path to ply file or folder that should be converted to Shapenet format")
+    ("out", po::value<std::string>(), "Path to file or folder where converted Shapenet format should be saved")
     ("PointCloudName", po::value<std::string>(), "Name of the PointCloud that should be converted to Shapenet format")
     ("PointCloudPlant", po::value<std::string>(), "Path to Plant Point Cloud")
     ("NormalEsitmationSearchRadius", po::value<float>(), "Radius that should be used in Normal Estimation")

@@ -86,9 +86,12 @@ class Pointnet2PartSegmentation2:
 
         # Shapenet official train/test split
         self.DATA_PATH = os.path.join(os.path.abspath(os.getcwd()), 'data', 'predictions/background/')#os.path.join(ROOT_DIR, 'data', 'shapenetcore_partanno_segmentation_benchmark_v0_normal')
+        self.SEG_CLASSES = segmentationClasses
         self.TEST_DATASET = part_dataset_all_normal.PartNormalDataset(root=self.DATA_PATH, npoints=self.NUM_POINT, classification=False, split='val', normalize=False, seg_classes=segmentationClasses)
 
     def predict(self):
+        # Reload Dataset to get updates
+        self.TEST_DATASET = part_dataset_all_normal.PartNormalDataset(root=self.DATA_PATH, npoints=self.NUM_POINT, classification=False, split='val', normalize=False, seg_classes=self.SEG_CLASSES)
         with tf.Graph().as_default():
             with tf.device('/gpu:'+str(self.GPU_INDEX)):
                 pointclouds_pl, labels_pl = self.MODEL.placeholder_inputs(self.BATCH_SIZE, self.NUM_POINT)

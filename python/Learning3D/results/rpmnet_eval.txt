@@ -1,0 +1,3 @@
+Validation Loss: 0.058253 & Validation Distance Sum: 0.058920
+Validation Loss: 0.069300 & Validation Distance Sum: 0.073752
+Validation Loss: 0.055750 & Validation Distance Sum: 0.066215

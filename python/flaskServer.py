@@ -10,6 +10,7 @@ import jobs
 import utilities
 import state
 import traceback
+import constants
 
 import multiprocessing
 from multiprocessing.managers import BaseManager
@@ -67,6 +68,14 @@ def jobProcessingThread(state):
                 job = jobqueue[0]
                 mutexJobQueue.release()
 
+                if "FailedExecutionCount" in job:
+                    failCount = job["FailedExecutionCount"]
+                    if failCount > 5:
+                        mutexJobQueue.acquire()
+                        del jobqueue[0]
+                        mutexJobQueue.release()
+                        continue
+
                 result = job["job"](job["data"])
                 mutexServerState.acquire()
                 state.updateState(job, result)
@@ -82,18 +91,23 @@ def jobProcessingThread(state):
                 mutexJobQueue.release()
                 
             except Exception as e:
-                mutexServerState.acquire()
-                state.updateState(job, {"Status": "NOK", "Reason": "Exception Occurred", "Details" : str(e)})
-                mutexServerState.release()
-                traceback.format_exc()
+                # If Server State is locked this has to be unlocked first to update server state
                 if mutexServerState.locked():
                     mutexServerState.release()
+
+                mutexServerState.acquire()
+                state.updateState(job, {"Status": constants.statusFailed, "Reason": "Exception Occurred", "Details" : str(e)})
+                mutexServerState.release()
+                traceback.format_exc()
+
+                if "FailedExecutionCount" not in job:
+                    job["FailedExecutionCount"] = 0
+                job["FailedExecutionCount"] = job["FailedExecutionCount"] + 1
+
                 if mutexJobQueue.locked():
                     mutexJobQueue.release()
                 if mutexResult.locked():
                     mutexResult.release()
-                    raise e
-                
                 #raise e
         time.sleep(1.0)
     print("cleanup job processing queue")

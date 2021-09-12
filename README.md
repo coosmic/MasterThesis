@@ -25,7 +25,7 @@ cmake -S ./src -B ./build_python_binding
 ``` shell
 ./pgm -J RegistrationFormat --SourceCloudPath <PATH> --TargetCloudPath <PATH> --OutputFolder <PATH>
 
-./pgm -J Shapenet --snin /home/solomon/Thesis/MasterThesis/python/data/avocado/background/odm_filterpoints/point_cloud.ply --snout /home/solomon/Thesis/MasterThesis/python/data/avocado/background/shapenet/point_cloud --RemoveBackground false --MaxSubsample 1
+./pgm -J Shapenet --in /home/solomon/Thesis/MasterThesis/python/data/avocado/background/odm_filterpoints/point_cloud.ply --out /home/solomon/Thesis/MasterThesis/python/data/avocado/background/shapenet/point_cloud --RemoveBackground false --MaxSubsample 1
 
 ./pgm -J RegistrationFormat --SourceCloudPath ~/Thesis/MasterThesis/data/plant2/t1.ply --TargetCloudPath ~/Thesis/MasterThesis/data/plant2/background.ply --OutputFolder ~/Thesis/python/dcp/data/Custome/plant2t1
 
@@ -47,6 +47,7 @@ cmake -S ./src -B ./build_python_binding
 ```
 ### Plot Generation
 ``` shell
+python reportPointNetpp.py --pathIn /home/solomon/Thesis/MasterThesis/python/pointnet2/part_seg/results/training/t11_2Classes_PartSeg_WithNorm_WithoutRot/log_train.txt --plotName T11_2C_PS_WN_NR
 python reportPointNetpp.py --pathIn /home/solomon/Thesis/MasterThesis/python/pointnet2/part_seg/results/training/t10_2Classes_PartSeg_WitNorm_WithRotation/log_train.txt --plotName T10_2C_PS_WN_RR
 python reportPointNetpp.py --pathIn /home/solomon/Thesis/MasterThesis/python/pointnet2/part_seg/results/training/t9_3Classes_PartSeg_WitNorm_WithRotation/log_train.txt --plotName T9_3C_PS_WN_RR
 python reportPointNetpp.py --pathIn /home/solomon/Thesis/MasterThesis/python/pointnet2/part_seg/results/training/t8_2Classes_PartSeg_NoNorm_RandRot/log_train.txt --plotName T8_2C_PS_NN_RR

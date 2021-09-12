@@ -69,5 +69,6 @@
     "spellright.documentTypes": [
         "markdown",
         "plaintext"
-    ]
+    ],
+    "python.pythonPath": "/home/solomon/anaconda3/envs/learning3d/bin/python"
 }

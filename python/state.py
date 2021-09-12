@@ -1,6 +1,7 @@
 import os
 import constants
 import json
+import utilities
 
 class State():
 
@@ -16,7 +17,9 @@ class State():
             "LeavesSegmented" : {"Status" : constants.statusNotDone},
             "LeaveStemSplit" : {"Status" : constants.statusNotDone},
             "CountLeaves" : {"Status" : constants.statusNotDone},
-            "BackgroundRegistration" : {"Status" : constants.statusNotDone}
+            "BackgroundRegistration" : {"Status" : constants.statusNotDone},
+            "ConvertToRegistration" : {"Status" : constants.statusNotDone},
+            "CalculateSize" : {"Status" : constants.statusNotDone}
         }
         #print(folderPath)
         if os.path.isdir(os.path.join(folderPath, "images")) and len(os.listdir(os.path.join( folderPath, "images"))) != 0:
@@ -35,13 +38,24 @@ class State():
             pipelineStatus["LeaveStemSplit"] = {"Status" : constants.statusDone}
         if os.path.isfile(os.path.join( folderPath, "shapenet", "leavesSegmented.pcd")):
             pipelineStatus["CountLeaves"] = {"Status" : constants.statusDone}
+        if os.path.isfile(os.path.join(folderPath, 'shapenet', "registrationFormat.txt")):
+            pipelineStatus["ConvertToRegistration"] = {"Status" : constants.statusDone}
+        if os.path.isfile(os.path.join(folderPath, "result.json")):
+            results = utilities.getResultObject(folderPath)
+            if 'Height' in results:
+                if results['Height'] != -1:
+                    pipelineStatus["CalculateSize"] = {"Status" : constants.statusDone}
+            if 'BackgroundRegistration' in results:
+                if results['BackgroundRegistration']['Scale'] != -1:
+                    pipelineStatus["BackgroundRegistration"] = {"Status" : constants.statusDone}
         return pipelineStatus
 
     def getPipelineStatusBackground(self,folderPath):
         pipelineStatus  = {
             "ImagesUploaded" : {"Status" : constants.statusNotDone},
             "PointCloudGenerated" : {"Status" : constants.statusNotDone},
-            "ShapenetFormat" : {"Status" : constants.statusNotDone}
+            "ShapenetFormat" : {"Status" : constants.statusNotDone},
+            "ConvertToRegistration" : {"Status" : constants.statusNotDone}
         }
 
         if os.path.isdir(os.path.join( folderPath, "images")) and len(os.listdir(os.path.join( folderPath, "images"))) != 0:
@@ -50,6 +64,8 @@ class State():
             pipelineStatus["PointCloudGenerated"] = {"Status" : constants.statusDone}
         if os.path.isfile(os.path.join( folderPath, "shapenet", "point_cloudSS1.txt")):
             pipelineStatus["ShapenetFormat"] = {"Status" : constants.statusDone}
+        if os.path.isfile(os.path.join(folderPath, 'shapenet', "registrationFormat.txt")):
+            pipelineStatus["ConvertToRegistration"] = {"Status" : constants.statusDone}
         return pipelineStatus
 
     def restoreState(self,dataPath):
@@ -101,13 +117,16 @@ class State():
                     "LeavesSegmented" : {"Status" : constants.statusNotDone},
                     "LeaveStemSplit" : {"Status" : constants.statusNotDone},
                     "CountLeaves" : {"Status" : constants.statusNotDone},
-                    "BackgroundRegistration" : {"Status" : constants.statusNotDone}
+                    "BackgroundRegistration" : {"Status" : constants.statusNotDone},
+                    "ConvertToRegistration" : {"Status" : constants.statusNotDone},
+                    "CalculateSize" : {"Status" : constants.statusNotDone}
                 }
             else:
                 self.state[dataSet][timeStamp] = {
                     "ImagesUploaded" : {"Status" : constants.statusNotDone},
                     "PointCloudGenerated" : {"Status" : constants.statusNotDone},
-                    "ShapenetFormat" : {"Status" : constants.statusNotDone}
+                    "ShapenetFormat" : {"Status" : constants.statusNotDone},
+                    "ConvertToRegistration" : {"Status" : constants.statusNotDone}
                 }
 
         if stateUpdate["jobName"] == "SaveImages":
@@ -126,5 +145,9 @@ class State():
             self.state[dataSet][timeStamp]["CountLeaves"] = result
         if stateUpdate["jobName"] == "BackgroundRegistration":
             self.state[dataSet][timeStamp]["BackgroundRegistration"] = result
+        if stateUpdate["jobName"] == "ConvertToRegistration":
+            self.state[dataSet][timeStamp]["ConvertToRegistration"] = result
+        if stateUpdate["jobName"] == "CalculateSize":
+            self.state[dataSet][timeStamp]["CalculateSize"] = result
 
         return self.state

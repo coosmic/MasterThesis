@@ -6,117 +6,13 @@ import psutil
 import random
 import json
 
-def getPipelineStatus(folderPath):
-    pipelineStatus  = {
-        "ImagesUploaded" : False,
-        "PointCloudGenerated" : False,
-        "ShapenetFormat" : False,
-        "BackgroundSegmented" : False,
-        "LeavesSegmented" : False,
-        "LeaveStemSplit" : False,
-        "CountLeaves" : False,
-        "BackgroundRegistration" : False
-    }
-    #print(folderPath)
-    if os.path.isdir(os.path.join(folderPath, "images")) and len(os.listdir(os.path.join( folderPath, "images"))) != 0:
-        pipelineStatus["ImagesUploaded"] = True
-    if os.path.isfile(os.path.join( folderPath, "odm_filterpoints", "point_cloud.ply")):
-        pipelineStatus["PointCloudGenerated"] = True
-    if not os.path.isdir(os.path.join( folderPath, "shapenet") ):
-        return pipelineStatus
-    if os.path.isfile(os.path.join( folderPath, "shapenet", "point_cloudSS1.txt")):
-        pipelineStatus["ShapenetFormat"] = True
-    if os.path.isfile(os.path.join( folderPath, "shapenet", "point_cloudSS1BackgroundPrediction.pcd")):
-        pipelineStatus["BackgroundSegmented"] = True
-    if os.path.isfile(os.path.join( folderPath, "shapenet", "point_cloudSS1LeavePrediction.pcd")):
-        pipelineStatus["LeavesSegmented"] = True
-    if os.path.isfile(os.path.join( folderPath, "shapenet", "stem.txt")) and os.path.isfile(os.path.join( folderPath, "shapenet", "leaves.txt")):
-        pipelineStatus["LeaveStemSplit"] = True
-    if os.path.isfile(os.path.join( folderPath, "shapenet", "leavesSegmented.pcd")):
-        pipelineStatus["CountLeaves"] = True
-    return pipelineStatus
-
-def getPipelineStatusBackground(folderPath):
-    pipelineStatus  = {
-        "ImagesUploaded" : False,
-        "PointCloudGenerated" : False,
-        "ShapenetFormat" : False
-    }
-
-    if os.path.isdir(os.path.join( folderPath, "images")) and len(os.listdir(os.path.join( folderPath, "images"))) != 0:
-        pipelineStatus["ImagesUploaded"] = True
-    if os.path.isfile(os.path.join( folderPath, "odm_filterpoints", "point_cloud.ply")):
-        pipelineStatus["PointCloudGenerated"] = True
-    if os.path.isfile(os.path.join( folderPath, "shapenet", "point_cloudSS1.txt")):
-        pipelineStatus["ShapenetFormat"] = True
-    return pipelineStatus
-
-def restoreState(dataPath):
-    state = {}
-
-    dirs = [name for name in os.listdir(dataPath) if os.path.isdir(os.path.join(dataPath,name))]
-    for d in dirs:
-        if d != "predictions":
-            currentDirPath = os.path.join(dataPath,d)
-            currentTimestamps = dirs = [name for name in os.listdir(currentDirPath) if os.path.isdir(os.path.join(currentDirPath,name))]
-            state[d] = {}
-            for t in currentTimestamps:
-                #print(os.path.join(currentDirPath,t))
-                if t != "background":
-                    state[d][t] = getPipelineStatus(os.path.join(currentDirPath,t))
-                else:
-                    state[d][t] = getPipelineStatusBackground(os.path.join(currentDirPath,t))
-    return state
-
-def updateState(currentState, stateUpdate):
-    dataSet = stateUpdate["data"]["testSet"]
-    timeStamp = stateUpdate["data"]["timeStamp"]
-
-    if dataSet not in currentState:
-        currentState[dataSet] = {}
-        if timeStamp not in currentState[dataSet]:
-            if timeStamp != "background":
-                currentState[dataSet][timeStamp] = {
-                    "ImagesUploaded" : False,
-                    "PointCloudGenerated" : False,
-                    "ShapenetFormat" : False,
-                    "BackgroundSegmented" : False,
-                    "LeavesSegmented" : False,
-                    "LeaveStemSplit" : False,
-                    "CountLeaves" : False,
-                    "BackgroundRegistration" : False
-                }
-            else:
-                currentState[dataSet][timeStamp] = {
-                    "ImagesUploaded" : False,
-                    "PointCloudGenerated" : False,
-                    "ShapenetFormat" : False
-                }
-    if stateUpdate["jobName"] == "SaveImages":
-        currentState[dataSet][timeStamp]["ImagesUploaded"] = True
-    if stateUpdate["jobName"] == "GeneratePointCloud":
-        currentState[dataSet][timeStamp]["PointCloudGenerated"] = True
-    if stateUpdate["jobName"] == "ConvertToShapenet":
-        currentState[dataSet][timeStamp]["ShapenetFormat"] = True
-    if stateUpdate["jobName"] == "SegmentLeaves":
-        currentState[dataSet][timeStamp]["LeavesSegmented"] = True
-    if stateUpdate["jobName"] == "SegmentBackground":
-        currentState[dataSet][timeStamp]["BackgroundSegmented"] = True
-    if stateUpdate["jobName"] == "LeaveStemSplit":
-        currentState[dataSet][timeStamp]["LeaveStemSplit"] = True
-    if stateUpdate["jobName"] == "CountLeaves":
-        currentState[dataSet][timeStamp]["CountLeaves"] = True
-    if stateUpdate["jobName"] == "BackgroundRegistration":
-        currentState[dataSet][timeStamp]["BackgroundRegistration"] = True
-
-    return currentState
-
 def createResultObject(path):
     result = {
         "LeaveCount" : -1,
         "Height" : -1,
         "Volume" : -1,
-        "grothSinceLastSnapshot" : -1
+        "GrothSinceLastSnapshot" : -1,
+        "BackgroundRegistration" : {"Transformation" : "", "Scale" : -1}
     }
 
     with open(os.path.join(path, "result.json"), 'w') as f:
@@ -124,7 +20,7 @@ def createResultObject(path):
 
 def updateResultObject(path, resultUpdate):
     if not os.path.isfile(os.path.join(path, "result.json")):
-        raise Exception("Missing Result File for " + path)
+       createResultObject(path)
     with open(os.path.join(path, "result.json"), 'r') as f:
         result = json.load(f)
         print(resultUpdate)

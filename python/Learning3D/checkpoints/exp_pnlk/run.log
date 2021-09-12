@@ -1,0 +1,232 @@
+Namespace(batch_size=24, dataset_path='ModelNet40', dataset_type='modelnet', device='cuda:0', emb_dims=1024, epochs=200, eval=False, exp_name='exp_pnlk', fine_tune_pointnet='tune', num_points=1024, optimizer='Adam', pretrained='', resume='', seed=1234, start_epoch=0, symfn='max', transfer_ptnet_weights='./checkpoints/exp_classifier/models/best_ptnet_model.t7', workers=4)
+EPOCH:: 1, Traininig Loss: 14.408318, Testing Loss: 2.414923, Best Loss: 2.414923
+EPOCH:: 2, Traininig Loss: 3.892108, Testing Loss: 1.438219, Best Loss: 1.438219
+EPOCH:: 3, Traininig Loss: 5.030073, Testing Loss: 0.800098, Best Loss: 0.800098
+EPOCH:: 4, Traininig Loss: 3.343115, Testing Loss: 1.177937, Best Loss: 0.800098
+EPOCH:: 5, Traininig Loss: 3.008535, Testing Loss: 0.960659, Best Loss: 0.800098
+EPOCH:: 6, Traininig Loss: 1.530319, Testing Loss: 1.908202, Best Loss: 0.800098
+EPOCH:: 7, Traininig Loss: 4.059114, Testing Loss: 1.535683, Best Loss: 0.800098
+EPOCH:: 8, Traininig Loss: 4.315329, Testing Loss: 1.564648, Best Loss: 0.800098
+EPOCH:: 9, Traininig Loss: 5.852137, Testing Loss: 0.717028, Best Loss: 0.717028
+EPOCH:: 10, Traininig Loss: 1.656026, Testing Loss: 0.744882, Best Loss: 0.717028
+EPOCH:: 11, Traininig Loss: 2.381637, Testing Loss: 0.697948, Best Loss: 0.697948
+EPOCH:: 12, Traininig Loss: 0.792611, Testing Loss: 0.521418, Best Loss: 0.521418
+EPOCH:: 13, Traininig Loss: 6.455037, Testing Loss: 1.164387, Best Loss: 0.521418
+EPOCH:: 14, Traininig Loss: 9.339244, Testing Loss: 2.442899, Best Loss: 0.521418
+EPOCH:: 15, Traininig Loss: 7.422797, Testing Loss: 1.735540, Best Loss: 0.521418
+EPOCH:: 16, Traininig Loss: 7.256695, Testing Loss: 5.888188, Best Loss: 0.521418
+EPOCH:: 17, Traininig Loss: 10.768486, Testing Loss: 1.944071, Best Loss: 0.521418
+EPOCH:: 18, Traininig Loss: 5.064585, Testing Loss: 2.213050, Best Loss: 0.521418
+EPOCH:: 19, Traininig Loss: 11.603862, Testing Loss: 8.812437, Best Loss: 0.521418
+EPOCH:: 20, Traininig Loss: 30.110181, Testing Loss: 4.509138, Best Loss: 0.521418
+EPOCH:: 21, Traininig Loss: 19.956603, Testing Loss: 3.880283, Best Loss: 0.521418
+EPOCH:: 22, Traininig Loss: 12.938464, Testing Loss: 8.228950, Best Loss: 0.521418
+EPOCH:: 23, Traininig Loss: 15.740301, Testing Loss: 2.794474, Best Loss: 0.521418
+EPOCH:: 24, Traininig Loss: 39.169248, Testing Loss: 17.072647, Best Loss: 0.521418
+EPOCH:: 25, Traininig Loss: 35.393274, Testing Loss: 9.553790, Best Loss: 0.521418
+EPOCH:: 26, Traininig Loss: 23.029605, Testing Loss: 6.423855, Best Loss: 0.521418
+EPOCH:: 27, Traininig Loss: 53.592183, Testing Loss: 32.255959, Best Loss: 0.521418
+EPOCH:: 28, Traininig Loss: 46.278852, Testing Loss: 32.558734, Best Loss: 0.521418
+EPOCH:: 29, Traininig Loss: 134.842527, Testing Loss: 26.111457, Best Loss: 0.521418
+EPOCH:: 30, Traininig Loss: 59.830286, Testing Loss: 16.930228, Best Loss: 0.521418
+EPOCH:: 31, Traininig Loss: 67.044893, Testing Loss: 5.402782, Best Loss: 0.521418
+EPOCH:: 32, Traininig Loss: 34.327167, Testing Loss: 8.584709, Best Loss: 0.521418
+EPOCH:: 33, Traininig Loss: 21.598534, Testing Loss: 6.852180, Best Loss: 0.521418
+EPOCH:: 34, Traininig Loss: 21.209967, Testing Loss: 10.660460, Best Loss: 0.521418
+EPOCH:: 35, Traininig Loss: 17.788804, Testing Loss: 3.562531, Best Loss: 0.521418
+EPOCH:: 36, Traininig Loss: 12.677377, Testing Loss: 3.247929, Best Loss: 0.521418
+EPOCH:: 37, Traininig Loss: 13.814140, Testing Loss: 3.447943, Best Loss: 0.521418
+EPOCH:: 38, Traininig Loss: 12.963266, Testing Loss: 9.675334, Best Loss: 0.521418
+EPOCH:: 39, Traininig Loss: 16.008737, Testing Loss: 5.924363, Best Loss: 0.521418
+EPOCH:: 40, Traininig Loss: 19.106420, Testing Loss: 6.593735, Best Loss: 0.521418
+EPOCH:: 41, Traininig Loss: 23.020961, Testing Loss: 4.971778, Best Loss: 0.521418
+EPOCH:: 42, Traininig Loss: 20.542026, Testing Loss: 4.465285, Best Loss: 0.521418
+EPOCH:: 43, Traininig Loss: 14.442469, Testing Loss: 2.779979, Best Loss: 0.521418
+EPOCH:: 44, Traininig Loss: 9.134055, Testing Loss: 11.292237, Best Loss: 0.521418
+EPOCH:: 45, Traininig Loss: 33.786845, Testing Loss: 5.592368, Best Loss: 0.521418
+EPOCH:: 46, Traininig Loss: 29.932399, Testing Loss: 25.253954, Best Loss: 0.521418
+EPOCH:: 47, Traininig Loss: 18.493688, Testing Loss: 25.041623, Best Loss: 0.521418
+EPOCH:: 48, Traininig Loss: 39.587992, Testing Loss: 8.908315, Best Loss: 0.521418
+EPOCH:: 49, Traininig Loss: 27.636483, Testing Loss: 11.726213, Best Loss: 0.521418
+EPOCH:: 50, Traininig Loss: 28.394957, Testing Loss: 47.654348, Best Loss: 0.521418
+EPOCH:: 51, Traininig Loss: 16.450855, Testing Loss: 4.428712, Best Loss: 0.521418
+EPOCH:: 52, Traininig Loss: 27.244390, Testing Loss: 771.261008, Best Loss: 0.521418
+EPOCH:: 53, Traininig Loss: 17.664819, Testing Loss: 4.261033, Best Loss: 0.521418
+EPOCH:: 54, Traininig Loss: 21.060448, Testing Loss: 6.506568, Best Loss: 0.521418
+EPOCH:: 55, Traininig Loss: 30.153874, Testing Loss: 4.179910, Best Loss: 0.521418
+EPOCH:: 56, Traininig Loss: 19.761451, Testing Loss: 3.976393, Best Loss: 0.521418
+EPOCH:: 57, Traininig Loss: 19.555557, Testing Loss: 3.192957, Best Loss: 0.521418
+EPOCH:: 58, Traininig Loss: 14.270407, Testing Loss: 4.459331, Best Loss: 0.521418
+EPOCH:: 59, Traininig Loss: 15.551638, Testing Loss: 7.496179, Best Loss: 0.521418
+EPOCH:: 60, Traininig Loss: 16.895704, Testing Loss: 5.097368, Best Loss: 0.521418
+EPOCH:: 61, Traininig Loss: 14.159922, Testing Loss: 6.624424, Best Loss: 0.521418
+EPOCH:: 62, Traininig Loss: 14.296238, Testing Loss: 4.563233, Best Loss: 0.521418
+EPOCH:: 63, Traininig Loss: 21.117856, Testing Loss: 10.389016, Best Loss: 0.521418
+EPOCH:: 64, Traininig Loss: 15.397001, Testing Loss: 1.652047, Best Loss: 0.521418
+EPOCH:: 65, Traininig Loss: 8.502930, Testing Loss: 2.988682, Best Loss: 0.521418
+EPOCH:: 66, Traininig Loss: 9.180188, Testing Loss: 2.503480, Best Loss: 0.521418
+EPOCH:: 67, Traininig Loss: 8.931992, Testing Loss: 1.231140, Best Loss: 0.521418
+EPOCH:: 68, Traininig Loss: 6.618993, Testing Loss: 3.716041, Best Loss: 0.521418
+EPOCH:: 69, Traininig Loss: 5.163608, Testing Loss: 2.295118, Best Loss: 0.521418
+EPOCH:: 70, Traininig Loss: 9.646489, Testing Loss: 4.068777, Best Loss: 0.521418
+EPOCH:: 71, Traininig Loss: 15.197679, Testing Loss: 4.034135, Best Loss: 0.521418
+EPOCH:: 72, Traininig Loss: 7.397501, Testing Loss: 2.191047, Best Loss: 0.521418
+EPOCH:: 73, Traininig Loss: 11.311903, Testing Loss: 3.209385, Best Loss: 0.521418
+EPOCH:: 74, Traininig Loss: 10.705638, Testing Loss: 2.585452, Best Loss: 0.521418
+EPOCH:: 75, Traininig Loss: 3.625022, Testing Loss: 1.331695, Best Loss: 0.521418
+EPOCH:: 76, Traininig Loss: 8.115421, Testing Loss: 1.873839, Best Loss: 0.521418
+EPOCH:: 77, Traininig Loss: 6.091157, Testing Loss: 2.668368, Best Loss: 0.521418
+EPOCH:: 78, Traininig Loss: 4.579265, Testing Loss: 1.180618, Best Loss: 0.521418
+EPOCH:: 79, Traininig Loss: 17.581609, Testing Loss: 4.277966, Best Loss: 0.521418
+EPOCH:: 80, Traininig Loss: 11.352378, Testing Loss: 3.248882, Best Loss: 0.521418
+EPOCH:: 81, Traininig Loss: 8.378639, Testing Loss: 1.931334, Best Loss: 0.521418
+EPOCH:: 82, Traininig Loss: 7.625906, Testing Loss: 3.710873, Best Loss: 0.521418
+EPOCH:: 83, Traininig Loss: 9.616586, Testing Loss: 1.767858, Best Loss: 0.521418
+EPOCH:: 84, Traininig Loss: 6.755167, Testing Loss: 2.009200, Best Loss: 0.521418
+EPOCH:: 85, Traininig Loss: 6.209049, Testing Loss: 1.681852, Best Loss: 0.521418
+EPOCH:: 86, Traininig Loss: 8.313808, Testing Loss: 1.577751, Best Loss: 0.521418
+EPOCH:: 87, Traininig Loss: 6.453637, Testing Loss: 1.702994, Best Loss: 0.521418
+EPOCH:: 88, Traininig Loss: 4.488015, Testing Loss: 1.148312, Best Loss: 0.521418
+EPOCH:: 89, Traininig Loss: 5.267684, Testing Loss: 1.366364, Best Loss: 0.521418
+EPOCH:: 90, Traininig Loss: 3.756322, Testing Loss: 1.025389, Best Loss: 0.521418
+EPOCH:: 91, Traininig Loss: 3.026760, Testing Loss: 1.593833, Best Loss: 0.521418
+EPOCH:: 92, Traininig Loss: 5.013724, Testing Loss: 2.624965, Best Loss: 0.521418
+EPOCH:: 93, Traininig Loss: 3.275113, Testing Loss: 1.107336, Best Loss: 0.521418
+EPOCH:: 94, Traininig Loss: 3.716561, Testing Loss: 4.427042, Best Loss: 0.521418
+EPOCH:: 95, Traininig Loss: 6.954517, Testing Loss: 2.925394, Best Loss: 0.521418
+EPOCH:: 96, Traininig Loss: 5.545254, Testing Loss: 1.224117, Best Loss: 0.521418
+EPOCH:: 97, Traininig Loss: 3.904612, Testing Loss: 0.777621, Best Loss: 0.521418
+EPOCH:: 98, Traininig Loss: 2.898577, Testing Loss: 0.941001, Best Loss: 0.521418
+EPOCH:: 99, Traininig Loss: 4.138015, Testing Loss: 1.484547, Best Loss: 0.521418
+EPOCH:: 100, Traininig Loss: 5.397242, Testing Loss: 1.436988, Best Loss: 0.521418
+EPOCH:: 101, Traininig Loss: 3.289739, Testing Loss: 0.887987, Best Loss: 0.521418
+EPOCH:: 102, Traininig Loss: 3.111797, Testing Loss: 0.763969, Best Loss: 0.521418
+EPOCH:: 103, Traininig Loss: 4.159158, Testing Loss: 1.009650, Best Loss: 0.521418
+EPOCH:: 104, Traininig Loss: 5.074044, Testing Loss: 1.753590, Best Loss: 0.521418
+EPOCH:: 105, Traininig Loss: 3.901801, Testing Loss: 1.580918, Best Loss: 0.521418
+EPOCH:: 106, Traininig Loss: 3.411386, Testing Loss: 1.094789, Best Loss: 0.521418
+EPOCH:: 107, Traininig Loss: 3.884460, Testing Loss: 1.619914, Best Loss: 0.521418
+EPOCH:: 108, Traininig Loss: 2.990137, Testing Loss: 1.154123, Best Loss: 0.521418
+EPOCH:: 109, Traininig Loss: 2.646084, Testing Loss: 0.416415, Best Loss: 0.416415
+EPOCH:: 110, Traininig Loss: 1.563647, Testing Loss: 0.473228, Best Loss: 0.416415
+EPOCH:: 111, Traininig Loss: 2.209955, Testing Loss: 0.845778, Best Loss: 0.416415
+EPOCH:: 112, Traininig Loss: 2.080501, Testing Loss: 0.931430, Best Loss: 0.416415
+EPOCH:: 113, Traininig Loss: 2.749391, Testing Loss: 1.061233, Best Loss: 0.416415
+EPOCH:: 114, Traininig Loss: 4.039530, Testing Loss: 3.914620, Best Loss: 0.416415
+EPOCH:: 115, Traininig Loss: 4.012717, Testing Loss: 0.999012, Best Loss: 0.416415
+EPOCH:: 116, Traininig Loss: 2.334342, Testing Loss: 0.783863, Best Loss: 0.416415
+EPOCH:: 117, Traininig Loss: 2.834677, Testing Loss: 1.139294, Best Loss: 0.416415
+EPOCH:: 118, Traininig Loss: 2.072556, Testing Loss: 0.854064, Best Loss: 0.416415
+EPOCH:: 119, Traininig Loss: 3.462259, Testing Loss: 1.360426, Best Loss: 0.416415
+EPOCH:: 120, Traininig Loss: 2.143001, Testing Loss: 0.489533, Best Loss: 0.416415
+EPOCH:: 121, Traininig Loss: 2.037738, Testing Loss: 0.728129, Best Loss: 0.416415
+EPOCH:: 122, Traininig Loss: 1.456352, Testing Loss: 0.323665, Best Loss: 0.323665
+EPOCH:: 123, Traininig Loss: 1.893906, Testing Loss: 0.789962, Best Loss: 0.323665
+EPOCH:: 124, Traininig Loss: 2.317175, Testing Loss: 0.624304, Best Loss: 0.323665
+EPOCH:: 125, Traininig Loss: 0.916748, Testing Loss: 0.446325, Best Loss: 0.323665
+EPOCH:: 126, Traininig Loss: 2.086109, Testing Loss: 1.104855, Best Loss: 0.323665
+EPOCH:: 127, Traininig Loss: 1.525468, Testing Loss: 0.490460, Best Loss: 0.323665
+EPOCH:: 128, Traininig Loss: 0.957243, Testing Loss: 0.592045, Best Loss: 0.323665
+EPOCH:: 129, Traininig Loss: 1.318256, Testing Loss: 0.933179, Best Loss: 0.323665
+EPOCH:: 130, Traininig Loss: 1.850212, Testing Loss: 0.297640, Best Loss: 0.297640
+EPOCH:: 131, Traininig Loss: 2.161373, Testing Loss: 0.605955, Best Loss: 0.297640
+EPOCH:: 132, Traininig Loss: 0.720409, Testing Loss: 0.703736, Best Loss: 0.297640
+EPOCH:: 133, Traininig Loss: 0.920005, Testing Loss: 0.688450, Best Loss: 0.297640
+EPOCH:: 134, Traininig Loss: 0.867942, Testing Loss: 0.397646, Best Loss: 0.297640
+EPOCH:: 135, Traininig Loss: 1.161463, Testing Loss: 0.178064, Best Loss: 0.178064
+EPOCH:: 136, Traininig Loss: 1.006578, Testing Loss: 0.451094, Best Loss: 0.178064
+EPOCH:: 137, Traininig Loss: 0.568680, Testing Loss: 0.296855, Best Loss: 0.178064
+EPOCH:: 138, Traininig Loss: 0.569282, Testing Loss: 0.175542, Best Loss: 0.175542
+EPOCH:: 139, Traininig Loss: 0.859719, Testing Loss: 0.329106, Best Loss: 0.175542
+EPOCH:: 140, Traininig Loss: 0.768213, Testing Loss: 0.447849, Best Loss: 0.175542
+EPOCH:: 141, Traininig Loss: 2.182591, Testing Loss: 0.725452, Best Loss: 0.175542
+EPOCH:: 142, Traininig Loss: 1.191075, Testing Loss: 0.268210, Best Loss: 0.175542
+EPOCH:: 143, Traininig Loss: 0.672485, Testing Loss: 0.501762, Best Loss: 0.175542
+EPOCH:: 144, Traininig Loss: 0.525224, Testing Loss: 0.305431, Best Loss: 0.175542
+EPOCH:: 145, Traininig Loss: 0.646054, Testing Loss: 0.210477, Best Loss: 0.175542
+EPOCH:: 146, Traininig Loss: 1.223753, Testing Loss: 0.248914, Best Loss: 0.175542
+EPOCH:: 147, Traininig Loss: 0.731123, Testing Loss: 0.161983, Best Loss: 0.161983
+EPOCH:: 148, Traininig Loss: 0.361657, Testing Loss: 0.195387, Best Loss: 0.161983
+EPOCH:: 149, Traininig Loss: 0.451030, Testing Loss: 0.174076, Best Loss: 0.161983
+EPOCH:: 150, Traininig Loss: 0.482487, Testing Loss: 0.399795, Best Loss: 0.161983
+EPOCH:: 151, Traininig Loss: 0.344232, Testing Loss: 0.162802, Best Loss: 0.161983
+EPOCH:: 152, Traininig Loss: 0.477310, Testing Loss: 0.176798, Best Loss: 0.161983
+EPOCH:: 153, Traininig Loss: 0.408048, Testing Loss: 0.177319, Best Loss: 0.161983
+EPOCH:: 154, Traininig Loss: 0.763511, Testing Loss: 0.184573, Best Loss: 0.161983
+EPOCH:: 155, Traininig Loss: 0.502156, Testing Loss: 0.254870, Best Loss: 0.161983
+EPOCH:: 156, Traininig Loss: 0.543660, Testing Loss: 0.321710, Best Loss: 0.161983
+EPOCH:: 157, Traininig Loss: 0.849994, Testing Loss: 0.362487, Best Loss: 0.161983
+EPOCH:: 158, Traininig Loss: 0.710682, Testing Loss: 0.186863, Best Loss: 0.161983
+EPOCH:: 159, Traininig Loss: 1.336333, Testing Loss: 0.697028, Best Loss: 0.161983
+EPOCH:: 160, Traininig Loss: 0.772451, Testing Loss: 0.505577, Best Loss: 0.161983
+EPOCH:: 161, Traininig Loss: 0.966293, Testing Loss: 0.170911, Best Loss: 0.161983
+EPOCH:: 162, Traininig Loss: 0.404693, Testing Loss: 0.164393, Best Loss: 0.161983
+EPOCH:: 163, Traininig Loss: 0.868832, Testing Loss: 0.217413, Best Loss: 0.161983
+EPOCH:: 164, Traininig Loss: 0.482422, Testing Loss: 0.204942, Best Loss: 0.161983
+EPOCH:: 165, Traininig Loss: 1.010895, Testing Loss: 0.342587, Best Loss: 0.161983
+EPOCH:: 166, Traininig Loss: 0.691400, Testing Loss: 0.503929, Best Loss: 0.161983
+EPOCH:: 167, Traininig Loss: 0.676336, Testing Loss: 0.374955, Best Loss: 0.161983
+EPOCH:: 168, Traininig Loss: 0.460961, Testing Loss: 0.402467, Best Loss: 0.161983
+EPOCH:: 169, Traininig Loss: 0.375823, Testing Loss: 0.186863, Best Loss: 0.161983
+EPOCH:: 170, Traininig Loss: 0.330034, Testing Loss: 0.201292, Best Loss: 0.161983
+EPOCH:: 171, Traininig Loss: 0.348133, Testing Loss: 0.161126, Best Loss: 0.161126
+EPOCH:: 172, Traininig Loss: 0.610450, Testing Loss: 0.171242, Best Loss: 0.161126
+EPOCH:: 173, Traininig Loss: 0.839184, Testing Loss: 0.538553, Best Loss: 0.161126
+EPOCH:: 174, Traininig Loss: 0.628948, Testing Loss: 1.494541, Best Loss: 0.161126
+EPOCH:: 175, Traininig Loss: 0.983315, Testing Loss: 0.348400, Best Loss: 0.161126
+EPOCH:: 176, Traininig Loss: 1.185902, Testing Loss: 0.390251, Best Loss: 0.161126
+EPOCH:: 177, Traininig Loss: 1.899289, Testing Loss: 0.263511, Best Loss: 0.161126
+EPOCH:: 178, Traininig Loss: 0.766348, Testing Loss: 0.198466, Best Loss: 0.161126
+EPOCH:: 179, Traininig Loss: 0.891960, Testing Loss: 0.506545, Best Loss: 0.161126
+EPOCH:: 180, Traininig Loss: 0.855462, Testing Loss: 0.297928, Best Loss: 0.161126
+EPOCH:: 181, Traininig Loss: 0.818792, Testing Loss: 0.245268, Best Loss: 0.161126
+EPOCH:: 182, Traininig Loss: 1.014164, Testing Loss: 0.348598, Best Loss: 0.161126
+EPOCH:: 183, Traininig Loss: 1.286721, Testing Loss: 0.553533, Best Loss: 0.161126
+EPOCH:: 184, Traininig Loss: 1.202304, Testing Loss: 0.538115, Best Loss: 0.161126
+EPOCH:: 185, Traininig Loss: 1.165436, Testing Loss: 0.455362, Best Loss: 0.161126
+EPOCH:: 186, Traininig Loss: 1.349754, Testing Loss: 0.496381, Best Loss: 0.161126
+EPOCH:: 187, Traininig Loss: 0.733686, Testing Loss: 0.249345, Best Loss: 0.161126
+EPOCH:: 188, Traininig Loss: 0.518039, Testing Loss: 0.366875, Best Loss: 0.161126
+EPOCH:: 189, Traininig Loss: 0.716342, Testing Loss: 0.251251, Best Loss: 0.161126
+EPOCH:: 190, Traininig Loss: 0.609092, Testing Loss: 0.229825, Best Loss: 0.161126
+EPOCH:: 191, Traininig Loss: 0.671847, Testing Loss: 0.178987, Best Loss: 0.161126
+EPOCH:: 192, Traininig Loss: 0.816097, Testing Loss: 0.322702, Best Loss: 0.161126
+EPOCH:: 193, Traininig Loss: 0.540870, Testing Loss: 0.431332, Best Loss: 0.161126
+EPOCH:: 194, Traininig Loss: 0.682411, Testing Loss: 0.399805, Best Loss: 0.161126
+EPOCH:: 195, Traininig Loss: 0.645854, Testing Loss: 0.389158, Best Loss: 0.161126
+EPOCH:: 196, Traininig Loss: 0.777870, Testing Loss: 0.374524, Best Loss: 0.161126
+EPOCH:: 197, Traininig Loss: 0.562463, Testing Loss: 0.387156, Best Loss: 0.161126
+EPOCH:: 198, Traininig Loss: 0.806747, Testing Loss: 0.202087, Best Loss: 0.161126
+EPOCH:: 199, Traininig Loss: 1.008386, Testing Loss: 0.230553, Best Loss: 0.161126
+EPOCH:: 200, Traininig Loss: 1.330404, Testing Loss: 1.356217, Best Loss: 0.161126
+Namespace(batch_size=24, dataset_path='ModelNet40', dataset_type='modelnet', device='cuda:0', emb_dims=1024, epochs=200, eval=True, exp_name='exp_pnlk', fine_tune_pointnet='tune', num_points=1024, optimizer='Adam', pretrained='', resume='', seed=1234, start_epoch=0, symfn='max', transfer_ptnet_weights='./checkpoints/exp_classifier/models/best_ptnet_model.t7', workers=4)
+Namespace(batch_size=24, dataset_path='ModelNet40', dataset_type='modelnet', device='cuda:0', emb_dims=1024, epochs=200, eval=True, exp_name='exp_pnlk', fine_tune_pointnet='tune', num_points=1024, optimizer='Adam', pretrained='', resume='', seed=1234, start_epoch=0, symfn='max', transfer_ptnet_weights='./checkpoints/exp_classifier/models/best_ptnet_model.t7', workers=4)
+Namespace(batch_size=24, dataset_path='ModelNet40', dataset_type='modelnet', device='cuda:0', emb_dims=1024, epochs=200, eval=True, exp_name='exp_pnlk', fine_tune_pointnet='tune', num_points=1024, optimizer='Adam', pretrained='', resume='', seed=1234, start_epoch=0, symfn='max', transfer_ptnet_weights='./checkpoints/exp_classifier/models/best_ptnet_model.t7', workers=4)
+Namespace(batch_size=24, dataset_path='ModelNet40', dataset_type='modelnet', device='cuda:0', emb_dims=1024, epochs=200, eval=True, exp_name='exp_pnlk', fine_tune_pointnet='tune', num_points=1024, optimizer='Adam', pretrained='', resume='', seed=1234, start_epoch=0, symfn='max', transfer_ptnet_weights='./checkpoints/exp_classifier/models/best_ptnet_model.t7', workers=4)
+Namespace(batch_size=24, dataset_path='ModelNet40', dataset_type='modelnet', device='cuda:0', emb_dims=1024, epochs=200, eval=True, exp_name='exp_pnlk', fine_tune_pointnet='tune', num_points=1024, optimizer='Adam', pretrained='', resume='', seed=1234, start_epoch=0, symfn='max', transfer_ptnet_weights='./checkpoints/exp_classifier/models/best_ptnet_model.t7', workers=4)
+Namespace(batch_size=24, dataset_path='ModelNet40', dataset_type='modelnet', device='cuda:0', emb_dims=1024, epochs=200, eval=True, exp_name='exp_pnlk', fine_tune_pointnet='tune', num_points=1024, optimizer='Adam', pretrained='', resume='', seed=1234, start_epoch=0, symfn='max', transfer_ptnet_weights='./checkpoints/exp_classifier/models/best_ptnet_model.t7', workers=4)
+Namespace(batch_size=24, dataset_path='ModelNet40', dataset_type='modelnet', device='cuda:0', emb_dims=1024, epochs=200, eval=True, exp_name='exp_pnlk', fine_tune_pointnet='tune', num_points=1024, optimizer='Adam', pretrained='', resume='', seed=1234, start_epoch=0, symfn='max', transfer_ptnet_weights='./checkpoints/exp_classifier/models/best_ptnet_model.t7', workers=4)
+Namespace(batch_size=24, dataset_path='ModelNet40', dataset_type='modelnet', device='cuda:0', emb_dims=1024, epochs=200, eval=True, exp_name='exp_pnlk', fine_tune_pointnet='tune', num_points=1024, optimizer='Adam', pretrained='', resume='', seed=1234, start_epoch=0, symfn='max', transfer_ptnet_weights='./checkpoints/exp_classifier/models/best_ptnet_model.t7', workers=4)
+Namespace(batch_size=24, dataset_path='ModelNet40', dataset_type='modelnet', device='cuda:0', emb_dims=1024, epochs=200, eval=True, exp_name='exp_pnlk', fine_tune_pointnet='tune', num_points=1024, optimizer='Adam', pretrained='', resume='', seed=1234, start_epoch=0, symfn='max', transfer_ptnet_weights='./checkpoints/exp_classifier/models/best_ptnet_model.t7', workers=4)
+Namespace(batch_size=24, dataset_path='ModelNet40', dataset_type='modelnet', device='cuda:0', emb_dims=1024, epochs=200, eval=True, exp_name='exp_pnlk', fine_tune_pointnet='tune', num_points=1024, optimizer='Adam', pretrained='', resume='', seed=1234, start_epoch=0, symfn='max', transfer_ptnet_weights='./checkpoints/exp_classifier/models/best_ptnet_model.t7', workers=4)
+Namespace(batch_size=24, dataset_path='ModelNet40', dataset_type='modelnet', device='cuda:0', emb_dims=1024, epochs=200, eval=True, exp_name='exp_pnlk', fine_tune_pointnet='tune', num_points=1024, optimizer='Adam', pretrained='', resume='', seed=1234, start_epoch=0, symfn='max', transfer_ptnet_weights='./checkpoints/exp_classifier/models/best_ptnet_model.t7', workers=4)
+Namespace(batch_size=24, dataset_path='ModelNet40', dataset_type='modelnet', device='cuda:0', emb_dims=1024, epochs=200, eval=True, exp_name='exp_pnlk', fine_tune_pointnet='tune', num_points=1024, optimizer='Adam', pretrained='', resume='', seed=1234, start_epoch=0, symfn='max', transfer_ptnet_weights='./checkpoints/exp_classifier/models/best_ptnet_model.t7', workers=4)
+Namespace(batch_size=24, dataset_path='ModelNet40', dataset_type='modelnet', device='cuda:0', emb_dims=1024, epochs=200, eval=True, exp_name='exp_pnlk', fine_tune_pointnet='tune', num_points=1024, optimizer='Adam', pretrained='', resume='', seed=1234, start_epoch=0, symfn='max', transfer_ptnet_weights='./checkpoints/exp_classifier/models/best_ptnet_model.t7', workers=4)
+Namespace(batch_size=24, dataset_path='ModelNet40', dataset_type='modelnet', device='cuda:0', emb_dims=1024, epochs=200, eval=True, exp_name='exp_pnlk', fine_tune_pointnet='tune', num_points=1024, optimizer='Adam', pretrained='', resume='', seed=1234, start_epoch=0, symfn='max', transfer_ptnet_weights='./checkpoints/exp_classifier/models/best_ptnet_model.t7', workers=4)
+Namespace(batch_size=24, dataset_path='ModelNet40', dataset_type='modelnet', device='cuda:0', emb_dims=1024, epochs=200, eval=True, exp_name='exp_pnlk', fine_tune_pointnet='tune', num_points=1024, optimizer='Adam', pretrained='', resume='', seed=1234, start_epoch=0, symfn='max', transfer_ptnet_weights='./checkpoints/exp_classifier/models/best_ptnet_model.t7', workers=4)
+Namespace(batch_size=24, dataset_path='ModelNet40', dataset_type='modelnet', device='cuda:0', emb_dims=1024, epochs=200, eval=True, exp_name='exp_pnlk', fine_tune_pointnet='tune', num_points=1024, optimizer='Adam', pretrained='', resume='', seed=1234, start_epoch=0, symfn='max', transfer_ptnet_weights='./checkpoints/exp_classifier/models/best_ptnet_model.t7', workers=4)
+Namespace(batch_size=24, dataset_path='ModelNet40', dataset_type='modelnet', device='cuda:0', emb_dims=1024, epochs=200, eval=True, exp_name='exp_pnlk', fine_tune_pointnet='tune', num_points=1024, optimizer='Adam', pretrained='', resume='', seed=1234, start_epoch=0, symfn='max', transfer_ptnet_weights='./checkpoints/exp_classifier/models/best_ptnet_model.t7', workers=4)
+Namespace(batch_size=24, dataset_path='ModelNet40', dataset_type='modelnet', device='cuda:0', emb_dims=1024, epochs=200, eval=True, exp_name='exp_pnlk', fine_tune_pointnet='tune', num_points=1024, optimizer='Adam', pretrained='', resume='', seed=1234, start_epoch=0, symfn='max', transfer_ptnet_weights='./checkpoints/exp_classifier/models/best_ptnet_model.t7', workers=4)
+Validation Loss: 0.111193 & Validation Accuracy: 0.026128
+Namespace(batch_size=24, dataset_path='ModelNet40', dataset_type='modelnet', device='cuda:0', emb_dims=1024, epochs=200, eval=True, exp_name='exp_pnlk', fine_tune_pointnet='tune', num_points=1024, optimizer='Adam', pretrained='', resume='', seed=1234, start_epoch=0, symfn='max', transfer_ptnet_weights='./checkpoints/exp_classifier/models/best_ptnet_model.t7', workers=4)
+Namespace(batch_size=24, dataset_path='ModelNet40', dataset_type='modelnet', device='cuda:0', emb_dims=1024, epochs=200, eval=True, exp_name='exp_pnlk', fine_tune_pointnet='tune', num_points=1024, optimizer='Adam', pretrained='', resume='', seed=1234, start_epoch=0, symfn='max', transfer_ptnet_weights='./checkpoints/exp_classifier/models/best_ptnet_model.t7', workers=4)
+Namespace(batch_size=24, dataset_path='ModelNet40', dataset_type='modelnet', device='cuda:0', emb_dims=1024, epochs=200, eval=True, exp_name='exp_pnlk', fine_tune_pointnet='tune', num_points=1024, optimizer='Adam', pretrained='', resume='', seed=1234, start_epoch=0, symfn='max', transfer_ptnet_weights='./checkpoints/exp_classifier/models/best_ptnet_model.t7', workers=4)
+Validation Loss: 0.111193 & Validation Accuracy: 0.026128
+Namespace(batch_size=24, dataset_path='ModelNet40', dataset_type='modelnet', device='cuda:0', emb_dims=1024, epochs=200, eval=True, exp_name='exp_pnlk', fine_tune_pointnet='tune', num_points=1024, optimizer='Adam', pretrained='', resume='', seed=1234, start_epoch=0, symfn='max', transfer_ptnet_weights='./checkpoints/exp_classifier/models/best_ptnet_model.t7', workers=4)
+Validation Loss: 0.111193 & Validation Accuracy: 0.026128
+Namespace(batch_size=24, dataset_path='ModelNet40', dataset_type='modelnet', device='cuda:0', emb_dims=1024, epochs=200, eval=True, exp_name='exp_pnlk', fine_tune_pointnet='tune', num_points=1024, optimizer='Adam', pretrained='', resume='', seed=1234, start_epoch=0, symfn='max', transfer_ptnet_weights='./checkpoints/exp_classifier/models/best_ptnet_model.t7', workers=4)
+Validation Loss: 0.111193 & Validation Accuracy: 0.026128
+Namespace(batch_size=24, dataset_path='ModelNet40', dataset_type='modelnet', device='cuda:0', emb_dims=1024, epochs=200, eval=True, exp_name='exp_pnlk', fine_tune_pointnet='tune', num_points=1024, optimizer='Adam', pretrained='', resume='', seed=1234, start_epoch=0, symfn='max', transfer_ptnet_weights='./checkpoints/exp_classifier/models/best_ptnet_model.t7', workers=4)
+Validation Loss: 0.111193 & Validation Accuracy: 0.026128
+Namespace(batch_size=24, dataset_path='ModelNet40', dataset_type='modelnet', device='cuda:0', emb_dims=1024, epochs=200, eval=True, exp_name='exp_pnlk', fine_tune_pointnet='tune', num_points=1024, optimizer='Adam', pretrained='', resume='', seed=1234, start_epoch=0, symfn='max', transfer_ptnet_weights='./checkpoints/exp_classifier/models/best_ptnet_model.t7', workers=4)
+Validation Loss: 0.111193 & Validation Accuracy: 0.026128

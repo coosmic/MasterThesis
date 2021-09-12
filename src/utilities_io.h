@@ -51,13 +51,13 @@ bool loadAsciCloud(std::string filename, pcl::PointCloud<PointTypePCL>::Ptr clou
     return cloud->size() > 0;
 }
 
-bool writeRegistrationFormat(Cloud::Ptr cloud, std::string outPath, std::string name){
+bool writeRegistrationFormat(Cloud::Ptr cloud, std::string outPath){
     ofstream file;
 
-    file.open(outPath+name+".txt");
+    file.open(outPath);
 
     if(!file.is_open() ){
-        std::cout << "could not open file "<< outPath<<name<<".txt" <<std::endl;
+        std::cout << "could not open file "<< outPath <<std::endl;
         return false;
     }
 
@@ -69,7 +69,7 @@ bool writeRegistrationFormat(Cloud::Ptr cloud, std::string outPath, std::string 
 
     file.close();
 
-    std::cout << "Registration Format written to location " << outPath << name << ".txt\n";
+    std::cout << "Registration Format written to location " << outPath << "\n";
 
     return true;
 }

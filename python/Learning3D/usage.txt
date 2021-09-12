@@ -1,0 +1,3 @@
+python test_user_data.py --icp True --icp_threshold 0.2 --estimate_scale True --show True
+
+python test_user_data.py --estimate_scale True --show True --net RPM
