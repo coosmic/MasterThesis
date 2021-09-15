@@ -25,6 +25,44 @@
 
 \usepackage{makecell}
 
+\usepackage{xcolor}           % Code highligting
+
+\colorlet{punct}{red!60!black}
+\definecolor{background}{HTML}{EEEEEE}
+\definecolor{delim}{RGB}{20,105,176}
+\definecolor{string}{RGB}{0,0,255}
+\colorlet{numb}{magenta!60!black}
+
+\lstdefinelanguage{json}{
+    basicstyle=\normalfont\ttfamily,
+    numbers=left,
+    numberstyle=\scriptsize,
+    stepnumber=1,
+    numbersep=8pt,
+    showstringspaces=false,
+    breaklines=true,
+    frame=lines,
+    stringstyle=\ttfamily\color{string},
+    %backgroundcolor=\color{background},
+    literate=
+     *{0}{{{\color{numb}0}}}{1}
+      {1}{{{\color{numb}1}}}{1}
+      {2}{{{\color{numb}2}}}{1}
+      {3}{{{\color{numb}3}}}{1}
+      {4}{{{\color{numb}4}}}{1}
+      {5}{{{\color{numb}5}}}{1}
+      {6}{{{\color{numb}6}}}{1}
+      {7}{{{\color{numb}7}}}{1}
+      {8}{{{\color{numb}8}}}{1}
+      {9}{{{\color{numb}9}}}{1}
+      {:}{{{\color{punct}{:}}}}{1}
+      {,}{{{\color{punct}{,}}}}{1}
+      {\{}{{{\color{delim}{\{}}}}{1}
+      {\}}{{{\color{delim}{\}}}}}{1}
+      {[}{{{\color{delim}{[}}}}{1}
+      {]}{{{\color{delim}{]}}}}{1},
+}
+
 % Hier bei Bedarf die Seitenränder einstellen
 \usepackage{geometry}
 %\geometry{a4paper}
@@ -158,12 +196,23 @@ Zuletzt müssen zwei Punktwolken einer Pflanze zu verschiedenen Zeitpunkten mite
 Generell kann man zwischen zwei Methoden der Generierung von Punktwolken unterscheiden, die jeweils verschiedene Verfahren beziehungsweise Techniken anwenden.
 
 Die erste Methode nutzt Hardware wie LIDAR-Scanner \cite{lidar} um Punkwolken direkt zu erzeugen. Es gibt eine Reihe von Sensoren die das ermöglichen. Da der Großteil der Sensoren aus kostengrünen nicht in Frage kommt sei hier nur noch der RGB-D erwähnt. 
-Dieser liefert neben den Farbwerten für ein Bild auch noch eine Tiefeninformation für jeden Pixel. In einigen Smartphone-Modellen wird bereits ein solcher Sensor verbaut.
+Dieser liefert neben den Farbwerten für ein Bild auch noch eine Tiefeninformation für jeden Pixel. In einigen Smartphone-Modellen wird bereits ein solcher Sensor verbaut \cite{rgbd_smartphones}.
 
-Die andere Methode ist die Photgeometrie, bei der die Punktwolke aus Bildern, einer Szene aus verschiedenen Perspektiven, generiert wird. Eine der bekanntesten Algorithmen ist SIFT \cite{Sift3D}.
-Einige Verfahren benötigen genaue Informationen über die Kamera Position, Ausrichtung und andere Angaben wie die Brennweite der Linse etc. andere wiederrum lesen diese Informationen aus den Bildern direkt aus oder schätzen diese \cite{ODM}.
+Die andere Methode ist Structure from Motion (SfM), bei der die Punktwolke aus Bildern, einer Szene aus verschiedenen Perspektiven, generiert wird. 
+Allgemein werden auf den zugrundeliegenden Bildern nach Merkmalen(Feature) gesucht die robust gegen Translation, Rotation, Skalierung und Beleuchtung sind. 
+Hier können SIFT \cite{Sift}, ORB \cite{ORB}, BRIEF \cite{BRIEF} oder SURF \cite{SURF} eingesetzt werden.
+Wurden die Feature ermittelt müssen korrespondierende Feature zwischen den Bilder ermittelt werden. Das Bild-Paar mit den meisten übereinstimmungen wird als Basis für die Rekonstruktion der 3D-Punkwolke genutzt.
+Wurde aus den beiden Bildern eine initiale Punktwolke erstellt, wird diese mit den verbleibenden Bildern angereichert \cite{alouacheevaluation}. 
 
-Es wurden in den letzten Jahren große Fortschritte im Bereich Deep Learning auf 3D-Punkwolken gemacht, zur Gewinnung von 3D-Punkwolken.
+%Eine der bekanntesten Algorithmen ist SIFT \cite{Sift3D}.
+Einige Verfahren benötigen genaue Informationen über die Kamera Position, Ausrichtung und andere Angaben wie die Brennweite der Linse etc. 
+andere wiederrum lesen diese Informationen aus den EXIF Header der Bildern direkt aus oder schätzen diese \cite{ODM} \cite{schoenberger2016mvs}.
+
+Es wurden in den letzten Jahren große Fortschritte im Bereich Deep Learning auf 3D-Punkwolken gemacht, zur Gewinnung von 3D-Punkwolken \cite{fan2016point} \cite{tatarchenko2017octree} \cite{wang2018pixel2mesh}. 
+Mit diesen Verfahren ist es möglich aus einer minimalen Datenbasis die auch nur aus einem Bild bestehen kann 3D-Punkwolken zu generieren. 
+Nachteil der Verfahren ist, dass auf dem Bild nur ein Objekt ohne Hintergrund abgebildet sein darf, oder das zu erkennende Objekt mit einer Binären Maske maskiert werden muss.
+Eine Rekonstruktion von komplexen Szenen ist so nicht oder nur mit sehr hohem Aufwand möglich \cite{rs11222644} und wird daher nicht weiter untersucht. 
+Der in \cite{rs11222644} vorgestellte Ansatz geht die Problematik an und soll daher untersucht werden.
 
 %TODO Verfahren auflisten SIFT, RANSAC?, 
 
@@ -172,21 +221,33 @@ Es wurden in den letzten Jahren große Fortschritte im Bereich Deep Learning auf
 
 Unter der Segmentierung von 3D-Punktwolken versteht man, dass jedem Punkt ein Label zu zugewiesen wird, welches auskunft über eine Eigenschaft des Punktes gibt. Im Falle dieser Arbeit sollen Label wie Stamm, Blatt, Blüte oder Frucht vergeben werden.
 
-Bei der Analyse von Pflanzen in Form von 3D Punktwolken gibt es einige nicht gelernte Lösungen \cite{ThreeBasics} \cite{RegionGrowing} die das segmentieren von 3D Punktwolken von Pflanzen in Stiele und Blätter behandeln, viele dieser Ansätze haben aber das Problem, dass sie nur unter Laborbedingungen gute Ergebnisse liefern. 
-Insbesondere die hohe Qualität der Punktwolken die meist mit einem LIDAR-Scanner oder einem vergleichbaren Gerät erzielt wird, kann mit bildbasierten Methoden nicht oder nur mit sehr großen Datenmengen erreicht werden. 
-Ein weiteres Problem das viele Lösungen haben ist, dass der Hintergrund manuell entfernt wird und erst auf der freigestellten Pflanze der eigentliche Ansatz ausgeführt wird. 
+Bei der Analyse von Pflanzen in Form von 3D Punktwolken gibt es einige nicht gelernte Lösungen \cite{ThreeBasics} \cite{RegionGrowing} die das segmentieren von 3D Punktwolken von Pflanzen in Stiele und Blätter behandeln, 
+viele dieser Ansätze haben aber das Problem, dass sie nur unter bestimmten Bedingungen gute Ergebnisse liefern. 
+Insbesondere die hohe Qualität der Punktwolken die meist mit einem LIDAR-Scanner oder einem vergleichbaren Gerät erzielt wird, kann mit bildbasierten Methoden wie SfM nicht oder nur mit sehr großen Datenmengen und dem damit verbundenen Rechenaufwand erreicht werden. 
+Ein weiteres Problem das viele Lösungen haben ist, dass der Hintergrund, also alles was nicht zur Pflanze gehört. manuell entfernt wird und erst auf der freigestellten Pflanze der eigentliche Ansatz ausgeführt wird. 
 Um diese Lösungen dennoch in einer voll automatischen Pipeline nutzen zu können muss das freistellen der Pflanzen erst automatisiert werden.
-Auch im Bereich Segmentierung wurden große Fortschritte im Bereich Deep Learning auf 3D-Punkwolken gemacht, die mit einer angelernten Netzarchitektur bestimmte Objekte erkennen und Teile davon segmentieren. Diese Ansätze können auch auf Pflanzen angewandt werden. Dazu müssen Architekturen wie PointNet\cite{qi2017pointnet}/PointNet++\cite{qi2017pointnet++} auf Punktwolken von Pflanzen trainiert werden.  
+Auch im Bereich Segmentierung wurden große Fortschritte im Bereich Deep Learning auf 3D-Punkwolken gemacht, die mit einer angelernten Netzarchitektur bestimmte Objekte erkennen und Teile davon segmentieren. 
+Diese Ansätze können auch auf Pflanzen angewandt werden. Dazu müssen Architekturen wie PointNet\cite{qi2017pointnet}/PointNet++\cite{qi2017pointnet++} oder DGCNN \cite{dgcnn} auf Punktwolken von Pflanzen trainiert werden.  
 
 \subsection{Registrierung von 3D-Punkwolken}
 \label{sec:stand:registrierung}
 
 Bei der Registrierung von 3D-Punktwolken probiert man eine Transformationen $T$ zu finden die eine Quell-Punktwolke $S_p$ so transformiert, dass der Abstand $d(S_p,T_p)$ zu einer Ziel-Punktwolke $T_p$ minimiert wird.
 
-Die am weitesten verbreitete Method zur Registrierung von 3D Punktwolken ist Iterative Closest Points (ICP). ICP basiert auf dem Ansatz das zwei Punktwolken iterativ aneinander angenähert werden und bei jeder Iteration der Abstand minimiert wird.
-Die meisten Implementierungen von ICP beachten aber nicht die Skalierung der Punktwolken. Es gibt einige wenige Ansätze für dieses Problem. 
-Ein weiteres Problem bei ICP ist, dass es in lokalen Minima Lösungen finden kann. Daher muss eine gute Initiale Transformation gefunden werden. Dieses Problem kann durch globale ICP gelöst werden. Hierbei wird der zu durchsuchend Suchraum SO(3) mittels Branch \& Bound Verfahren durchsucht.
-Auch für das Registrierung-Problem gibt es Lösungen die auf Neuronal Netzen basieren, aber auch hier gibt es das Problem, dass es nur wenige Ansätze gibt die mit Skalierung umgehen können.
+Die am weitesten verbreitete Method zur Registrierung von 3D Punktwolken ist Iterative Closest Points (ICP) \cite{icp_org}. ICP basiert auf dem Ansatz das zwei Punktwolken iterativ aneinander angenähert werden.
+Dabei wird bei jeder Iteration für jeden Punkt $p_i$ aus der Quellpunkwolke $S_p$ der Punkt aus der Zielpunktwolke gesucht der $p_i$ am nächsten ist. In einem zweiten Schritt wird der Abstand zwischen den korrespondierenden Punkten minimiert.
+Zuerst wird für jede Punkwolke das Massezentrum $c_s$ und $c_t$ berechnet und $S_p$ um die Differenz $c_t - c_s$ verschoben. Danach wird mittels SVD die Rotation der $R$ ermittelt und auf $S_p$ angewandt.
+Der Vorgang wird wiederholt bis es zu einer Konvergenz kommt, also keine oder nur noch minimale Änderungen an der Punkwolke $S_p$ vorkommen.
+
+Ein Problem das ICP hat ist, das es auch für lokale Minima konvergiert. Das heißt, das die initiale Transformation von $S_p$ so gewählt sein muss, dass der ICP-Durchlauf bei einem globalen Minimum konvergiert.
+Ansätze wie global ICP, die mit verschiedenen initialen Transformationen starten existieren sind aber sehr Rechenaufwendig und damit recht langsam.
+
+Des weiteren ist ICP anfällig für Ausreißer. Für diese Problem gibt es allerdings existierende Lösungen \cite{ICP}.
+
+Ein weiteres Problem ist, dass die meisten ICP-Ansätze die Skalierung nicht beachten. Es gibt einige wenige Ansätze für dieses Problem \cite{Ziner2005PointSR}.
+
+Auch für das Registrierung-Problem gibt es Lösungen aus dem Deep-Learning-Bereich, aber auch hier gibt es das Problem, dass es nur wenige Ansätze gibt die mit Skalierung umgehen können.
+Bekannt Ansätze sind DCP \cite{Wang_2019_ICCV}, PointNetLK \cite{aoki2019pointnetlk}, RPM-Net \cite{Yew_2020}, DeepGMR \cite{yuan2020deepgmr}, PRNet \cite{wang2019prnet} und PCRNet \cite{sarode2019pcrnet}.
 
 \newpage
 \section{Realisierung}
@@ -343,13 +404,63 @@ s_i = argmax_x(H_i(x))
 %-------------------------------------------------------------
 \label{sec:realisierung:implementierung4}
 
-Der Server ist mit dem Python-Framework Flask erstellt. Flask bietet eine Schlanke API um neue Endpunkte zu erstellen und Daten vom Client anzunehmen. 
+Der Server ist mit dem Python-Framework Flask erstellt. Flask bietet eine Schlanke API um neue REST-Endpunkte zu erstellen und Daten vom Client anzunehmen. 
 
-Ein Hintergrund-Prozess führt die einzelnen Jobs aus und sorgt für den Lastausgleich. Die Anfragen an den Server werden asynchron verarbeitet. Jede Anfrage wird in die Job-Queue eingeordnet. Diese wird vom Hintergrund-Prozess abgearbeitet.
+Ein Hintergrund-Prozess führt die einzelnen Jobs aus und sorgt für den Lastausgleich. Die Anfragen an den Server werden asynchron verarbeitet. 
+Jede Anfrage wird in die Job-Queue eingeordnet. Diese wird vom Hintergrund-Prozess abgearbeitet.
 Einzige Ausnahme bildet hier das Speichern der Bilder. Die Bilder müssen synchrone zum Request auf der Platte persistiert werden, da Flask die Datei-Streams nach dem Lebenszyklus eines Requests schließt.
 
-Neben dem Hintergrund-Prozess wird auch der aktuelle Stand der Datenhaltung eingelesen und der Status des Servers aufgebaut. Des weiteren werden zwei Instanzen von PointNet++ gestartet. 
-Eine für die Hintergrundsegmentierung und einer für die Blatt/Stiel-Erkennung.
+Beim Start des Servers wird neben dem Hintergrund-Prozess wird der aktuelle Stand der Datenhaltung eingelesen und der Status des Servers aufgebaut. 
+Bei der Datenhaltung wurde auf eine Datenbank verzichtet, da die meisten Daten als Blob vorliegen und daher nicht geeignet für ein relationales Datenbank-Modell sind. Die Daten werden direkt auf der Festplatte des Host-Systems abgelegt.
+Des weiteren werden zwei Instanzen von PointNet++ gestartet. Eine für die Segmentierung des Hintergrundes und einer für die Segmentierung der Pflanze.
+
+Der Server bietet folgende Schnittstellen:
+
+\textbf{POST /data/\{Messreihe\}/\{Zeitstempel\}}
+
+Dient dazu neue Datensätze hinzu zu fügen. Es muss eine Sammlung von Bildern einer Pflanze mit geliefert werden. 
+Wird der Endpunkt angesprochen werden die Bilder gespeichert und die Pipeline zum generieren der Punktwolke in die Job-Queue hinzugefügt.
+
+\textbf{PUT /data/\{Messreihe\}/\{Zeitstempel\}}
+
+Dient dazu Pipelines für einen Datensatz zu starten. Hierzu wird im Payload des Request an den Server eine JSON-Datei übermittelt welches eine Liste der Pipelines enthält (Beispiel siehe Listing \ref{listing:example:payload}).
+Die spezifizierten Pipelines werden, in der angegebene Reihenfolge, der Job-Queue hinzugefügt.
+\\
+
+\begin{lstlisting}[language=json, caption={Beispiel Payload zum starten einer Pipeline}, captionpos=b, label=listing:example:payload]
+{
+    "jobs" : [
+        {
+            "jobName" : "SegmentBackground",
+            "jobParameter" : {}
+        }
+    ]
+}
+\end{lstlisting}
+
+Es stehen folgende Pipelines zur Verfügung:
+
+\begin{itemize}
+\item Punkwolke generieren
+\item In Shapnet-Format überführen
+\item Segmentierung Hintergrund
+\item Segmentierung Pflanze
+\item Blatt/Stamm Trennung
+\item Blätter zählen
+\item In Registrierungs-Format überführen
+\item Hintergrund-Registrierung
+\item Größen berechnen
+\end{itemize}
+
+\textbf{GET /listings/\{Messreihe\}}
+
+Dient dazu zu einer Messreihe den aktuellen Status abzuholen. Der Status der Messreihe setzt sich aus den einzelnen Pipeline-Status zusammen. 
+
+\textbf{PUT /results/\{Messreihe\}/\{Zeitstempel\}}
+
+Dient dazu zu einem Zeitpunkt einer Messreihe die ermittelten Werte wie Anzahl Blätter oder Volumen abzuholen.
+
+
 
 \newpage
 \section{Ergebnisse}

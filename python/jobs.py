@@ -6,6 +6,8 @@ import psutil
 import constants
 import time
 
+import registration
+
 from Learning3D.registration import runWithDifferentScales, loadRawDataWithoutArgs
 
 PARTSEG2 = None
@@ -166,11 +168,16 @@ def jobBackgroundRegistration(jobParameter):
     folderPath = os.path.join(os.path.abspath(os.getcwd()), 'data', jobParameter['testSet'], jobParameter['timeStamp'])
     srcPath = os.path.join(folderPath, 'shapenet', 'registrationFormat.txt')
     targetPath = os.path.join(os.path.abspath(os.getcwd()), 'data', jobParameter['testSet'], 'background', 'shapenet', 'registrationFormat.txt')
+    outPath = os.path.join(folderPath, 'shapenet', 'registration/')
 
-    data = loadRawDataWithoutArgs(srcPath, targetPath, 1024)
+    print("start reg")
+    transformation, scale = registration.scaleRegistration(srcPath, targetPath, outPath)
+    print("Transformation", transformation)
+    print("Scale", scale)
 
-    transformation, scale = runWithDifferentScales(data, show=False)
-    print(type(transformation))
+    #data = loadRawDataWithoutArgs(srcPath, targetPath, 1024)
+
+    #transformation, scale = runWithDifferentScales(data, show=False)
     return {"Status": constants.statusDone, "Results" : {"JobName": "BackgroundRegistration", "Value": {"Transformation" : transformation.tolist(), "Scale" : scale}} }
 
 def jobConvertToBackground(jobParameter):

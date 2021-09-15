@@ -3,44 +3,47 @@ Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: template.aux
 The style file: ieeetr.bst
 Database file #1: ./bibleografie.bib
-You've used 7 entries,
+Warning--empty journal in alouacheevaluation
+Warning--empty year in alouacheevaluation
+You've used 27 entries,
             1876 wiz_defined-function locations,
-            520 strings with 4800 characters,
-and the built_in function-call counts, 1851 in all, are:
-= -- 171
-> -- 82
+            620 strings with 8115 characters,
+and the built_in function-call counts, 6231 in all, are:
+= -- 528
+> -- 339
 < -- 0
-+ -- 30
-- -- 23
-* -- 131
-:= -- 269
-add.period$ -- 7
-call.type$ -- 7
-change.case$ -- 7
++ -- 123
+- -- 96
+* -- 442
+:= -- 917
+add.period$ -- 26
+call.type$ -- 27
+change.case$ -- 27
 chr.to.int$ -- 0
-cite$ -- 7
-duplicate$ -- 92
-empty$ -- 175
-format.name$ -- 23
-if$ -- 446
+cite$ -- 29
+duplicate$ -- 295
+empty$ -- 631
+format.name$ -- 96
+if$ -- 1488
 int.to.chr$ -- 0
-int.to.str$ -- 7
-missing$ -- 6
-newline$ -- 24
-num.names$ -- 7
-pop$ -- 27
+int.to.str$ -- 27
+missing$ -- 18
+newline$ -- 84
+num.names$ -- 27
+pop$ -- 144
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 66
+skip$ -- 187
 stack$ -- 0
-substring$ -- 120
-swap$ -- 38
+substring$ -- 283
+swap$ -- 89
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
-warning$ -- 0
-while$ -- 14
-width$ -- 8
-write$ -- 63
+warning$ -- 2
+while$ -- 49
+width$ -- 29
+write$ -- 227
+(There were 2 warnings)

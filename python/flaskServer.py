@@ -108,7 +108,7 @@ def jobProcessingThread(state):
                     mutexJobQueue.release()
                 if mutexResult.locked():
                     mutexResult.release()
-                #raise e
+                raise e
         time.sleep(1.0)
     print("cleanup job processing queue")
     #TODO

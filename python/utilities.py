@@ -5,6 +5,7 @@ import os
 import psutil
 import random
 import json
+from sklearn.neighbors import NearestNeighbors
 
 def createResultObject(path):
     result = {
@@ -144,3 +145,11 @@ def saveLeavePredictions(leaves, path):
         pcd.paint_uniform_color([random.uniform(0,1), random.uniform(0,1), random.uniform(0,1)])
         pcd_combined += pcd
     o3d.io.write_point_cloud(path, pcd_combined, False, True, False)
+
+def pointCloudDistance(cloudA, cloudB):
+    error = 0
+    for i in range(cloudB.shape[0]):
+        nbrs = NearestNeighbors(n_neighbors=1, algorithm='ball_tree').fit(cloudA)
+        distances, indices = nbrs.kneighbors(cloudB)
+        error = error + (np.sum(distances) / distances.shape[0])
+    return error

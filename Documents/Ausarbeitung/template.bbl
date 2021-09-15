@@ -1,18 +1,61 @@
-\begin{thebibliography}{1}
+\begin{thebibliography}{10}
 
 \bibitem{lidar}
 N.~Mehendale and S.~Neoge, ``Review on lidar technology,'' {\em ssrn preprint
   ssrn:3604309}, 2020.
 
-\bibitem{Sift3D}
-R.~Hänsch, T.~Weber, and O.~Hellwich, ``Comparison of 3d interest point
-  detectors and descriptors for point cloud fusion,'' {\em ISPRS Annals of
-  Photogrammetry, Remote Sensing and Spatial Information Sciences}, vol.~II-3,
-  09 2014.
+\bibitem{rgbd_smartphones}
+A.~Taneja, ``Top 10 smartphones with a dedicated depth sensor camera to capture
+  perfect bokeh shots,'' 2020.
+
+\bibitem{Sift}
+D.~G. Lowe, ``Distinctive image features from scale-invariant keypoints,'' {\em
+  International journal of computer vision}, vol.~60, no.~2, pp.~91--110, 2004.
+
+\bibitem{ORB}
+E.~Rublee, V.~Rabaud, K.~Konolige, and G.~Bradski, ``Orb: An efficient
+  alternative to sift or surf,'' in {\em 2011 International conference on
+  computer vision}, pp.~2564--2571, Ieee, 2011.
+
+\bibitem{BRIEF}
+M.~Calonder, V.~Lepetit, C.~Strecha, and P.~Fua, ``Brief: Binary robust
+  independent elementary features,'' in {\em European conference on computer
+  vision}, pp.~778--792, Springer, 2010.
+
+\bibitem{SURF}
+H.~Bay, A.~Ess, T.~Tuytelaars, and L.~Van~Gool, ``Speeded-up robust features
+  (surf),'' {\em Computer vision and image understanding}, vol.~110, no.~3,
+  pp.~346--359, 2008.
+
+\bibitem{alouacheevaluation}
+A.~Alouache and Q.~Wu, ``Evaluation of an opencv implementation of structure
+  from motion on open source data,''
 
 \bibitem{ODM}
 pierotofy, ``Open drone map - a command line toolkit to generate maps, point
   clouds, 3d models and dems from drone, balloon or kite images.,'' 2020.
+
+\bibitem{schoenberger2016mvs}
+J.~L. Sch\"{o}nberger, E.~Zheng, M.~Pollefeys, and J.-M. Frahm, ``{Pixelwise
+  View Selection for Unstructured Multi-View Stereo},'' in {\em European
+  Conference on Computer Vision (ECCV)}, 2016.
+
+\bibitem{fan2016point}
+H.~Fan, H.~Su, and L.~Guibas, ``A point set generation network for 3d object
+  reconstruction from a single image,'' 2016.
+
+\bibitem{tatarchenko2017octree}
+M.~Tatarchenko, A.~Dosovitskiy, and T.~Brox, ``Octree generating networks:
+  Efficient convolutional architectures for high-resolution 3d outputs,'' 2017.
+
+\bibitem{wang2018pixel2mesh}
+N.~Wang, Y.~Zhang, Z.~Li, Y.~Fu, W.~Liu, and Y.-G. Jiang, ``Pixel2mesh:
+  Generating 3d mesh models from single rgb images,'' 2018.
+
+\bibitem{rs11222644}
+Y.~Xia, C.~Wang, Y.~Xu, Y.~Zang, W.~Liu, J.~Li, and U.~Stilla, ``Realpoint3d:
+  Generating 3d point clouds from a single image of complex scenarios,'' {\em
+  Remote Sensing}, vol.~11, no.~22, 2019.
 
 \bibitem{ThreeBasics}
 I.~Ziamtsov and S.~Navlakha, ``{Machine Learning Approaches to Improve Three
@@ -34,5 +77,51 @@ C.~R. Qi, H.~Su, K.~Mo, and L.~J. Guibas, ``Pointnet: Deep learning on point
 C.~R. Qi, L.~Yi, H.~Su, and L.~J. Guibas, ``Pointnet++: Deep hierarchical
   feature learning on point sets in a metric space,'' {\em arXiv preprint
   arXiv:1706.02413}, 2017.
+
+\bibitem{dgcnn}
+Y.~Wang, Y.~Sun, Z.~Liu, S.~E. Sarma, M.~M. Bronstein, and J.~M. Solomon,
+  ``Dynamic graph cnn for learning on point clouds,'' {\em ACM Transactions on
+  Graphics (TOG)}, 2019.
+
+\bibitem{icp_org}
+P.~J. Besl and N.~D. McKay, ``Method for registration of 3-d shapes,'' in {\em
+  Sensor fusion IV: control paradigms and data structures}, vol.~1611,
+  pp.~586--606, International Society for Optics and Photonics, 1992.
+
+\bibitem{ICP}
+J.~Zhang, Y.~Yao, and B.~Deng, ``Fast and robust iterative closest point,''
+  {\em IEEE Transactions on Pattern Analysis and Machine Intelligence}, 2021.
+
+\bibitem{Ziner2005PointSR}
+T.~Zin{\ss}er, J.~Schmidt, and H.~Niemann, ``Point set registration with
+  integrated scale estimation,'' in {\em Point Set Registration with Integrated
+  Scale Estimation}, 2005.
+
+\bibitem{Wang_2019_ICCV}
+Y.~Wang and J.~M. Solomon, ``Deep closest point: Learning representations for
+  point cloud registration,'' in {\em The IEEE International Conference on
+  Computer Vision (ICCV)}, October 2019.
+
+\bibitem{aoki2019pointnetlk}
+Y.~Aoki, H.~Goforth, R.~A. Srivatsan, and S.~Lucey, ``Pointnetlk: Robust and
+  efficient point cloud registration using pointnet,'' 2019.
+
+\bibitem{Yew_2020}
+Z.~J. Yew and G.~H. Lee, ``Rpm-net: Robust point matching using learned
+  features,'' {\em 2020 IEEE/CVF Conference on Computer Vision and Pattern
+  Recognition (CVPR)}, Jun 2020.
+
+\bibitem{yuan2020deepgmr}
+W.~Yuan, B.~Eckart, K.~Kim, V.~Jampani, D.~Fox, and J.~Kautz, ``Deepgmr:
+  Learning latent gaussian mixture models for registration,'' 2020.
+
+\bibitem{wang2019prnet}
+Y.~Wang and J.~M. Solomon, ``Prnet: Self-supervised learning for
+  partial-to-partial registration,'' 2019.
+
+\bibitem{sarode2019pcrnet}
+V.~Sarode, X.~Li, H.~Goforth, Y.~Aoki, R.~A. Srivatsan, S.~Lucey, and
+  H.~Choset, ``Pcrnet: Point cloud registration network using pointnet
+  encoding,'' 2019.
 
 \end{thebibliography}
