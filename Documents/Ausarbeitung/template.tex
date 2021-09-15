@@ -400,7 +400,7 @@ s_i = argmax_x(H_i(x))
 \end{array}
 \end{equation}
 
-\subsection{Umsetzung Pipelines und Server}
+\subsection{Umsetzung Server}
 %-------------------------------------------------------------
 \label{sec:realisierung:implementierung4}
 
@@ -410,11 +410,20 @@ Ein Hintergrund-Prozess führt die einzelnen Jobs aus und sorgt für den Lastaus
 Jede Anfrage wird in die Job-Queue eingeordnet. Diese wird vom Hintergrund-Prozess abgearbeitet.
 Einzige Ausnahme bildet hier das Speichern der Bilder. Die Bilder müssen synchrone zum Request auf der Platte persistiert werden, da Flask die Datei-Streams nach dem Lebenszyklus eines Requests schließt.
 
-Beim Start des Servers wird neben dem Hintergrund-Prozess wird der aktuelle Stand der Datenhaltung eingelesen und der Status des Servers aufgebaut. 
-Bei der Datenhaltung wurde auf eine Datenbank verzichtet, da die meisten Daten als Blob vorliegen und daher nicht geeignet für ein relationales Datenbank-Modell sind. Die Daten werden direkt auf der Festplatte des Host-Systems abgelegt.
+Beim Start des Servers wird neben dem Hintergrund-Prozess der aktuelle Stand der Datenhaltung eingelesen und der Status des Servers aufgebaut. 
+Bei der Datenhaltung wurde auf eine Datenbank verzichtet, da die meisten Daten als Blob vorliegen und daher nicht geeignet für ein relationales Datenbank-Modell sind. 
+Die Daten werden direkt auf der Festplatte des Host-Systems abgelegt.
 Des weiteren werden zwei Instanzen von PointNet++ gestartet. Eine für die Segmentierung des Hintergrundes und einer für die Segmentierung der Pflanze.
 
 Der Server bietet folgende Schnittstellen:
+
+\textbf{GET /listings/\{Messreihe\}}
+
+Dient dazu zu einer Messreihe den aktuellen Status abzuholen. Der Status der Messreihe setzt sich aus den einzelnen Pipeline-Status zusammen. 
+
+\textbf{PUT /results/\{Messreihe\}/\{Zeitstempel\}}
+
+Dient dazu zu einem Zeitpunkt einer Messreihe die ermittelten Werte wie Anzahl Blätter oder Volumen abzuholen.
 
 \textbf{POST /data/\{Messreihe\}/\{Zeitstempel\}}
 
@@ -443,7 +452,7 @@ Es stehen folgende Pipelines zur Verfügung:
 \begin{itemize}
 \item Punkwolke generieren
 \item In Shapnet-Format überführen
-\item Segmentierung Hintergrund
+\item Entfernung des Hintergrundes
 \item Segmentierung Pflanze
 \item Blatt/Stamm Trennung
 \item Blätter zählen
@@ -452,15 +461,68 @@ Es stehen folgende Pipelines zur Verfügung:
 \item Größen berechnen
 \end{itemize}
 
-\textbf{GET /listings/\{Messreihe\}}
+Die Pipeline Punktwolke generieren wird mit dem Anlegen einen neuen Zeitstempels gestartet. Es wird aus den hoch geladenen Bildern eine Punktwolke generiert.
 
-Dient dazu zu einer Messreihe den aktuellen Status abzuholen. Der Status der Messreihe setzt sich aus den einzelnen Pipeline-Status zusammen. 
+\subsection{Umsetzung Pipelines}
+%-------------------------------------------------------------
+\label{sec:realisierung:implementierung5}
 
-\textbf{PUT /results/\{Messreihe\}/\{Zeitstempel\}}
+\textbf{Punkwolke generieren}
 
-Dient dazu zu einem Zeitpunkt einer Messreihe die ermittelten Werte wie Anzahl Blätter oder Volumen abzuholen.
+Die Punktwolke wird auf Basis der hoch geladenen Bilder zu einem Zeitstempel generiert. Beim Anlegen eines neuen Zeitstempels wird die Pipeline automatisch gestartet, kann aber auch manuell neu gestartet werden.
 
+\textbf{In Shapnet-Format überführen}
 
+Überführt die Punktwolke in das Shapenet-Format. Die Punktwolke muss in diesem Format vorliegen um die beiden Segmentierungs-Pipelines nutzen zu können.
+Bevor die Punktwolke in das Shapenet-Format überführt wird können zwei optionale Schritte durchgeführt werden. 
+Bei der Hintegrund-Segmentierung wird die Punktwolke mittels der größten in der Punktwolke zu findenden Ebene an der XY-Ebene ausgerichtet.
+Bei der Pflanzen-Segmentierung werden alle als Hintergrund gelabelten Punkte entfernt. Danach beginnt die eigentliche Überführung in das Shapenet-Format.
+Zuerst wird die Punktwolke so verschoben, dass die Bounding-Box im Koordinaten-Ursprung beginnt und sich auf den positiven Bereich der Achsen erstreckt.
+Danach wird die Punktwolke in der Form normiert, dass sich alle Punkte der Punktwolke zwischen den Punkten $(0,0,0)$ und $(1,1,1)$ befinden.
+Zuletzt werden $n=16384$ Punkte aus der Punktwolke zufällig gezogen, wobei die Punkte nicht zurück gelegt werden.
+
+\textbf{Entfernung des Hintergrundes}
+
+Die im Shapenet-Format vorliegende Punktwolke wird mit der Instanz von PointNet++ für die Hintegrund-Segmentierung segmentiert. Das Ergebnis wird im Speicher des Host-Systems abgelget.
+Da die Segmentierung etwas verrauscht ist wird das Ergebniss mit einem nächste Nachbarn Vote verbessert.
+Im Anschluss wir das Ergebnis auf die original Punktwolke übertragen, da sonst zu wenig Punkte für die Segmenetierung der Pflanze übrig bleiben.
+Auch wird der Hintegrund entfernt und aus den verbleibenden Punkten, die nur noch Pflanzen-Punkte enthalten sollten wieder eine Punktwolke im Shapenet-Format erstellt.
+
+\textbf{Segmentierung Pflanze}
+
+Auf dem Ergebniss der Hintergrund-Entfernung wird PointNet++ zur Segmentierung der Pflanze gestartet. Auch hier wird das Ergebnis im Speicher des Host-Systems abgegelegt. Dieses wird aber nicht weiter bearbeitet.
+
+\textbf{Blatt/Stamm Trennung}
+
+Die Punktwolke die die segmentierte Pflanze enthält wird in zwei Punktwolken aufgeteilt. 
+Wobei die eine Punktwolke nur noch Punkte enthält die Blätter repräsentieren und eine die entsprechend nur noch Punkte enthält die Stiele repräsentieren.
+
+\textbf{Blätter zählen}
+
+Die Punktwolke $P$ die die Blätter enthält wird nun mit einer 3D Interpretation des Flood-Fill-Algoritmus untersucht. Hierbei wird ein zufälliger Punkt in der Punkwolke gewählt und in die Menge $Q$ aufgenommen.
+Nun wird solange bis $Q$ keine Punkte mehr enhält ein Punkt $p$ aus $Q$ entnommen und mittels nächster Nachbarn-Suche im Radius $r$ nach weiteren Punkten in der nähe gesucht. Gefundene Punkte werden in $Q$ aufgenommen.
+Der Punkt $p$ wird danach in eine Menge $B$ aufgenommen. Ist $Q$ leer wird die Menge $B$ aus $P$ entfernt und der Blatt-Zählstand um eins erhöht. 
+Der Vorgang wird so lange wiederholt, bis keine Punkte mehr in $P$ enthalten sind.
+
+\textbf{In Registrierungs-Format überführen}
+
+Zuerst wird die Punktwolke wieder anhand der größten Ebene die in der Punktwolke zu finden ist an der XY-Ebene ausgerichtet.
+Danach wird um das Zentrum der Punktwolke ein Ausschnitt entnommen. 
+Im folgenden wird die Punktwolke wie beim Shapenet Format normiert und es werden zufällig 1024 Punkte aus der Punktwolke gezogen.
+
+\textbf{Hintergrund-Registrierung}
+
+Um einen Zeitstempel $t$ einer Messung mit dem Hintergrund der Messreihe zu registrieren muss sowohl die Punktwolke $P_t$ für den Zeitstempel $t$ als auch die Punktwolke für den Hintegrund im Registrierungs-Format vorliegen.
+Ist das gegeben kann die Registrierung gestartet werden. Hierbei wird ein Skalierungs-Faktor $s$ und eine Transformation $T$ ermittelt. 
+Das Registrierungs-Ergebnis der Punktwolke $P_t$ kann dann mit der Formel $P_{Registration} = (P_t \cdot s) \cdot T$ ermittelt werden. Wobei beachtet werden muss, dass erst die Skalierung und dann die Transformation angwandt wird.
+
+\textbf{Größen berechnen}
+
+Ist die Punktwolke $P_t$ zum Zeitstempel $t$ mit dem Hintegrund registriert, können die Größen Höhe und Volumen berechnet werden. Diese sind leicht zu ermitteln. 
+Die Höhe kann über den höchsten z-Wert der Punkte in $P_t$ ermittelt werden. Um das Volumen zu berechnen, muss für $P_t$ die Länge $l$, Breite $b$ und Höhe $h$ ermittelt werden. 
+Das Volumen $v$ lässt sich dann folgendermaßen berechnen: $v = h \cdot b \cdot l$.
+
+Ist die Höhe für den vorherigen Zeitstempel $t-1$ auch bekannt, kann das relative Wachstum seit dem letzten Zeitpunkt ermittelt werden.
 
 \newpage
 \section{Ergebnisse}
