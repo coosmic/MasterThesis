@@ -92,6 +92,9 @@ P.~J. Besl and N.~D. McKay, ``Method for registration of 3-d shapes,'' in {\em
 J.~Zhang, Y.~Yao, and B.~Deng, ``Fast and robust iterative closest point,''
   {\em IEEE Transactions on Pattern Analysis and Machine Intelligence}, 2021.
 
+\bibitem{RANSAC}
+K.~Derpanis, ``Overview of the ransac algorithm,'' 2005.
+
 \bibitem{Ziner2005PointSR}
 T.~Zin{\ss}er, J.~Schmidt, and H.~Niemann, ``Point set registration with
   integrated scale estimation,'' in {\em Point Set Registration with Integrated
@@ -123,5 +126,11 @@ Y.~Wang and J.~M. Solomon, ``Prnet: Self-supervised learning for
 V.~Sarode, X.~Li, H.~Goforth, Y.~Aoki, R.~A. Srivatsan, S.~Lucey, and
   H.~Choset, ``Pcrnet: Point cloud registration network using pointnet
   encoding,'' 2019.
+
+\bibitem{Sift3D}
+R.~Hänsch, T.~Weber, and O.~Hellwich, ``Comparison of 3d interest point
+  detectors and descriptors for point cloud fusion,'' {\em ISPRS Annals of
+  Photogrammetry, Remote Sensing and Spatial Information Sciences}, vol.~II-3,
+  09 2014.
 
 \end{thebibliography}

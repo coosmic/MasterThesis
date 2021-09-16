@@ -5,7 +5,7 @@ import open3d as o3d
 
 import utilities
 
-def robustICP(srcPath, targetPath, outPath, scale):
+def robustICP(srcPath, targetPath, outPath, scale, srcCloud, targetCloud):
     
     if not os.path.isdir(outPath):
         os.makedirs(outPath)
@@ -17,8 +17,8 @@ def robustICP(srcPath, targetPath, outPath, scale):
 
     # Apply Transformation
     transformation = np.loadtxt(pathToTransformation).astype(np.float32)
-    srcCloud = np.loadtxt(srcPath).astype(np.float32)
-    targetCloud = np.loadtxt(targetPath).astype(np.float32)
+    #srcCloud = np.loadtxt(srcPath).astype(np.float32)
+    #targetCloud = np.loadtxt(targetPath).astype(np.float32)
     
     srcCloud *= scale
     transformedSrc = np.hstack((srcCloud, np.ones((srcCloud.shape[0], 1))))  #(nx3)->(nx4)
@@ -48,6 +48,9 @@ def scaleRegistration(srcPath, targetPath, outPath, start_scale = 1.0, end_scale
 
     assert startScale < endScale
 
+    srcCloud = np.loadtxt(srcPath).astype(np.float32)
+    targetCloud = np.loadtxt(targetPath).astype(np.float32)
+
     currentScale = startScale
     best_result = sys.float_info.max
     best_iteration = -1
@@ -55,7 +58,7 @@ def scaleRegistration(srcPath, targetPath, outPath, start_scale = 1.0, end_scale
     best_transformation = None
     best_scale = -1
     while currentScale <= endScale:
-        current_error, current_transformation = robustICP(srcPath, targetPath, outPath, currentScale)
+        current_error, current_transformation = robustICP(srcPath, targetPath, outPath, currentScale, srcCloud, targetCloud)
         if current_error < best_result:
             best_result = current_error
             best_iteration = current_iteration
@@ -67,11 +70,11 @@ def scaleRegistration(srcPath, targetPath, outPath, start_scale = 1.0, end_scale
         current_iteration += 1
 
     # DEBUG
-    #srcCloud = np.loadtxt(srcPath).astype(np.float32)
-    #srcCloud *= best_scale
-    #transformedSrc = np.hstack((srcCloud, np.ones((srcCloud.shape[0], 1))))  #(nx3)->(nx4)
-    #transformedSrc = transformedSrc.dot(best_transformation.T)[:, 0:3]
-    #targetCloud = np.loadtxt(targetPath).astype(np.float32)
-    #display_open3d(targetCloud, srcCloud, transformedSrc)
+    srcCloud = np.loadtxt(srcPath).astype(np.float32)
+    srcCloud *= best_scale
+    transformedSrc = np.hstack((srcCloud, np.ones((srcCloud.shape[0], 1))))  #(nx3)->(nx4)
+    transformedSrc = transformedSrc.dot(best_transformation.T)[:, 0:3]
+    targetCloud = np.loadtxt(targetPath).astype(np.float32)
+    display_open3d(targetCloud, srcCloud, transformedSrc)
 
     return best_transformation, best_scale

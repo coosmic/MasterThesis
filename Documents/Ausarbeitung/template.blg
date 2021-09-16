@@ -3,47 +3,53 @@ Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: template.aux
 The style file: ieeetr.bst
 Database file #1: ./bibleografie.bib
+I was expecting a `,' or a `}'---line 282 of file ./bibleografie.bib
+ :   
+ :   url={http://www.cse.yorku.ca/~kosta/CompVis_Notes/ransac.pdf}
+(Error may have been on previous line)
+I'm skipping whatever remains of this entry
 Warning--empty journal in alouacheevaluation
 Warning--empty year in alouacheevaluation
-You've used 27 entries,
+Warning--empty booktitle in RANSAC
+You've used 29 entries,
             1876 wiz_defined-function locations,
-            620 strings with 8115 characters,
-and the built_in function-call counts, 6231 in all, are:
-= -- 528
-> -- 339
+            632 strings with 8402 characters,
+and the built_in function-call counts, 6541 in all, are:
+= -- 551
+> -- 354
 < -- 0
-+ -- 123
-- -- 96
-* -- 442
-:= -- 917
-add.period$ -- 26
-call.type$ -- 27
-change.case$ -- 27
++ -- 129
+- -- 100
+* -- 465
+:= -- 967
+add.period$ -- 28
+call.type$ -- 29
+change.case$ -- 29
 chr.to.int$ -- 0
-cite$ -- 29
-duplicate$ -- 295
-empty$ -- 631
-format.name$ -- 96
-if$ -- 1488
+cite$ -- 32
+duplicate$ -- 315
+empty$ -- 668
+format.name$ -- 100
+if$ -- 1559
 int.to.chr$ -- 0
-int.to.str$ -- 27
-missing$ -- 18
-newline$ -- 84
-num.names$ -- 27
-pop$ -- 144
+int.to.str$ -- 29
+missing$ -- 20
+newline$ -- 90
+num.names$ -- 29
+pop$ -- 155
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 187
+skip$ -- 190
 stack$ -- 0
 substring$ -- 283
-swap$ -- 89
+swap$ -- 90
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
-warning$ -- 2
-while$ -- 49
-width$ -- 29
-write$ -- 227
-(There were 2 warnings)
+warning$ -- 3
+while$ -- 51
+width$ -- 31
+write$ -- 243
+(There was 1 error message)
