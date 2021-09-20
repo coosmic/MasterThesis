@@ -1,5 +1,10 @@
 \begin{thebibliography}{10}
 
+\bibitem{droughts}
+I.~Masih, S.~Maskey, F.~Mussá, and P.~Trambauer, ``A review of droughts on the
+  african continent: A geospatial and long-term perspective,'' {\em Hydrology
+  and Earth System Sciences}, vol.~18, pp.~3635--3649, 09 2014.
+
 \bibitem{lidar}
 N.~Mehendale and S.~Neoge, ``Review on lidar technology,'' {\em ssrn preprint
   ssrn:3604309}, 2020.
@@ -67,6 +72,10 @@ D.~Li, Y.~Cao, G.~Shi, X.~Cai, Y.~Chen, S.~Wang, and S.~Yan, ``An
   overlapping-free leaf segmentation method for plant point clouds,'' {\em IEEE
   Access}, vol.~7, pp.~129054--129070, 2019.
 
+\bibitem{lecun2015deep}
+Y.~LeCun, Y.~Bengio, and G.~Hinton, ``Deep learning,'' {\em nature}, vol.~521,
+  no.~7553, pp.~436--444, 2015.
+
 \bibitem{qi2017pointnet}
 C.~R. Qi, H.~Su, K.~Mo, and L.~J. Guibas, ``Pointnet: Deep learning on point
   sets for 3d classification and segmentation,'' in {\em Proceedings of the
@@ -88,6 +97,11 @@ P.~J. Besl and N.~D. McKay, ``Method for registration of 3-d shapes,'' in {\em
   Sensor fusion IV: control paradigms and data structures}, vol.~1611,
   pp.~586--606, International Society for Optics and Photonics, 1992.
 
+\bibitem{GoICP}
+J.~Yang, H.~Li, D.~Campbell, and Y.~Jia, ``Go-icp: A globally optimal solution
+  to 3d icp point-set registration,'' {\em IEEE Transactions on Pattern
+  Analysis and Machine Intelligence}, vol.~38, p.~2241–2254, Nov 2016.
+
 \bibitem{ICP}
 J.~Zhang, Y.~Yao, and B.~Deng, ``Fast and robust iterative closest point,''
   {\em IEEE Transactions on Pattern Analysis and Machine Intelligence}, 2021.
@@ -99,6 +113,11 @@ K.~Derpanis, ``Overview of the ransac algorithm,'' 2005.
 T.~Zin{\ss}er, J.~Schmidt, and H.~Niemann, ``Point set registration with
   integrated scale estimation,'' in {\em Point Set Registration with Integrated
   Scale Estimation}, 2005.
+
+\bibitem{ScaleLK}
+S.~Xu and Y.~Shang, ``{ScaleLK}: Registration of point clouds with different
+  scales using deep learning methods,'' {\em {IOP} Conference Series: Materials
+  Science and Engineering}, vol.~768, p.~072089, mar 2020.
 
 \bibitem{Wang_2019_ICCV}
 Y.~Wang and J.~M. Solomon, ``Deep closest point: Learning representations for
@@ -132,5 +151,10 @@ R.~Hänsch, T.~Weber, and O.~Hellwich, ``Comparison of 3d interest point
   detectors and descriptors for point cloud fusion,'' {\em ISPRS Annals of
   Photogrammetry, Remote Sensing and Spatial Information Sciences}, vol.~II-3,
   09 2014.
+
+\bibitem{sears2007blob}
+R.~Sears, C.~Van~Ingen, and J.~Gray, ``To blob or not to blob: Large object
+  storage in a database or a filesystem?,'' {\em arXiv preprint cs/0701168},
+  2007.
 
 \end{thebibliography}

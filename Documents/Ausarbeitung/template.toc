@@ -8,11 +8,11 @@
 \contentsline {subsection}{\numberline {3.2}Umsetzung Generierung einer 3D Punktwolke aus Bildern}{7}{subsection.3.2}%
 \contentsline {subsection}{\numberline {3.3}Umsetzung Registrierung zweier Punktwolken}{8}{subsection.3.3}%
 \contentsline {subsection}{\numberline {3.4}Umsetzung Segmentierung}{9}{subsection.3.4}%
-\contentsline {subsection}{\numberline {3.5}Umsetzung Server}{10}{subsection.3.5}%
+\contentsline {subsection}{\numberline {3.5}Umsetzung Server}{11}{subsection.3.5}%
 \contentsline {subsection}{\numberline {3.6}Umsetzung Pipelines}{12}{subsection.3.6}%
-\contentsline {section}{\numberline {4}Ergebnisse}{14}{section.4}%
-\contentsline {subsection}{\numberline {4.1}Vergleich von Verfahren zur Generierung von 3D-Punktwolken auf Basis von Bildern}{14}{subsection.4.1}%
-\contentsline {subsection}{\numberline {4.2}Vergleich von Verfahren zur Registrierung 3D-Punkwolken}{14}{subsection.4.2}%
-\contentsline {subsection}{\numberline {4.3}Vergleich von Verfahren zur Segmentierung von Pflanzen auf 3D-Punkwolken}{15}{subsection.4.3}%
-\contentsline {section}{\numberline {5}Fazit und Ausblick}{18}{section.5}%
-\contentsline {section}{Literatur}{19}{section.5}%
+\contentsline {section}{\numberline {4}Ergebnisse}{15}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Vergleich von Verfahren zur Generierung von 3D-Punktwolken auf Basis von Bildern}{15}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Vergleich von Verfahren zur Registrierung 3D-Punkwolken}{18}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}Vergleich von Verfahren zur Segmentierung von Pflanzen auf 3D-Punkwolken}{18}{subsection.4.3}%
+\contentsline {section}{\numberline {5}Fazit und Ausblick}{22}{section.5}%
+\contentsline {section}{Literatur}{24}{section.5}%

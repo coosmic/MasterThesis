@@ -577,7 +577,11 @@ int convertToShapenetFormat(po::variables_map vm){
     return 1;
   }
   if(!vm.count("RemoveBackground")){
-    cout << "Missing parameter out\n";
+    cout << "Missing parameter RemoveBackground\n";
+    return 1;
+  }
+  if(!vm.count("CenterOnly")){
+    cout << "Missing parameter CenterOnly\n";
     return 1;
   }
 
@@ -594,6 +598,7 @@ int convertToShapenetFormat(po::variables_map vm){
   std::string pathToPlant = vm["in"].as<std::string>();
   std::string pathToShapenetFormatResult = vm["out"].as<std::string>();
   bool removeBackground = vm["RemoveBackground"].as<bool>();
+  bool centerOnly = vm["CenterOnly"].as<bool>();
 
   cout << "Converting file saved under "<< pathToPlant  << " to Shapenet format\n";
 
@@ -617,6 +622,18 @@ int convertToShapenetFormat(po::variables_map vm){
   //showCloud2(cloudPlant, "Labeled Cloud");
   if(removeBackground){
     removeBackgroundPointsShapenet(cloudPlant);
+  } else if(centerOnly) {
+    bool containsBG = false;
+    for(int i=0; i<cloudPlant->size(); i++){
+      int colorCode = colorToCode(cloudPlant->points[i]);
+      if(colorCode == BackgroundLabel){
+        containsBG = true;
+        break;
+      }
+        
+    }
+    if(containsBG)
+      extractCenterOfCloud(cloudPlant, 0.3);
   }
   
   //showCloud2(cloudPlant, "Cloud Without Background");
@@ -838,7 +855,12 @@ int convertToRegistrationFormat(po::variables_map vm){
 
   extractCenterOfCloud(cloudSrc, 0.3);
 
-  pcl::PointCloud<PointTypePCL>::Ptr cloudSrcSubsampled = subSampleCloudRandom(cloudSrc, 1024);
+  int numOfPoints = 1024;
+  if(vm.count("SubsamplePointCount")){
+    numOfPoints = vm["SubsamplePointCount"].as<int>();
+  }
+
+  pcl::PointCloud<PointTypePCL>::Ptr cloudSrcSubsampled = subSampleCloudRandom(cloudSrc, numOfPoints);
 
   Eigen::Matrix4f t,s;
   transformToShapenetFormat(cloudSrcSubsampled, t,s);
@@ -989,12 +1011,15 @@ int backgroundRemovalPipeline(po::variables_map vm){
   std::cout << "removing background by shapnet label" << std::endl;
   Cloud::Ptr background = removeBackgroundPointsShapenet(cloudSrc);
 
+  Cloud::Ptr cloudWithoutPlant = getPointsNearCloudFromOtherCloud(background, cloudTgt, searchRadius);
+  pcl::io::savePLYFile(outFolderPath+"/CloudWithoutPlant.ply", *cloudWithoutPlant);
+
   //showCloud2(cloudSrc, "Cloud without Background");
   //showCloud2(background, "Background");
   //debug_showCombinedCloud(background, cloudTgt, "Background with cloudTgt");
-  getPointsNearCloudFromOtherCloud(cloudSrc, cloudTgt, searchRadius);
+  Cloud::Ptr cloudWithoutBackground = getPointsNearCloudFromOtherCloud(cloudSrc, cloudTgt, searchRadius);
   //showCloud2(cloudTgt, "No Background");
-  pcl::io::savePLYFile(outFolderPath+"/CloudWithoutBackground.ply", *cloudTgt);
+  pcl::io::savePLYFile(outFolderPath+"/CloudWithoutBackground.ply", *cloudWithoutBackground);
   //debug_showCombinedCloud(background, cloudTgt, "Background with cloudTgt");
   return 0;
 }
@@ -1047,6 +1072,7 @@ int main (int argc, char** argv)
     ("SearchRadius", po::value<float>(), "Radius that should be used for nearest neighbor search")
     ("NoPlaneAlignment", po::bool_switch()->default_value(false), "Ignore plane alignment step")
     ("RotateRandom", po::bool_switch()->default_value(false), "Rotate cloud randomly")
+    ("CenterOnly", po::bool_switch()->default_value(false), "Rotate cloud randomly")
   ;
 
   po::variables_map vm;

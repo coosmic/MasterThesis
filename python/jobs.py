@@ -182,13 +182,16 @@ def jobBackgroundRegistration(jobParameter):
 
 def jobConvertToBackground(jobParameter):
     folderPath = os.path.join(os.path.abspath(os.getcwd()), 'data', jobParameter['testSet'], jobParameter['timeStamp'])
-    inPath = os.path.join(folderPath, 'odm_filterpoints', "point_cloud.ply")
+    
+    inPath = os.path.join(folderPath, 'shapenet', "CloudWithoutPlant.ply")
+    if not os.path.exists(inPath):
+        inPath = os.path.join(folderPath, 'odm_filterpoints', "point_cloud.ply")
     outPath = os.path.join(folderPath, 'shapenet', "registrationFormat.txt")
 
     if not os.path.isdir(os.path.join(folderPath, 'shapenet')):
         os.makedirs(os.path.join(folderPath, 'shapenet'))
 
-    registrationFormatCommand = f"../build/pgm -J RegistrationFormat --in {inPath} --out {outPath}"
+    registrationFormatCommand = f"../build/pgm -J RegistrationFormat --in {inPath} --out {outPath} --SubsamplePointCount 2048"
     os.system(registrationFormatCommand)
     return {"Status": constants.statusDone}
 

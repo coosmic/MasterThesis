@@ -4,6 +4,8 @@ conda activate tensorflow-15
 
 Training:
 
+python train.py --model pointnet2_part_seg --log_dir log --max_epoch 50 --num_classes 2 --batch_size 4 --normalize True --input_dimension 3
+
 python train.py --model pointnet2_part_seg --log_dir log --max_epoch 50 --num_classes 2 --batch_size 4 --normalize True
 
 python train.py --model pointnet2_part_seg3C --log_dir log --max_epoch 50 --num_classes 3 --batch_size 4 --normalize True
@@ -20,5 +22,10 @@ python evaluate.py --model pointnet2_part_seg --model_path ./results/training/t6
 
 python evaluate.py --model pointnet2_part_seg3C --model_path ./results/training/t7_3ClassesPartSegNoNorm/model.ckpt --log_dir ./results/evaluation/t7_without_normalization/ --pred_dir pred_eval --num_classes 3
 
-python evaluate.py --model pointnet2_part_seg3C --model_path ./results/training/t6_2ClassesPartSeg/model.ckpt --log_dir ./results/evaluation/t7_without_normalization/ --pred_dir pred_eval --num_classes 3
+python evaluate.py --model pointnet2_part_seg3C --model_path ./results/training/t6_2ClassesPartSeg/model.ckpt --log_dir ./results/evaluation/t6_without_normalization/ --pred_dir pred_eval --num_classes 3
 
+python evaluate.py --model pointnet2_part_seg --model_path ./results/training/t11_2Classes_PartSeg_WithNorm_WithoutRot/model.ckpt --log_dir ./results/evaluation/t11_2Classes_PartSeg_WithNorm_WithoutRot/ --pred_dir pred_eval --num_classes 2 --normalize False
+
+python evaluate.py --model pointnet2_part_seg3C --model_path ./results/training/t4_3ClassesPartSeg/model.ckpt --log_dir ./results/evaluation/t4_3ClassesPartSeg/ --pred_dir pred_eval --num_classes 3 --normalize False
+
+python evaluate.py --model pointnet2_part_seg3C --model_path ./results/training/t5_3ClassesPartSeg3C/model.ckpt --log_dir ./results/evaluation/t5_3ClassesPartSeg3C/ --pred_dir pred_eval --num_classes 3 --normalize True

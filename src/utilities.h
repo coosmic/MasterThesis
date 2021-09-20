@@ -312,7 +312,7 @@ void centerCloud(Cloud::Ptr cloud){
   pcl::transformPointCloud (*cloud, *cloud, matrix);
 }
 
-void getPointsNearCloudFromOtherCloud(pcl::PointCloud<PointTypePCL>::Ptr cloud, pcl::PointCloud<PointTypePCL>::Ptr otherCloud, float radius){
+Cloud::Ptr getPointsNearCloudFromOtherCloud(pcl::PointCloud<PointTypePCL>::Ptr cloud, pcl::PointCloud<PointTypePCL>::Ptr otherCloud, float radius){
   pcl::KdTreeFLANN<PointTypePCL> kdtree;
   kdtree.setInputCloud (otherCloud);
 
@@ -342,11 +342,13 @@ void getPointsNearCloudFromOtherCloud(pcl::PointCloud<PointTypePCL>::Ptr cloud, 
   pcl::PointIndices::Ptr inliers(new pcl::PointIndices);
   inliers->indices = indicesToBeTaken;
 
+  Cloud::Ptr out (new Cloud);
   pcl::ExtractIndices<PointTypePCL> extract;
   extract.setInputCloud(otherCloud);
   extract.setIndices(inliers);
   extract.setNegative(false);
-  extract.filter(*otherCloud);
+  extract.filter(*out);
+  return out;
 }
 
 void substractCloudFromOtherCloud(pcl::PointCloud<PointTypePCL>::Ptr cloud, pcl::PointCloud<PointTypePCL>::Ptr otherCloud, float radius){

@@ -10,19 +10,21 @@ from pointnet_util import pointnet_sa_module, pointnet_fp_module
 
 NUM_LABEL=2
 
-def placeholder_inputs(batch_size, num_point):
-    pointclouds_pl = tf.placeholder(tf.float32, shape=(batch_size, num_point, 6))
+def placeholder_inputs(batch_size, num_point, input_dimension = 6):
+    pointclouds_pl = tf.placeholder(tf.float32, shape=(batch_size, num_point, input_dimension))
     labels_pl = tf.placeholder(tf.int32, shape=(batch_size, num_point))
     return pointclouds_pl, labels_pl
 
 
-def get_model(point_cloud, is_training, bn_decay=None):
+def get_model(point_cloud, is_training, bn_decay=None, input_dimension=6):
     """ Part segmentation PointNet, input is BxNx6 (XYZ NormalX NormalY NormalZ), output Bx50 """
     batch_size = point_cloud.get_shape()[0].value
     num_point = point_cloud.get_shape()[1].value
     end_points = {}
     l0_xyz = tf.slice(point_cloud, [0,0,0], [-1,-1,3])
-    l0_points = tf.slice(point_cloud, [0,0,3], [-1,-1,3])
+    #print(l0_xyz.shape)
+    l0_points = tf.slice(point_cloud, [0,0,3], [-1,-1,input_dimension-3])
+    #print(l0_points.shape)
 
     # Set Abstraction layers
     #l1_xyz, l1_points, l1_indices = pointnet_sa_module(l0_xyz, l0_points, npoint=512, radius=0.2, nsample=64, mlp=[64,64,128], mlp2=None, group_all=False, is_training=is_training, bn_decay=bn_decay, scope='layer1')

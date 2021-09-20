@@ -9,7 +9,7 @@ for filename in $1/*.ply; do
     filename=${filename/$1/}
     #./build/pgm $1/$filename $2/${filename/.ply/.txt}
     #./build/pgm -J Shapenet --snin $1/$filename --snout $2/${filename/.ply/.txt}
-    ./build/pgm -J Shapenet --in $1/$filename --out $2${filename/.ply/} --RemoveBackground false --RotateRandom true
+    ./build/pgm -J Shapenet --in $1/$filename --out $2${filename/.ply/} --RemoveBackground false --RotateRandom false --CenterOnly true
 
 done
 

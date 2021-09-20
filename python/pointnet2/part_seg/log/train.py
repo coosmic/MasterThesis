@@ -31,6 +31,7 @@ parser.add_argument('--optimizer', default='adam', help='adam or momentum [defau
 parser.add_argument('--decay_step', type=int, default=200000, help='Decay step for lr decay [default: 200000]')
 parser.add_argument('--decay_rate', type=float, default=0.7, help='Decay rate for lr decay [default: 0.7]')
 parser.add_argument('--num_classes', type=int, default=2, help='Count of Classes in test and train data')
+parser.add_argument('--input_dimension', type=int, default=6, help='How many values per point? Default 6 (position + normals)')
 parser.add_argument('--normalize', type=bool, default=False, help='Should the input point clouds be normalized? Default False')
 FLAGS = parser.parse_args()
 
@@ -45,6 +46,7 @@ MOMENTUM = FLAGS.momentum
 OPTIMIZER = FLAGS.optimizer
 DECAY_STEP = FLAGS.decay_step
 DECAY_RATE = FLAGS.decay_rate
+INPUT_DIMENSION = FLAGS.input_dimension
 
 MODEL = importlib.import_module(FLAGS.model) # import network module
 MODEL_FILE = os.path.join(ROOT_DIR, 'models', FLAGS.model+'.py')
@@ -105,7 +107,7 @@ def get_bn_decay(batch):
 def train():
     with tf.Graph().as_default():
         with tf.device('/gpu:'+str(GPU_INDEX)):
-            pointclouds_pl, labels_pl = MODEL.placeholder_inputs(BATCH_SIZE, NUM_POINT)
+            pointclouds_pl, labels_pl = MODEL.placeholder_inputs(BATCH_SIZE, NUM_POINT, INPUT_DIMENSION)
             is_training_pl = tf.placeholder(tf.bool, shape=())
             
             # Note the global_step=batch parameter to minimize. 
@@ -116,7 +118,7 @@ def train():
 
             print("--- Get model and loss")
             # Get model and loss 
-            pred, end_points = MODEL.get_model(pointclouds_pl, is_training_pl, bn_decay=bn_decay)
+            pred, end_points = MODEL.get_model(pointclouds_pl, is_training_pl, bn_decay=bn_decay, input_dimension=INPUT_DIMENSION)
             loss = MODEL.get_loss(pred, labels_pl)
             tf.summary.scalar('loss', loss)
 
@@ -211,7 +213,7 @@ def train_one_epoch(sess, ops, train_writer):
         #aug_data = batch_data
         #aug_data = provider.random_scale_point_cloud(batch_data)
         batch_data[:,:,0:3] = provider.jitter_point_cloud(batch_data[:,:,0:3])
-        feed_dict = {ops['pointclouds_pl']: batch_data,
+        feed_dict = {ops['pointclouds_pl']: batch_data[:,:,0:INPUT_DIMENSION],
                      ops['labels_pl']: batch_label,
                      ops['is_training_pl']: is_training,}
         summary, step, _, loss_val, pred_val = sess.run([ops['merged'], ops['step'],
@@ -273,7 +275,7 @@ def eval_one_epoch(sess, ops, test_writer):
             batch_label[0:cur_batch_size] = cur_batch_label
 
         # ---------------------------------------------------------------------
-        feed_dict = {ops['pointclouds_pl']: batch_data,
+        feed_dict = {ops['pointclouds_pl']: batch_data[:,:,0:INPUT_DIMENSION],
                      ops['labels_pl']: batch_label,
                      ops['is_training_pl']: is_training}
         summary, step, loss_val, pred_val = sess.run([ops['merged'], ops['step'],

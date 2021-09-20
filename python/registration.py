@@ -2,6 +2,7 @@ import os
 import sys
 import numpy as np
 import open3d as o3d
+from sklearn.neighbors import NearestNeighbors
 
 import utilities
 
@@ -25,7 +26,10 @@ def robustICP(srcPath, targetPath, outPath, scale, srcCloud, targetCloud):
     transformedSrc = transformedSrc.dot(transformation.T)[:, 0:3]
 
     # Calc and return error
-    return utilities.pointCloudDistance(transformedSrc, targetCloud), transformation
+    nbrs = NearestNeighbors(n_neighbors=1, algorithm='ball_tree').fit(targetCloud)
+    distances, indices = nbrs.kneighbors(transformedSrc)
+    error = (np.sum(distances) / distances.shape[0])
+    return error, transformation
 
 def display_open3d(template, source, transformed_source):
     template_ = o3d.geometry.PointCloud()

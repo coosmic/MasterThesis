@@ -4,8 +4,8 @@ import numpy as np
 import codecs, json 
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--pathIn', default='/home/solomon/Thesis/python/data/plants/shapenet/withRotationWithBackground/', help='Path to Folder that contains Samples')
-parser.add_argument('--pathOut', default='/home/solomon/Thesis/python/data/plants/shapenet/withRotationWithBackground/split/', help='Path to Folder that where Sets should be saved')
+parser.add_argument('--pathIn', default='/home/solomon/Thesis/python/data/plants/shapenet/OnlyCenter/', help='Path to Folder that contains Samples')
+parser.add_argument('--pathOut', default='/home/solomon/Thesis/python/data/plants/shapenet/OnlyCenter/split/', help='Path to Folder that where Sets should be saved')
 FLAGS = parser.parse_args()
 
 filenames = next(walk(FLAGS.pathIn), (None, None, []))[2]

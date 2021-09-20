@@ -47,6 +47,8 @@ cmake -S ./src -B ./build_python_binding
 ```
 ### Plot Generation
 ``` shell
+python reportPointNetpp.py --pathIn /home/solomon/Thesis/MasterThesis/python/pointnet2/part_seg/results/training/t13_2Classes_PartSeg_WithNorm_WithoutRot_WithoutNormals/log_train.txt --plotName T13_3C_PS_WN_NR_NN
+python reportPointNetpp.py --pathIn /home/solomon/Thesis/MasterThesis/python/pointnet2/part_seg/results/training/t12_3Classes_PartSeg_WithNorm_NoRot_OnlyCenter/log_train.txt --plotName T12_3C_PS_WN_NR_OC
 python reportPointNetpp.py --pathIn /home/solomon/Thesis/MasterThesis/python/pointnet2/part_seg/results/training/t11_2Classes_PartSeg_WithNorm_WithoutRot/log_train.txt --plotName T11_2C_PS_WN_NR
 python reportPointNetpp.py --pathIn /home/solomon/Thesis/MasterThesis/python/pointnet2/part_seg/results/training/t10_2Classes_PartSeg_WitNorm_WithRotation/log_train.txt --plotName T10_2C_PS_WN_RR
 python reportPointNetpp.py --pathIn /home/solomon/Thesis/MasterThesis/python/pointnet2/part_seg/results/training/t9_3Classes_PartSeg_WitNorm_WithRotation/log_train.txt --plotName T9_3C_PS_WN_RR
