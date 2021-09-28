@@ -23,6 +23,8 @@ cmake -S ./src -B ./build_python_binding
 ### BusyBox
 
 ``` shell
+./pgm -J HandcraftedClassifier --in ../python/data/plant2/t1/odm_filterpoints/point_cloud.ply
+
 ./pgm -J RegistrationFormat --SourceCloudPath <PATH> --TargetCloudPath <PATH> --OutputFolder <PATH>
 
 ./pgm -J Shapenet --in /home/solomon/Thesis/MasterThesis/python/data/avocado/background/odm_filterpoints/point_cloud.ply --out /home/solomon/Thesis/MasterThesis/python/data/avocado/background/shapenet/point_cloud --RemoveBackground false --MaxSubsample 1

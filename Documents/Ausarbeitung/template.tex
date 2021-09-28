@@ -15,6 +15,7 @@
 
 % miscellaneous
 \usepackage{graphicx}         % graphics
+\usepackage{subcaption}       % subfigures
 \usepackage{hhline}           % double lines in tables
 \usepackage{amsfonts}         % real numbers etc.
 \usepackage[rightcaption]{sidecap} % figure captions on the right (optional)
@@ -63,6 +64,10 @@
       {]}{{{\color{delim}{]}}}}{1},
 }
 
+\newcommand{\imageSizeTwo}{0.49\textwidth}
+\newcommand{\imageSizeTwoHeight}{7.5cm}
+\newcommand{\imageSizeThree}{4.5cm}
+
 % Hier bei Bedarf die Seitenränder einstellen
 \usepackage{geometry}
 %\geometry{a4paper}
@@ -74,7 +79,6 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}
-
 
 %-------------------------------------------------------------
 \begin{titlepage}
@@ -205,14 +209,20 @@ Zuletzt müssen zwei Punktwolken einer Pflanze zu verschiedenen Zeitpunkten mite
 
 Generell kann man zwischen zwei Methoden der Generierung von Punktwolken unterscheiden, die jeweils verschiedene Verfahren beziehungsweise Techniken anwenden.
 
-Die erste Methode nutzt Hardware wie LIDAR-Scanner \cite{lidar} um Punkwolken direkt zu erzeugen. Es gibt eine Reihe von Sensoren die das ermöglichen. Da der Großteil der Sensoren aus kostengrünen nicht in Frage kommt sei hier nur noch der RGB-D erwähnt. 
+Die erste Methode nutzt Hardware wie LIDAR-Scanner \cite{lidar} um Punkwolken direkt zu erzeugen. Es gibt eine Reihe von Sensoren die das ermöglichen. Da der Großteil der Sensoren aus kostengründen nicht in Frage kommt sei hier nur noch der RGB-D erwähnt. 
 Dieser liefert neben den Farbwerten für ein Bild auch noch eine Tiefeninformation für jeden Pixel. In einigen Smartphone-Modellen wird bereits ein solcher Sensor verbaut \cite{rgbd_smartphones}.
 
 Die andere Methode ist Structure from Motion (SfM), bei der die Punktwolke aus Bildern, einer Szene aus verschiedenen Perspektiven, generiert wird. 
 Allgemein werden auf den zugrundeliegenden Bildern nach Merkmalen (Feature) gesucht die robust gegen Translation, Rotation, Skalierung und Beleuchtung sind. 
 Hier können SIFT \cite{Sift}, ORB \cite{ORB}, BRIEF \cite{BRIEF} oder SURF \cite{SURF} eingesetzt werden.
-Wurden die Feature ermittelt müssen korrespondierende Feature zwischen den Bilder ermittelt werden. Das Bild-Paar mit den meisten übereinstimmungen wird als Basis für die Rekonstruktion der 3D-Punkwolke genutzt.
-Wurde aus den beiden Bildern eine initiale Punktwolke erstellt, wird diese mit den verbleibenden Bildern angereichert \cite{alouacheevaluation}. 
+Wurden die Feature ermittelt müssen korrespondierende Feature zwischen den Bilder ermittelt werden. 
+Danach werden zwischen den Bildern Übereinstimmungen in den Featuren mittels RANSAC gesucht. Gleichzeitig werden mittels RANSAC auch die einzelne Feature die keine Übereinstimmungen haben aus dem Verfahren ausgeschlossen.
+Nun wird die Fundamental-Matrix $F$ für jedes Bildpaar ermittelt. Dazu werden mindestens 8 korrespondierende Features zwischen den beiden Bildpaaren benötigt. 
+Aus der Fundamental-Matrix $F$ kann die Essential-Matrix $E$ unter zuhilfenahme der Kamera-Kalibration-Matrix $K$ ermittelt werden. 
+Mit $E$ kann nun die Kamera-Ausrichtung bestehend aus Kamera- Position und Rotation berechnet werden.
+
+%Das Bild-Paar mit den meisten Übereinstimmungen wird als Basis für die Rekonstruktion der 3D-Punktwolke genutzt.
+%Wurde aus den beiden Bildern eine initiale Punktwolke erstellt, wird diese mit den verbleibenden Bildern angereichert \cite{alouacheevaluation}. 
 
 %Eine der bekanntesten Algorithmen ist SIFT \cite{Sift3D}.
 Einige Verfahren benötigen genaue Informationen über die Kamera Position, Ausrichtung und andere Angaben wie die Brennweite der Linse etc. 
@@ -231,8 +241,16 @@ Der in \cite{rs11222644} vorgestellte Ansatz geht diese Problematik an und soll 
 
 Unter der Segmentierung von 3D-Punktwolken versteht man, dass jedem Punkt ein Label zu zugewiesen wird, welches Auskunft über eine Eigenschaft des Punktes gibt. Im Falle dieser Arbeit sollen Label wie Stamm, Blatt, Blüte oder Frucht vergeben werden.
 
-Bei der Analyse von Pflanzen in Form von 3D Punktwolken gibt es einige nicht gelernte Lösungen \cite{ThreeBasics} \cite{RegionGrowing} die das segmentieren von 3D Punktwolken von Pflanzen in Stiele und Blätter behandeln, 
-viele dieser Ansätze haben aber das Problem, dass sie nur unter bestimmten Bedingungen gute Ergebnisse liefern. 
+Bei der Analyse von Pflanzen in Form von 3D Punktwolken gibt es einige nicht gelernte Lösungen \cite{ThreeBasics} \cite{ModelBased} die das segmentieren von 3D Punktwolken von Pflanzen in Stiele und Blätter behandeln, 
+diese Ansätze haben aber das Problem, dass sie nur unter bestimmten Bedingungen gute Ergebnisse liefern.
+
+\cite{ThreeBasics} verfolgt den Ansatz eine Punktwolke in Stamm und Blätter anhand der Hauptkrümmung um jeden Punkt zu segmentieren. 
+Hierbei wird die Hauptkrümmung für einen Punkt so interpretiert, dass der Punkt als Stamm interpretiert wird wenn die Krümmung hoch ist. 
+Es wird also davon ausgegangen, dass die Stämme eine höhere Krümmung aufweisen als die Blätter. 
+
+In \cite{ModelBased}  wird ein Ansatz verfolgt, der sich die zylindrische Form von Stielen zunutze macht um diese von anderen Teilen der Pflanze wie Blätter zu unterscheiden. 
+Es wird das Model eines Zylinders in der Punktwolke gesucht und wird dieses gefunden werden Punkte die in das Model fallen als Stamm klassifiziert.
+
 Insbesondere die hohe Qualität der Punktwolken die meist mit einem LIDAR-Scanner oder einem vergleichbaren Gerät erzielt wird, 
 kann mit bildbasierten Methoden wie SfM nicht oder nur mit sehr großen Datenmengen und dem damit verbundenen Rechenaufwand erreicht werden. 
 Ein weiteres Problem das viele Lösungen haben ist, dass der Hintergrund, also alles was nicht zur Pflanze gehört, manuell entfernt wird, 
@@ -284,10 +302,12 @@ Hierbei gilt es die ideale Transformation $T$ bestehend aus Rotation, Skalierung
 Es werden drei Ansätze überprüft dieses Problem zu lösen. 
 Der erste Ansatz basiert auf der Idee, beim Beginn einer neuen Zeitserie zur Analyse eines Wachstumsprozesses, eine Punktwolke des Hintergrunds zu erstellen und die Punktwolken der einzelnen Zeitpunkte mit diesem Hintegrund zu registrieren. 
 So wird ein Verhältnis geschaffen das dem der Realität entspricht.
-Der zweite Ansatz basiert darauf das die Registrierung direkt zwischen zwei Zeitpunkten erfolgt. Hierbei kann es zu Abweichungen von der Realität kommen, wenn die Pflanzen skaliert werden müssen für die Registrierung.
-Der letzte Ansatz soll überprüfen ob es mittels eines platziertem Objekts möglich ist die Skalierung der Punktwolke zu ermitteln und so das Problem beim direkten Vergleich zweier Szenen lösen soll.
+Der zweite Ansatz soll untersuchen ob DCP so angepasst werden kann, dass statt Rotation und Translation separat, die komplette Transformations-Matrix mit Skalierung geschätzt werden kann.
+In einem letzten Ansatz soll die Skalierung durch iteratives probieren gefunden werden mit einer anschließenden Registrierung ohne Schätzung der Skalierung.
+%Der zweite Ansatz basiert darauf das die Registrierung direkt zwischen zwei Zeitpunkten erfolgt. Hierbei kann es zu Abweichungen von der Realität kommen, wenn die Pflanzen skaliert werden müssen für die Registrierung.
+%Der letzte Ansatz soll überprüfen ob es mittels eines platziertem Objekts möglich ist die Skalierung der Punktwolke zu ermitteln und so das Problem beim direkten Vergleich zweier Szenen lösen soll.
 
-TODO: Platziertes Objekt Ansatz umsetzen oder entfernen. DCP-Umbau und Skalierung schätzen fehlt hier.
+%TODO: Platziertes Objekt Ansatz umsetzen oder entfernen. DCP-Umbau und Skalierung schätzen fehlt hier.
 
 Das dritte Problem ist die Segmentierung der Punktwolke in Stamm, Blätter und Hintergrund. Hier gibt es viele Ansätze dieses Problem zu lösen. Allerdings ist es schwer eine allgemein gültigen Lösung zu finden. 
 Ziel ist es daher eine Lösung zu finden die auf möglichst vielen Varianten von Pflanzen funktioniert. 
@@ -326,7 +346,7 @@ Die einzelnen Abläufe sind in Abbildung \ref{fig:WorkflowClientServer} zu sehen
 %bitte auf kurze, aussagekräftige Ausschnitte.
 
 Die aus der Analyse der verschiedenen Verfahren (siehe Evaluation) ausgewählte Anwendung ODM wird als Docker bereit gestellt. Um den Docker aus zu führen muss eine Ordner-Struktur bereit gestellt werden.
-In dieser Ordner-Struktur muss ein Ordner "images" enthalten sein, der die Bilder des Datensatzes, aus dem eine Punktwolke generiert werden soll, enthält.
+In dieser Ordner-Struktur muss ein Ordner \glqq images\grqq{} enthalten sein, der die Bilder des Datensatzes, aus dem eine Punktwolke generiert werden soll, enthält.
 
 Ist das Verzeichnis angelegt kann der Docker gestartet werden. Hierbei muss allerdings beachtet werden, dass der Docker mit den selben Rechten wie der User arbeitet. Ansonsten werden per Standarteinstellung Root-Rechte genutzt.
 Das führt dazu das auf die erstellten Daten nur noch lesend zugegriffen werden kann, was das Aufräumen erschwert.
@@ -463,13 +483,30 @@ Dient dazu zu einer Messreihe den aktuellen Status abzuholen. Der Status der Mes
 \textbf{PUT /results/\{Messreihe\}/\{Zeitstempel\}}
 
 Dient dazu zu einem Zeitpunkt einer Messreihe die ermittelten Werte wie Anzahl Blätter oder Volumen abzuholen.
-TODO: Ergebnis Beispiel
+
+\begin{lstlisting}[language=json, caption={Beispiel Ergebnisse eines Zeitstempels}, captionpos=b, label=listing:example:result]
+{
+    "LeaveCount": 7,
+    "Height": 0.276259834557858,
+    "Volume": 0.025656320729475497,
+    "GrothSinceLastSnapshot": 1.1,
+    "BackgroundRegistration": {
+        "Transformation": [
+            [0.9995419979095459, 0.0299260001629591, -0.004519070032984018, -0.030479200184345245], 
+            [-0.029895899817347527, 0.9995309710502625, 0.0065834098495543, 0.025272000581026077], 
+            [0.004713969770818949, -0.006445290055125952, 0.9999679923057556, 0.0013244400033727288], 
+            [0.0, 0.0, 0.0, 1.0]
+        ],
+        "Scale": 1.3
+    }
+}
+\end{lstlisting}
 
 \textbf{POST /data/\{Messreihe\}/\{Zeitstempel\}}
 
 Dient dazu neue Datensätze hinzu zu fügen. Es muss eine Sammlung von Bildern einer Pflanze mit geliefert werden. 
 Wird der Endpunkt angesprochen werden die Bilder gespeichert und die Pipeline zum generieren der Punktwolke in der Job-Queue hinzugefügt.
-Wird als Zeitstempel \"background\" angegeben wird dieser Datensatz als Hintergrund für die derzeitige Messreihe interpretiert.
+Wird als Zeitstempel \glqq background\grqq{} angegeben wird dieser Datensatz als Hintergrund für die derzeitige Messreihe interpretiert.
 
 \textbf{PUT /data/\{Messreihe\}/\{Zeitstempel\}}
 
@@ -722,8 +759,8 @@ Des weiteren kann es vorkommen, dass Colmap zwei Szenen in den Bildern erkennt w
 
 Ein weiterer Punkt bei der Bewertung des Verfahrens zur Generierung von 3D Punktwolken ist die Zeit die benötigt wird die Punkwolke zu generieren.
 Hier dominiert ODM klar. Obwohl, mangels der GEO-Position der Bilder, ODM nur in der Lage ist die CPU parallel zu nutzen und nicht die GPU werden die Punkwolken wesentlich schneller generiert als mit Colmap, welches die GPU nutzt und diese auch gut auslastet.
-ODM benötigt zur generierung einer Punktwolke mit 73 Bilder xx Sekunden wärend Colmap für die gleiche Datenbasis xx Sekungen benötigt. 
-Sollten GEO-Positionen für die Bilder bekannt sein kann ODM auch die GPU nutzen und somit die Zeit die benötigt wird die Punktwolken zu generieren weiter veringert werden.
+ODM benötigt zur generierung einer Punktwolke mit 73 Bilder 566 Sekunden wärend Colmap für die gleiche Datenbasis 4148 Sekungen benötigt. 
+Sollten GEO-Positionen für die Bilder bekannt sein kann ODM die GPU nutzen und somit die Zeit die benötigt wird die Punktwolken zu generieren weiter verbessern.
 
 Da ODM wesentlich weniger Rauschen beinhaltet, keine Probleme mit doppelt erkannten Szenen macht und weniger Zeit zur Generierung der Punkwolken benötigt wurde in dieser Arbeit ODM zur Generierung von Punktwolken genutzt.
 
@@ -731,7 +768,7 @@ Da ODM wesentlich weniger Rauschen beinhaltet, keine Probleme mit doppelt erkann
 
 In einem ersten Schritt wurden verschiedene Lösungen aus dem Deep-Learning Bereich miteinander Verglichen. 
 Es wird die Distanz zwischen transformierter Quell-Punktwolke und Ziel-Punktwolke wie im Abschnitt \ref{sec:realisierung:implementierung2} beschrieben gemessen. Neben der Distanz berichten wir über den bei der Evaluation gemessenen Loss.
-Die einzelnen Verfahren sind alle in dem Python-Paket "learning3d" implementiert und nutzen die selbe Datenbasis ModelNet40 für das Training und sind somit gut vergleichbar. Für DCP und RPM-Net wurden das vortrainierte Model vom Author des Pakets genutzt.
+Die einzelnen Verfahren sind alle in dem Python-Paket \glqq learning3d\grqq{} implementiert und nutzen die selbe Datenbasis ModelNet40 für das Training und sind somit gut vergleichbar. Für DCP und RPM-Net wurden das vortrainierte Model vom Author des Pakets genutzt.
 PointNetLK musste trainiert werden und wurde mit den empfohlenen Angaben des Authors trainiert. Die Evaluation wurde drei mal mit zufälligen Daten wiederholt und aus den drei Durchläufen die Mittelwerte für die ermittelten Werten gebildet.
 Die Ergebnisse sind in Tabelle \ref{tab:registration:deeplearn:compare} zu finden.
 
@@ -760,7 +797,58 @@ TODO: Erkenntniss aus dem Vergleich. Ggf Bilder von den Ergebnissen.
 
 \subsection{Vergleich von Verfahren zur Segmentierung von Pflanzen auf 3D-Punkwolken}
 
-TODO: Handcrafted Classifier mit PointNet++ vergleichen. Erkenntnis das Handcrafted Classifier auf Grund der ungenauen Punkte nicht funktioniert.
+In Experimenten mit dem hanfgeschriebenen Klassifier konnte keine gute Parametriesierung gefunden werden, die eine gute Unterteilung in Blätter und Stämme erreichen konnte. Dies liegt in erster Linie an der Qualität der Punktwolken.
+Diese haben das Problem, das die oft sehr feinen Stiele der Pflanze nicht als Zylinder sondern als Ebene in den Punktwolken repräsentiert werden. Das ist in Abbildung \ref{fig:handcrafted:classifier} zu sehen.
+Ein weiteres Problem ist eine allgemein gültige Parametriesierung zu finden. Ein Beispiel dafür ist in Abbildung \ref{fig:handcrafted:classifier} zu sehen. Hier wurde mit dem selben Schwellwert klassifiziert.
+
+\begin{figure}
+    \centering
+    \begin{subfigure}[t]{1.0\textwidth}
+        \centering
+        \raisebox{-\height}{\includegraphics[width=\imageSizeTwo, height=\imageSizeTwoHeight]{./Images/OdmFlatError1.png}}
+        \centering
+        \raisebox{-\height}{\includegraphics[width=\imageSizeTwo, height=\imageSizeTwoHeight]{./Images/OdmFlatError2.png}}
+        \vspace{.6ex}
+        \centering
+        \raisebox{-\height}{\includegraphics[width=\imageSizeTwo, height=\imageSizeTwoHeight]{./Images/HandcraftedClassifierAvocado.png}}
+        \centering
+        \raisebox{-\height}{\includegraphics[width=\imageSizeTwo, height=\imageSizeTwoHeight]{./Images/HandcraftedClassifierPlant2.png}}
+    \end{subfigure}
+    \caption{Oben: ODM Seitenansicht die als Ebene erkannten Stiel zeigt.\\Unten: Segmentierungs-Ergebniss für zwei verschiedene Pflanzen mit dem selben Schwellert.}
+    \label{fig:handcrafted:classifier}
+\end{figure}
+
+%&\begin{figure}
+%&    \centering
+%&    \begin{minipage}{0.475\textwidth}
+%&        \centering
+%&        \includegraphics[height=4.5cm,width=4.5cm]{./Images/OdmFlatError1.png}
+%&        \caption{ODM Seitenansicht die falche Seite der Stiele zeigt}
+%&        \label{fig:odm:flat:zylinder:1}
+%&    \end{minipage}\hfill
+%&    \begin{minipage}{0.475\textwidth}
+%&        \centering
+%&        \includegraphics[height=4.5cm,width=4.5cm]{./Images/OdmFlatError2.png}
+%&        \caption{ODM Seitenansicht die breite Seite der Stiele zeigt}
+%&        \label{fig:odm:flat:zylinder:2}
+%&    \end{minipage}
+%&\end{figure}
+%&
+%&\begin{figure}
+%&    \centering
+%&    \begin{minipage}{0.475\textwidth}
+%&        \centering
+%&        \includegraphics[height=4.5cm,width=4.5cm]{./Images/HandcraftedClassifierAvocado.png}
+%&        \caption{Segmentierungs-Ergebnisse auf Avocado-Pflanze}
+%&        \label{fig:handcrafted.classifier:avocado}
+%&    \end{minipage}\hfill
+%&    \begin{minipage}{0.475\textwidth}
+%&        \centering
+%&        \includegraphics[height=4.5cm,width=4.5cm]{./Images/HandcraftedClassifierPlant2.png}
+%&        \caption{Segmentierungs-Ergebnisse auf anderer Pflanze}
+%&        \label{fig:handcrafted.classifier:plant2}
+%&    \end{minipage}
+%&\end{figure}
 
 \textbf{Datenbasis für das Training von PointNet++}
 

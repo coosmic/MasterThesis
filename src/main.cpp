@@ -346,10 +346,8 @@ void printMinMax(pcl::PointCloud<PointTypePCL>::Ptr cloud){
 
 }
 
-int main1(int argc, char** argv){
+int main1(std::string pathToFile){
   pcl::PointCloud<PointTypePCL>::Ptr cloud(new pcl::PointCloud<PointTypePCL>);
-
-  std::string pathToFile = argv[1];
 
   if(pathToFile.substr(pathToFile.find_last_of(".") + 1) == "ply"){
     if( pcl::io::loadPLYFile(pathToFile, *cloud) == -1){
@@ -516,6 +514,20 @@ int backgroundRemovalPipeline(int argc, char** argv){
   t.join();
   return 0;
 
+}
+
+int handcraftedClassifier(po::variables_map vm){
+
+  if(!vm.count("in")){
+    cout << "Missing parameter in\n";
+    return 1;
+  }
+
+  std::string pathIn = vm["in"].as<std::string>();
+
+  main1(pathIn);
+
+  return 0;
 }
 
 int convertToShapenetFormat2(po::variables_map vm){
@@ -1032,6 +1044,7 @@ enum JobName {
   RegistrationFormat,
   IterativeScaleRegistration,
   BackgroundRemovalPipeline,
+  HandcraftedClassifier,
   UnknownJob
 };
 
@@ -1043,6 +1056,7 @@ JobName jobStringToEnum(std::string jobString){
   if(jobString == "RegistrationFormat") return RegistrationFormat;
   if(jobString == "IterativeScaleRegistration") return IterativeScaleRegistration;
   if(jobString == "BackgroundRemovalPipeline") return BackgroundRemovalPipeline;
+  if(jobString == "HandcraftedClassifier") return HandcraftedClassifier;
   return UnknownJob;
 }
 
@@ -1108,6 +1122,8 @@ int main (int argc, char** argv)
         return iterativeScaleRegistration(vm);
       case BackgroundRemovalPipeline:
         return backgroundRemovalPipeline(vm);
+      case HandcraftedClassifier:
+        return handcraftedClassifier(vm);
       case UnknownJob:
         cout << "Job " << vm["job"].as<std::string>() << " is unknown.\n";
         return 1;
