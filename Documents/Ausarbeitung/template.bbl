@@ -32,10 +32,6 @@ H.~Bay, A.~Ess, T.~Tuytelaars, and L.~Van~Gool, ``Speeded-up robust features
   (surf),'' {\em Computer vision and image understanding}, vol.~110, no.~3,
   pp.~346--359, 2008.
 
-\bibitem{alouacheevaluation}
-A.~Alouache and Q.~Wu, ``Evaluation of an opencv implementation of structure
-  from motion on open source data,''
-
 \bibitem{ODM}
 pierotofy, ``Open drone map - a command line toolkit to generate maps, point
   clouds, 3d models and dems from drone, balloon or kite images.,'' 2020.
@@ -67,10 +63,11 @@ I.~Ziamtsov and S.~Navlakha, ``{Machine Learning Approaches to Improve Three
   Basic Plant Phenotyping Tasks Using Three-Dimensional Point Clouds1[OPEN]},''
   {\em Plant Physiology}, vol.~181, pp.~1425--1440, 10 2019.
 
-\bibitem{RegionGrowing}
-D.~Li, Y.~Cao, G.~Shi, X.~Cai, Y.~Chen, S.~Wang, and S.~Yan, ``An
-  overlapping-free leaf segmentation method for plant point clouds,'' {\em IEEE
-  Access}, vol.~7, pp.~129054--129070, 2019.
+\bibitem{ModelBased}
+W.~G{\'e}lard, M.~Devy, A.~Herbulot, and P.~Burger, ``Model-based segmentation
+  of 3d point clouds for phenotyping sunflower plants,'' in {\em 12.
+  International Joint Conference on Computer Vision, Imaging and Computer
+  Graphics Theory and Applications}, 2017.
 
 \bibitem{lecun2015deep}
 Y.~LeCun, Y.~Bengio, and G.~Hinton, ``Deep learning,'' {\em nature}, vol.~521,

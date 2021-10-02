@@ -4,8 +4,6 @@ import numpy as np
 import open3d as o3d
 from sklearn.neighbors import NearestNeighbors
 
-import utilities
-
 def robustICP(srcPath, targetPath, outPath, scale, srcCloud, targetCloud):
     
     if not os.path.isdir(outPath):
@@ -80,5 +78,7 @@ def scaleRegistration(srcPath, targetPath, outPath, start_scale = 1.0, end_scale
     transformedSrc = transformedSrc.dot(best_transformation.T)[:, 0:3]
     targetCloud = np.loadtxt(targetPath).astype(np.float32)
     display_open3d(targetCloud, srcCloud, transformedSrc)
+
+    print("Error: ",best_result)
 
     return best_transformation, best_scale

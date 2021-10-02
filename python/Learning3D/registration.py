@@ -45,6 +45,7 @@ def test_one_epoch(net, device, model, test_loader, withError=False, show=False,
     test_error = 0.0
 
     for i, data in enumerate(tqdm(test_loader)):
+        print(data)
         template, source, igt = data
         source = source * scale
         transformations = get_transformations(igt)
@@ -132,9 +133,9 @@ def icp(src, target, threshold, scale, show=False):
     return error, icp_res
 
 def runWithDifferentScalesWithArgs(args, data, model = None):
-    runWithDifferentScales(data, model, args.start_scale, args.end_scale, args.scale_step_width, args.show, args.icp, args.icp_threshold)
+    runWithDifferentScales(data, model, args.start_scale, args.end_scale, args.scale_step_width, args.show, args.icp, args.icp_threshold, args.net)
 
-def runWithDifferentScales(data, model=None, start_scale = 1.0, end_scale = 3.0, scale_step_width=0.1, show=False, use_icp=True, icp_threshold = 0.2 ):
+def runWithDifferentScales(data, model=None, start_scale = 1.0, end_scale = 3.0, scale_step_width=0.1, show=False, use_icp=True, icp_threshold = 0.2, net="PointNetLK" ):
 
     startScale = start_scale
     endScale = end_scale
@@ -154,6 +155,7 @@ def runWithDifferentScales(data, model=None, start_scale = 1.0, end_scale = 3.0,
                 best_iteration = current_iteration
         else:
             args = options()
+            args.net = net
             args.scale = currentScale
             args.show = False
             result = test(args, model, data, currentScale)
@@ -164,13 +166,14 @@ def runWithDifferentScales(data, model=None, start_scale = 1.0, end_scale = 3.0,
         #update scale
         currentScale = currentScale + scaleStepWidth
         current_iteration += 1
-    #print(f"best iteration {best_iteration} with score {best_result} and scale {startScale + (scaleStepWidth * best_iteration)}")
+    print(f"best iteration {best_iteration} with score {best_result} and scale {startScale + (scaleStepWidth * best_iteration)}")
 
     if show:
         scale = startScale + (scaleStepWidth * best_iteration)
         if use_icp:
             err, result = icp(data['source'][0], data['template'][0], icp_threshold, scale, True)
         else:
+            args.show = True
             test(args, model, data, scale)
 
     scale = startScale + (scaleStepWidth * best_iteration)
@@ -178,13 +181,16 @@ def runWithDifferentScales(data, model=None, start_scale = 1.0, end_scale = 3.0,
         err, result = icp(data['source'][0], data['template'][0], icp_threshold, scale, False)
         return result.transformation, scale
     else:
-        test(args, model, data, scale)  
+        #test(args, model, data, scale)  
         return None, scale #TODO Return Transformation from NN Registration
             
 
 def loadRawDataWithoutArgs(srcPath, targetPath, numPoints):
     cloudSrc = np.loadtxt(srcPath).astype(np.float32)
     cloudTemplate = np.loadtxt(targetPath).astype(np.float32)
+
+    print(cloudSrc.shape)
+    print(cloudTemplate.shape)
 
     template = np.empty([1,numPoints,3])
     template[0] = cloudTemplate
@@ -193,6 +199,12 @@ def loadRawDataWithoutArgs(srcPath, targetPath, numPoints):
     transformation = np.ones([1,4,4])
     rawData = {'template' : template, 'source' : source, 'transformation' : transformation}
     return rawData
+
+def loadDataLoader(srcPath, targetPath, numPoints):
+    rawData = loadRawDataWithoutArgs(srcPath, targetPath, numPoints)
+    dataset = UserData('registration', rawData)
+    loader = DataLoader(dataset, batch_size=1, shuffle=False, drop_last=False, num_workers=4)
+    return loader
 
 def loadRawData(args):
     cloudSrc = np.loadtxt(os.path.join(args.dataset_path,"SrcCloud.txt")).astype(np.float32)
@@ -206,30 +218,33 @@ def loadRawData(args):
     rawData = {'template' : template, 'source' : source, 'transformation' : transformation}
     return rawData
 
-def loadModel(args):
+def loadModelWithArgs(args):
+    return loadModel(args.net, args.device, "")
+
+def loadModel(net, device="cuda:0", pathPrefix="Learning3D/"):
     model = None
-    if args.net == 'PointNetLK':
+    if net == 'PointNetLK':
         ptnet = PointNet(emb_dims=1024, use_bn=True)
         model = PointNetLK(feature_model=ptnet)
-        model = model.to(args.device)
-        assert os.path.isfile('checkpoints/exp_pnlk/models/best_model.t7')
-        model.load_state_dict(torch.load('checkpoints/exp_pnlk/models/best_model.t7'), strict=False)
-        model.to(args.device)
-    elif args.net == 'DCP':
+        model = model.to(device)
+        assert os.path.isfile(pathPrefix+'checkpoints/exp_pnlk/models/best_model.t7')
+        model.load_state_dict(torch.load(pathPrefix+'checkpoints/exp_pnlk/models/best_model.t7'), strict=False)
+        model.to(device)
+    elif net == 'DCP':
         dgcnn = DGCNN(emb_dims=512)
         model = DCP(feature_model=dgcnn, cycle=True)
-        model = model.to(args.device)
-        assert os.path.isfile('learning3d/pretrained/exp_dcp/models/best_model.t7')
-        model.load_state_dict(torch.load('learning3d/pretrained/exp_dcp/models/best_model.t7'), strict=False)
-        model.to(args.device)
-    elif args.net == 'RPM':
+        model = model.to(device)
+        assert os.path.isfile(pathPrefix+'learning3d/pretrained/exp_dcp/models/best_model.t7')
+        model.load_state_dict(torch.load(pathPrefix+'learning3d/pretrained/exp_dcp/models/best_model.t7'), strict=False)
+        model.to(device)
+    elif net == 'RPM':
         model = RPMNet(feature_model=PPFNet())
-        model = model.to(args.device)
-        assert os.path.isfile('learning3d/pretrained/exp_rpmnet/models/partial-trained.pth')
-        model.load_state_dict(torch.load('learning3d/pretrained/exp_rpmnet/models/partial-trained.pth', map_location='cpu')['state_dict'])
-        model.to(args.device)
+        model = model.to(device)
+        assert os.path.isfile(pathPrefix+'learning3d/pretrained/exp_rpmnet/models/partial-trained.pth')
+        model.load_state_dict(torch.load(pathPrefix+'learning3d/pretrained/exp_rpmnet/models/partial-trained.pth', map_location='cpu')['state_dict'])
+        model.to(device)
     else:
-        raise Exception(f"Unkown value for parameter net: {args.net}")
+        raise Exception(f"Unkown value for parameter net: {net}")
     return model
 
 def options():
@@ -295,7 +310,7 @@ def main():
         args.device = 'cpu'
     args.device = torch.device(args.device)
 
-    model = loadModel(args)
+    model = loadModelWithArgs(args)
     if args.estimate_scale:
         runWithDifferentScalesWithArgs(args, loader, model)
     else:

@@ -228,13 +228,13 @@ Mit $E$ kann nun die Kamera-Ausrichtung bestehend aus Kamera- Position und Rotat
 Einige Verfahren benötigen genaue Informationen über die Kamera Position, Ausrichtung und andere Angaben wie die Brennweite der Linse etc. 
 andere wiederrum lesen diese Informationen aus den EXIF-Headern der Bildern direkt aus, wenn diese zur Verfügung stehen, oder schätzen diese \cite{ODM} \cite{schoenberger2016mvs}.
 
+TODO: Verfahren nennen und erläutern.
+
 Es wurden in den letzten Jahren große Fortschritte im Bereich Deep Learning, zur Gewinnung von 3D-Punkwolken, gemacht \cite{fan2016point} \cite{tatarchenko2017octree} \cite{wang2018pixel2mesh}. 
 Mit diesen Verfahren ist es möglich aus einer minimalen Datenbasis die auch nur aus einem Bild bestehen kann 3D-Punkwolken zu generieren. Was dem Ziel die Datenübertragung zum Server gering zu halten entgegenkommt.
 Nachteil der Verfahren ist, dass auf dem Bild nur ein Objekt ohne Hintergrund abgebildet sein darf, oder das zu erkennende Objekt mit einer Binären Maske maskiert werden muss.
 Eine Rekonstruktion von komplexen Szenen ist so nicht oder nur mit sehr hohem Aufwand möglich \cite{rs11222644} und wird daher nicht weiter untersucht. 
 Der in \cite{rs11222644} vorgestellte Ansatz geht diese Problematik an und soll daher untersucht werden.
-
-%TODO Verfahren auflisten SIFT, RANSAC?, 
 
 \subsection{Segmentierung von 3D-Punkwolken}
 \label{sec:stand:segmentierung}
@@ -261,6 +261,25 @@ Auch im Bereich Segmentierung wurden große Fortschritte im Bereich tiefer Neuro
 Diese Ansätze können auch auf Pflanzen angewandt werden. Dazu müssen Architekturen wie PointNet\cite{qi2017pointnet}/PointNet++\cite{qi2017pointnet++} oder DGCNN \cite{dgcnn} auf Punktwolken von Pflanzen trainiert werden, 
 da für diese Klasse von Objekten noch keine Gewichte Trainiert wurden.
 
+Bei PointNet wird jeder der $n$ Punkt der Punktwolke mit einer $3x3$ Matrix transformiert deren Gewichte gelernt sind. 
+Diese T-Net genannte Transformation wird angewandt um die Punktwolke in ein neues Koordinaten-System zu überführen.
+Danach wird jeder Punkt nacheinander mittels eines Multi-Layer-Perceptron (MLP) mit zwei Layern der Größe $64$ in einen neuen Feature-Raum überführt. 
+Die Gewichte des MLP werden also über alle Punkte geteilt, was auch für die folgenden MLPs gilt. Der Feature-Vektor für einen Punkt besteht aus $64$ Elementen.
+Die Punkte des Feature-Raums werden wieder mit einem T-Net der Größe $64x64$ transformiert. Danach wird wieder ein MLP (drei Layer $64$, $128$, $1024$) angewandt und mittels Max-Pooling eine globaler Feature-Vektor der Größe $1024$ ermittelt. 
+Dieser Vektor wird mit dem lokalen Feature-Vektor für jeden Punkt kombiniert und die daraus entstehende Matrix der Größe $nx1088$ wird mittels zwei MLP-Layern in eine Matrix der Größe $nxm$ überführt, wobei $m$ die Anzahl möglichen Label sind.
+Der erste dieser MLPs hat die drei Layer mit den Größen $512$, $256$ und $128$, der Zweite besteht aus zwei Layern der Größe $128$ und $m$.
+Die Architektur ist in Abbildung \ref{fig:point:net:arch} zu finden.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1.0\textwidth]{./Images/PointNetArchitektur.png}
+    \caption{PointNet-Architektur}
+    \label{fig:point:net:arch}
+\end{figure}
+
+PointNet++ baut auf der Architektur von PointNet auf. Hierbei wird das Problem adressiert, dass PointNet nicht gut mit kleinen Details umgehen kann. 
+TODO: PointNet++ fertig erklären
+
 \subsection{Registrierung von 3D-Punkwolken}
 \label{sec:stand:registrierung}
 
@@ -286,9 +305,20 @@ Letzteres kann genutzt werden um Punkte bei der Registrierung auszuschließen.
 
 Ein weiteres Problem ist, dass die meisten ICP-Ansätze keine Werte für die Skalierung schätzen. Es gibt einige wenige Ansätze für dieses Problem die auch eine Schätzung für die Skalierung ermitteln \cite{Ziner2005PointSR}.
 
+TODO: Erläutern wie Skalierung geschätzt wird.
+
 Auch für das Registrierung-Problem gibt es Lösungen aus dem Deep-Learning-Bereich, aber auch hier gibt es das Problem, dass es nur wenige Ansätze gibt die mit Skalierung umgehen können \cite{ScaleLK}.
 Bekannt Ansätze sind DCP \cite{Wang_2019_ICCV}, PointNetLK \cite{aoki2019pointnetlk}, RPM-Net \cite{Yew_2020}, DeepGMR \cite{yuan2020deepgmr}, PRNet \cite{wang2019prnet} und PCRNet \cite{sarode2019pcrnet}.
 Einige dieser Ansätze sollen in dieser Arbeit untersucht werden.
+
+TODO: Erläutern wie Netze funktioniren.
+
+DCP besteht aus drei Teilnetzen. Das erste Netz (PointNet oder DGCNN) überführt die Punktwolke in einen hochdimensionalen Raum. Das zweite Netz codiert die kontextuelle Information mittels eines Transformer-Modells 
+und das letzte Netz schätzt auf Basis der kontextuellen Information mittels eines differnezierbaren SVD Layers.
+
+PointNetLK 
+
+RPM-Net
 
 \newpage
 \section{Realisierung}
@@ -303,11 +333,7 @@ Es werden drei Ansätze überprüft dieses Problem zu lösen.
 Der erste Ansatz basiert auf der Idee, beim Beginn einer neuen Zeitserie zur Analyse eines Wachstumsprozesses, eine Punktwolke des Hintergrunds zu erstellen und die Punktwolken der einzelnen Zeitpunkte mit diesem Hintegrund zu registrieren. 
 So wird ein Verhältnis geschaffen das dem der Realität entspricht.
 Der zweite Ansatz soll untersuchen ob DCP so angepasst werden kann, dass statt Rotation und Translation separat, die komplette Transformations-Matrix mit Skalierung geschätzt werden kann.
-In einem letzten Ansatz soll die Skalierung durch iteratives probieren gefunden werden mit einer anschließenden Registrierung ohne Schätzung der Skalierung.
-%Der zweite Ansatz basiert darauf das die Registrierung direkt zwischen zwei Zeitpunkten erfolgt. Hierbei kann es zu Abweichungen von der Realität kommen, wenn die Pflanzen skaliert werden müssen für die Registrierung.
-%Der letzte Ansatz soll überprüfen ob es mittels eines platziertem Objekts möglich ist die Skalierung der Punktwolke zu ermitteln und so das Problem beim direkten Vergleich zweier Szenen lösen soll.
-
-%TODO: Platziertes Objekt Ansatz umsetzen oder entfernen. DCP-Umbau und Skalierung schätzen fehlt hier.
+In einem letzten Ansatz soll die Skalierung durch iteratives Anwenden verschiedener Skalierungen gefunden werden mit einer anschließenden Registrierung ohne Schätzung der Skalierung.
 
 Das dritte Problem ist die Segmentierung der Punktwolke in Stamm, Blätter und Hintergrund. Hier gibt es viele Ansätze dieses Problem zu lösen. Allerdings ist es schwer eine allgemein gültigen Lösung zu finden. 
 Ziel ist es daher eine Lösung zu finden die auf möglichst vielen Varianten von Pflanzen funktioniert. 
@@ -327,8 +353,6 @@ Es soll möglich sein weitere Messpunkte zu einer Messreihe hinzuzufügen. Zu ei
 Zu jeder Messreihe soll ein Bearbeitungs-Status abgerufen werden können, da die einzelnen Pipelines asynchrone im Hintergrund ausgeführt werden sollen.
 Die einzelnen Abläufe sind in Abbildung \ref{fig:WorkflowClientServer} zu sehen.
 
-%TODO: Workflows darstellen. Sequenzdiagramme oder ähnliches.
-%WorkflowClientServer
 \begin{figure}
     \centering
     \includegraphics[width=0.9\textwidth]{./Images/WorkflowClientServer.png}
@@ -567,8 +591,10 @@ Die im Shapenet-Format vorliegende Punktwolke wird mit der Instanz von PointNet+
 Da die Segmentierung etwas verrauscht ist wird das Ergebniss mit einem nächste Nachbarn Vote verbessert.
 Im Anschluss wir das Ergebnis auf die original Punktwolke übertragen, da sonst zu wenig Punkte für die Segmenetierung der Pflanze übrig bleiben.
 Auch wird der Hintegrund entfernt und aus den verbleibenden Punkten, die nun nur noch Pflanzen-Punkte enthalten wieder eine Punktwolke im Shapenet-Format erstellt.
+Um die als Pflanze erkannten Punkte auf die originale Punktwolke zu übertragen, wird zu jedem Punkt der als Pflanze erkannt wird in einem Radius $r$ in der originalen Punktwolke nach Punkten gesucht 
+und die gefundenen Punkte in die neue Punktwolke die nur die Punkte der Pflanze enthält übertragen. Die verbleibenden Punkte in der Original-Punktwolke, die nur noch Hintergrund enthalten, werden auch gespeichert um diese später für die Registrierung zu nutzen.
 
-TODO: Erleutern wie das Segmentierungs-Ergebnis auf die originale Punktwolke übertragen wird. Auch erwähnen das eine Punktwolke die nur den Hintergrund enthält für die Registrierung gespeichert wird.
+%TODO: Erleutern wie das Segmentierungs-Ergebnis auf die originale Punktwolke übertragen wird. Auch erwähnen das eine Punktwolke die nur den Hintergrund enthält für die Registrierung gespeichert wird.
 
 \textbf{Segmentierung Pflanze}
 
@@ -789,11 +815,28 @@ Die Ergebnisse sind in Tabelle \ref{tab:registration:deeplearn:compare} zu finde
 \label{tab:registration:deeplearn:compare}
 \end{table}
 
-In einem zweiten Schritt wurden die Verfahren auf konkreten Beispielen der Problemstellung getestet. 
+In einem zweiten Schritt wurden die Verfahren auf konkreten Beispielen der Problemstellung getestet. Hier wurden exemplarisch je eine Avocado- und eine Bananan-Pflanze getestet. 
+Die Ergebnisse sind in Tabelle \ref{tab:registration:real:compare} zu sehen.
 
-TODO: Tabelle mit Vergleich auf echten Daten für DCP RPM-Net PointNetLK ICP und RICP.
+\begin{table}
+    \begin{center}
+    \begin{tabular}{|l || c | c | c | c | c | } 
+        \hline
+         & DCP & RPM-Net & PointNetLK & ICP & RICP \\  
+        \hline
+        \hline
+        Banane & $0.0585$ & $0.0129$& $0.1673$& $0.0117$& $0.0178$\\
+        \hline
+        Avocado & $0.0721$& $0.012$& $0.2235$& $0.0122$& $0.0245$\\
+        \hline
+    \end{tabular}
+    \end{center}
+    \caption{Vergleich von Registrierungs-Verfahren auf konkreten Beispielen der Problemstellung. Für jede Pflanze wird die Distanz zwischen Quelle und Ziel angegeben}
+    \label{tab:registration:real:compare}
+\end{table}
 
-TODO: Erkenntniss aus dem Vergleich. Ggf Bilder von den Ergebnissen.
+Aus den Ergebnissen der Messung in Tabelle \ref{tab:registration:real:compare} ist zu erkennen, dass ICP die besten Ergebnisse für die Registrierung liefert. 
+Die Neuronalen-Netze liefern keine guten Ergebnisse. Mit Aussnahme von RPM-Net. Diese liegen in etwa gleich auf mit den Ergebnissen die für ICP erreicht wurden und sind besser als die Ergebnisse von RICP.
 
 \subsection{Vergleich von Verfahren zur Segmentierung von Pflanzen auf 3D-Punkwolken}
 
@@ -934,10 +977,10 @@ Wird die Normalisierung komplett verhindert, kann das Auswirkungen auf die Güte
     \end{tabular}
     \end{center}
     \caption{Vergleich von Evaluations-Ergebnissen von den mit normaliserten Daten trainierten Netzen t4 (mit Hintergrund) und t11(ohne Hintergrund) mit jeweils normalisierten und nicht normaliserten Daten.}
-    \label{tab:registration:deeplearn:compare}
+    \label{tab:segmentation:normalization:compare}
 \end{table}
 
-In Tabelle \ref{tab:registration:deeplearn:compare} werden die Ergebnisse der Evaluation von PointNet++ auf nicht normaliserten Daten nach dem Training mit normaliserten Daten mit normalisierten Daten verglichen.
+In Tabelle \ref{tab:segmentation:normalization:compare} werden die Ergebnisse der Evaluation von PointNet++ auf nicht normaliserten Daten nach dem Training mit normaliserten Daten mit normalisierten Daten verglichen.
 Da die Ergebnisse sich für die Segmentierung mit Hintergrund stark verschlechtern, wenn die Daten nicht normalisiert werden wird PointNet++ ohne Normalisierung erneut trainiert. 
 Die Ergebnisse für das erneute Training sind in Abbildung \ref{fig:T6_2C_PS_NN_NR} für zwei Klassen und in Abbildung \ref{fig:T7_3C_PS_NN_NR} für drei Klassen zu sehen.
 
@@ -962,12 +1005,14 @@ Das führt zu dem Schluss, dass PointNet++ mit Normalisierung genutzt werden sol
 
 \textbf{Vergleich Training mit und ohne zufällige Rotationen}
 
-Die Tests des Servers haben gezeigt, das es bei der Segmentierung der freigestellten Pflanzen zu starken Fehlern kommt, wenn diese rotiert sind. 
+Die Tests des Servers haben gezeigt, das es bei der Segmentierung der freigestellten Pflanzen zu starken Fehlern kommt, wenn diese rotiert sind. Diese Fehler sind in Abbildung \ref{fig:rotation:error:1} und \ref{fig:rotation:error:2} zu sehen.
+Wird die Evaluation eines ohne zufällig rotierte Punktwolken trainierte Netz mit zufällig rotierten Punktwolken ausgeführt sinkt der mIoU-Wert auf $0,6$ und Accuracy auf $0,875$
 Das hat zu der Erkenntnis geführt, dass PointNet++ anfällig für die Ausrichtung von Punktwolken ist. 
+
 Aus diesem Grund wurde das Training für das zwei und drei Klassen-Netz mit zufälligen Rotationen wiederholt um ein Robustheit gegen Rotationen anzutrainieren.
 Die Ergebnisse für zwei Klassen-Netz ist in Abbildung ~\ref{fig:10_2C_PS_WN_RR} zu sehen. Die Ergebnisse für das 3 Klassen-Netz in Abbildung ~\ref{fig:9_3C_PS_WN_RR}. 
-Beim Training von dem Netz mit drei Klassen sind starke Ausreißer in den Loss-Werten zu erkennen die sich auch in der Accuracy und dem IoU wiederspiegeln.
-Diese Beobachtung kann man bei dem anderen Netz nur in wesentlich kleinerem Ausmaß feststellen. Dennoch sind die Ergebnisse wesentlich schlechter für das Training mit zufälligen Rotationen als das Training ohne.
+Beim Training von dem Netz mit drei Klassen sind starke Ausreißer in den Loss-Werten zu erkennen die sich auch in der Accuracy und dem IoU - wenn auch nicht so stark - wiederspiegeln.
+Diese Beobachtung kann man bei dem anderen Netzen nur in wesentlich kleinerem Ausmaß feststellen. Dennoch sind die Ergebnisse wesentlich schlechter für das Training mit zufälligen Rotationen als das Training ohne.
 Im Einsatz sollt also bei der Entfernung des Hintergrundes darauf geachtet werden, dass dieser zumindest grob an der XY-Ebene Ausgerichtet ist.
 
 \begin{figure}
@@ -986,7 +1031,21 @@ Im Einsatz sollt also bei der Entfernung des Hintergrundes darauf geachtet werde
     \end{minipage}
 \end{figure}
 
-TODO: Bilder von fehlgeschlagener Segmentierung einfügen
+\begin{figure}
+    \centering
+    \begin{minipage}{0.475\textwidth}
+        \centering
+        \includegraphics[width=1.0\textwidth]{./Images/RotationError1.png}
+        \caption{Fehlgeschlagene Segmentierung einer Bananen-Pflanze. Verursacht durch Rotation der Punktwolke}
+        \label{fig:rotation:error:1}
+    \end{minipage}\hfill
+    \begin{minipage}{0.475\textwidth}
+        \centering
+        \includegraphics[width=1.0\textwidth]{./Images/RotationError2.png}
+        \caption{Fehlgeschlagene Segmentierung einer Tomaten-Pflanze. Verursacht durch Rotation der Punktwolke}
+        \label{fig:rotation:error:2}
+    \end{minipage}
+\end{figure}
 
 \newpage
 \section{Fazit und Ausblick}
@@ -1012,6 +1071,7 @@ Da keine Geo-Informationen zu den Bilder vorliegen, kann die GPU von ODM nicht e
 Sollte sich in Zukunft bei Smartphones eine RGB-D Kamera als Standart etablieren, könnte diese Technologie genutzt werden um eine schnelle Generierung der Punktwolken zu ermöglichen.
 
 Ein weiterer Ansatz der Untersucht werden könnte ist die Generierung von Punktwolken mit Neuronalen Netzen. Hier gibt es einige interessante Ansätze die im Rahmen dieser Arbeit nicht untersucht wurden. 
+Diese Ansätze ermöglichen es aus einem Bild eine Punktwolke zu generieren, was dem Ziel die zu übertragende Datenmenge gering zu halten entgegen kommt.
 
 \textbf{Registrierung}
 
@@ -1019,11 +1079,11 @@ Die Ergebnisse der Registrierung sind zwar für den Zweck ausreichend, aber kön
 
 Bei der Datengewinnung könnte zu den Bildern auch eine GPS-Position ermittelt werden und so Punktwolken mit gleichem Maßstab erstellt werden. Das würde die Registrierung erleichtern, da die Skalierung nicht mehr geschätzt werden müsste.
 
-Ein weiterer Ansatz der in dieser Arbeit nicht verfolgt wurde ist ScaleLK.
+Ein weiterer Ansatz der in dieser Arbeit nicht verfolgt wurde ist ScaleLK. ScaleLK hat eine ähnliche Archtektur wie PoinNetLK allerdings wird neben Rotation und Translation auch eine Schätzung für die Skalierung geliefert.
 
 \textbf{Segmentierung}
 
-Die Segmentierung ist für die Hintergrundentfernung noch nicht gut genug. Hier könnte probiert werden mit einem größerem Datensatz zu trainieren oder mehr Punkte während des Trainings zu nutzen.
+Die Segmentierung ist für die Hintergrundentfernung noch recht fehleranfällig. Hier könnte probiert werden mit einem größerem Datensatz zu trainieren oder mehr Punkte während des Trainings zu nutzen.
 
 Die Segmentierung der Pflanze kann erweitert werden um zusätzliche Informationen über eine Pflanze zu erhalten. Zum Beispiel können neben Blättern und Stielen auch Blüten und Früchte erkannt werden, was für die Analyse des Ertrags einer Fruchtfolge genutz werden könnte.
 Um das zu bewerkstelligen muss für jedes Merkmal ein weiters Label hinzugefügt werden und die Datenbasis, die für das Training genutzt wird, um Punktwolken erweitert werden die diese Merkmale auch beinhalten.
@@ -1031,8 +1091,9 @@ Um das zu bewerkstelligen muss für jedes Merkmal ein weiters Label hinzugefügt
 \textbf{Server}
 
 Um die Perfomance des Servers zu steigern könnte für die in c++ Implementierten Funktionalitäten ein Python-Binding erstellt werden. Bisher werden diese Funktionen über System-Kommandos angesteuert. 
-Mit einem Python-Binding könnten diese direkt aus dem Python-Code angesprochen werden. Dadurch müssten die Daten zwischen den einzelnen Pipelines im Hauptspeicher gehalten werden und müssten nur noch zu Persistierungs-Zwecken auf der Festplatte abgelegt werden.
+Mit einem Python-Binding könnten diese direkt aus dem Python-Code angesprochen werden. Dadurch könnten die Daten zwischen den einzelnen Pipelines im Hauptspeicher gehalten werden und müssten nur noch zu Persistierungs-Zwecken auf der Festplatte abgelegt werden.
 
+Da der Server keine Sicherheitsmechanismen zur Verfügung stellt ist von einem Einsatz in der Praxis in diesem Zustand abzuraten. Es sollte mindestens ein User-Management hinzugefügt werden um die Schnittstellen vor missbrauch zu schützen.
 
 %Weitere Analyse der Daten
 

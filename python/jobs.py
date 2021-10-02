@@ -8,7 +8,7 @@ import time
 
 import registration
 
-from Learning3D.registration import runWithDifferentScales, loadRawDataWithoutArgs
+from Learning3D.registration import runWithDifferentScales, loadRawDataWithoutArgs, loadModel, loadDataLoader
 
 PARTSEG2 = None
 PARTSEG3 = None
@@ -171,13 +171,19 @@ def jobBackgroundRegistration(jobParameter):
     outPath = os.path.join(folderPath, 'shapenet', 'registration/')
 
     print("start reg")
-    transformation, scale = registration.scaleRegistration(srcPath, targetPath, outPath)
+    #transformation, scale = registration.scaleRegistration(srcPath, targetPath, outPath)
+    
+    model = None #ICP
+    #model = loadModel("PointNetLK")
+    #model = loadModel("DCP")
+    #model = loadModel("RPM")
+    #data = loadDataLoader(srcPath, targetPath, 2048) # For Nets
+    data = loadRawDataWithoutArgs(srcPath, targetPath, 2048) # For ICP
+    transformation, scale = runWithDifferentScales(data, show=True, model=model, use_icp=True, net="PointNetLK")
+
     print("Transformation", transformation)
     print("Scale", scale)
 
-    #data = loadRawDataWithoutArgs(srcPath, targetPath, 1024)
-
-    #transformation, scale = runWithDifferentScales(data, show=False)
     return {"Status": constants.statusDone, "Results" : {"JobName": "BackgroundRegistration", "Value": {"Transformation" : transformation.tolist(), "Scale" : scale}} }
 
 def jobConvertToBackground(jobParameter):

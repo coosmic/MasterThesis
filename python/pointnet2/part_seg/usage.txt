@@ -29,3 +29,5 @@ python evaluate.py --model pointnet2_part_seg --model_path ./results/training/t1
 python evaluate.py --model pointnet2_part_seg3C --model_path ./results/training/t4_3ClassesPartSeg/model.ckpt --log_dir ./results/evaluation/t4_3ClassesPartSeg/ --pred_dir pred_eval --num_classes 3 --normalize False
 
 python evaluate.py --model pointnet2_part_seg3C --model_path ./results/training/t5_3ClassesPartSeg3C/model.ckpt --log_dir ./results/evaluation/t5_3ClassesPartSeg3C/ --pred_dir pred_eval --num_classes 3 --normalize True
+
+python evaluate.py --model pointnet2_part_seg3C --model_path ./results/training/t5_3ClassesPartSeg3C/model.ckpt --log_dir ./results/evaluation/t5_WithRotatedData/ --pred_dir pred_eval --num_classes 3 --normalize True

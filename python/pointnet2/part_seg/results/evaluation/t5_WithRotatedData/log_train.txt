@@ -1,0 +1,312 @@
+Namespace(batch_size=10, gpu=0, log_dir='./results/evaluation/t5_WithRotatedData/', model='pointnet2_part_seg3C', model_path='./results/training/t5_3ClassesPartSeg3C/model.ckpt', normalize=True, num_classes=3, num_point=16384, pred_dir='pred_eval')
+pid: 4575
+2021-09-29 19:39:14.166751
+---- EPOCH 000 EVALUATION ----
+000/028
+Avocado10LabeledShapenetSS7.txt
+Avocado12LabeledShapenetSS13.txt
+Avocado12LabeledShapenetSS15.txt
+Avocado12LabeledShapenetSS20.txt
+Avocado14LabeledShapenetSS16.txt
+Avocado14LabeledShapenetSS17.txt
+Avocado14LabeledShapenetSS18.txt
+Avocado14LabeledShapenetSS2.txt
+Avocado14LabeledShapenetSS7.txt
+Avocado15LabeledShapenetSS7.txt
+Batch 0 mean mIoU: 0.5911389773402405
+Avocado5LabeledShapenetSS11.txt
+Avocado5LabeledShapenetSS14.txt
+Avocado5LabeledShapenetSS15.txt
+Avocado5LabeledShapenetSS16.txt
+Avocado5LabeledShapenetSS18.txt
+Avocado6LabeledShapenetSS16.txt
+Avocado7LabeledShapenetSS2.txt
+Avocado8LabeledShapenetSS2.txt
+Avocado8LabeledShapenetSS20.txt
+Avocado8LabeledShapenetSS5.txt
+Batch 1 mean mIoU: 0.6477624111312535
+Avocado8LabeledShapenetSS6.txt
+Avocado9LabeledShapenetSS11.txt
+Avocado9LabeledShapenetSS12.txt
+Avocado9LabeledShapenetSS2.txt
+Avocado9LabeledShapenetSS4.txt
+Avocado9LabeledShapenetSS8.txt
+BananaT1LabeledShapenetSS9.txt
+BananaT2LabeledShapenetSS13.txt
+BananaT2LabeledShapenetSS7.txt
+BananaT3LabeledShapenetSS20.txt
+Batch 2 mean mIoU: 0.5015602181924088
+BananaT3LabeledShapenetSS4.txt
+BananaT4LabeledShapenetSS20.txt
+BananaT5LabeledShapenetSS17.txt
+BananaT6LabeledShapenetSS13.txt
+BananaT6LabeledShapenetSS18.txt
+Kohlrabi1LabeldShapenetSS14.txt
+Kohlrabi1LabeldShapenetSS19.txt
+Kohlrabi1LabeldShapenetSS9.txt
+Kohlrabi2LabeledShapenetSS8.txt
+Kohlrabi3LabeledShapenetSS14.txt
+Batch 3 mean mIoU: 0.4921470346777822
+Kohlrabi4LabeledShapenetSS8.txt
+Kohlrabi5LabeldShapenetSS20.txt
+Kohlrabi6LabeledShapenetSS12.txt
+Kohlrabi6LabeledShapenetSS7.txt
+Kohlrabi7LabeledShapenetSS11.txt
+Kohlrabi9LabeledShapenetSS14.txt
+Kohlrabi9LabeledShapenetSS4.txt
+Mais1T2LabeledShapenetNormalsSS10.txt
+Mais1T2LabeledShapenetNormalsSS17.txt
+Mais1T2LabeledShapenetNormalsSS9.txt
+Batch 4 mean mIoU: 0.4979876702195365
+Mais1T3LabeledShapenetNormalsSS14.txt
+Mais1T4LabeledShapenetNormalsSS12.txt
+Mais1T4LabeledShapenetNormalsSS18.txt
+Mais1T5LabeledShapenetNormalsSS3.txt
+Mais1T6LabeledShapenetNormalsSS11.txt
+Mais1T6LabeledShapenetNormalsSS4.txt
+Mais1T7LabeledShapenetNormalsSS13.txt
+Mais1T7LabeledShapenetNormalsSS14.txt
+Mais1T7LabeledShapenetNormalsSS9.txt
+Mais1T8LabeledShapenetNormalsSS14.txt
+Batch 5 mean mIoU: 0.783624670079332
+Mais1T9LabeledShapenetNormalsSS10.txt
+Mais1T9LabeledShapenetNormalsSS11.txt
+Mais1T9LabeledShapenetNormalsSS15.txt
+Mais2T1LabeledShapenetNormalsSS1.txt
+Mais2T2LabeledShapenetNormalsSS10.txt
+Mais2T2LabeledShapenetNormalsSS15.txt
+Mais2T3LabeledShapenetNormalsSS3.txt
+Mais2T3LabeledShapenetNormalsSS9.txt
+Mais2T4LabeledShapenetNormalsSS12.txt
+Mais2T4LabeledShapenetNormalsSS14.txt
+Batch 6 mean mIoU: 0.750769428563289
+Mais2T4LabeledShapenetNormalsSS3.txt
+Mais2T4LabeledShapenetNormalsSS4.txt
+Mais2T4LabeledShapenetNormalsSS7.txt
+Mais2T4LabeledShapenetNormalsSS8.txt
+Mais2T5LabeledShapenetNormalsSS14.txt
+Mais2T8LabeledShapenetNormalsSS14.txt
+Mais2T8LabeledShapenetNormalsSS7.txt
+Mais2T8LabeledShapenetNormalsSS8.txt
+Mais2T9LabeledShapenetNormalsSS14.txt
+Mais3T2LabeledShapenetNormalsSS3.txt
+Batch 7 mean mIoU: 0.6478093689076106
+Mais3T2LabeledShapenetNormalsSS4.txt
+Mais3T2LabeledShapenetNormalsSS8.txt
+Mais3T3LabeledShapenetNormalsSS12.txt
+Mais3T3LabeledShapenetNormalsSS14.txt
+Mais3T3LabeledShapenetNormalsSS8.txt
+Mais3T4LabeledShapenetNormalsSS12.txt
+Mais3T4LabeledShapenetNormalsSS6.txt
+Mais3T4LabeledShapenetNormalsSS9.txt
+Mais3T5LabeledShapenetNormalsSS11.txt
+Mais3T5LabeledShapenetNormalsSS13.txt
+Batch 8 mean mIoU: 0.820596875618729
+Mais3T5LabeledShapenetNormalsSS14.txt
+Mais3T5LabeledShapenetNormalsSS4.txt
+Mais3T5LabeledShapenetNormalsSS5.txt
+Mais3T5LabeledShapenetNormalsSS8.txt
+Mais3T6LabeledShapenetNormalsSS5.txt
+Mais3T6LabeledShapenetNormalsSS8.txt
+Mais3T7LabeledShapenetNormalsSS4.txt
+Mais3T7LabeledShapenetNormalsSS8.txt
+Mais3T8LabeledShapenetNormalsSS10.txt
+Mais3T8LabeledShapenetNormalsSS3.txt
+Batch 9 mean mIoU: 0.6646249255555627
+Mais3T8LabeledShapenetNormalsSS5.txt
+Mais3T8LabeledShapenetNormalsSS7.txt
+Paprika10LabeledShapenetSS10.txt
+Paprika10LabeledShapenetSS5.txt
+Paprika1LabeledShapenetSS14.txt
+Paprika1LabeledShapenetSS15.txt
+Paprika1LabeledShapenetSS16.txt
+Paprika1LabeledShapenetSS5.txt
+Paprika2LabeledShapenetSS16.txt
+Paprika2LabeledShapenetSS6.txt
+Batch 10 mean mIoU: 0.47997908322715155
+Paprika2LabeledShapenetSS7.txt
+Paprika3LabeledShapenetSS12.txt
+Paprika3LabeledShapenetSS16.txt
+Paprika3LabeledShapenetSS9.txt
+Paprika4LabeledShapenetSS1.txt
+Paprika4LabeledShapenetSS5.txt
+Paprika5LabeledShapenetSS18.txt
+Paprika5LabeledShapenetSS19.txt
+Paprika5LabeledShapenetSS20.txt
+Paprika5LabeledShapenetSS7.txt
+Batch 11 mean mIoU: 0.5730891022143068
+Paprika8LabeledShapenetSS10.txt
+Paprika8LabeledShapenetSS19.txt
+Paprika9LabaeledShapenetSS14.txt
+Paprika9LabeledShapenetSS13.txt
+Paprika9LabeledShapenetSS14.txt
+Paprika9LabeledShapenetSS16.txt
+Plant1T1LabeledShapenetSS16.txt
+Plant1T2LabeledShapenetSS10.txt
+Plant1T2LabeledShapenetSS15.txt
+Plant1T2LabeledShapenetSS17.txt
+Batch 12 mean mIoU: 0.6352921995918794
+Plant1T2LabeledShapenetSS3.txt
+Plant2T3LabeledShapenetSS1.txt
+Plant2T3LabeledShapenetSS9.txt
+Plant3T1LabeledShapenetSS1.txt
+Plant3T1LabeledShapenetSS20.txt
+Plant3T1LabeledShapenetSS9.txt
+Plant4T1LabeledShapenetSS12.txt
+Plant4T1LabeledShapenetSS7.txt
+Plant4T1LabeledShapenetSS8.txt
+Plant4T1LabeledShapenetSS9.txt
+Batch 13 mean mIoU: 0.5838481812961217
+Plant5T1LabeledShapenetSS13.txt
+Plant5T1LabeledShapenetSS15.txt
+Plant5T1LabeledShapenetSS9.txt
+Plant8T1LabeledShapenetSS5.txt
+Plant9T1LabeledShapenetSS15.txt
+Plant9T1LabeledShapenetSS6.txt
+Plant9T1LabeledShapenetSS9.txt
+RedpotT1LabeledShapenetSS1.txt
+RedpotT1LabeledShapenetSS18.txt
+RedpotT1LabeledShapenetSS9.txt
+Batch 14 mean mIoU: 0.5301635339430247
+RedpotT2LabeledShapenetSS15.txt
+RedpotT2LabeledShapenetSS9.txt
+Salat1LabeledShapenetSS18.txt
+Salat3LabeledShapenetSS8.txt
+Salat4LabeledShapenetSS12.txt
+Salat5LabeledShapenetSS15.txt
+Salat5LabeledShapenetSS19.txt
+Salat5LabeledShapenetSS9.txt
+Salat6LabeledShapenetSS16.txt
+Salat7LabeledShapenetSS2.txt
+Batch 15 mean mIoU: 0.5906326627283822
+Salat7LabeledShapenetSS4.txt
+Salat8LabeledShapenetSS2.txt
+Tomato10LabeledShapenetSS13.txt
+Tomato10LabeledShapenetSS18.txt
+Tomato10LabeledShapenetSS5.txt
+Tomato11LabeledShapenetSS12.txt
+Tomato14LabeledShapenetSS1.txt
+Tomato14LabeledShapenetSS11.txt
+Tomato16LabeledShapenetSS18.txt
+Tomato16LabeledShapenetSS2.txt
+Batch 16 mean mIoU: 0.5822687662490497
+Tomato16LabeledShapenetSS7.txt
+Tomato17LabeledShapenetSS13.txt
+Tomato17LabeledShapenetSS17.txt
+Tomato17LabeledShapenetSS4.txt
+Tomato18LabeledShapenetSS10.txt
+Tomato18LabeledShapenetSS13.txt
+Tomato19LabeledShapenetSS12.txt
+Tomato19LabeledShapenetSS5.txt
+Tomato19LabeledShapenetSS6.txt
+Tomato19LabeledShapenetSS8.txt
+Batch 17 mean mIoU: 0.5596424392477153
+Tomato1T1LabeldShapenetNormalsSS4.txt
+Tomato1T2LabeledShapenetNormalsSS1.txt
+Tomato1T5LabeledShapenetNormalsSS20.txt
+Tomato1T5LabeledShapenetNormalsSS6.txt
+Tomato1T5LabeledShapenetNormalsSS8.txt
+Tomato1T6LabeledShapenetNormalsSS14.txt
+Tomato1T6LabeledShapenetNormalsSS8.txt
+Tomato1T7LabeledShapenetNormalsSS10.txt
+Tomato1T7LabeledShapenetNormalsSS2.txt
+Tomato1T7LabeledShapenetNormalsSS9.txt
+Batch 18 mean mIoU: 0.6198715178115586
+Tomato1T8LabeledShapenetNormalsSS14.txt
+Tomato1T9LabeledShapenetNormalsSS12.txt
+Tomato1T9LabeledShapenetNormalsSS3.txt
+Tomato20LabeledShapenetSS13.txt
+Tomato20LabeledShapenetSS2.txt
+Tomato21LabeledShapenetSS1.txt
+Tomato21LabeledShapenetSS15.txt
+Tomato22LabeledShapenetSS11.txt
+Tomato22LabeledShapenetSS13.txt
+Tomato22LabeledShapenetSS16.txt
+Batch 19 mean mIoU: 0.5328184959619209
+020/028
+Tomato22LabeledShapenetSS9.txt
+Tomato23LabeledShapenetSS12.txt
+Tomato23LabeledShapenetSS15.txt
+Tomato23LabeledShapenetSS2.txt
+Tomato23LabeledShapenetSS6.txt
+Tomato24LabeledShapenetSS12.txt
+Tomato24LabeledShapenetSS5.txt
+Tomato25LabeledShapenetSS11.txt
+Tomato25LabeledShapenetSS4.txt
+Tomato25LabeledShapenetSS8.txt
+Batch 20 mean mIoU: 0.5817527467990857
+Tomato26LabeledShapenetSS3.txt
+Tomato26LabeledShapenetSS7.txt
+Tomato27LabeledShapenetSS20.txt
+Tomato29LabeledShapenetSS10.txt
+Tomato2T2LabeledShapenetNormalsSS1.txt
+Tomato2T2LabeledShapenetNormalsSS11.txt
+Tomato2T2LabeledShapenetNormalsSS12.txt
+Tomato2T2LabeledShapenetNormalsSS3.txt
+Tomato2T3LabeldShapenetNormalsSS1.txt
+Tomato2T3LabeldShapenetNormalsSS15.txt
+Batch 21 mean mIoU: 0.5881286757192459
+Tomato2T3LabeldShapenetNormalsSS2.txt
+Tomato2T4LabeledShapenetNormalsSS14.txt
+Tomato2T5LabeledShapenetNormalsSS11.txt
+Tomato2T6LabeledShapenetNormalsSS10.txt
+Tomato2T7LabeledShapenetNormalsSS13.txt
+Tomato2T7LabeledShapenetNormalsSS2.txt
+Tomato2T7LabeledShapenetNormalsSS4.txt
+Tomato2T7LabeledShapenetNormalsSS5.txt
+Tomato2T7LabeledShapenetNormalsSS7.txt
+Tomato2T8LabeledShapenetNormalsSS14.txt
+Batch 22 mean mIoU: 0.819088016010662
+Tomato2T8LabeledShapenetNormalsSS20.txt
+Tomato2T9LabeledShapenetNormalsSS14.txt
+Tomato30LabeledShapenetSS11.txt
+Tomato30LabeledShapenetSS13.txt
+Tomato32LabeledShapenetSS13.txt
+Tomato32LabeledShapenetSS6.txt
+Tomato34LabeledShapenetSS12.txt
+Tomato34LabeledShapenetSS6.txt
+Tomato34LabeledShapenetSS9.txt
+Tomato35LabeledShapenetSS14.txt
+Batch 23 mean mIoU: 0.6234046112980741
+Tomato35LabeledShapenetSS17.txt
+Tomato3LabeledShapenetSS4.txt
+Tomato3T2LabeledShapenetNormalsSS6.txt
+Tomato3T3LabeldShapenetNormalsSS2.txt
+Tomato3T3LabeldShapenetNormalsSS4.txt
+Tomato3T3LabeldShapenetNormalsSS8.txt
+Tomato3T5LabeledShapenetNormalsSS6.txt
+Tomato3T6LabeledShapenetNormalsSS3.txt
+Tomato3T7LabeledShapenetNormalsSS1.txt
+Tomato3T7LabeledShapenetNormalsSS10.txt
+Batch 24 mean mIoU: 0.6789583754085753
+Tomato3T8LabeldShapenetNormalsSS1.txt
+Tomato3T8LabeldShapenetNormalsSS14.txt
+Tomato3T8LabeldShapenetNormalsSS19.txt
+Tomato3T8LabeldShapenetNormalsSS2.txt
+Tomato3T8LabeldShapenetNormalsSS5.txt
+Tomato3T9LabeledShapenetNormalsSS7.txt
+Tomato4LabeledShapenetSS11.txt
+Tomato4LabeledShapenetSS12.txt
+Tomato4LabeledShapenetSS6.txt
+Tomato6LabeledShapenetSS14.txt
+Batch 25 mean mIoU: 0.6055642368191834
+Tomato6LabeledShapenetSS5.txt
+Tomato6LabeledShapenetSS9.txt
+Tomato8LabeledShapenetSS20.txt
+Tomato8LabeledShapenetSS3.txt
+Tomato9LabeledShapenetSS11.txt
+Tomato9LabeledShapenetSS12.txt
+Tomato9LabeledShapenetSS15.txt
+Tomato9LabeledShapenetSS17.txt
+Tomato9LabeledShapenetSS4.txt
+Tomato9LabeledShapenetSS6.txt
+Batch 26 mean mIoU: 0.4962787038454811
+paprika9LabaeledShapenetSS12.txt
+paprika9LabaeledShapenetSS3.txt
+Batch 27 mean mIoU: 0.5542214431125482
+eval mean loss: 0.593300
+eval accuracy: 0.875070
+eval avg class acc: 0.787960
+eval mIoU of Plant:	 0.609914
+eval mean mIoU: 0.609914
+eval mean mIoU (all shapes): 0.609914
