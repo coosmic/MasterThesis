@@ -32,14 +32,9 @@ H.~Bay, A.~Ess, T.~Tuytelaars, and L.~Van~Gool, ``Speeded-up robust features
   (surf),'' {\em Computer vision and image understanding}, vol.~110, no.~3,
   pp.~346--359, 2008.
 
-\bibitem{ODM}
-pierotofy, ``Open drone map - a command line toolkit to generate maps, point
-  clouds, 3d models and dems from drone, balloon or kite images.,'' 2020.
-
-\bibitem{schoenberger2016mvs}
-J.~L. Sch\"{o}nberger, E.~Zheng, M.~Pollefeys, and J.-M. Frahm, ``{Pixelwise
-  View Selection for Unstructured Multi-View Stereo},'' in {\em European
-  Conference on Computer Vision (ECCV)}, 2016.
+\bibitem{lecun2015deep}
+Y.~LeCun, Y.~Bengio, and G.~Hinton, ``Deep learning,'' {\em nature}, vol.~521,
+  no.~7553, pp.~436--444, 2015.
 
 \bibitem{fan2016point}
 H.~Fan, H.~Su, and L.~Guibas, ``A point set generation network for 3d object
@@ -68,10 +63,6 @@ W.~G{\'e}lard, M.~Devy, A.~Herbulot, and P.~Burger, ``Model-based segmentation
   of 3d point clouds for phenotyping sunflower plants,'' in {\em 12.
   International Joint Conference on Computer Vision, Imaging and Computer
   Graphics Theory and Applications}, 2017.
-
-\bibitem{lecun2015deep}
-Y.~LeCun, Y.~Bengio, and G.~Hinton, ``Deep learning,'' {\em nature}, vol.~521,
-  no.~7553, pp.~436--444, 2015.
 
 \bibitem{qi2017pointnet}
 C.~R. Qi, H.~Su, K.~Mo, and L.~J. Guibas, ``Pointnet: Deep learning on point
@@ -143,6 +134,15 @@ V.~Sarode, X.~Li, H.~Goforth, Y.~Aoki, R.~A. Srivatsan, S.~Lucey, and
   H.~Choset, ``Pcrnet: Point cloud registration network using pointnet
   encoding,'' 2019.
 
+\bibitem{lk}
+B.~Lucas and T.~Kanade, ``An iterative image registration technique with an
+  application to stereo vision (ijcai),'' vol.~81, 04 1981.
+
+\bibitem{RPM}
+S.~Gold, C.-P. Lu, A.~Rangarajan, S.~Pappu, and E.~Mjolsness, ``New algorithms
+  for 2d and 3d point matching: Pose estimation and correspondence,'' {\em
+  Advances in neural information processing systems}, pp.~957--964, 1995.
+
 \bibitem{Sift3D}
 R.~Hänsch, T.~Weber, and O.~Hellwich, ``Comparison of 3d interest point
   detectors and descriptors for point cloud fusion,'' {\em ISPRS Annals of
@@ -153,5 +153,13 @@ R.~Hänsch, T.~Weber, and O.~Hellwich, ``Comparison of 3d interest point
 R.~Sears, C.~Van~Ingen, and J.~Gray, ``To blob or not to blob: Large object
   storage in a database or a filesystem?,'' {\em arXiv preprint cs/0701168},
   2007.
+
+\bibitem{learning3d}
+V.~Sarode, ``Learning3d: A modern library for deep learning on 3d point clouds
+  data.,'' 2021.
+
+\bibitem{zhou2018open3d}
+Q.-Y. Zhou, J.~Park, and V.~Koltun, ``Open3d: A modern library for 3d data
+  processing,'' {\em arXiv preprint arXiv:1801.09847}, 2018.
 
 \end{thebibliography}

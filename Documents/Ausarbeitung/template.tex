@@ -4,7 +4,7 @@
 
 % language stuff
 \usepackage{german}           % deutsche Überschriften etc.
-\usepackage[utf8]{inputenc} % direkte Einbgabe von Umlauten
+\usepackage[utf8]{inputenc} % direkte Eingabe von Umlauten
 
 % Layout-Einstellungen
 \usepackage{parskip}          % Abstand statt Einrückung
@@ -200,7 +200,7 @@ Spezielle Aufnahmegeräte, wie ein LIDAR-Scanner, die den Kleinbauern nicht scho
 %Arbeit erforderlich sind, aber einem mit der Aufgabenstellugn nicht vertrauten
 %fachkundigen Leser nicht zwangsweise bekannt sind.
 
-Drei Kernprobleme müssen betrachtet werden die für den Erfolg diese Arbeit gelöst werden müssen. 
+Drei Kernprobleme müssen betrachtet werden, die für den Erfolg diese Arbeit gelöst werden müssen. 
 Zuerst muss aus einer Menge an Bilder eine Punkwolke generiert werden. Danach muss die Punktwolke Segmentiert werden um den Hintergrund zu entfernen und die einzelnen Teile der Pflanze wie Blätter und Stiele zu erkennen und weiter zu analysieren. 
 Zuletzt müssen zwei Punktwolken einer Pflanze zu verschiedenen Zeitpunkten miteinander registriert werden um Aussagen über das Wachstum einer Pflanze treffen zu können.
 
@@ -209,7 +209,7 @@ Zuletzt müssen zwei Punktwolken einer Pflanze zu verschiedenen Zeitpunkten mite
 
 Generell kann man zwischen zwei Methoden der Generierung von Punktwolken unterscheiden, die jeweils verschiedene Verfahren beziehungsweise Techniken anwenden.
 
-Die erste Methode nutzt Hardware wie LIDAR-Scanner \cite{lidar} um Punkwolken direkt zu erzeugen. Es gibt eine Reihe von Sensoren die das ermöglichen. Da der Großteil der Sensoren aus kostengründen nicht in Frage kommt sei hier nur noch der RGB-D erwähnt. 
+Die erste Methode nutzt Hardware wie LIDAR-Scanner \cite{lidar} um Punkwolken direkt zu erzeugen. Es gibt eine Reihe von Sensoren die das ermöglichen. Da der Großteil der Sensoren aus kostengründen nicht in Frage kommt sei hier nur noch der RGB-D-Sensor erwähnt. 
 Dieser liefert neben den Farbwerten für ein Bild auch noch eine Tiefeninformation für jeden Pixel. In einigen Smartphone-Modellen wird bereits ein solcher Sensor verbaut \cite{rgbd_smartphones}.
 
 Die andere Methode ist Structure from Motion (SfM), bei der die Punktwolke aus Bildern, einer Szene aus verschiedenen Perspektiven, generiert wird. 
@@ -225,14 +225,14 @@ Mit $E$ kann nun die Kamera-Ausrichtung bestehend aus Kamera- Position und Rotat
 %Wurde aus den beiden Bildern eine initiale Punktwolke erstellt, wird diese mit den verbleibenden Bildern angereichert \cite{alouacheevaluation}. 
 
 %Eine der bekanntesten Algorithmen ist SIFT \cite{Sift3D}.
-Einige Verfahren benötigen genaue Informationen über die Kamera Position, Ausrichtung und andere Angaben wie die Brennweite der Linse etc. 
-andere wiederrum lesen diese Informationen aus den EXIF-Headern der Bildern direkt aus, wenn diese zur Verfügung stehen, oder schätzen diese \cite{ODM} \cite{schoenberger2016mvs}.
+%Einige Verfahren benötigen genaue Informationen über die Kamera Position, Ausrichtung und andere Angaben wie die Brennweite der Linse etc. 
+%andere wiederrum lesen diese Informationen aus den EXIF-Headern der Bildern direkt aus, wenn diese zur Verfügung stehen, oder schätzen diese \cite{ODM} \cite{schoenberger2016mvs}.
 
 TODO: Verfahren nennen und erläutern.
 
-Es wurden in den letzten Jahren große Fortschritte im Bereich Deep Learning, zur Gewinnung von 3D-Punkwolken, gemacht \cite{fan2016point} \cite{tatarchenko2017octree} \cite{wang2018pixel2mesh}. 
+Es wurden in den letzten Jahren große Fortschritte im Bereich tiefer Neuronaler Netze (Deep-Learning) \cite{lecun2015deep}, zur Gewinnung von 3D-Punkwolken, gemacht \cite{fan2016point} \cite{tatarchenko2017octree} \cite{wang2018pixel2mesh}. 
 Mit diesen Verfahren ist es möglich aus einer minimalen Datenbasis die auch nur aus einem Bild bestehen kann 3D-Punkwolken zu generieren. Was dem Ziel die Datenübertragung zum Server gering zu halten entgegenkommt.
-Nachteil der Verfahren ist, dass auf dem Bild nur ein Objekt ohne Hintergrund abgebildet sein darf, oder das zu erkennende Objekt mit einer Binären Maske maskiert werden muss.
+Nachteil der Verfahren ist, dass auf dem Bild nur ein Objekt ohne Hintergrund abgebildet sein darf, oder das zu erkennende Objekt mit einer binären Maske maskiert werden muss.
 Eine Rekonstruktion von komplexen Szenen ist so nicht oder nur mit sehr hohem Aufwand möglich \cite{rs11222644} und wird daher nicht weiter untersucht. 
 Der in \cite{rs11222644} vorgestellte Ansatz geht diese Problematik an und soll daher untersucht werden.
 
@@ -252,33 +252,45 @@ In \cite{ModelBased}  wird ein Ansatz verfolgt, der sich die zylindrische Form v
 Es wird das Model eines Zylinders in der Punktwolke gesucht und wird dieses gefunden werden Punkte die in das Model fallen als Stamm klassifiziert.
 
 Insbesondere die hohe Qualität der Punktwolken die meist mit einem LIDAR-Scanner oder einem vergleichbaren Gerät erzielt wird, 
-kann mit bildbasierten Methoden wie SfM nicht oder nur mit sehr großen Datenmengen und dem damit verbundenen Rechenaufwand erreicht werden. 
+kann mit Bild basierten Methoden wie SfM nicht oder nur mit sehr großen Datenmengen und dem damit verbundenen Rechenaufwand erreicht werden. 
 Ein weiteres Problem das viele Lösungen haben ist, dass der Hintergrund, also alles was nicht zur Pflanze gehört, manuell entfernt wird, 
-oder der Hintegrund so vorbereitet wird das dieser beim erstellen der Punktwolke ignoriert wird und erst auf der freigestellten Pflanze der eigentliche Ansatz ausgeführt wird. 
-Um diese Lösungen dennoch in einer voll automatischen Pipeline nutzen zu können muss das freistellen der Pflanzen erst automatisiert werden.
+oder der Hintergrund so vorbereitet wird das dieser beim erstellen der Punktwolke ignoriert wird und erst auf der freigestellten Pflanze der eigentliche Ansatz ausgeführt wird. 
+Um diese Lösungen dennoch in einer voll automatischen Pipeline nutzen zu können muss das Freistellen der Pflanzen erst automatisiert werden.
 
-Auch im Bereich Segmentierung wurden große Fortschritte im Bereich tiefer Neuronaler Netze (Deep-Learning) \cite{lecun2015deep} auf 3D-Punkwolken gemacht, die mit einer angelernten Netzarchitektur bestimmte Objekte erkennen und Teile davon segmentieren. 
+Auch im Bereich Segmentierung wurden große Fortschritte im Bereich Deep-Learning auf 3D-Punkwolken gemacht, die mit einer angelernten Netzarchitektur bestimmte Objekte erkennen und Teile davon segmentieren. 
 Diese Ansätze können auch auf Pflanzen angewandt werden. Dazu müssen Architekturen wie PointNet\cite{qi2017pointnet}/PointNet++\cite{qi2017pointnet++} oder DGCNN \cite{dgcnn} auf Punktwolken von Pflanzen trainiert werden, 
-da für diese Klasse von Objekten noch keine Gewichte Trainiert wurden.
+da für diese Klasse von Objekten noch keine Gewichte trainiert wurden.
 
-Bei PointNet wird jeder der $n$ Punkt der Punktwolke mit einer $3x3$ Matrix transformiert deren Gewichte gelernt sind. 
-Diese T-Net genannte Transformation wird angewandt um die Punktwolke in ein neues Koordinaten-System zu überführen.
-Danach wird jeder Punkt nacheinander mittels eines Multi-Layer-Perceptron (MLP) mit zwei Layern der Größe $64$ in einen neuen Feature-Raum überführt. 
+Bei PointNet wird jeder der $n$ Punkt der Punktwolke mit einer $3\times 3$ Matrix transformiert deren Gewichte gelernt sind. Dieses Mininetz wird von den Autoren T-Net genannt.
+Danach wird jeder Punkt nacheinander mittels eines Multi-Layer-Perceptron (MLP) mit zwei Layern, deren Ausgabe-Schicht jeweils die Größe $64$ hat, in einen neuen Feature-Raum überführt. 
 Die Gewichte des MLP werden also über alle Punkte geteilt, was auch für die folgenden MLPs gilt. Der Feature-Vektor für einen Punkt besteht aus $64$ Elementen.
-Die Punkte des Feature-Raums werden wieder mit einem T-Net der Größe $64x64$ transformiert. Danach wird wieder ein MLP (drei Layer $64$, $128$, $1024$) angewandt und mittels Max-Pooling eine globaler Feature-Vektor der Größe $1024$ ermittelt. 
-Dieser Vektor wird mit dem lokalen Feature-Vektor für jeden Punkt kombiniert und die daraus entstehende Matrix der Größe $nx1088$ wird mittels zwei MLP-Layern in eine Matrix der Größe $nxm$ überführt, wobei $m$ die Anzahl möglichen Label sind.
-Der erste dieser MLPs hat die drei Layer mit den Größen $512$, $256$ und $128$, der Zweite besteht aus zwei Layern der Größe $128$ und $m$.
+Die Punkte des Feature-Raums werden wieder mit einem T-Net der Größe $64\times 64$ transformiert. Danach wird wieder ein MLP (drei Layer mit Ausgabeschicht der Größe $64$, $128$, $1024$) angewandt und mittels Max-Pooling eine globaler Feature-Vektor der Größe $1024$ ermittelt. 
+Dieser Vektor wird mit dem lokalen Feature-Vektor für jeden Punkt kombiniert und die daraus entstehende Matrix der Größe $n\times 1088$ wird mittels zwei MLP-Layern in eine Matrix der Größe $n\times m$ überführt, wobei $m$ die Anzahl möglichen Label sind.
+Der erste dieser MLPs hat drei Layer mit den Ausgangs-Schicht-Größen $512$, $256$ und $128$, der Zweite besteht aus zwei Layern der Ausgangs-Schicht-Größe $128$ und $m$.
 Die Architektur ist in Abbildung \ref{fig:point:net:arch} zu finden.
 
 \begin{figure}
     \centering
     \includegraphics[width=1.0\textwidth]{./Images/PointNetArchitektur.png}
-    \caption{PointNet-Architektur}
+    \caption{PointNet-Architektur \cite{qi2017pointnet}}
     \label{fig:point:net:arch}
 \end{figure}
 
 PointNet++ baut auf der Architektur von PointNet auf. Hierbei wird das Problem adressiert, dass PointNet nicht gut mit kleinen Details umgehen kann. 
-TODO: PointNet++ fertig erklären
+PointNet++ führt PointNet auf einem kleinen Bereich um gewählte zentrale Punkte aus. Die zentralen Punkte werden mittels Farthest-Point-Sampling ermittelt. 
+Um die gewählten Punkte werden alle Punkte in den Bereich aufgenommen, die einen bestimmten Abstand $k$ von dem zentralen Punkt nicht überschreiten. 
+Auf diesen Punkten wird PointNet angewandt. Für jeden zentralen Punkt wird ein Feature-Vektor ermittelt.
+Dieser Vorgang wird so lange wiederholt, bis alle zentralen Punkte zu einem vereint werden könnten. Für klassifizierung würde dieser Schritt auch durchgeführt, bei der Segmentierung allerdings nicht.
+Um jeden einzelnen Punkt ein Label zuzuordnen wird der Prozess nun umgekehrt und mittels Interpolation werden die ermittelten Feature-Vektoren schrittweise auf die originalen Punkte übertragen 
+unter zuhilfenahme der in den vorherigen Schritten ermittelten zentralen Punkte.
+Die Architektur von PointNet++ ist in Abbildung \ref{fig:point:net:pp:arch} zu sehen.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1.0\textwidth]{./Images/PointNetPPArchitektur.png}
+    \caption{PointNet++-Architektur \cite{qi2017pointnet++}}
+    \label{fig:point:net:pp:arch}
+\end{figure}
 
 \subsection{Registrierung von 3D-Punkwolken}
 \label{sec:stand:registrierung}
@@ -295,30 +307,56 @@ Der Vorgang wird wiederholt bis es zu einer Konvergenz kommt, also $T$ nahezu de
 Ein Problem das ICP hat ist, das es auch für lokale Minima konvergiert. Das heißt, das eine initiale Transformation für $S_p$ so gewählt werden muss, so dass der ICP-Durchlauf bei einem globalen Minimum konvergiert.
 Ansätze wie Go-ICP \cite{GoICP}, die mit verschiedenen initialen Transformationen starten existieren sind aber sehr Rechenaufwendig und damit recht langsam.
 
-Des weiteren ist ICP anfällig für Ausreißer. Für diese Problem gibt es allerdings existierende Lösungen \cite{ICP}. Hierbei kommt in der Regel RANSAC \cite{RANSAC} zum Einsatz um Ausreißer bei der Registrierung auszuschließen.
+Des weiteren ist ICP anfällig für Ausreißer. Für diese Problem gibt es allerdings existierende Lösungen wie RICP \cite{ICP}. Hierbei kommt in der Regel RANSAC \cite{RANSAC} zum Einsatz um Ausreißer bei der Registrierung auszuschließen.
 RANSAC basiert auf der Idee ein Model in einer Punktwolke zu suchen und möglichst viele Punkte zu finden die in das Model passen. Initial werden zufällig so viele Punkte wie nötig gezogen um das Model minimal zu repräsentieren. 
 So werden zum Beispiel für ein Linien-Model zwei zufällige Punkte aus der Punktwolke gezogen. Nun werden die Parameter für das Model mit den gezogenen Punkten ermittelt und alle Punkte die nahe genug an dem so gebildeten Model sind mit aufgenommen.
 Wenn der Anteil der Punkte die in das Model fallen über einem bestimmten Schwellwert liegen, terminiert der Algorithmus. 
 Ansonsten wird der Vorgang solange wiederholt bis eine Parametrisierung gefunden wurde die terminiert oder eine Obergrenze an Iterationen erreicht wurde.
 Das Ergebnis des Algorithmus ist auf der einen Seite die gefundene Parametrisierung und auf der anderen Seite eine Unterteilung der Punkte in der Punktwolke in Punkte die in das Model mit gegebener Parametrisierung fallen und in die die nicht in das Model fallen.
-Letzteres kann genutzt werden um Punkte bei der Registrierung auszuschließen.
+Letzteres kann genutzt werden um Punkte bei der Registrierung auszuschließen. Dieser Schritt ist allerdings optional und wird nicht in allen Verfahren angewandt.
 
-Ein weiteres Problem ist, dass die meisten ICP-Ansätze keine Werte für die Skalierung schätzen. Es gibt einige wenige Ansätze für dieses Problem die auch eine Schätzung für die Skalierung ermitteln \cite{Ziner2005PointSR}.
+Ein weiteres Problem ist, dass die meisten ICP-Ansätze keine Werte für die Skalierung schätzen. 
+Dies ist aber nötig, da bei SFM keine Information über die reale Ausdehnung eines Objektes ermittelt werden kann.
+Es gibt einige wenige Ansätze für dieses Problem die auch eine Schätzung für die Skalierung ermitteln \cite{Ziner2005PointSR}.
+In \cite{Ziner2005PointSR} wird die Skalierung geschätzt nachdem die Rotation $R$ bekannt ist, also nach der SVD-Zerlegung. 
+Ist $R$ bekannt können die Vektoren $S_P^*$ und $T_P^*$ gebildet werden (Siehe Gleichung \ref{eq:icp_scale:1}).
 
-TODO: Erläutern wie Skalierung geschätzt wird.
+\begin{equation}
+    \label{eq:icp_scale:1}
+    S_{P_i}^* = S_{P_i} - \bar{S_P},\quad T_{P_j}^* = T_{P_j} - \bar{T_P}
+\end{equation}
+
+Mittels dieser Vektoren kann die Skalierung $s$ berechnet werden. Die Berechnung ist in Gleichung \ref{eq:icp_scale:2} zu sehen.
+
+\begin{equation}
+    \label{eq:icp_scale:2}
+    s = \sum_{i,j}{T_{P_j}^{*T}S_{P_i}^*} / \sum_{i}{S_{P_i}^{*T}S_{P_i}^*}
+\end{equation}
 
 Auch für das Registrierung-Problem gibt es Lösungen aus dem Deep-Learning-Bereich, aber auch hier gibt es das Problem, dass es nur wenige Ansätze gibt die mit Skalierung umgehen können \cite{ScaleLK}.
 Bekannt Ansätze sind DCP \cite{Wang_2019_ICCV}, PointNetLK \cite{aoki2019pointnetlk}, RPM-Net \cite{Yew_2020}, DeepGMR \cite{yuan2020deepgmr}, PRNet \cite{wang2019prnet} und PCRNet \cite{sarode2019pcrnet}.
 Einige dieser Ansätze sollen in dieser Arbeit untersucht werden.
 
-TODO: Erläutern wie Netze funktioniren.
-
 DCP besteht aus drei Teilnetzen. Das erste Netz (PointNet oder DGCNN) überführt die Punktwolke in einen hochdimensionalen Raum. Das zweite Netz codiert die kontextuelle Information mittels eines Transformer-Modells 
-und das letzte Netz schätzt auf Basis der kontextuellen Information mittels eines differnezierbaren SVD Layers.
+und das letzte Netz schätzt auf Basis der kontextuellen Information mittels eines differnezierbaren SVD Layers die Rotation und Translation.
 
-PointNetLK 
+PointNetLK basiert auf der Idee von PointNet und dem LK-Algorithmus \cite{lk}. Initial wird die Ziel-Punktwolke der Größe nx3 in einen hochdimensionalen Vektorraum der Größe nxk mittels eines MLP überführt. 
+Aus der Ausgabe des MLP-Layers wird mittels einer symmetrischen Polling-Funktion ein $k$ großer globaler Feature-Vektor ermittelt. Für diesen wird die Jakobi-Matrix $J$ berechnet.
+Die Quell-Punktwolke wird nun iterativ an die Ziel-Punktwolke angenähert.
+Die Quell-Punktwolke wird dabei ähnlich wie die Ziel-Punktwolke behandelt. Es wird allerdings nach dem ermitteln des globalen Feature-Vektors nicht die Jakobi-Matrix gebildet, 
+sondern mittels der Moore-Penrose Inversen Matrix von $J$ und der Differenz der beiden globalen Feature-Vektoren die Parameter für die in dieser Iteration auszuführenden Transformation ermittelt.
+Die Transformation wird angewandt und der Vorgang solange wiederholt bis es zu keinen oder nur noch kleinen unter einem Schwellwert liegenden Änderungen in den Parametern für die Transformation kommt.
+Die einzelnen Transformationen aus den Iterationen werden miteinander multipliziert um die Transformation zu erlangen die die Quell-Punktwolke mit der Ziel-Punkwolke registriert.
 
-RPM-Net
+RPM-Net baut auf RPM \cite{RPM} auf. Nur werden im Gegensatz zu RPM die räumlichen Entfernungne durch hybride Feature-Distanzen ersetzt und 
+die Parameter $\alpha$ und $\beta$ werden in jeder Iteration durch ein neuronales Netz geschätzt. Details der Archtektur sind in Abbildung \ref{fig:rpm:net:arch} zu finden.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1.0\textwidth]{./Images/RPM_Net_Arch.png}
+    \caption{RPM-Net-Architektur \cite{Yew_2020}}
+    \label{fig:rpm:net:arch}
+\end{figure}
 
 \newpage
 \section{Realisierung}
@@ -331,7 +369,7 @@ Ein zweites Problem ist die Registrierung zweier Punktwolken einer Pflanze zu ve
 Hierbei gilt es die ideale Transformation $T$ bestehend aus Rotation, Skalierung und Translation zu finden um die beiden Punktwolken so realitätsnah wie möglich aneinander aus zu richten.
 Es werden drei Ansätze überprüft dieses Problem zu lösen. 
 Der erste Ansatz basiert auf der Idee, beim Beginn einer neuen Zeitserie zur Analyse eines Wachstumsprozesses, eine Punktwolke des Hintergrunds zu erstellen und die Punktwolken der einzelnen Zeitpunkte mit diesem Hintegrund zu registrieren. 
-So wird ein Verhältnis geschaffen das dem der Realität entspricht.
+So wird ein Verhältnis geschaffen das dem der Realität entspricht. Wird für einen beliebigen Zeitpunkt noch die totale Größe der Pflanze angegeben, kann aus den Verhältnissen die totale Größe aller Zeitpunkte berechnet werden. 
 Der zweite Ansatz soll untersuchen ob DCP so angepasst werden kann, dass statt Rotation und Translation separat, die komplette Transformations-Matrix mit Skalierung geschätzt werden kann.
 In einem letzten Ansatz soll die Skalierung durch iteratives Anwenden verschiedener Skalierungen gefunden werden mit einer anschließenden Registrierung ohne Schätzung der Skalierung.
 
@@ -339,7 +377,7 @@ Das dritte Problem ist die Segmentierung der Punktwolke in Stamm, Blätter und H
 Ziel ist es daher eine Lösung zu finden die auf möglichst vielen Varianten von Pflanzen funktioniert. 
 Das Problem der Segmentierung ist essentiell für die weitere Analyse einer Zeitserien. Ohne die Information welche Punkte zu Stamm und Blättern gehören kann nicht auf die Entwicklung von Blättern und Stielen geschlossen werden.
 
-Zuletzt müssen aus die bisherigen Problemen in geeignete Pipelines zusammengefasst werden und durch einen Server angesteuert werden. Hier muss die Lastverteilung und Datenhaltung beachtet werden.
+Zuletzt müssen die bisherigen Problemen in geeignete Pipelines zusammengefasst werden und durch einen Server angesteuert werden. Hier muss die Lastverteilung und Datenhaltung beachtet werden.
 
 \subsection{Architektur}
 %-------------------------------------------------------------
@@ -369,11 +407,12 @@ Die einzelnen Abläufe sind in Abbildung \ref{fig:WorkflowClientServer} zu sehen
 %(z.B.~Klassendiagramm) Beschreibung. Bei Quellcode beschränken Sie Sich
 %bitte auf kurze, aussagekräftige Ausschnitte.
 
-Die aus der Analyse der verschiedenen Verfahren (siehe Evaluation) ausgewählte Anwendung ODM wird als Docker bereit gestellt. Um den Docker aus zu führen muss eine Ordner-Struktur bereit gestellt werden.
+Die aus der Analyse der verschiedenen Verfahren (siehe Evaluation) ausgewählte Anwendung ODM wird als Docker bereit gestellt. Um den Docker erfolgreich aus zu führen muss eine Ordner-Struktur bereit gestellt werden.
 In dieser Ordner-Struktur muss ein Ordner \glqq images\grqq{} enthalten sein, der die Bilder des Datensatzes, aus dem eine Punktwolke generiert werden soll, enthält.
 
-Ist das Verzeichnis angelegt kann der Docker gestartet werden. Hierbei muss allerdings beachtet werden, dass der Docker mit den selben Rechten wie der User arbeitet. Ansonsten werden per Standarteinstellung Root-Rechte genutzt.
+Ist das Verzeichnis angelegt kann der Docker gestartet werden. Hierbei muss allerdings beachtet werden, dass der Docker mit den selben Rechten wie der User ausgeführt wird. Ansonsten werden per Standarteinstellung Root-Rechte genutzt.
 Das führt dazu das auf die erstellten Daten nur noch lesend zugegriffen werden kann, was das Aufräumen erschwert.
+Nach dem Ausführen des Dockers sollte in jedem Fall alle nicht benötigten Dateien gelöscht werden, da diese je nach Anzahl genutzter Bilder mehrere Gigabyte an Festplattenspeicher belegen.
 
 \subsection{Umsetzung Registrierung zweier Punktwolken}
 %-------------------------------------------------------------
@@ -382,33 +421,33 @@ Das führt dazu das auf die erstellten Daten nur noch lesend zugegriffen werden 
 Bei der Umsetzung der Registrierung muss die Besonderheit beachtet werden, dass die Skalierung der Punktwolken nicht bekannt ist und sich unterscheiden. Das heißt die Punkwolken liegen in unterschiedlichen Maasstäben vor.  
 Um ein gutes Verfahren zu finden was mit dieser Besonderheit umgehen kann wurden mehrere Ansätze verglichen.
 
-In einem ersten Ansatz wurde versucht ein Pipeline zu erstellen die eine gute Initiale Lösung findet ohne den ganzen Suchraum SO(3) zu durchsuchen.
+In einem ersten Ansatz wurde versucht ein Pipeline zu erstellen die eine gute Initiale Lösung findet ohne den ganzen möglichen Suchraum zu durchsuchen.
 Die Pipeline sucht zuerst für die Quell- und Ziel-Punktwolke $S$ und $T$ nach der größten Ebene in der Punkwolke und richtet die Punkwolke so aus, dass die gefundene Ebene auf der Ebene liegt, die die x und y Achse bilden.
 Zudem wurden die Punkwolken so skaliert, dass die begrenzenden Boxen gleich groß sind.
 Des weiteren werden aus beiden Punkwolken nur ein Teilmenge $P_c$ der Punkte in einem Radius $r$ um dem Punkt $c$ der das Zentrum der Masse der Punktwolken repräsentiert entnommen.
-Damit soll Rauschen an den Rändern verhindert werden und ein Teil des Hintergrunds soll ausgeblendet werden.
-Aus diese Teilmenge werden Subsample gezogen um den Rechenaufwand zu minimieren. In diesem Zustand haben Quell- und Ziel-Punktwolke eine gute initiale Transformation.
+Damit soll Rauschen und unvollständige Fragmente an den Rändern unterdrückt werden und ein Teil des Hintergrunds soll ausgeblendet werden.
+Aus dieser Teilmenge werden Subsample gezogen um den Rechenaufwand zu minimieren. In diesem Zustand haben Quell- und Ziel-Punktwolke eine gute initiale Transformation.
 Für die zu registrierende Punktwolke wird zunächst mittels SIFT 3D \cite{Sift3D} eine Verbesserung der initiale Transformation gesucht. Danach wird ein ICP-Durchlauf gestartet der auch die Skalierung der Ziel-Punktwolke schätzt.
 Um das Ergebnis nach der Schätzung der Skalierung weiter zu verbessern wird noch ein ICP-Durchlauf gestartet - diesmal ohne Schätzung der Skalierung.
 
-Ein weiterer Ansatz ist es DCP so abzuwandeln das statt Translations-Vektor und Rotations-Matrix direkt die ganze Transformations-Matrix geschätzt wird. 
-Dazu muss der SVD-Head so angepasst werden das er statt einer $3X3$ Rotations-Matrix $R$ und dem Translations-Vektor $\vec(t)$ die Translations-Matrix $T$ zurück geliefert wird.
-Um das zu Erreichen muss die Eingabe der Größe $NX3$ auf eine Eingabe der Größe $NX4$ erweitert werden. Hier kann die Eingabe um einen Vektor mit Einsen erweitert werden.
-Das führt dazu das die Singulärwert-Zerlegung von $H$ im SVD-Head nun eine $4X4$ Matrix ist. Die Annahme die wir treffen ist das $H$ als Transformations-Matrix interpretiert werden kann.
+Ein weiterer Ansatz ist es DCP so abzuwandeln, dass statt Translations-Vektor und Rotations-Matrix direkt die ganze Transformations-Matrix geschätzt wird. 
+Dazu muss der SVD-Head so angepasst werden das er statt einer $3\times 3$ Rotations-Matrix $R$ und dem Translations-Vektor $\vec(t)$ die Translations-Matrix $T$ zurück geliefert wird.
+Um das zu Erreichen muss die Eingabe der Größe $N\times 3$ auf eine Eingabe der Größe $N\times 4$ erweitert werden. Hier kann die Eingabe um einen Vektor mit Einsen erweitert werden.
+Das führt dazu das die Singulärwert-Zerlegung von $H$ im SVD-Head nun eine $4\times 4$ Matrix ist. Die Annahme die wir treffen ist das $H$ als Transformations-Matrix interpretiert werden kann.
 
 In einem letzten Ansatz wird die Skalierung geschätzt in dem ein vorgegebener Bereich an Werten für die Skalierung in einer vorgegebenen Schrittgröße $s$ dursucht wird.
-Wieder werden die Quell- und Ziel-Punktwolke an der XY-Achse ausgerichtet und eine Teilmenge $P_c$ um das Zentrum $c$ entnommen wie im ersten Ansatz. Auch werden wieder Subsample gezogen.
+Wieder werden die Quell- und Ziel-Punktwolke an der XY-Ebene ausgerichtet und eine Teilmenge $P_c$ um das Zentrum $c$ entnommen wie im ersten Ansatz. Auch werden wieder Subsample gezogen.
 In jedem Skalierungs-Schritt wird die Punktwolke mit der aktuellen Skalierung skaliert und danach mit einem Registrierungs-Verfahren registriert.
 Um die Ergebnisse der einzelnen Registrierungen zu messen wird der Abstand zwischen der transformierten Quell-Punktwolke und der Ziel-Punktwolke berechnet. 
-Der Abstand $d(S,T)$ wird so berechnet, dass für jeden Punkt $p$ aus Punktwolke $T$ der Abstand zum nächsten Punkt in der Punktwolke $S$ berechnet wird.
+Der Abstand $d(S,T)$ wird so berechnet, dass für jeden Punkt $p$ aus der Punktwolke $T$ der Abstand zum nächsten Punkt in der Punktwolke $S$ berechnet wird.
 
 Man könnte auch den Abstand von allen Punkten in $S$ messen, aber das kann zu Problemen bei kleinen Skalierungen führen, da wenn im extrem Fall die Punktwolke $S$ sehr klein ist alle Punkte in $S$ nahezu keinen Abstand mehr zueinander haben.
 Man könnt $S$ also auch durch einen Punkt $p_{S}$ abstrahieren.
 Bei der Registrierung muss $S$ nur sehr nah an einen Punkt $p_t$ in $T$ sein sodas gilt $p_t \approx p_S$ und der Abstand zwischen $S$ und $T$ geht gegen $0$. Dadurch werden sehr kleine Skalierung durch dieses Maß bevorzugt.
-Nimmt man statt aller Punkte in $S$ alle Punkte in $T$ wird der Fehler in diesem Fall größer als 0 sein, es sei den $T$ ist auch sehr groß.
+Nimmt man statt aller Punkte in $S$ alle Punkte in $T$ wird der Fehler in diesem Fall größer als 0 sein, es sei den $T$ ist auch sehr klein.
 
 Mit diesem robustem Maß kann man nun die Güte der einzelnen Skalierungs-Iterationen bewerten und die beste Skalierung mit zugehörigen Transformation für Rotation und Translation finden.
-Da die Wahl des Registrierungs-Verfahren offen bleibt wurden hier mehrere Verfahren mit einander verglichen. Es wurden ICP, DCP, PointNetLK und RPM-Net miteinander verglichen.
+Da die Wahl des Registrierungs-Verfahren offen bleibt wurden hier mehrere Verfahren mit einander verglichen. Es wurden zwei ICP-Implementationen, DCP, PointNetLK und RPM-Net miteinander verglichen.
 
 \subsection{Umsetzung Segmentierung}
 %-------------------------------------------------------------
@@ -434,7 +473,7 @@ C_i = \frac{1}{k} \sum_{j=1}^k{(\vec{m}_j - \vec{\bar{m}}) \otimes (\vec{m}_j - 
 
 Die Hauptkrümmung kann aus den Eigenwerten $0 \leq \lambda_1 \leq \lambda_2 \leq \lambda_3$ von $C_i$ bestimmt werden. $\lambda_3$ ist die stärkste Krümmung und $\lambda_2$ die schwächste Krümmung.
 
-Einige untersuchte Ansätze für eine Funktion $k(p_i)$ sind in \ref{eq:hauptkruemmung:3} zu finden. 
+Einige untersuchte Ansätze für eine Funktion $k(p_i)$ sind in Gleichung \ref{eq:hauptkruemmung:3} zu finden.
 
 \begin{equation}
 \label{eq:hauptkruemmung:3}
@@ -446,7 +485,7 @@ k_3(p_i) = (\lambda_3 + \lambda_2) / 2
 \end{equation}
 
 Je höher der Wert der Funktion $k(p_i)$ aus den Gleichungen in \ref{eq:hauptkruemmung:3} ist desto Wahrscheinlicher gehört ein Punkt zum Stiel einer Pflanze. Die Entscheidungregel dafür ist in Gleichung \ref{eq:manuell_classifier} zu sehen.
-Ein guter Wert für den Schwellwert $T_k$ muss in Experimenten für die Funktionen $k_1$, $k_2$ und $k_3$ gefunden werden.
+Ein guter Wert für den Schwellwert $T_k$ muss in Experimenten für die Funktionen $k_1$, $k_2$ und $k_3$ gefunden werden. Diese Experimente haben gezeigt, dass $k_1$ die besten Ergebnisse liefert.
 
 \begin{equation}
 \label{eq:manuell_classifier}
@@ -487,15 +526,15 @@ s_i = argmax_x(H_i(x))
 %-------------------------------------------------------------
 \label{sec:realisierung:implementierung4}
 
-Der Server ist mit dem Python-Framework Flask erstellt. Flask bietet eine Schlanke API um neue REST-Endpunkte zu erstellen und Daten vom Client anzunehmen. 
+Der Server ist mit dem Python-Framework Flask erstellt. Flask bietet eine Schlanke API um REST-Endpunkte zu erstellen und Daten vom Client anzunehmen. 
 
 Ein Hintergrund-Prozess führt die einzelnen Jobs aus und sorgt für den Lastausgleich. Die Anfragen an den Server werden asynchron verarbeitet. 
 Jede Anfrage wird in die Job-Queue eingeordnet. Diese wird vom Hintergrund-Prozess abgearbeitet.
 Einzige Ausnahme bildet hier das Speichern der Bilder. Die Bilder müssen synchrone zum Request auf der Platte persistiert werden, da Flask die Datei-Streams nach dem Lebenszyklus eines Requests schließt.
 
-Beim Start des Servers wird neben dem Hintergrund-Prozess der aktuelle Stand der Datenhaltung eingelesen und der Status des Servers aufgebaut. 
+Beim Start des Servers wird neben Starten des Hintergrund-Prozesses auch der aktuelle Stand der Datenhaltung eingelesen und der Status des Servers aufgebaut. 
 Bei der Datenhaltung wurde auf eine Datenbank verzichtet, da die Anwendung Datenhaltungs-Technisch simpel ist und die meisten Daten als BLOB \cite{sears2007blob} vorliegen und daher nicht ideal für ein relationales Datenbank-Modell sind. 
-Die Daten werden direkt auf der Festplatte des Host-Systems abgelegt.
+Die Daten werden direkt auf der Festplatte des Host-Systems abgelegt, wobei die Ergebnisse als JSON-Datei abgelegt werden.
 Des weiteren werden zwei Instanzen von PointNet++ gestartet. Eine für die Segmentierung des Hintergrundes und einer für die Segmentierung der Pflanze.
 
 Der Server bietet folgende Schnittstellen die den Betrieb der Anwendnung ermöglichen:
@@ -534,7 +573,7 @@ Wird als Zeitstempel \glqq background\grqq{} angegeben wird dieser Datensatz als
 
 \textbf{PUT /data/\{Messreihe\}/\{Zeitstempel\}}
 
-Dient dazu Pipelines für einen Zeitstempel einer Messreihe zu starten. Hierzu wird im Payload des Request an den Server eine JSON-Datei übermittelt welches eine Liste der Pipelines enthält (Beispiel siehe Listing \ref{listing:example:payload}).
+Dient dazu Pipelines für einen Zeitstempel einer Messreihe zu starten. Hierzu wird im Payload des Request an den Server eine JSON-Datei übermittelt welche eine Liste der Pipelines enthält (Beispiel siehe Listing \ref{listing:example:payload}).
 Die spezifizierten Pipelines werden, in der angegebene Reihenfolge, der Job-Queue hinzugefügt.
 \\
 
@@ -587,7 +626,7 @@ Zuletzt werden $n=16384$ Punkte aus der Punktwolke zufällig gezogen, wobei die 
 
 \textbf{Entfernung des Hintergrundes}
 
-Die im Shapenet-Format vorliegende Punktwolke wird mit der Instanz von PointNet++ für die Hintegrund-Segmentierung segmentiert. Das Ergebnis wird im Speicher des Host-Systems abgelget.
+Die im Shapenet-Format vorliegende Punktwolke wird mit der Instanz von PointNet++ für die Hintegrund-Segmentierung segmentiert. Das Ergebnis wird im Speicher des Host-Systems abgelegt.
 Da die Segmentierung etwas verrauscht ist wird das Ergebniss mit einem nächste Nachbarn Vote verbessert.
 Im Anschluss wir das Ergebnis auf die original Punktwolke übertragen, da sonst zu wenig Punkte für die Segmenetierung der Pflanze übrig bleiben.
 Auch wird der Hintegrund entfernt und aus den verbleibenden Punkten, die nun nur noch Pflanzen-Punkte enthalten wieder eine Punktwolke im Shapenet-Format erstellt.
@@ -617,13 +656,13 @@ Der Vorgang wird so lange wiederholt, bis keine Punkte mehr in $P$ enthalten sin
 
 Zuerst wird die Punktwolke wieder anhand der größten Ebene die in der Punktwolke zu finden ist an der XY-Ebene ausgerichtet.
 Danach wird um das Zentrum der Punktwolke ein Ausschnitt entnommen. 
-Im folgenden wird die Punktwolke wie beim Shapenet Format normiert und es werden zufällig 1024 Punkte aus der Punktwolke gezogen.
+Im folgenden wird die Punktwolke wie beim Shapenet Format normiert und es werden zufällig $n=1024$ Punkte aus der Punktwolke gezogen.
 
 \textbf{Hintergrund-Registrierung}
 
 Um einen Zeitstempel $t$ einer Messung mit dem Hintergrund der Messreihe zu registrieren muss sowohl die Punktwolke $P_t$ für den Zeitstempel $t$ als auch die Punktwolke für den Hintegrund im Registrierungs-Format vorliegen.
 Ist das gegeben kann die Registrierung gestartet werden. Hierbei wird ein Skalierungs-Faktor $s$ und eine Transformation $T$ ermittelt. 
-Das Registrierungs-Ergebnis der Punktwolke $P_t$ kann dann mit der Formel $P_{Registration} = (P_t \cdot s) \cdot T$ ermittelt werden. Wobei beachtet werden muss, dass erst die Skalierung und dann die Transformation angewandt wird.
+Das Registrierungs-Ergebnis $P_{Registration}$ der Punktwolke $P_t$ kann dann mit der Formel $P_{Registration} = (P_t \cdot s) \cdot T$ ermittelt werden. Wobei beachtet werden muss, dass erst die Skalierung und dann die Transformation angewandt wird.
 
 \textbf{Größen berechnen}
 
@@ -700,7 +739,7 @@ Ist die Höhe für den vorherigen Zeitstempel $t-1$ auch bekannt, kann das relat
 \subsection{Vergleich von Verfahren zur Generierung von 3D-Punktwolken auf Basis von Bildern}
 
 Um eine geeignete Anwendung zur Generierung von 3D-Punktwolken auszuwählen muss erst entschieden werden nach welchen Gütekriterien verschiedene Verfahren betrachtet werden sollen und wie wichtig diese sind.
-Bei dieser Arbeit ist die nötige Anzahl der Bilder die zur Generierung einer Punktwolke mit genug Information nötig sind wie die Dauer die Punktwolke zu erstellen sind die wichtigsten Kriterien.
+Bei dieser Arbeit ist die nötige Anzahl der Bilder die zur Generierung einer Punktwolke mit genug Information nötig sind, so wie die Dauer die Punktwolke zu erstellen die wichtigsten Kriterien.
 
 Um zu messen wie viele Bilder benötigt werden um eine Szene gut zu repräsentieren muss ein Goldstandart von der fotografierten Szene als 3D-Punktwolke erstellt werden, mit dem Verglichen werden kann.
 Dieser Goldstandart kann erstellt werden, indem alle Fotografien genutzt werden die zur Verfügung stehen und damit alle Verfahren eine Punktwolke erstellen lassen. 
@@ -711,12 +750,12 @@ Die so erstellte Szene sollte nachbearbeitet werden um etwaige Fehler wie Rausch
 Nun kann mit wenigeren Bildern aus dem selben Datensatz ein weitere Punktwolke generiert werden und die Distanz der Punkte der Goldstandart-Punktwolke zum jeweils nächsten Punkt der erstellten Punktwolke gemessen werden.
 Die Summe dieser Abstände kann als Fehlermaß genutzt werden. Bei der Berechnung der Abstände muss beachtet werden, dass die Punkwolken mit dem Goldstandart registriert ist.
 
-Nach einem manuellen Auswahlverfahren wurden ODM und Colmap als geeignete Anwendung zur Generierung von Punktwolken gewählt, da diese die einzigen untersuchten Anwendungen sind die gute Ergebnisse bei wenig Bildern erzielen die die Szene erkennen lassen.
+Nach einem manuellen Auswahlverfahren sind ODM und Colmap als geeignete Anwendung zur Generierung von Punktwolken gewählt worden, da diese die einzigen untersuchten Anwendungen sind die gute Ergebnisse bei wenig Bildern erzielen die die Szene erkennen lassen.
 Um die beiden Anwendungen weiter zu vergleichen wurde aus 73 Bildern sowohl mit Colmap als auch mit ODM eine Punktwolke generiert, 
 da ODM die Szene besser repräsentiert und weniger Rauschen beinhaltet wurde die mit ODM erstellet Punktwolke als Goldstandart gewählt. 
 
-Im Folgenden wurden aus Teilmengen der Bilder jeweils für ODM und Colmap Punktwolken generiert. Die Teilmengen bestehen aus 5 bis 70 Bildern wobei immer 5 Bilder mehr pro Schritt genutzt wurden.
-Bei der Wahl der Bilder pro Schritt wurde beachtet, dass die Bilder ähnliche Ausschnitte enthalten, da diese zur Generierung von Punktwolken nötig sind.
+Im Folgenden werden aus Teilmengen der Bilder jeweils für ODM und Colmap Punktwolken generiert. Die Teilmengen bestehen aus 5 bis 70 Bildern wobei immer 5 Bilder mehr pro Schritt genutzt werden.
+Bei der Wahl der Bilder pro Schritt wird beachtet, dass die Bilder ähnliche Ausschnitte enthalten, da diese zur Generierung von Punktwolken nötig sind.
 
 In zwei Vergleichen wurden zum einen die Durschnittliche Distanz für jeden Punkt zum nächsten Punkt in der Goldstandart-Punktwolke verglichen und zum anderen die Anzahl generierter Punkte pro Schritt verglichen.
 Die Ergebnisse sind in Abbildung \ref{fig:DistanceCloudGen} und \ref{fig:NPointsCloudGen} zu sehen. 
@@ -739,8 +778,8 @@ Es ist zu erkenne, dass Colmap zwar mehr Punkte generiert als ODM, aber ab einer
 \end{figure}
 
 Generell lässt sich in den generierten Punktwolken beobachten, dass Colmap mehr Rauschen enthält als ODM. Exemplarisch in den Abbildungen \ref{fig:ODMNoise} und \ref{fig:ColmapNoise} zu sehen. 
-Ein Nachteil von ODM ist, dass es um die Kannten herum sehr viele Hintergrundpunkte mit aufgenommen werden die eine Art Halo um die erkannten Strukturen bilden. Dadurch können feine Strukturen in einander über fließen. 
-Bei Colmap hat man hingegen das Problem, dass es zu größeren Lücken in erkannten Oberflächen kommt.
+Ein Nachteil von ODM ist, dass es um die Kannten herum sehr viele Hintergrundpunkte mit aufgenommen werden die eine Art Halo um die erkannten Strukturen bilden. Dadurch können feine Strukturen in einander über fließen. Dies ist auch bei Colmap zu beobachten, allerdings nur in einem kleineren Ausmaß.
+Bei Colmap hat man zusätzlich das Problem, dass es zu größeren Lücken in erkannten Oberflächen kommt.
 Beide Probleme sind in Abbildung \ref{fig:ODMerror} und \ref{fig:ColmapError} zu sehen. 
 Des weiteren kann es vorkommen, dass Colmap zwei Szenen in den Bildern erkennt was insbesondere bei Nutzung von vielen Bildern vorkommt (Abbildung \ref{fig:ColmapDuplicatedScene}).
 
@@ -785,16 +824,16 @@ Des weiteren kann es vorkommen, dass Colmap zwei Szenen in den Bildern erkennt w
 
 Ein weiterer Punkt bei der Bewertung des Verfahrens zur Generierung von 3D Punktwolken ist die Zeit die benötigt wird die Punkwolke zu generieren.
 Hier dominiert ODM klar. Obwohl, mangels der GEO-Position der Bilder, ODM nur in der Lage ist die CPU parallel zu nutzen und nicht die GPU werden die Punkwolken wesentlich schneller generiert als mit Colmap, welches die GPU nutzt und diese auch gut auslastet.
-ODM benötigt zur generierung einer Punktwolke mit 73 Bilder 566 Sekunden wärend Colmap für die gleiche Datenbasis 4148 Sekungen benötigt. 
+ODM benötigt zur generierung einer Punktwolke mit $73$ Bilder $566$ Sekunden wärend Colmap für die gleiche Datenbasis $4148$ Sekungen benötigt. 
 Sollten GEO-Positionen für die Bilder bekannt sein kann ODM die GPU nutzen und somit die Zeit die benötigt wird die Punktwolken zu generieren weiter verbessern.
 
-Da ODM wesentlich weniger Rauschen beinhaltet, keine Probleme mit doppelt erkannten Szenen macht und weniger Zeit zur Generierung der Punkwolken benötigt wurde in dieser Arbeit ODM zur Generierung von Punktwolken genutzt.
+Da ODM wesentlich weniger Rauschen beinhaltet, keine Probleme mit doppelt erkannten Szenen hat und weniger Zeit zur Generierung der Punkwolken benötigt wurde in dieser Arbeit ODM zur Generierung von Punktwolken genutzt, wobei die Dauer die zur Generierung der Punktwolke benötigt wird der ausschlaggebende Faktor für die Entscheidung ist.
 
 \subsection{Vergleich von Verfahren zur Registrierung 3D-Punkwolken}
 
 In einem ersten Schritt wurden verschiedene Lösungen aus dem Deep-Learning Bereich miteinander Verglichen. 
 Es wird die Distanz zwischen transformierter Quell-Punktwolke und Ziel-Punktwolke wie im Abschnitt \ref{sec:realisierung:implementierung2} beschrieben gemessen. Neben der Distanz berichten wir über den bei der Evaluation gemessenen Loss.
-Die einzelnen Verfahren sind alle in dem Python-Paket \glqq learning3d\grqq{} implementiert und nutzen die selbe Datenbasis ModelNet40 für das Training und sind somit gut vergleichbar. Für DCP und RPM-Net wurden das vortrainierte Model vom Author des Pakets genutzt.
+Die einzelnen Verfahren sind alle in dem Python-Paket learning3d \cite{learning3d} implementiert und nutzen die selbe Datenbasis ModelNet40 für das Training und sind somit gut vergleichbar. Für DCP und RPM-Net wurden das vortrainierte Model vom Author des Pakets genutzt.
 PointNetLK musste trainiert werden und wurde mit den empfohlenen Angaben des Authors trainiert. Die Evaluation wurde drei mal mit zufälligen Daten wiederholt und aus den drei Durchläufen die Mittelwerte für die ermittelten Werten gebildet.
 Die Ergebnisse sind in Tabelle \ref{tab:registration:deeplearn:compare} zu finden.
 
@@ -815,7 +854,9 @@ Die Ergebnisse sind in Tabelle \ref{tab:registration:deeplearn:compare} zu finde
 \label{tab:registration:deeplearn:compare}
 \end{table}
 
-In einem zweiten Schritt wurden die Verfahren auf konkreten Beispielen der Problemstellung getestet. Hier wurden exemplarisch je eine Avocado- und eine Bananan-Pflanze getestet. 
+In einem zweiten Schritt wurden die Verfahren auf konkreten Beispielen der Problemstellung verglichen. 
+Neben DCP, RPM-Net und PointNetLK wird auch die ICP Implementation aus dem Python-Paket open3d \cite{zhou2018open3d} und eine weitere in c++ implementierte ICP Version RICP verglichen.
+Hier wurden exemplarisch je eine Avocado- und eine Bananen-Pflanze verglichen. Wie im vorherigen Vergleich wird die Distanz zur Zielpunktwolke in den Ergebnissen wieder gegeben.
 Die Ergebnisse sind in Tabelle \ref{tab:registration:real:compare} zu sehen.
 
 \begin{table}
@@ -836,11 +877,11 @@ Die Ergebnisse sind in Tabelle \ref{tab:registration:real:compare} zu sehen.
 \end{table}
 
 Aus den Ergebnissen der Messung in Tabelle \ref{tab:registration:real:compare} ist zu erkennen, dass ICP die besten Ergebnisse für die Registrierung liefert. 
-Die Neuronalen-Netze liefern keine guten Ergebnisse. Mit Aussnahme von RPM-Net. Diese liegen in etwa gleich auf mit den Ergebnissen die für ICP erreicht wurden und sind besser als die Ergebnisse von RICP.
+Die Neuronalen-Netze liefern keine guten Ergebnisse. Mit Aussnahme von RPM-Net. Die Ergebnisse für RPM-Net liegen in etwa gleich auf mit den Ergebnissen die für ICP erreicht wurden und sind besser als die Ergebnisse von RICP.
 
 \subsection{Vergleich von Verfahren zur Segmentierung von Pflanzen auf 3D-Punkwolken}
 
-In Experimenten mit dem hanfgeschriebenen Klassifier konnte keine gute Parametriesierung gefunden werden, die eine gute Unterteilung in Blätter und Stämme erreichen konnte. Dies liegt in erster Linie an der Qualität der Punktwolken.
+In Experimenten mit dem handgeschriebenen Classifier konnte keine gute Parametriesierung gefunden werden, die eine gute Unterteilung in Blätter und Stämme erreichen konnte. Dies liegt in erster Linie an der Qualität der Punktwolken.
 Diese haben das Problem, das die oft sehr feinen Stiele der Pflanze nicht als Zylinder sondern als Ebene in den Punktwolken repräsentiert werden. Das ist in Abbildung \ref{fig:handcrafted:classifier} zu sehen.
 Ein weiteres Problem ist eine allgemein gültige Parametriesierung zu finden. Ein Beispiel dafür ist in Abbildung \ref{fig:handcrafted:classifier} zu sehen. Hier wurde mit dem selben Schwellwert klassifiziert.
 
@@ -857,48 +898,18 @@ Ein weiteres Problem ist eine allgemein gültige Parametriesierung zu finden. Ei
         \centering
         \raisebox{-\height}{\includegraphics[width=\imageSizeTwo, height=\imageSizeTwoHeight]{./Images/HandcraftedClassifierPlant2.png}}
     \end{subfigure}
-    \caption{Oben: ODM Seitenansicht die als Ebene erkannten Stiel zeigt.\\Unten: Segmentierungs-Ergebniss für zwei verschiedene Pflanzen mit dem selben Schwellert.}
+    \caption{Oben: ODM Seitenansicht die als Ebene erkannten Stiel zeigt.\\Unten: Segmentierungs-Ergebniss für zwei verschiedene Pflanzen mit dem selben Schwellwert.}
     \label{fig:handcrafted:classifier}
 \end{figure}
 
-%&\begin{figure}
-%&    \centering
-%&    \begin{minipage}{0.475\textwidth}
-%&        \centering
-%&        \includegraphics[height=4.5cm,width=4.5cm]{./Images/OdmFlatError1.png}
-%&        \caption{ODM Seitenansicht die falche Seite der Stiele zeigt}
-%&        \label{fig:odm:flat:zylinder:1}
-%&    \end{minipage}\hfill
-%&    \begin{minipage}{0.475\textwidth}
-%&        \centering
-%&        \includegraphics[height=4.5cm,width=4.5cm]{./Images/OdmFlatError2.png}
-%&        \caption{ODM Seitenansicht die breite Seite der Stiele zeigt}
-%&        \label{fig:odm:flat:zylinder:2}
-%&    \end{minipage}
-%&\end{figure}
-%&
-%&\begin{figure}
-%&    \centering
-%&    \begin{minipage}{0.475\textwidth}
-%&        \centering
-%&        \includegraphics[height=4.5cm,width=4.5cm]{./Images/HandcraftedClassifierAvocado.png}
-%&        \caption{Segmentierungs-Ergebnisse auf Avocado-Pflanze}
-%&        \label{fig:handcrafted.classifier:avocado}
-%&    \end{minipage}\hfill
-%&    \begin{minipage}{0.475\textwidth}
-%&        \centering
-%&        \includegraphics[height=4.5cm,width=4.5cm]{./Images/HandcraftedClassifierPlant2.png}
-%&        \caption{Segmentierungs-Ergebnisse auf anderer Pflanze}
-%&        \label{fig:handcrafted.classifier:plant2}
-%&    \end{minipage}
-%&\end{figure}
+Die Annahme das DCP eine gute Schätzung für die Transformations-Matrix liefern kann hat sich, auch nach umfangreichem Training, nicht bestätigt und wird daher nicht weiter betrachtet.
 
 \textbf{Datenbasis für das Training von PointNet++}
 
 Als Datenbasis für das Training von PointNet++ wurden 144 handgelabelte Punkwolken von verschiedenen Pflanzen gewählt. Darunter sind Tomaten, Mais, Paprika, Avocado, Bananen und weitere nicht bekannte Sorten. 
 Da diese Datenbasis für das Training eines Neuronalen Netz recht klein ist wurde aus jeder einzelnen Punktwolke bis zu 20 Subsample erstellt. Diese wurden so erstellt, dass zufällig $n$ Punkte aus einer Punktwolke gezogen und entfernt wurden.
-Des weiteren sind die Daten so aufbereitet das der Boden der Punktwolke an der XY-Ebene ausgerichtet ist und der Stiel bei geradem Wachstum Richtung z-Achse zeigt. Des weiteren sind die Punkte in der Punktwolke auf 1 normiert. 
-Das heißt sie liegen in dem Raum den die beiden Punkte $(0,0,0)$ und $(1,1,1)$ aufspannen. Die Daten werden in einem Verhältnis 80 zu 10 zu 10 in Trainings-, Test- und Evaluations-Datensatz aufgeteilt.
+Des weiteren sind die Daten so aufbereitet das der Boden der Punktwolke an der XY-Ebene ausgerichtet ist und der Stiel bei geradem Wachstum Richtung z-Achse zeigt. Auch sind die Punkte in der Punktwolke auf 1 normiert. 
+Das heißt sie liegen in dem Raum den die beiden Punkte $(0,0,0)$ und $(1,1,1)$ bilden. Die Daten werden in einem Verhältnis 80 zu 10 zu 10 in Trainings-, Test- und Evaluations-Datensatz aufgeteilt.
 
 \textbf{Vergleich Training mit und ohne Hintergrund}
 
@@ -907,8 +918,10 @@ Die Ergebnisse der Evaluation sind in Tabelle \ref{} zu sehen.
 Sowohl die Ergebnisse des Trainings, als auch die Ergebnisse der Evaluation zeigen deutlich, dass die Segmentierung ohne Hintergrund die besseren Ergebnisse liefert.
 Das wird vermutlich daran liegen, dass der Anteil der Punkte die zum Hintergrund gehören dominiert.
 Da die Segmentierung mit Hintegrund aber zur Entfernung des Hintergrundes benötigt wird, wird in einem zweiten Vergleich die Hintergrund-Segmentierung neu trainiert. 
-Diesmal wird aber ein Grpßteil der Hintergrund-Punkte entfernt, indem nur das Zentrum der Punktwolke beim Training betrachtet wird. Die Ergebnisse sind in Abbildung \ref{fig:T12_3C_PS_WN_NR_OC} zu sehen.
+Diesmal wird aber ein Großteil der Hintergrund-Punkte entfernt, indem nur das Zentrum der Punktwolke beim Training betrachtet wird. Die Ergebnisse sind in Abbildung \ref{fig:T12_3C_PS_WN_NR_OC} zu sehen.
 Wie in Abbildung \ref{fig:T12_3C_PS_WN_NR_OC} zu sehen ist verbessern sich die Ergebnisse für das Training mit weniger Hintergrund deutlich. 
+
+TODO: Tabel Evaluation missing
 
 \begin{figure}
     \centering
@@ -949,7 +962,7 @@ Die Ergebnisse des Trainings ohne Normalen sind in Abbilung \ref{fig:T13_2C_PS_W
 Mit Normalen liefern die ersten Epochen zwar schlechtere Ergebnisse, aber nach einigen Epochen gleicht sich die Güte an und es kommt zudem zu weniger Ausreißern. 
 Der Einsatz von Normalen scheint sich also in geringem Maß zu lohnen. 
 
-\textbf{Vergleich Training mit und ohne Normalisierung}  (Einsatz von nicht normalisierten Punkten trotz Normalisierung im Training möglich?)
+\textbf{Vergleich Training mit und ohne Normalisierung} 
 
 Es soll Überprüft werden ob PointNet++ mit oder ohne Normaliserung bessere Ergebnisse liefert. 
 Des weiteren soll geprüft werden, ob auch nicht normaliserte Eingabe-Daten gute Segmentierungs-Ergebnisse liefern wenn PointNet++ mit normaliserten Daten trainiert wurde.
@@ -980,7 +993,7 @@ Wird die Normalisierung komplett verhindert, kann das Auswirkungen auf die Güte
     \label{tab:segmentation:normalization:compare}
 \end{table}
 
-In Tabelle \ref{tab:segmentation:normalization:compare} werden die Ergebnisse der Evaluation von PointNet++ auf nicht normaliserten Daten nach dem Training mit normaliserten Daten mit normalisierten Daten verglichen.
+In Tabelle \ref{tab:segmentation:normalization:compare} werden die Ergebnisse der Evaluation von PointNet++ auf nicht normaliserten Daten nach dem Training mit normaliserten Daten verglichen.
 Da die Ergebnisse sich für die Segmentierung mit Hintergrund stark verschlechtern, wenn die Daten nicht normalisiert werden wird PointNet++ ohne Normalisierung erneut trainiert. 
 Die Ergebnisse für das erneute Training sind in Abbildung \ref{fig:T6_2C_PS_NN_NR} für zwei Klassen und in Abbildung \ref{fig:T7_3C_PS_NN_NR} für drei Klassen zu sehen.
 
@@ -1001,12 +1014,12 @@ Die Ergebnisse für das erneute Training sind in Abbildung \ref{fig:T6_2C_PS_NN_
 \end{figure}
 
 Gegenüber dem Training mit Normalisierung ist das Training ohne Normalisierung etwas schlechter. Insbesondere für das Netz mit drei Klassen haben die Ausreißer für Loss-, Accuracy- und IoU-Werte zugenommen.
-Das führt zu dem Schluss, dass PointNet++ mit Normalisierung genutzt werden sollt und der zusätzliche Rechenaufwand zum übertragen der Ergebnisse auf die vollständige Punktwolke in kauf genommen werden sollt.
+Das führt zu dem Schluss, dass PointNet++ mit Normalisierung genutzt werden sollte und der zusätzliche Rechenaufwand zum übertragen der Ergebnisse auf die vollständige Punktwolke in kauf genommen werden sollte.
 
 \textbf{Vergleich Training mit und ohne zufällige Rotationen}
 
 Die Tests des Servers haben gezeigt, das es bei der Segmentierung der freigestellten Pflanzen zu starken Fehlern kommt, wenn diese rotiert sind. Diese Fehler sind in Abbildung \ref{fig:rotation:error:1} und \ref{fig:rotation:error:2} zu sehen.
-Wird die Evaluation eines ohne zufällig rotierte Punktwolken trainierte Netz mit zufällig rotierten Punktwolken ausgeführt sinkt der mIoU-Wert auf $0,6$ und Accuracy auf $0,875$
+Wird die Evaluation eines ohne zufällig rotierte Punktwolken trainierte Netz mit zufällig rotierten Punktwolken ausgeführt sinkt der IoU-Wert auf $0,6$ und Accuracy auf $0,875$
 Das hat zu der Erkenntnis geführt, dass PointNet++ anfällig für die Ausrichtung von Punktwolken ist. 
 
 Aus diesem Grund wurde das Training für das zwei und drei Klassen-Netz mit zufälligen Rotationen wiederholt um ein Robustheit gegen Rotationen anzutrainieren.
@@ -1079,13 +1092,13 @@ Die Ergebnisse der Registrierung sind zwar für den Zweck ausreichend, aber kön
 
 Bei der Datengewinnung könnte zu den Bildern auch eine GPS-Position ermittelt werden und so Punktwolken mit gleichem Maßstab erstellt werden. Das würde die Registrierung erleichtern, da die Skalierung nicht mehr geschätzt werden müsste.
 
-Ein weiterer Ansatz der in dieser Arbeit nicht verfolgt wurde ist ScaleLK. ScaleLK hat eine ähnliche Archtektur wie PoinNetLK allerdings wird neben Rotation und Translation auch eine Schätzung für die Skalierung geliefert.
+Ein weiterer Ansatz der in dieser Arbeit nicht verfolgt wurde ist ScaleLK. ScaleLK hat eine ähnliche Architektur wie PoinNetLK allerdings wird neben Rotation und Translation auch eine Schätzung für die Skalierung geliefert.
 
 \textbf{Segmentierung}
 
 Die Segmentierung ist für die Hintergrundentfernung noch recht fehleranfällig. Hier könnte probiert werden mit einem größerem Datensatz zu trainieren oder mehr Punkte während des Trainings zu nutzen.
 
-Die Segmentierung der Pflanze kann erweitert werden um zusätzliche Informationen über eine Pflanze zu erhalten. Zum Beispiel können neben Blättern und Stielen auch Blüten und Früchte erkannt werden, was für die Analyse des Ertrags einer Fruchtfolge genutz werden könnte.
+Des weiteren kann die Segmentierung der Pflanze erweitert werden um zusätzliche Informationen über eine Pflanze zu erhalten. Zum Beispiel können neben Blättern und Stielen auch Blüten und Früchte erkannt werden, was für die Analyse des Ertrags einer Fruchtfolge genutz werden könnte.
 Um das zu bewerkstelligen muss für jedes Merkmal ein weiters Label hinzugefügt werden und die Datenbasis, die für das Training genutzt wird, um Punktwolken erweitert werden die diese Merkmale auch beinhalten.
 
 \textbf{Server}
@@ -1093,7 +1106,7 @@ Um das zu bewerkstelligen muss für jedes Merkmal ein weiters Label hinzugefügt
 Um die Perfomance des Servers zu steigern könnte für die in c++ Implementierten Funktionalitäten ein Python-Binding erstellt werden. Bisher werden diese Funktionen über System-Kommandos angesteuert. 
 Mit einem Python-Binding könnten diese direkt aus dem Python-Code angesprochen werden. Dadurch könnten die Daten zwischen den einzelnen Pipelines im Hauptspeicher gehalten werden und müssten nur noch zu Persistierungs-Zwecken auf der Festplatte abgelegt werden.
 
-Da der Server keine Sicherheitsmechanismen zur Verfügung stellt ist von einem Einsatz in der Praxis in diesem Zustand abzuraten. Es sollte mindestens ein User-Management hinzugefügt werden um die Schnittstellen vor missbrauch zu schützen.
+Da der Server keine Sicherheitsmechanismen zur Verfügung stellt ist von einem Einsatz in der Praxis in diesem Zustand abzuraten. Es sollte mindestens ein User-Management hinzugefügt werden um die Schnittstellen vor Missbrauch zu schützen.
 
 %Weitere Analyse der Daten
 
