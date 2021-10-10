@@ -66,7 +66,8 @@
 
 \newcommand{\imageSizeTwo}{0.49\textwidth}
 \newcommand{\imageSizeTwoHeight}{7.5cm}
-\newcommand{\imageSizeThree}{4.5cm}
+\newcommand{\imageSizeThree}{0.3\textwidth}
+\newcommand{\imageSizeThreeHeight}{5cm}
 
 % Hier bei Bedarf die Seitenränder einstellen
 \usepackage{geometry}
@@ -204,7 +205,7 @@ Drei Kernprobleme müssen betrachtet werden, die für den Erfolg diese Arbeit ge
 Zuerst muss aus einer Menge an Bilder eine Punkwolke generiert werden. Danach muss die Punktwolke Segmentiert werden um den Hintergrund zu entfernen und die einzelnen Teile der Pflanze wie Blätter und Stiele zu erkennen und weiter zu analysieren. 
 Zuletzt müssen zwei Punktwolken einer Pflanze zu verschiedenen Zeitpunkten miteinander registriert werden um Aussagen über das Wachstum einer Pflanze treffen zu können.
 
-\subsection{Generierung einer 3D Punkwolke aus Bildern}
+\subsection{Generierung einer 3D Punktwolke aus Bildern}
 \label{sec:stand:pointcloud}
 
 Generell kann man zwischen zwei Methoden der Generierung von Punktwolken unterscheiden, die jeweils verschiedene Verfahren beziehungsweise Techniken anwenden.
@@ -228,7 +229,13 @@ Mit $E$ kann nun die Kamera-Ausrichtung bestehend aus Kamera- Position und Rotat
 %Einige Verfahren benötigen genaue Informationen über die Kamera Position, Ausrichtung und andere Angaben wie die Brennweite der Linse etc. 
 %andere wiederrum lesen diese Informationen aus den EXIF-Headern der Bildern direkt aus, wenn diese zur Verfügung stehen, oder schätzen diese \cite{ODM} \cite{schoenberger2016mvs}.
 
-TODO: Verfahren nennen und erläutern.
+Einige bekannte Implementationen von SfM sind Colmap \cite{schoenberger2016sfm},\cite{schoenberger2016mvs}, Open Drone Map (ODM) \cite{ODM}, OpenCV SfM-Pipeline \cite{opencv}, AliceVision (Meshroom)\cite{Moulon2012},\cite{Jancosek2011} und OpenMVG \cite{moulon2016openmvg}.
+
+Colmap stellt eine Pipeline bereit die eine inkrementelle Implementation von SfM implementiert. Initial wird nach korrespondierenden Bildern gesucht und diese dann inkrementell in die Rekonstruktion aufgenommen.
+
+ODM stellt auch eine Pipeline bereit die aus den Schritten SfM, Multi View Stereo und Filterpunkte ermitteln besteht. 
+
+
 
 Es wurden in den letzten Jahren große Fortschritte im Bereich tiefer Neuronaler Netze (Deep-Learning) \cite{lecun2015deep}, zur Gewinnung von 3D-Punkwolken, gemacht \cite{fan2016point} \cite{tatarchenko2017octree} \cite{wang2018pixel2mesh}. 
 Mit diesen Verfahren ist es möglich aus einer minimalen Datenbasis die auch nur aus einem Bild bestehen kann 3D-Punkwolken zu generieren. Was dem Ziel die Datenübertragung zum Server gering zu halten entgegenkommt.
@@ -751,6 +758,28 @@ Nun kann mit wenigeren Bildern aus dem selben Datensatz ein weitere Punktwolke g
 Die Summe dieser Abstände kann als Fehlermaß genutzt werden. Bei der Berechnung der Abstände muss beachtet werden, dass die Punkwolken mit dem Goldstandart registriert ist.
 
 Nach einem manuellen Auswahlverfahren sind ODM und Colmap als geeignete Anwendung zur Generierung von Punktwolken gewählt worden, da diese die einzigen untersuchten Anwendungen sind die gute Ergebnisse bei wenig Bildern erzielen die die Szene erkennen lassen.
+Hierzu wurden auf einer Menge von 25 Bildern die Implementationen ODM, Colmap, OpenCV SfM-Pipeline, Meshroom (nutzt AliceVision) und OpenMVG miteinander verglichen. Die generierten Punktwolken sind in Abbildung \ref{fig:SfM:All:Compare} zu sehen.
+Es ist deutlich zu erkennen, das bis auf Colmap und ODM alle anderen Verfahren schwerwiegende Probleme in der Representation haben. Meshroom hat Probleme feine Strukturen zu erkennen. 
+OpenMVG generiert zu wenig Punkte und OpenCV hat ein Problem bei der Kamera-Kalibrierung wodurch es zu schlechten Ergebnissen kommt.
+\begin{figure}
+    \centering
+    \begin{subfigure}[t]{1.0\textwidth}
+        \centering
+        \raisebox{-\height}{\includegraphics[width=\imageSizeThree, height=\imageSizeThreeHeight]{./Images/PointCloudGeneration_odm.png}}
+        \centering
+        \raisebox{-\height}{\includegraphics[width=\imageSizeThree, height=\imageSizeThreeHeight]{./Images/PointCloudGeneration_colmap.png}}
+        \vspace{.6ex}
+        \centering
+        \raisebox{-\height}{\includegraphics[width=\imageSizeThree, height=\imageSizeThreeHeight]{./Images/PointCloudGeneration_meshroom.png}}
+        \centering
+        \raisebox{-\height}{\includegraphics[width=\imageSizeThree, height=\imageSizeThreeHeight]{./Images/PointCloudGeneration_openmvg.png}}
+        \centering
+        \raisebox{-\height}{\includegraphics[width=\imageSizeThree, height=\imageSizeThreeHeight]{./Images/PointCloudGeneration_opencv.png}}
+    \end{subfigure}
+    \caption{Ergebnisse auf Datensatz mit 25 Bildern. Von oben links nach unten rechts: ODM, Colmap, Meshroom, OpenMVG, OpenCV}
+    \label{fig:SfM:All:Compare}
+\end{figure}
+
 Um die beiden Anwendungen weiter zu vergleichen wurde aus 73 Bildern sowohl mit Colmap als auch mit ODM eine Punktwolke generiert, 
 da ODM die Szene besser repräsentiert und weniger Rauschen beinhaltet wurde die mit ODM erstellet Punktwolke als Goldstandart gewählt. 
 

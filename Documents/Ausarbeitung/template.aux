@@ -25,6 +25,13 @@
 \citation{ORB}
 \citation{BRIEF}
 \citation{SURF}
+\citation{schoenberger2016sfm}
+\citation{schoenberger2016mvs}
+\citation{ODM}
+\citation{opencv}
+\citation{Moulon2012}
+\citation{Jancosek2011}
+\citation{moulon2016openmvg}
 \citation{lecun2015deep}
 \citation{fan2016point}
 \citation{tatarchenko2017octree}
@@ -33,8 +40,8 @@
 \citation{rs11222644}
 \@writefile{toc}{\contentsline {section}{\numberline {2}Stand der Technik}{4}{section.2}\protected@file@percent }
 \newlabel{sec:stand}{{2}{4}{Stand der Technik}{section.2}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Generierung einer 3D Punkwolke aus Bildern}{4}{subsection.2.1}\protected@file@percent }
-\newlabel{sec:stand:pointcloud}{{2.1}{4}{Generierung einer 3D Punkwolke aus Bildern}{subsection.2.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Generierung einer 3D Punktwolke aus Bildern}{4}{subsection.2.1}\protected@file@percent }
+\newlabel{sec:stand:pointcloud}{{2.1}{4}{Generierung einer 3D Punktwolke aus Bildern}{subsection.2.1}{}}
 \citation{ThreeBasics}
 \citation{ModelBased}
 \citation{ThreeBasics}
@@ -42,26 +49,25 @@
 \citation{qi2017pointnet}
 \citation{qi2017pointnet++}
 \citation{dgcnn}
-\citation{qi2017pointnet}
-\citation{qi2017pointnet}
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Segmentierung von 3D-Punkwolken}{5}{subsection.2.2}\protected@file@percent }
 \newlabel{sec:stand:segmentierung}{{2.2}{5}{Segmentierung von 3D-Punkwolken}{subsection.2.2}{}}
+\citation{qi2017pointnet}
+\citation{qi2017pointnet}
 \citation{qi2017pointnet++}
 \citation{qi2017pointnet++}
+\citation{icp_org}
 \@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces PointNet-Architektur \cite  {qi2017pointnet}\relax }}{6}{figure.caption.5}\protected@file@percent }
 \providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
 \newlabel{fig:point:net:arch}{{1}{6}{PointNet-Architektur \cite {qi2017pointnet}\relax }{figure.caption.5}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces PointNet++-Architektur \cite  {qi2017pointnet++}\relax }}{6}{figure.caption.6}\protected@file@percent }
-\newlabel{fig:point:net:pp:arch}{{2}{6}{PointNet++-Architektur \cite {qi2017pointnet++}\relax }{figure.caption.6}{}}
-\citation{icp_org}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.3}Registrierung von 3D-Punkwolken}{6}{subsection.2.3}\protected@file@percent }
+\newlabel{sec:stand:registrierung}{{2.3}{6}{Registrierung von 3D-Punkwolken}{subsection.2.3}{}}
 \citation{GoICP}
 \citation{ICP}
 \citation{RANSAC}
 \citation{Ziner2005PointSR}
 \citation{Ziner2005PointSR}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.3}Registrierung von 3D-Punkwolken}{7}{subsection.2.3}\protected@file@percent }
-\newlabel{sec:stand:registrierung}{{2.3}{7}{Registrierung von 3D-Punkwolken}{subsection.2.3}{}}
-\newlabel{eq:icp_scale:1}{{1}{7}{Registrierung von 3D-Punkwolken}{equation.2.1}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces PointNet++-Architektur \cite  {qi2017pointnet++}\relax }}{7}{figure.caption.6}\protected@file@percent }
+\newlabel{fig:point:net:pp:arch}{{2}{7}{PointNet++-Architektur \cite {qi2017pointnet++}\relax }{figure.caption.6}{}}
 \citation{ScaleLK}
 \citation{Wang_2019_ICCV}
 \citation{aoki2019pointnetlk}
@@ -73,23 +79,24 @@
 \citation{RPM}
 \citation{Yew_2020}
 \citation{Yew_2020}
-\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces RPM-Net-Architektur \cite  {Yew_2020}\relax }}{8}{figure.caption.7}\protected@file@percent }
-\newlabel{fig:rpm:net:arch}{{3}{8}{RPM-Net-Architektur \cite {Yew_2020}\relax }{figure.caption.7}{}}
+\newlabel{eq:icp_scale:1}{{1}{8}{Registrierung von 3D-Punkwolken}{equation.2.1}{}}
 \newlabel{eq:icp_scale:2}{{2}{8}{Registrierung von 3D-Punkwolken}{equation.2.2}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces RPM-Net-Architektur \cite  {Yew_2020}\relax }}{9}{figure.caption.7}\protected@file@percent }
+\newlabel{fig:rpm:net:arch}{{3}{9}{RPM-Net-Architektur \cite {Yew_2020}\relax }{figure.caption.7}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {3}Realisierung}{9}{section.3}\protected@file@percent }
 \newlabel{sec:realisierung}{{3}{9}{Realisierung}{section.3}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Architektur}{9}{subsection.3.1}\protected@file@percent }
 \newlabel{sec:realisierung:architektur}{{3.1}{9}{Architektur}{subsection.3.1}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Umsetzung Generierung einer 3D Punktwolke aus Bildern}{9}{subsection.3.2}\protected@file@percent }
-\newlabel{sec:realisierung:implementierung1}{{3.2}{9}{Umsetzung Generierung einer 3D Punktwolke aus Bildern}{subsection.3.2}{}}
 \citation{Sift3D}
 \@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Arbeitsabläufe zwischen Nutzer, Client, Server und Hintergrundprozess.\relax }}{10}{figure.caption.8}\protected@file@percent }
 \newlabel{fig:WorkflowClientServer}{{4}{10}{Arbeitsabläufe zwischen Nutzer, Client, Server und Hintergrundprozess.\relax }{figure.caption.8}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Umsetzung Generierung einer 3D Punktwolke aus Bildern}{10}{subsection.3.2}\protected@file@percent }
+\newlabel{sec:realisierung:implementierung1}{{3.2}{10}{Umsetzung Generierung einer 3D Punktwolke aus Bildern}{subsection.3.2}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Umsetzung Registrierung zweier Punktwolken}{10}{subsection.3.3}\protected@file@percent }
 \newlabel{sec:realisierung:implementierung2}{{3.3}{10}{Umsetzung Registrierung zweier Punktwolken}{subsection.3.3}{}}
 \citation{ThreeBasics}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.4}Umsetzung Segmentierung}{11}{subsection.3.4}\protected@file@percent }
-\newlabel{sec:realisierung:implementierung3}{{3.4}{11}{Umsetzung Segmentierung}{subsection.3.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.4}Umsetzung Segmentierung}{12}{subsection.3.4}\protected@file@percent }
+\newlabel{sec:realisierung:implementierung3}{{3.4}{12}{Umsetzung Segmentierung}{subsection.3.4}{}}
 \newlabel{eq:hauptkruemmung:1}{{3}{12}{Umsetzung Segmentierung}{equation.3.3}{}}
 \newlabel{eq:hauptkruemmung:2}{{4}{12}{Umsetzung Segmentierung}{equation.3.4}{}}
 \newlabel{eq:hauptkruemmung:3}{{5}{12}{Umsetzung Segmentierung}{equation.3.5}{}}
@@ -98,70 +105,72 @@
 \newlabel{eq:improve_score}{{7}{13}{Umsetzung Segmentierung}{equation.3.7}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.5}Umsetzung Server}{13}{subsection.3.5}\protected@file@percent }
 \newlabel{sec:realisierung:implementierung4}{{3.5}{13}{Umsetzung Server}{subsection.3.5}{}}
-\newlabel{listing:example:result}{{1}{13}{Beispiel Ergebnisse eines Zeitstempels}{lstlisting.1}{}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {1}Beispiel Ergebnisse eines Zeitstempels}{13}{lstlisting.1}\protected@file@percent }
+\newlabel{listing:example:result}{{1}{14}{Beispiel Ergebnisse eines Zeitstempels}{lstlisting.1}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {1}Beispiel Ergebnisse eines Zeitstempels}{14}{lstlisting.1}\protected@file@percent }
 \newlabel{listing:example:payload}{{2}{14}{Beispiel Payload zum starten einer Pipeline}{lstlisting.2}{}}
 \@writefile{lol}{\contentsline {lstlisting}{\numberline {2}Beispiel Payload zum starten einer Pipeline}{14}{lstlisting.2}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.6}Umsetzung Pipelines}{15}{subsection.3.6}\protected@file@percent }
 \newlabel{sec:realisierung:implementierung5}{{3.6}{15}{Umsetzung Pipelines}{subsection.3.6}{}}
-\newlabel{eq:length}{{8}{16}{Umsetzung Pipelines}{equation.3.8}{}}
-\newlabel{eq:width}{{9}{16}{Umsetzung Pipelines}{equation.3.9}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Hintegrund-Segmentierung\relax }}{17}{figure.caption.9}\protected@file@percent }
 \newlabel{fig:PiplineBackgroundSegmentation}{{5}{17}{Hintegrund-Segmentierung\relax }{figure.caption.9}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Planzen-Segmentierung\relax }}{17}{figure.caption.9}\protected@file@percent }
 \newlabel{fig:PipelinePlantSegmentation}{{6}{17}{Planzen-Segmentierung\relax }{figure.caption.9}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Blatt-Segmentierung\relax }}{17}{figure.caption.9}\protected@file@percent }
 \newlabel{fig:PipelineLeaveSegmentation}{{7}{17}{Blatt-Segmentierung\relax }{figure.caption.9}{}}
+\newlabel{eq:length}{{8}{17}{Umsetzung Pipelines}{equation.3.8}{}}
+\newlabel{eq:width}{{9}{17}{Umsetzung Pipelines}{equation.3.9}{}}
 \newlabel{eq:height}{{10}{17}{Umsetzung Pipelines}{equation.3.10}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {4}Ergebnisse}{18}{section.4}\protected@file@percent }
 \newlabel{sec:ergebnisse}{{4}{18}{Ergebnisse}{section.4}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Vergleich von Verfahren zur Generierung von 3D-Punktwolken auf Basis von Bildern}{18}{subsection.4.1}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces Distanz der Punktwolke mit bestimmter Anzahl Bilder zur Goldstandart-Punktwolke.\relax }}{19}{figure.caption.10}\protected@file@percent }
-\newlabel{fig:DistanceCloudGen}{{8}{19}{Distanz der Punktwolke mit bestimmter Anzahl Bilder zur Goldstandart-Punktwolke.\relax }{figure.caption.10}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces Anzahl Punkte die mit einer bestimmten Anzahl Bilder generiert werden kann.\relax }}{19}{figure.caption.10}\protected@file@percent }
-\newlabel{fig:NPointsCloudGen}{{9}{19}{Anzahl Punkte die mit einer bestimmten Anzahl Bilder generiert werden kann.\relax }{figure.caption.10}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces ODM mit 40 Bildern - Ansicht von der Seite\relax }}{19}{figure.caption.11}\protected@file@percent }
-\newlabel{fig:ODMNoise}{{10}{19}{ODM mit 40 Bildern - Ansicht von der Seite\relax }{figure.caption.11}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces Colmap mit 40 Bildern - Ansicht von der Seite\relax }}{19}{figure.caption.11}\protected@file@percent }
-\newlabel{fig:ColmapNoise}{{11}{19}{Colmap mit 40 Bildern - Ansicht von der Seite\relax }{figure.caption.11}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {12}{\ignorespaces ODM mit 40 Bildern - Ansicht von Oben\relax }}{20}{figure.caption.12}\protected@file@percent }
-\newlabel{fig:ODMerror}{{12}{20}{ODM mit 40 Bildern - Ansicht von Oben\relax }{figure.caption.12}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {13}{\ignorespaces Colmap mit 40 Bildern - Ansicht von Oben\relax }}{20}{figure.caption.12}\protected@file@percent }
-\newlabel{fig:ColmapError}{{13}{20}{Colmap mit 40 Bildern - Ansicht von Oben\relax }{figure.caption.12}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {14}{\ignorespaces Colmap mit 55 Bildern und doppelt erkannter Szene.\relax }}{20}{figure.caption.13}\protected@file@percent }
-\newlabel{fig:ColmapDuplicatedScene}{{14}{20}{Colmap mit 55 Bildern und doppelt erkannter Szene.\relax }{figure.caption.13}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces Ergebnisse auf Datensatz mit 25 Bildern. Von oben links nach unten rechts: ODM, Colmap, Meshroom, OpenMVG, OpenCV\relax }}{19}{figure.caption.10}\protected@file@percent }
+\newlabel{fig:SfM:All:Compare}{{8}{19}{Ergebnisse auf Datensatz mit 25 Bildern. Von oben links nach unten rechts: ODM, Colmap, Meshroom, OpenMVG, OpenCV\relax }{figure.caption.10}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces Distanz der Punktwolke mit bestimmter Anzahl Bilder zur Goldstandart-Punktwolke.\relax }}{20}{figure.caption.11}\protected@file@percent }
+\newlabel{fig:DistanceCloudGen}{{9}{20}{Distanz der Punktwolke mit bestimmter Anzahl Bilder zur Goldstandart-Punktwolke.\relax }{figure.caption.11}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces Anzahl Punkte die mit einer bestimmten Anzahl Bilder generiert werden kann.\relax }}{20}{figure.caption.11}\protected@file@percent }
+\newlabel{fig:NPointsCloudGen}{{10}{20}{Anzahl Punkte die mit einer bestimmten Anzahl Bilder generiert werden kann.\relax }{figure.caption.11}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces ODM mit 40 Bildern - Ansicht von der Seite\relax }}{20}{figure.caption.12}\protected@file@percent }
+\newlabel{fig:ODMNoise}{{11}{20}{ODM mit 40 Bildern - Ansicht von der Seite\relax }{figure.caption.12}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {12}{\ignorespaces Colmap mit 40 Bildern - Ansicht von der Seite\relax }}{20}{figure.caption.12}\protected@file@percent }
+\newlabel{fig:ColmapNoise}{{12}{20}{Colmap mit 40 Bildern - Ansicht von der Seite\relax }{figure.caption.12}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {13}{\ignorespaces ODM mit 40 Bildern - Ansicht von Oben\relax }}{20}{figure.caption.13}\protected@file@percent }
+\newlabel{fig:ODMerror}{{13}{20}{ODM mit 40 Bildern - Ansicht von Oben\relax }{figure.caption.13}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {14}{\ignorespaces Colmap mit 40 Bildern - Ansicht von Oben\relax }}{20}{figure.caption.13}\protected@file@percent }
+\newlabel{fig:ColmapError}{{14}{20}{Colmap mit 40 Bildern - Ansicht von Oben\relax }{figure.caption.13}{}}
 \citation{learning3d}
 \citation{zhou2018open3d}
-\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Vergleich von Registrierungs-Verfahren auf ModelNet40. Distanz und Loss sind jeweils Mittelwerte über alle Datensätze in der Iteration.\relax }}{21}{table.caption.14}\protected@file@percent }
-\newlabel{tab:registration:deeplearn:compare}{{1}{21}{Vergleich von Registrierungs-Verfahren auf ModelNet40. Distanz und Loss sind jeweils Mittelwerte über alle Datensätze in der Iteration.\relax }{table.caption.14}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Vergleich von Registrierungs-Verfahren auf konkreten Beispielen der Problemstellung. Für jede Pflanze wird die Distanz zwischen Quelle und Ziel angegeben\relax }}{21}{table.caption.15}\protected@file@percent }
-\newlabel{tab:registration:real:compare}{{2}{21}{Vergleich von Registrierungs-Verfahren auf konkreten Beispielen der Problemstellung. Für jede Pflanze wird die Distanz zwischen Quelle und Ziel angegeben\relax }{table.caption.15}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {15}{\ignorespaces Colmap mit 55 Bildern und doppelt erkannter Szene.\relax }}{21}{figure.caption.14}\protected@file@percent }
+\newlabel{fig:ColmapDuplicatedScene}{{15}{21}{Colmap mit 55 Bildern und doppelt erkannter Szene.\relax }{figure.caption.14}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Vergleich von Registrierungs-Verfahren auf ModelNet40. Distanz und Loss sind jeweils Mittelwerte über alle Datensätze in der Iteration.\relax }}{21}{table.caption.15}\protected@file@percent }
+\newlabel{tab:registration:deeplearn:compare}{{1}{21}{Vergleich von Registrierungs-Verfahren auf ModelNet40. Distanz und Loss sind jeweils Mittelwerte über alle Datensätze in der Iteration.\relax }{table.caption.15}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Vergleich von Verfahren zur Registrierung 3D-Punkwolken}{21}{subsection.4.2}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {15}{\ignorespaces Oben: ODM Seitenansicht die als Ebene erkannten Stiel zeigt. Unten: Segmentierungs-Ergebniss für zwei verschiedene Pflanzen mit dem selben Schwellwert.\relax }}{22}{figure.caption.16}\protected@file@percent }
-\newlabel{fig:handcrafted:classifier}{{15}{22}{Oben: ODM Seitenansicht die als Ebene erkannten Stiel zeigt.\\Unten: Segmentierungs-Ergebniss für zwei verschiedene Pflanzen mit dem selben Schwellwert.\relax }{figure.caption.16}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Vergleich von Registrierungs-Verfahren auf konkreten Beispielen der Problemstellung. Für jede Pflanze wird die Distanz zwischen Quelle und Ziel angegeben\relax }}{22}{table.caption.16}\protected@file@percent }
+\newlabel{tab:registration:real:compare}{{2}{22}{Vergleich von Registrierungs-Verfahren auf konkreten Beispielen der Problemstellung. Für jede Pflanze wird die Distanz zwischen Quelle und Ziel angegeben\relax }{table.caption.16}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Vergleich von Verfahren zur Segmentierung von Pflanzen auf 3D-Punkwolken}{22}{subsection.4.3}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {16}{\ignorespaces PointNet++ Trainings-Ergebnisse pro Epoche mit 2 Klassen und Normalisierung ohne zufällige Rotationen\relax }}{23}{figure.caption.17}\protected@file@percent }
-\newlabel{fig:T11_2C_PS_WN_NR}{{16}{23}{PointNet++ Trainings-Ergebnisse pro Epoche mit 2 Klassen und Normalisierung ohne zufällige Rotationen\relax }{figure.caption.17}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {17}{\ignorespaces PointNet++ Trainings-Ergebnisse pro Epoche mit 3 Klassen und Normalisierung ohne zufällige Rotationen\relax }}{23}{figure.caption.17}\protected@file@percent }
-\newlabel{fig:T4_3C_PS_WN_NR}{{17}{23}{PointNet++ Trainings-Ergebnisse pro Epoche mit 3 Klassen und Normalisierung ohne zufällige Rotationen\relax }{figure.caption.17}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {18}{\ignorespaces PointNet++ Trainings-Ergebnisse pro Epoche mit 3 Klassen und Normalisierung ohne zufällige Rotationen. Mit Ausschnitt um das Zentrum.\relax }}{24}{figure.caption.18}\protected@file@percent }
-\newlabel{fig:T12_3C_PS_WN_NR_OC}{{18}{24}{PointNet++ Trainings-Ergebnisse pro Epoche mit 3 Klassen und Normalisierung ohne zufällige Rotationen. Mit Ausschnitt um das Zentrum.\relax }{figure.caption.18}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {19}{\ignorespaces PointNet++ Trainings-Ergebnisse pro Epoche mit 2 Klassen und Normalisierung ohne zufällige Rotationen. Ohne Normalen\relax }}{24}{figure.caption.18}\protected@file@percent }
-\newlabel{fig:T13_2C_PS_WN_NR_NN}{{19}{24}{PointNet++ Trainings-Ergebnisse pro Epoche mit 2 Klassen und Normalisierung ohne zufällige Rotationen. Ohne Normalen\relax }{figure.caption.18}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Vergleich von Evaluations-Ergebnissen von den mit normaliserten Daten trainierten Netzen t4 (mit Hintergrund) und t11(ohne Hintergrund) mit jeweils normalisierten und nicht normaliserten Daten.\relax }}{25}{table.caption.19}\protected@file@percent }
-\newlabel{tab:segmentation:normalization:compare}{{3}{25}{Vergleich von Evaluations-Ergebnissen von den mit normaliserten Daten trainierten Netzen t4 (mit Hintergrund) und t11(ohne Hintergrund) mit jeweils normalisierten und nicht normaliserten Daten.\relax }{table.caption.19}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {20}{\ignorespaces PointNet++ Trainings-Ergebnisse pro Epoche mit 2 Klassen, ohne Normalisierung und ohne zufällige Rotationen \relax }}{25}{figure.caption.20}\protected@file@percent }
-\newlabel{fig:T6_2C_PS_NN_NR}{{20}{25}{PointNet++ Trainings-Ergebnisse pro Epoche mit 2 Klassen, ohne Normalisierung und ohne zufällige Rotationen \relax }{figure.caption.20}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {21}{\ignorespaces PointNet++ Trainings-Ergebnisse pro Epoche mit 3 Klassen, ohne Normalisierung und ohne zufällige Rotationen\relax }}{25}{figure.caption.20}\protected@file@percent }
-\newlabel{fig:T7_3C_PS_NN_NR}{{21}{25}{PointNet++ Trainings-Ergebnisse pro Epoche mit 3 Klassen, ohne Normalisierung und ohne zufällige Rotationen\relax }{figure.caption.20}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {22}{\ignorespaces PointNet++ Trainings-Ergebnisse pro Epoche mit 2 Klassen, mit Normalisierung und zufälliger Rotationen\relax }}{26}{figure.caption.21}\protected@file@percent }
-\newlabel{fig:10_2C_PS_WN_RR}{{22}{26}{PointNet++ Trainings-Ergebnisse pro Epoche mit 2 Klassen, mit Normalisierung und zufälliger Rotationen\relax }{figure.caption.21}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {23}{\ignorespaces PointNet++ Trainings-Ergebnisse pro Epoche mit 3 Klassen, mit Normalisierung und zufälliger Rotationen\relax }}{26}{figure.caption.21}\protected@file@percent }
-\newlabel{fig:9_3C_PS_WN_RR}{{23}{26}{PointNet++ Trainings-Ergebnisse pro Epoche mit 3 Klassen, mit Normalisierung und zufälliger Rotationen\relax }{figure.caption.21}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {24}{\ignorespaces Fehlgeschlagene Segmentierung einer Bananen-Pflanze. Verursacht durch Rotation der Punktwolke\relax }}{27}{figure.caption.22}\protected@file@percent }
-\newlabel{fig:rotation:error:1}{{24}{27}{Fehlgeschlagene Segmentierung einer Bananen-Pflanze. Verursacht durch Rotation der Punktwolke\relax }{figure.caption.22}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {25}{\ignorespaces Fehlgeschlagene Segmentierung einer Tomaten-Pflanze. Verursacht durch Rotation der Punktwolke\relax }}{27}{figure.caption.22}\protected@file@percent }
-\newlabel{fig:rotation:error:2}{{25}{27}{Fehlgeschlagene Segmentierung einer Tomaten-Pflanze. Verursacht durch Rotation der Punktwolke\relax }{figure.caption.22}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {16}{\ignorespaces Oben: ODM Seitenansicht die als Ebene erkannten Stiel zeigt. Unten: Segmentierungs-Ergebniss für zwei verschiedene Pflanzen mit dem selben Schwellwert.\relax }}{23}{figure.caption.17}\protected@file@percent }
+\newlabel{fig:handcrafted:classifier}{{16}{23}{Oben: ODM Seitenansicht die als Ebene erkannten Stiel zeigt.\\Unten: Segmentierungs-Ergebniss für zwei verschiedene Pflanzen mit dem selben Schwellwert.\relax }{figure.caption.17}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {17}{\ignorespaces PointNet++ Trainings-Ergebnisse pro Epoche mit 2 Klassen und Normalisierung ohne zufällige Rotationen\relax }}{24}{figure.caption.18}\protected@file@percent }
+\newlabel{fig:T11_2C_PS_WN_NR}{{17}{24}{PointNet++ Trainings-Ergebnisse pro Epoche mit 2 Klassen und Normalisierung ohne zufällige Rotationen\relax }{figure.caption.18}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {18}{\ignorespaces PointNet++ Trainings-Ergebnisse pro Epoche mit 3 Klassen und Normalisierung ohne zufällige Rotationen\relax }}{24}{figure.caption.18}\protected@file@percent }
+\newlabel{fig:T4_3C_PS_WN_NR}{{18}{24}{PointNet++ Trainings-Ergebnisse pro Epoche mit 3 Klassen und Normalisierung ohne zufällige Rotationen\relax }{figure.caption.18}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {19}{\ignorespaces PointNet++ Trainings-Ergebnisse pro Epoche mit 3 Klassen und Normalisierung ohne zufällige Rotationen. Mit Ausschnitt um das Zentrum.\relax }}{24}{figure.caption.19}\protected@file@percent }
+\newlabel{fig:T12_3C_PS_WN_NR_OC}{{19}{24}{PointNet++ Trainings-Ergebnisse pro Epoche mit 3 Klassen und Normalisierung ohne zufällige Rotationen. Mit Ausschnitt um das Zentrum.\relax }{figure.caption.19}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {20}{\ignorespaces PointNet++ Trainings-Ergebnisse pro Epoche mit 2 Klassen und Normalisierung ohne zufällige Rotationen. Ohne Normalen\relax }}{24}{figure.caption.19}\protected@file@percent }
+\newlabel{fig:T13_2C_PS_WN_NR_NN}{{20}{24}{PointNet++ Trainings-Ergebnisse pro Epoche mit 2 Klassen und Normalisierung ohne zufällige Rotationen. Ohne Normalen\relax }{figure.caption.19}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Vergleich von Evaluations-Ergebnissen von den mit normaliserten Daten trainierten Netzen t4 (mit Hintergrund) und t11(ohne Hintergrund) mit jeweils normalisierten und nicht normaliserten Daten.\relax }}{25}{table.caption.20}\protected@file@percent }
+\newlabel{tab:segmentation:normalization:compare}{{3}{25}{Vergleich von Evaluations-Ergebnissen von den mit normaliserten Daten trainierten Netzen t4 (mit Hintergrund) und t11(ohne Hintergrund) mit jeweils normalisierten und nicht normaliserten Daten.\relax }{table.caption.20}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {21}{\ignorespaces PointNet++ Trainings-Ergebnisse pro Epoche mit 2 Klassen, ohne Normalisierung und ohne zufällige Rotationen \relax }}{26}{figure.caption.21}\protected@file@percent }
+\newlabel{fig:T6_2C_PS_NN_NR}{{21}{26}{PointNet++ Trainings-Ergebnisse pro Epoche mit 2 Klassen, ohne Normalisierung und ohne zufällige Rotationen \relax }{figure.caption.21}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {22}{\ignorespaces PointNet++ Trainings-Ergebnisse pro Epoche mit 3 Klassen, ohne Normalisierung und ohne zufällige Rotationen\relax }}{26}{figure.caption.21}\protected@file@percent }
+\newlabel{fig:T7_3C_PS_NN_NR}{{22}{26}{PointNet++ Trainings-Ergebnisse pro Epoche mit 3 Klassen, ohne Normalisierung und ohne zufällige Rotationen\relax }{figure.caption.21}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {23}{\ignorespaces PointNet++ Trainings-Ergebnisse pro Epoche mit 2 Klassen, mit Normalisierung und zufälliger Rotationen\relax }}{26}{figure.caption.22}\protected@file@percent }
+\newlabel{fig:10_2C_PS_WN_RR}{{23}{26}{PointNet++ Trainings-Ergebnisse pro Epoche mit 2 Klassen, mit Normalisierung und zufälliger Rotationen\relax }{figure.caption.22}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {24}{\ignorespaces PointNet++ Trainings-Ergebnisse pro Epoche mit 3 Klassen, mit Normalisierung und zufälliger Rotationen\relax }}{26}{figure.caption.22}\protected@file@percent }
+\newlabel{fig:9_3C_PS_WN_RR}{{24}{26}{PointNet++ Trainings-Ergebnisse pro Epoche mit 3 Klassen, mit Normalisierung und zufälliger Rotationen\relax }{figure.caption.22}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {25}{\ignorespaces Fehlgeschlagene Segmentierung einer Bananen-Pflanze. Verursacht durch Rotation der Punktwolke\relax }}{27}{figure.caption.23}\protected@file@percent }
+\newlabel{fig:rotation:error:1}{{25}{27}{Fehlgeschlagene Segmentierung einer Bananen-Pflanze. Verursacht durch Rotation der Punktwolke\relax }{figure.caption.23}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {26}{\ignorespaces Fehlgeschlagene Segmentierung einer Tomaten-Pflanze. Verursacht durch Rotation der Punktwolke\relax }}{27}{figure.caption.23}\protected@file@percent }
+\newlabel{fig:rotation:error:2}{{26}{27}{Fehlgeschlagene Segmentierung einer Tomaten-Pflanze. Verursacht durch Rotation der Punktwolke\relax }{figure.caption.23}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {5}Fazit und Ausblick}{27}{section.5}\protected@file@percent }
 \newlabel{sec:fazit}{{5}{27}{Fazit und Ausblick}{section.5}{}}
 \bibstyle{ieeetr}
@@ -173,35 +182,42 @@
 \bibcite{ORB}{5}
 \bibcite{BRIEF}{6}
 \bibcite{SURF}{7}
-\bibcite{lecun2015deep}{8}
-\bibcite{fan2016point}{9}
-\bibcite{tatarchenko2017octree}{10}
-\bibcite{wang2018pixel2mesh}{11}
-\bibcite{rs11222644}{12}
-\bibcite{ThreeBasics}{13}
-\bibcite{ModelBased}{14}
-\bibcite{qi2017pointnet}{15}
-\bibcite{qi2017pointnet++}{16}
+\bibcite{schoenberger2016sfm}{8}
+\bibcite{schoenberger2016mvs}{9}
+\bibcite{ODM}{10}
+\bibcite{opencv}{11}
+\bibcite{Moulon2012}{12}
+\bibcite{Jancosek2011}{13}
+\bibcite{moulon2016openmvg}{14}
+\bibcite{lecun2015deep}{15}
+\bibcite{fan2016point}{16}
+\bibcite{tatarchenko2017octree}{17}
 \@writefile{toc}{\contentsline {section}{Literatur}{29}{section.5}\protected@file@percent }
-\bibcite{dgcnn}{17}
-\bibcite{icp_org}{18}
-\bibcite{GoICP}{19}
-\bibcite{ICP}{20}
-\bibcite{RANSAC}{21}
-\bibcite{Ziner2005PointSR}{22}
-\bibcite{ScaleLK}{23}
-\bibcite{Wang_2019_ICCV}{24}
-\bibcite{aoki2019pointnetlk}{25}
-\bibcite{Yew_2020}{26}
-\bibcite{yuan2020deepgmr}{27}
-\bibcite{wang2019prnet}{28}
-\bibcite{sarode2019pcrnet}{29}
-\bibcite{lk}{30}
-\bibcite{RPM}{31}
-\bibcite{Sift3D}{32}
-\bibcite{sears2007blob}{33}
-\bibcite{learning3d}{34}
-\bibcite{zhou2018open3d}{35}
+\bibcite{wang2018pixel2mesh}{18}
+\bibcite{rs11222644}{19}
+\bibcite{ThreeBasics}{20}
+\bibcite{ModelBased}{21}
+\bibcite{qi2017pointnet}{22}
+\bibcite{qi2017pointnet++}{23}
+\bibcite{dgcnn}{24}
+\bibcite{icp_org}{25}
+\bibcite{GoICP}{26}
+\bibcite{ICP}{27}
+\bibcite{RANSAC}{28}
+\bibcite{Ziner2005PointSR}{29}
+\bibcite{ScaleLK}{30}
+\bibcite{Wang_2019_ICCV}{31}
+\bibcite{aoki2019pointnetlk}{32}
+\bibcite{Yew_2020}{33}
+\bibcite{yuan2020deepgmr}{34}
+\bibcite{wang2019prnet}{35}
+\bibcite{sarode2019pcrnet}{36}
+\bibcite{lk}{37}
+\bibcite{RPM}{38}
+\bibcite{Sift3D}{39}
+\bibcite{sears2007blob}{40}
+\bibcite{learning3d}{41}
+\bibcite{zhou2018open3d}{42}
 \newlabel{LastPage}{{}{31}{}{page.31}{}}
 \xdef\lastpage@lastpage{31}
 \xdef\lastpage@lastpageHy{31}

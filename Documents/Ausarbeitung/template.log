@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2021) (preloaded format=pdflatex 2021.8.18)  5 OCT 2021 23:00
+This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2021) (preloaded format=pdflatex 2021.8.18)  10 OCT 2021 22:58
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -344,7 +344,7 @@ Package: ifvtex 2019/10/25 v1.7 ifvtex legacy package. Use iftex instead.
 \Gm@dimlist=\toks23
 )
 LaTeX Font Info:    Trying to load font information for OT1+ptm on input line 8
-1.
+2.
 
 (/usr/local/texlive/2021/texmf-dist/tex/latex/psnfss/ot1ptm.fd
 File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
@@ -357,24 +357,24 @@ File: l3backend-pdftex.def 2021-08-04 L3 backend support: PDF output (pdfTeX)
 (./template.aux)
 \openout1 = `template.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 81.
-LaTeX Font Info:    ... okay on input line 81.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 81.
-LaTeX Font Info:    ... okay on input line 81.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 81.
-LaTeX Font Info:    ... okay on input line 81.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 81.
-LaTeX Font Info:    ... okay on input line 81.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 81.
-LaTeX Font Info:    ... okay on input line 81.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 81.
-LaTeX Font Info:    ... okay on input line 81.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 81.
-LaTeX Font Info:    ... okay on input line 81.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 81.
-LaTeX Font Info:    ... okay on input line 81.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 81.
-LaTeX Font Info:    ... okay on input line 81.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 82.
+LaTeX Font Info:    ... okay on input line 82.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 82.
+LaTeX Font Info:    ... okay on input line 82.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 82.
+LaTeX Font Info:    ... okay on input line 82.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 82.
+LaTeX Font Info:    ... okay on input line 82.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 82.
+LaTeX Font Info:    ... okay on input line 82.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 82.
+LaTeX Font Info:    ... okay on input line 82.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 82.
+LaTeX Font Info:    ... okay on input line 82.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 82.
+LaTeX Font Info:    ... okay on input line 82.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 82.
+LaTeX Font Info:    ... okay on input line 82.
 
 (/usr/local/texlive/2021/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
@@ -421,7 +421,7 @@ Package: ragged2e 2021/02/05 v3.0 ragged2e Package
 \RaggedRightParindent=\skip73
 \JustifyingParindent=\skip74
 )
-Package hyperref Info: Link coloring OFF on input line 81.
+Package hyperref Info: Link coloring OFF on input line 82.
 
 (/usr/local/texlive/2021/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2021-04-02 v2.47 Cross-referencing by name of section
@@ -435,9 +435,9 @@ Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 )
 \c@section@level=\count291
 )
-LaTeX Info: Redefining \ref on input line 81.
-LaTeX Info: Redefining \pageref on input line 81.
-LaTeX Info: Redefining \nameref on input line 81.
+LaTeX Info: Redefining \ref on input line 82.
+LaTeX Info: Redefining \pageref on input line 82.
+LaTeX Info: Redefining \nameref on input line 82.
  (./template.out) (./template.out)
 \@outlinefile=\write3
 \openout3 = `template.out'.
@@ -445,7 +445,7 @@ LaTeX Info: Redefining \nameref on input line 81.
 \c@lstlisting=\count292
 Package lastpage Info: Please have a look at the pageslts package at
 (lastpage)             https://www.ctan.org/pkg/pageslts
-(lastpage)             ! on input line 81.
+(lastpage)             ! on input line 82.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -487,12 +487,12 @@ Package lastpage Info: Please have a look at the pageslts package at
 [2
 
 ]
-LaTeX Font Info:    Trying to load font information for U+msa on input line 132
+LaTeX Font Info:    Trying to load font information for U+msa on input line 133
 .
  (/usr/local/texlive/2021/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 132
+LaTeX Font Info:    Trying to load font information for U+msb on input line 133
 .
 
 (/usr/local/texlive/2021/texmf-dist/tex/latex/amsfonts/umsb.fd
@@ -501,7 +501,7 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
  has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.158 \newpage
+l.159 \newpage
                [1] (./template.toc)
 \tf@toc=\write4
 \openout4 = `template.toc'.
@@ -510,331 +510,365 @@ pdfTeX warning (ext4): destination with the same identifier (name{page.2}) has
 been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.162 \newpage
+l.163 \newpage
                [2]pdfTeX warning (ext4): destination with the same identifier (
 name{page.3}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.190 \newpage
-               [3]
-Underfull \vbox (badness 4467) has occurred while \output is active []
-
- [4]
-<./Images/PointNetArchitektur.png, id=164, 2432.08624pt x 867.24pt>
+l.191 \newpage
+               [3] [4] [5]
+<./Images/PointNetArchitektur.png, id=190, 2432.08624pt x 867.24pt>
 File: ./Images/PointNetArchitektur.png Graphic file (type png)
 <use ./Images/PointNetArchitektur.png>
 Package pdftex.def Info: ./Images/PointNetArchitektur.png  used on input line 2
-74.
+81.
 (pdftex.def)             Requested size: 455.24411pt x 162.32921pt.
-
-[5]
-<./Images/PointNetPPArchitektur.png, id=181, 1972.36874pt x 816.04875pt>
+<./Images/PointNetPPArchitektur.png, id=195, 1972.36874pt x 816.04875pt>
 File: ./Images/PointNetPPArchitektur.png Graphic file (type png)
 <use ./Images/PointNetPPArchitektur.png>
 Package pdftex.def Info: ./Images/PointNetPPArchitektur.png  used on input line
- 290.
+ 297.
 (pdftex.def)             Requested size: 455.24411pt x 188.34721pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [6 <./Images/PointNetArchitektur.png> <./Images/PointNetPPArchitektur.png>] [7
+ [6 <./Images/PointNetArchitektur.png>] [7 <./Images/PointNetPPArchitektur.png>
 ]
-<./Images/RPM_Net_Arch.png, id=223, 1903.11pt x 491.8375pt>
+<./Images/RPM_Net_Arch.png, id=234, 1903.11pt x 491.8375pt>
 File: ./Images/RPM_Net_Arch.png Graphic file (type png)
 <use ./Images/RPM_Net_Arch.png>
-Package pdftex.def Info: ./Images/RPM_Net_Arch.png  used on input line 356.
+Package pdftex.def Info: ./Images/RPM_Net_Arch.png  used on input line 363.
 (pdftex.def)             Requested size: 455.24411pt x 117.65315pt.
- [8 <./Images/RPM_Net_Arch.png>]
-<./Images/WorkflowClientServer.png, id=244, 1749.53625pt x 1117.17375pt>
+ [8] [9 <./Images/RPM_Net_Arch.png>]
+<./Images/WorkflowClientServer.png, id=262, 1749.53625pt x 1117.17375pt>
 File: ./Images/WorkflowClientServer.png Graphic file (type png)
 <use ./Images/WorkflowClientServer.png>
 Package pdftex.def Info: ./Images/WorkflowClientServer.png  used on input line 
-396.
+403.
 (pdftex.def)             Requested size: 409.71692pt x 261.61534pt.
- [9] [10 <./Images/WorkflowClientServer.png>] [11]
-[12]
+ [10 <./Images/WorkflowClientServer.png>] [11] [12]
 LaTeX Font Info:    Trying to load font information for OMS+ptm on input line 5
-42.
- (/usr/local/texlive/2021/texmf-dist/tex/latex/psnfss/omsptm.fd
+49.
+
+(/usr/local/texlive/2021/texmf-dist/tex/latex/psnfss/omsptm.fd
 File: omsptm.fd 
 )
 LaTeX Font Info:    Font shape `OMS/ptm/b/n' in size <12> not available
-(Font)              Font shape `OMS/cmsy/b/n' tried instead on input line 542.
+(Font)              Font shape `OMS/cmsy/b/n' tried instead on input line 549.
+ [13]
 Package hyperref Info: bookmark level for unknown lstlisting defaults to 0 on i
-nput line 550.
+nput line 557.
 LaTeX Font Info:    Trying to load font information for OT1+pcr on input line 5
-50.
+57.
 
 (/usr/local/texlive/2021/texmf-dist/tex/latex/psnfss/ot1pcr.fd
 File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
 )
 LaTeX Font Info:    Trying to load font information for OMS+pcr on input line 5
-51.
+58.
 
 (/usr/local/texlive/2021/texmf-dist/tex/latex/psnfss/omspcr.fd
 File: omspcr.fd 
 )
 LaTeX Font Info:    Font shape `OMS/pcr/m/n' in size <12> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 551.
- [13]
-Underfull \hbox (badness 10000) in paragraph at lines 576--579
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 558.
+
+Underfull \hbox (badness 10000) in paragraph at lines 583--586
 
  []
 
-LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 5
-94.
-(/usr/local/texlive/2021/texmf-dist/tex/latex/psnfss/ts1ptm.fd
+[14]
+LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 6
+01.
+ (/usr/local/texlive/2021/texmf-dist/tex/latex/psnfss/ts1ptm.fd
 File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
-) [14] [15]
+) [15]
 [16]
-<./Images/PipelineBackgroundSegmentationStriped.png, id=332, 748.7975pt x 759.8
+<./Images/PipelineBackgroundSegmentationStriped.png, id=343, 748.7975pt x 759.8
 3875pt>
 File: ./Images/PipelineBackgroundSegmentationStriped.png Graphic file (type png
 )
 <use ./Images/PipelineBackgroundSegmentationStriped.png>
 Package pdftex.def Info: ./Images/PipelineBackgroundSegmentationStriped.png  us
-ed on input line 709.
+ed on input line 716.
 (pdftex.def)             Requested size: 128.03656pt x 128.03464pt.
 
-Underfull \hbox (badness 3189) in paragraph at lines 710--710
+Underfull \hbox (badness 3189) in paragraph at lines 717--717
 []\OT1/ptm/m/n/12 Abbildung 5: |Hintegrund-
  []
 
-<./Images/PipelinePlantSegmentation.png, id=333, 988.69376pt x 940.51375pt>
+<./Images/PipelinePlantSegmentation.png, id=344, 988.69376pt x 940.51375pt>
 File: ./Images/PipelinePlantSegmentation.png Graphic file (type png)
 <use ./Images/PipelinePlantSegmentation.png>
 Package pdftex.def Info: ./Images/PipelinePlantSegmentation.png  used on input 
-line 715.
+line 722.
 (pdftex.def)             Requested size: 128.03685pt x 128.02585pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 716--716
+Underfull \hbox (badness 10000) in paragraph at lines 723--723
 []\OT1/ptm/m/n/12 Abbildung 6: |Planzen-
  []
 
-<./Images/PipelineLeaveSegmentationStriped.png, id=334, 815.045pt x 847.165pt>
+<./Images/PipelineLeaveSegmentationStriped.png, id=345, 815.045pt x 847.165pt>
 File: ./Images/PipelineLeaveSegmentationStriped.png Graphic file (type png)
 <use ./Images/PipelineLeaveSegmentationStriped.png>
 Package pdftex.def Info: ./Images/PipelineLeaveSegmentationStriped.png  used on
- input line 721.
+ input line 728.
 (pdftex.def)             Requested size: 128.03447pt x 128.02583pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 722--722
+Underfull \hbox (badness 10000) in paragraph at lines 729--729
 []\OT1/ptm/m/n/12 Abbildung 7: |Blatt-
  []
 
 [17 <./Images/PipelineBackgroundSegmentationStriped.png> <./Images/PipelinePlan
 tSegmentation.png> <./Images/PipelineLeaveSegmentationStriped.png>]
-<./Images/DistanceCloudGen.png, id=345, 462.528pt x 346.896pt>
+<./Images/PointCloudGeneration_odm.png, id=358, 973.6375pt x 920.43875pt>
+File: ./Images/PointCloudGeneration_odm.png Graphic file (type png)
+<use ./Images/PointCloudGeneration_odm.png>
+Package pdftex.def Info: ./Images/PointCloudGeneration_odm.png  used on input l
+ine 768.
+(pdftex.def)             Requested size: 136.57573pt x 142.25923pt.
+<./Images/PointCloudGeneration_colmap.png, id=359, 877.2775pt x 865.2325pt>
+File: ./Images/PointCloudGeneration_colmap.png Graphic file (type png)
+<use ./Images/PointCloudGeneration_colmap.png>
+Package pdftex.def Info: ./Images/PointCloudGeneration_colmap.png  used on inpu
+t line 770.
+(pdftex.def)             Requested size: 136.5656pt x 142.25551pt.
+<./Images/PointCloudGeneration_meshroom.png, id=360, 1100.11pt x 954.56625pt>
+File: ./Images/PointCloudGeneration_meshroom.png Graphic file (type png)
+<use ./Images/PointCloudGeneration_meshroom.png>
+Package pdftex.def Info: ./Images/PointCloudGeneration_meshroom.png  used on in
+put line 773.
+(pdftex.def)             Requested size: 136.57338pt x 142.26112pt.
+<./Images/PointCloudGeneration_openmvg.png, id=361, 1066.98625pt x 977.6525pt>
+File: ./Images/PointCloudGeneration_openmvg.png Graphic file (type png)
+<use ./Images/PointCloudGeneration_openmvg.png>
+Package pdftex.def Info: ./Images/PointCloudGeneration_openmvg.png  used on inp
+ut line 775.
+(pdftex.def)             Requested size: 136.564pt x 142.25572pt.
+<./Images/PointCloudGeneration_opencv.png, id=362, 729.72626pt x 688.5725pt>
+File: ./Images/PointCloudGeneration_opencv.png Graphic file (type png)
+<use ./Images/PointCloudGeneration_opencv.png>
+Package pdftex.def Info: ./Images/PointCloudGeneration_opencv.png  used on inpu
+t line 777.
+(pdftex.def)             Requested size: 136.56723pt x 142.26147pt.
+ [18]
+<./Images/DistanceCloudGen.png, id=371, 462.528pt x 346.896pt>
 File: ./Images/DistanceCloudGen.png Graphic file (type png)
 <use ./Images/DistanceCloudGen.png>
-Package pdftex.def Info: ./Images/DistanceCloudGen.png  used on input line 768.
+Package pdftex.def Info: ./Images/DistanceCloudGen.png  used on input line 797.
 
 (pdftex.def)             Requested size: 216.24373pt x 162.18364pt.
-<./Images/NPointsCloudGen.png, id=346, 462.528pt x 346.896pt>
+<./Images/NPointsCloudGen.png, id=372, 462.528pt x 346.896pt>
 File: ./Images/NPointsCloudGen.png Graphic file (type png)
 <use ./Images/NPointsCloudGen.png>
-Package pdftex.def Info: ./Images/NPointsCloudGen.png  used on input line 774.
+Package pdftex.def Info: ./Images/NPointsCloudGen.png  used on input line 803.
 (pdftex.def)             Requested size: 216.24373pt x 162.18364pt.
- [18]
-<./Images/ODMNoise2.png, id=358, 862.22125pt x 743.77875pt>
+<./Images/ODMNoise2.png, id=378, 862.22125pt x 743.77875pt>
 File: ./Images/ODMNoise2.png Graphic file (type png)
 <use ./Images/ODMNoise2.png>
-Package pdftex.def Info: ./Images/ODMNoise2.png  used on input line 790.
+Package pdftex.def Info: ./Images/ODMNoise2.png  used on input line 819.
 (pdftex.def)             Requested size: 216.24373pt x 186.53438pt.
-<./Images/ColmapNoise2.png, id=359, 943.525pt x 787.94376pt>
+<./Images/ColmapNoise2.png, id=379, 943.525pt x 787.94376pt>
 File: ./Images/ColmapNoise2.png Graphic file (type png)
 <use ./Images/ColmapNoise2.png>
-Package pdftex.def Info: ./Images/ColmapNoise2.png  used on input line 796.
+Package pdftex.def Info: ./Images/ColmapNoise2.png  used on input line 825.
 (pdftex.def)             Requested size: 216.24373pt x 180.58603pt.
-<./Images/ODMError.png, id=360, 1071.00125pt x 791.95876pt>
+<./Images/ODMError.png, id=380, 1071.00125pt x 791.95876pt>
 File: ./Images/ODMError.png Graphic file (type png)
 <use ./Images/ODMError.png>
-Package pdftex.def Info: ./Images/ODMError.png  used on input line 806.
+Package pdftex.def Info: ./Images/ODMError.png  used on input line 835.
 (pdftex.def)             Requested size: 216.24373pt x 159.89948pt.
-<./Images/ColmapError.png, id=361, 1134.2375pt x 826.08624pt>
+<./Images/ColmapError.png, id=381, 1134.2375pt x 826.08624pt>
 File: ./Images/ColmapError.png Graphic file (type png)
 <use ./Images/ColmapError.png>
-Package pdftex.def Info: ./Images/ColmapError.png  used on input line 812.
+Package pdftex.def Info: ./Images/ColmapError.png  used on input line 841.
 (pdftex.def)             Requested size: 216.24373pt x 157.48743pt.
-<./Images/ColmapDuplicatedScene.png, id=362, 1032.85875pt x 1019.81pt>
+<./Images/ColmapDuplicatedScene.png, id=382, 1032.85875pt x 1019.81pt>
 File: ./Images/ColmapDuplicatedScene.png Graphic file (type png)
 <use ./Images/ColmapDuplicatedScene.png>
 Package pdftex.def Info: ./Images/ColmapDuplicatedScene.png  used on input line
- 820.
+ 849.
 (pdftex.def)             Requested size: 227.62206pt x 224.74791pt.
 
-[19 <./Images/DistanceCloudGen.png> <./Images/NPointsCloudGen.png> <./Images/OD
-MNoise2.png> <./Images/ColmapNoise2.png>] [20 <./Images/ODMError.png> <./Images
-/ColmapError.png> <./Images/ColmapDuplicatedScene.png>]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [21]
-<./Images/OdmFlatError1.png, id=396, 1022.82124pt x 905.3825pt>
+[19 <./Images/PointCloudGeneration_odm.png> <./Images/PointCloudGeneration_colm
+ap.png> <./Images/PointCloudGeneration_meshroom.png> <./Images/PointCloudGenera
+tion_openmvg.png> <./Images/PointCloudGeneration_opencv.png>] [20 <./Images/Dis
+tanceCloudGen.png> <./Images/NPointsCloudGen.png> <./Images/ODMNoise2.png> <./I
+mages/ColmapNoise2.png> <./Images/ODMError.png> <./Images/ColmapError.png>]
+[21 <./Images/ColmapDuplicatedScene.png>]
+<./Images/OdmFlatError1.png, id=421, 1022.82124pt x 905.3825pt>
 File: ./Images/OdmFlatError1.png Graphic file (type png)
 <use ./Images/OdmFlatError1.png>
-Package pdftex.def Info: ./Images/OdmFlatError1.png  used on input line 892.
+Package pdftex.def Info: ./Images/OdmFlatError1.png  used on input line 921.
 (pdftex.def)             Requested size: 223.0705pt x 213.3866pt.
-<./Images/OdmFlatError2.png, id=397, 840.13875pt x 769.87625pt>
+<./Images/OdmFlatError2.png, id=422, 840.13875pt x 769.87625pt>
 File: ./Images/OdmFlatError2.png Graphic file (type png)
 <use ./Images/OdmFlatError2.png>
-Package pdftex.def Info: ./Images/OdmFlatError2.png  used on input line 894.
+Package pdftex.def Info: ./Images/OdmFlatError2.png  used on input line 923.
 (pdftex.def)             Requested size: 223.07156pt x 213.39063pt.
-<./Images/HandcraftedClassifierAvocado.png, id=398, 804.00375pt x 622.325pt>
+<./Images/HandcraftedClassifierAvocado.png, id=423, 804.00375pt x 622.325pt>
 File: ./Images/HandcraftedClassifierAvocado.png Graphic file (type png)
 <use ./Images/HandcraftedClassifierAvocado.png>
 Package pdftex.def Info: ./Images/HandcraftedClassifierAvocado.png  used on inp
-ut line 897.
+ut line 926.
 (pdftex.def)             Requested size: 223.07074pt x 213.39192pt.
-<./Images/HandcraftedClassifierPlant2.png, id=399, 595.22375pt x 567.11874pt>
+<./Images/HandcraftedClassifierPlant2.png, id=424, 595.22375pt x 567.11874pt>
 File: ./Images/HandcraftedClassifierPlant2.png Graphic file (type png)
 <use ./Images/HandcraftedClassifierPlant2.png>
 Package pdftex.def Info: ./Images/HandcraftedClassifierPlant2.png  used on inpu
-t line 899.
+t line 928.
 (pdftex.def)             Requested size: 223.07213pt x 213.39589pt.
 
-[22 <./Images/OdmFlatError1.png> <./Images/OdmFlatError2.png> <./Images/Handcra
-ftedClassifierAvocado.png> <./Images/HandcraftedClassifierPlant2.png>]
 
-LaTeX Warning: Reference `' on page 23 undefined on input line 917.
+LaTeX Warning: Reference `' on page 22 undefined on input line 946.
 
-<./Images/T11_2C_PS_WN_NR.png, id=414, 462.528pt x 346.896pt>
+[22] [23 <./Images/OdmFlatError1.png> <./Images/OdmFlatError2.png> <./Images/Ha
+ndcraftedClassifierAvocado.png> <./Images/HandcraftedClassifierPlant2.png>]
+<./Images/T11_2C_PS_WN_NR.png, id=445, 462.528pt x 346.896pt>
 File: ./Images/T11_2C_PS_WN_NR.png Graphic file (type png)
 <use ./Images/T11_2C_PS_WN_NR.png>
-Package pdftex.def Info: ./Images/T11_2C_PS_WN_NR.png  used on input line 930.
+Package pdftex.def Info: ./Images/T11_2C_PS_WN_NR.png  used on input line 959.
 (pdftex.def)             Requested size: 216.24373pt x 162.18364pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 931--931
-[]\OT1/ptm/m/n/12 Abbildung 16: |Point-Net++ Trainings-
- []
-
-<./Images/T4_3C_PS_WN_NR.png, id=415, 462.528pt x 346.896pt>
-File: ./Images/T4_3C_PS_WN_NR.png Graphic file (type png)
-<use ./Images/T4_3C_PS_WN_NR.png>
-Package pdftex.def Info: ./Images/T4_3C_PS_WN_NR.png  used on input line 936.
-(pdftex.def)             Requested size: 216.24373pt x 162.18364pt.
-
-Underfull \hbox (badness 10000) in paragraph at lines 937--937
+Underfull \hbox (badness 10000) in paragraph at lines 960--960
 []\OT1/ptm/m/n/12 Abbildung 17: |Point-Net++ Trainings-
  []
 
-<./Images/T12_3C_PS_WN_NR_OC.png, id=416, 462.528pt x 346.896pt>
-File: ./Images/T12_3C_PS_WN_NR_OC.png Graphic file (type png)
-<use ./Images/T12_3C_PS_WN_NR_OC.png>
-Package pdftex.def Info: ./Images/T12_3C_PS_WN_NR_OC.png  used on input line 94
-6.
+<./Images/T4_3C_PS_WN_NR.png, id=446, 462.528pt x 346.896pt>
+File: ./Images/T4_3C_PS_WN_NR.png Graphic file (type png)
+<use ./Images/T4_3C_PS_WN_NR.png>
+Package pdftex.def Info: ./Images/T4_3C_PS_WN_NR.png  used on input line 965.
 (pdftex.def)             Requested size: 216.24373pt x 162.18364pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 947--947
+Underfull \hbox (badness 10000) in paragraph at lines 966--966
 []\OT1/ptm/m/n/12 Abbildung 18: |Point-Net++ Trainings-
  []
 
-<./Images/T13_2C_PS_WN_NR_NN.png, id=417, 462.528pt x 346.896pt>
-File: ./Images/T13_2C_PS_WN_NR_NN.png Graphic file (type png)
-<use ./Images/T13_2C_PS_WN_NR_NN.png>
-Package pdftex.def Info: ./Images/T13_2C_PS_WN_NR_NN.png  used on input line 95
-2.
+<./Images/T12_3C_PS_WN_NR_OC.png, id=447, 462.528pt x 346.896pt>
+File: ./Images/T12_3C_PS_WN_NR_OC.png Graphic file (type png)
+<use ./Images/T12_3C_PS_WN_NR_OC.png>
+Package pdftex.def Info: ./Images/T12_3C_PS_WN_NR_OC.png  used on input line 97
+5.
 (pdftex.def)             Requested size: 216.24373pt x 162.18364pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 953--953
+Underfull \hbox (badness 10000) in paragraph at lines 976--976
 []\OT1/ptm/m/n/12 Abbildung 19: |Point-Net++ Trainings-
  []
 
-[23 <./Images/T11_2C_PS_WN_NR.png> <./Images/T4_3C_PS_WN_NR.png>]
-Overfull \hbox (14.32639pt too wide) in paragraph at lines 979--991
- [] 
- []
-
-<./Images/T6_2C_PS_NN_NR.png, id=431, 462.528pt x 346.896pt>
-File: ./Images/T6_2C_PS_NN_NR.png Graphic file (type png)
-<use ./Images/T6_2C_PS_NN_NR.png>
-Package pdftex.def Info: ./Images/T6_2C_PS_NN_NR.png  used on input line 1004.
+<./Images/T13_2C_PS_WN_NR_NN.png, id=448, 462.528pt x 346.896pt>
+File: ./Images/T13_2C_PS_WN_NR_NN.png Graphic file (type png)
+<use ./Images/T13_2C_PS_WN_NR_NN.png>
+Package pdftex.def Info: ./Images/T13_2C_PS_WN_NR_NN.png  used on input line 98
+1.
 (pdftex.def)             Requested size: 216.24373pt x 162.18364pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 1005--1005
+Underfull \hbox (badness 10000) in paragraph at lines 982--982
 []\OT1/ptm/m/n/12 Abbildung 20: |Point-Net++ Trainings-
  []
 
-<./Images/T7_3C_PS_NN_NR.png, id=432, 462.528pt x 346.896pt>
-File: ./Images/T7_3C_PS_NN_NR.png Graphic file (type png)
-<use ./Images/T7_3C_PS_NN_NR.png>
-Package pdftex.def Info: ./Images/T7_3C_PS_NN_NR.png  used on input line 1010.
+[24 <./Images/T11_2C_PS_WN_NR.png> <./Images/T4_3C_PS_WN_NR.png> <./Images/T12_
+3C_PS_WN_NR_OC.png> <./Images/T13_2C_PS_WN_NR_NN.png>]
+Overfull \hbox (14.32639pt too wide) in paragraph at lines 1008--1020
+ [] 
+ []
+
+<./Images/T6_2C_PS_NN_NR.png, id=463, 462.528pt x 346.896pt>
+File: ./Images/T6_2C_PS_NN_NR.png Graphic file (type png)
+<use ./Images/T6_2C_PS_NN_NR.png>
+Package pdftex.def Info: ./Images/T6_2C_PS_NN_NR.png  used on input line 1033.
 (pdftex.def)             Requested size: 216.24373pt x 162.18364pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 1011--1011
+Underfull \hbox (badness 10000) in paragraph at lines 1034--1034
 []\OT1/ptm/m/n/12 Abbildung 21: |Point-Net++ Trainings-
  []
 
-[24 <./Images/T12_3C_PS_WN_NR_OC.png> <./Images/T13_2C_PS_WN_NR_NN.png>]
-[25 <./Images/T6_2C_PS_NN_NR.png> <./Images/T7_3C_PS_NN_NR.png>]
-<./Images/10_2C_PS_WN_RR.png, id=451, 462.528pt x 346.896pt>
-File: ./Images/10_2C_PS_WN_RR.png Graphic file (type png)
-<use ./Images/10_2C_PS_WN_RR.png>
-Package pdftex.def Info: ./Images/10_2C_PS_WN_RR.png  used on input line 1035.
+<./Images/T7_3C_PS_NN_NR.png, id=464, 462.528pt x 346.896pt>
+File: ./Images/T7_3C_PS_NN_NR.png Graphic file (type png)
+<use ./Images/T7_3C_PS_NN_NR.png>
+Package pdftex.def Info: ./Images/T7_3C_PS_NN_NR.png  used on input line 1039.
 (pdftex.def)             Requested size: 216.24373pt x 162.18364pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 1036--1036
+Underfull \hbox (badness 10000) in paragraph at lines 1040--1040
 []\OT1/ptm/m/n/12 Abbildung 22: |Point-Net++ Trainings-
  []
 
-<./Images/9_3C_PS_WN_RR.png, id=452, 462.528pt x 346.896pt>
-File: ./Images/9_3C_PS_WN_RR.png Graphic file (type png)
-<use ./Images/9_3C_PS_WN_RR.png>
-Package pdftex.def Info: ./Images/9_3C_PS_WN_RR.png  used on input line 1041.
+[25]
+<./Images/10_2C_PS_WN_RR.png, id=477, 462.528pt x 346.896pt>
+File: ./Images/10_2C_PS_WN_RR.png Graphic file (type png)
+<use ./Images/10_2C_PS_WN_RR.png>
+Package pdftex.def Info: ./Images/10_2C_PS_WN_RR.png  used on input line 1064.
 (pdftex.def)             Requested size: 216.24373pt x 162.18364pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 1042--1042
+Underfull \hbox (badness 10000) in paragraph at lines 1065--1065
 []\OT1/ptm/m/n/12 Abbildung 23: |Point-Net++ Trainings-
  []
 
-<./Images/RotationError1.png, id=453, 1026.83624pt x 816.04875pt>
+<./Images/9_3C_PS_WN_RR.png, id=478, 462.528pt x 346.896pt>
+File: ./Images/9_3C_PS_WN_RR.png Graphic file (type png)
+<use ./Images/9_3C_PS_WN_RR.png>
+Package pdftex.def Info: ./Images/9_3C_PS_WN_RR.png  used on input line 1070.
+(pdftex.def)             Requested size: 216.24373pt x 162.18364pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 1071--1071
+[]\OT1/ptm/m/n/12 Abbildung 24: |Point-Net++ Trainings-
+ []
+
+<./Images/RotationError1.png, id=479, 1026.83624pt x 816.04875pt>
 File: ./Images/RotationError1.png Graphic file (type png)
 <use ./Images/RotationError1.png>
-Package pdftex.def Info: ./Images/RotationError1.png  used on input line 1051.
+Package pdftex.def Info: ./Images/RotationError1.png  used on input line 1080.
 (pdftex.def)             Requested size: 216.24373pt x 171.84846pt.
 
-Underfull \hbox (badness 3769) in paragraph at lines 1052--1052
-[]\OT1/ptm/m/n/12 Abbildung 24: |Fehl-ge-schla-ge-ne Seg-men-
- []
-
-
-Underfull \hbox (badness 1609) in paragraph at lines 1052--1052
-\OT1/ptm/m/n/12 tie-rung ei-ner Bananen-Pflanze. Ver-ur-sacht
- []
-
-<./Images/RotationError2.png, id=454, 759.83875pt x 653.44125pt>
-File: ./Images/RotationError2.png Graphic file (type png)
-<use ./Images/RotationError2.png>
-Package pdftex.def Info: ./Images/RotationError2.png  used on input line 1057.
-(pdftex.def)             Requested size: 216.24373pt x 185.96347pt.
-
-Underfull \hbox (badness 3769) in paragraph at lines 1058--1058
+Underfull \hbox (badness 3769) in paragraph at lines 1081--1081
 []\OT1/ptm/m/n/12 Abbildung 25: |Fehl-ge-schla-ge-ne Seg-men-
  []
 
 
-Underfull \hbox (badness 1708) in paragraph at lines 1058--1058
+Underfull \hbox (badness 1609) in paragraph at lines 1081--1081
+\OT1/ptm/m/n/12 tie-rung ei-ner Bananen-Pflanze. Ver-ur-sacht
+ []
+
+<./Images/RotationError2.png, id=480, 759.83875pt x 653.44125pt>
+File: ./Images/RotationError2.png Graphic file (type png)
+<use ./Images/RotationError2.png>
+Package pdftex.def Info: ./Images/RotationError2.png  used on input line 1086.
+(pdftex.def)             Requested size: 216.24373pt x 185.96347pt.
+
+Underfull \hbox (badness 3769) in paragraph at lines 1087--1087
+[]\OT1/ptm/m/n/12 Abbildung 26: |Fehl-ge-schla-ge-ne Seg-men-
+ []
+
+
+Underfull \hbox (badness 1708) in paragraph at lines 1087--1087
 \OT1/ptm/m/n/12 tie-rung ei-ner Tomaten-Pflanze. Ver-ur-sacht
  []
 
-[26 <./Images/10_2C_PS_WN_RR.png> <./Images/9_3C_PS_WN_RR.png>] [27 <./Images/R
-otationError1.png> <./Images/RotationError2.png>] [28] (./template.bbl [29]
-[30]) 
+[26 <./Images/T6_2C_PS_NN_NR.png> <./Images/T7_3C_PS_NN_NR.png> <./Images/10_2C
+_PS_WN_RR.png> <./Images/9_3C_PS_WN_RR.png>] [27 <./Images/RotationError1.png> 
+<./Images/RotationError2.png>] [28] (./template.bbl [29] [30])
+
 AED: lastpage setting LastPage
 [31] (./template.aux)
 
 LaTeX Warning: There were undefined references.
 
-Package rerunfilecheck Info: File `template.out' has not changed.
-(rerunfilecheck)             Checksum: 1A4EBCFD30626F2DAC9658E960BF74FD;3850.
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
+
+Package rerunfilecheck Warning: File `template.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+Package rerunfilecheck Info: Checksums for `template.out':
+(rerunfilecheck)             Before: 1A4EBCFD30626F2DAC9658E960BF74FD;3850
+(rerunfilecheck)             After:  9801E53C5DA52B3F8448F5E9840AAF03;3855.
  ) 
 Here is how much of TeX's memory you used:
- 13533 strings out of 478542
- 205678 string characters out of 5850401
- 671768 words of memory out of 5000000
- 31102 multiletter control sequences out of 15000+600000
+ 13585 strings out of 478542
+ 207467 string characters out of 5850401
+ 707166 words of memory out of 5000000
+ 31141 multiletter control sequences out of 15000+600000
  421604 words of font info for 71 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 67i,16n,77p,557b,1891s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 67i,16n,77p,557b,1388s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2021/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/t
 exlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmbsy10.pfb></usr/local/t
 exlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/te
@@ -849,10 +883,10 @@ xmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/local/texlive/2021/texmf-dist
 /fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2021/texmf-dist/fonts/typ
 e1/urw/times/utmr8a.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/urw/tim
 es/utmri8a.pfb>
-Output written on template.pdf (34 pages, 5427151 bytes).
+Output written on template.pdf (34 pages, 6792545 bytes).
 PDF statistics:
- 575 PDF objects out of 1000 (max. 8388607)
- 449 compressed objects within 5 object streams
- 142 named destinations out of 1000 (max. 500000)
- 285 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 603 PDF objects out of 1000 (max. 8388607)
+ 467 compressed objects within 5 object streams
+ 150 named destinations out of 1000 (max. 500000)
+ 310 words of extra memory for PDF output out of 10000 (max. 10000000)
 
