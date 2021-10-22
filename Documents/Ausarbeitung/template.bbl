@@ -17,20 +17,20 @@ A.~Taneja, ``Top 10 smartphones with a dedicated depth sensor camera to capture
 D.~G. Lowe, ``Distinctive image features from scale-invariant keypoints,'' {\em
   International journal of computer vision}, vol.~60, no.~2, pp.~91--110, 2004.
 
-\bibitem{ORB}
-E.~Rublee, V.~Rabaud, K.~Konolige, and G.~Bradski, ``Orb: An efficient
-  alternative to sift or surf,'' in {\em 2011 International conference on
-  computer vision}, pp.~2564--2571, Ieee, 2011.
+\bibitem{SURF}
+H.~Bay, A.~Ess, T.~Tuytelaars, and L.~Van~Gool, ``Speeded-up robust features
+  (surf),'' {\em Computer vision and image understanding}, vol.~110, no.~3,
+  pp.~346--359, 2008.
 
 \bibitem{BRIEF}
 M.~Calonder, V.~Lepetit, C.~Strecha, and P.~Fua, ``Brief: Binary robust
   independent elementary features,'' in {\em European conference on computer
   vision}, pp.~778--792, Springer, 2010.
 
-\bibitem{SURF}
-H.~Bay, A.~Ess, T.~Tuytelaars, and L.~Van~Gool, ``Speeded-up robust features
-  (surf),'' {\em Computer vision and image understanding}, vol.~110, no.~3,
-  pp.~346--359, 2008.
+\bibitem{ORB}
+E.~Rublee, V.~Rabaud, K.~Konolige, and G.~Bradski, ``Orb: An efficient
+  alternative to sift or surf,'' in {\em 2011 International conference on
+  computer vision}, pp.~2564--2571, Ieee, 2011.
 
 \bibitem{schoenberger2016sfm}
 J.~L. Sch\"{o}nberger and J.-M. Frahm, ``Structure-from-motion revisited,''
@@ -62,6 +62,11 @@ M.~Jancosek and T.~Pajdla, ``Multi-view reconstruction preserving
 P.~Moulon, P.~Monasse, R.~Perrot, and R.~Marlet, ``Openmvg: Open multiple view
   geometry,'' in {\em International Workshop on Reproducible Research in
   Pattern Recognition}, pp.~60--74, Springer, 2016.
+
+\bibitem{arandjelovic2012three}
+R.~Arandjelovi{\'c} and A.~Zisserman, ``Three things everyone should know to
+  improve object retrieval,'' in {\em 2012 IEEE Conference on Computer Vision
+  and Pattern Recognition}, pp.~2911--2918, IEEE, 2012.
 
 \bibitem{lecun2015deep}
 Y.~LeCun, Y.~Bengio, and G.~Hinton, ``Deep learning,'' {\em nature}, vol.~521,

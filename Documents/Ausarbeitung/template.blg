@@ -5,45 +5,45 @@ The style file: ieeetr.bst
 Database file #1: ./bibleografie.bib
 Warning--empty booktitle in RANSAC
 Warning--empty booktitle in lk
-You've used 42 entries,
+You've used 43 entries,
             1876 wiz_defined-function locations,
-            711 strings with 10693 characters,
-and the built_in function-call counts, 9634 in all, are:
-= -- 846
-> -- 480
+            716 strings with 10893 characters,
+and the built_in function-call counts, 10022 in all, are:
+= -- 888
+> -- 488
 < -- 0
-+ -- 176
-- -- 134
-* -- 660
-:= -- 1389
-add.period$ -- 42
-call.type$ -- 42
-change.case$ -- 42
++ -- 179
+- -- 136
+* -- 683
+:= -- 1434
+add.period$ -- 43
+call.type$ -- 43
+change.case$ -- 43
 chr.to.int$ -- 0
-cite$ -- 44
-duplicate$ -- 492
-empty$ -- 981
-format.name$ -- 134
-if$ -- 2329
+cite$ -- 45
+duplicate$ -- 515
+empty$ -- 1021
+format.name$ -- 136
+if$ -- 2428
 int.to.chr$ -- 0
-int.to.str$ -- 42
-missing$ -- 30
-newline$ -- 129
-num.names$ -- 42
-pop$ -- 219
+int.to.str$ -- 43
+missing$ -- 31
+newline$ -- 132
+num.names$ -- 43
+pop$ -- 225
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 316
+skip$ -- 335
 stack$ -- 0
-substring$ -- 421
-swap$ -- 160
+substring$ -- 461
+swap$ -- 171
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
 warning$ -- 2
-while$ -- 78
-width$ -- 44
-write$ -- 359
+while$ -- 82
+width$ -- 45
+write$ -- 369
 (There were 2 warnings)
