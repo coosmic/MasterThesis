@@ -336,8 +336,11 @@ $ ist.
     C_4=-U(:,3),&\qquad R_4=UW^TV^T
     \end{split}
 \end{equation}
-Um zu überprüfen welche der vier Konfigurationen die richtige ist, kann geprüft werden ob die rekonstruierten Punkte vor beiden Kameras sind. Das trifft nur auf ein Konfigurationen zu.
+Um zu überprüfen welche der vier Konfigurationen die richtige ist, kann geprüft werden ob die rekonstruierten 3D-Punkte vor beiden Kameras sind. Das trifft nur auf ein Konfigurationen zu.
 Sind nun die ersten beiden Kamera-Posen bekannt, können weitere Kameras mittels Perspektive-n-Points-Algorithmus (PnP) hinzugefügt werden. 
+TODO: Explain PnP
+Wurden alle Kamera-Posen und 3D-Punkte geschätzt müssen diese noch einmal nach bearbeitet werden. Diesen Schritt nennt man Bundle-Adjustment.
+TODO: Bundle Adjustment erklären.
 
 %Das Bild-Paar mit den meisten Übereinstimmungen wird als Basis für die Rekonstruktion der 3D-Punktwolke genutzt.
 %Wurde aus den beiden Bildern eine initiale Punktwolke erstellt, wird diese mit den verbleibenden Bildern angereichert \cite{alouacheevaluation}. 
