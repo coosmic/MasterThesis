@@ -2,7 +2,7 @@
 \contentsline {section}{\numberline {2}Stand der Technik}{4}{section.2}%
 \contentsline {subsection}{\numberline {2.1}Generierung einer 3D Punktwolke aus Bildern}{4}{subsection.2.1}%
 \contentsline {subsection}{\numberline {2.2}Segmentierung von 3D-Punkwolken}{8}{subsection.2.2}%
-\contentsline {subsection}{\numberline {2.3}Registrierung von 3D-Punkwolken}{9}{subsection.2.3}%
+\contentsline {subsection}{\numberline {2.3}Registrierung von 3D-Punkwolken}{10}{subsection.2.3}%
 \contentsline {section}{\numberline {3}Realisierung}{13}{section.3}%
 \contentsline {subsection}{\numberline {3.1}Architektur}{13}{subsection.3.1}%
 \contentsline {subsection}{\numberline {3.2}Umsetzung Generierung einer 3D Punktwolke aus Bildern}{14}{subsection.3.2}%

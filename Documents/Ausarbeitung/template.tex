@@ -212,8 +212,9 @@ Zuletzt müssen zwei Punktwolken einer Pflanze zu verschiedenen Zeitpunkten mite
 
 Generell kann man zwischen zwei Methoden der Generierung von Punktwolken unterscheiden, die jeweils verschiedene Verfahren beziehungsweise Techniken anwenden.
 
-Die erste Methode nutzt Hardware wie LIDAR-Scanner \cite{lidar} um Punkwolken direkt zu erzeugen. Es gibt eine Reihe von Sensoren die das ermöglichen. Da der Großteil der Sensoren aus kostengründen nicht in Frage kommt sei hier nur noch der RGB-D-Sensor erwähnt. 
+Die erste Methode nutzt Hardware wie LIDAR-Scanner \cite{lidar} um Punktwolken direkt zu erzeugen. Es gibt eine Reihe von Sensoren die das ermöglichen. Da der Großteil der Sensoren aus kostengründen nicht in Frage kommt sei hier nur noch der RGB-D-Sensor erwähnt. 
 Dieser liefert neben den Farbwerten für ein Bild auch noch eine Tiefeninformation für jeden Pixel. In einigen Smartphone-Modellen wird bereits ein solcher Sensor verbaut \cite{rgbd_smartphones}.
+Ein Nachteil bei RGB-D Sensoren ist aber das sie Anfällig für Änderungen der Lichtverhältnisse sind. Was gerade im Außenbereich häufig vorkommt.
 
 Die andere Methode ist Structure from Motion (SfM), bei der die Punktwolke aus Bildern, einer Szene aus verschiedenen Perspektiven, generiert wird. 
 Allgemein werden auf den zugrundeliegenden Bildern nach Merkmalen (Feature) gesucht die robust gegen Translation, Rotation, Skalierung und Beleuchtung seien sollten. 
@@ -336,11 +337,19 @@ $ ist.
     C_4=-U(:,3),&\qquad R_4=UW^TV^T
     \end{split}
 \end{equation}
-Um zu überprüfen welche der vier Konfigurationen die richtige ist, kann geprüft werden ob die rekonstruierten 3D-Punkte vor beiden Kameras sind. Das trifft nur auf ein Konfigurationen zu.
+Um zu überprüfen welche der vier Konfigurationen die richtige ist, kann geprüft werden ob die rekonstruierten 3D-Punkte vor beiden Kameras sind. Es wird die Konfigurationen gewählt bei der am meisten Punkte vor den Kameras sind.
 Sind nun die ersten beiden Kamera-Posen bekannt, können weitere Kameras mittels Perspektive-n-Points-Algorithmus (PnP) hinzugefügt werden. 
-TODO: Explain PnP
-Wurden alle Kamera-Posen und 3D-Punkte geschätzt müssen diese noch einmal nach bearbeitet werden. Diesen Schritt nennt man Bundle-Adjustment.
-TODO: Bundle Adjustment erklären.
+Hierbei wird anhand der bereits ermittelten 3D-Punkte die Pose einer weiteren Kamera mittels Least-Square-Fit gefunden. Da die Pose der Kamera 6 Freiheitsgrade hat, werden mindesten 6 korrespondierende Punkte benötigt. 
+Wurden alle Kamera-Posen und 3D-Punkte geschätzt müssen diese noch einmal korrigiert werden. Diesen Schritt nennt man Bundle-Adjustment (BA).
+Beim BA wird für jede der $m$ Kamera-Posen $A$ mit den Parametern $a_j$ jeder der $n$ 3D-Punkt $P_i$ der von der Kamera aufgenommen wurde zurück auf das Kamera-Bild projiziert und 
+der Abstand des so ermittelten Bild-Punktes zum originalen Bild-Punkt aus der Feature-Detektion gemessen und minimiert. 
+Das Optimisierungs-Problem kann wie in Gleichung \ref{eq:sfm:bundle:adjustment} zu sehen formuliert werden. 
+\begin{equation}
+    \label{eq:sfm:bundle:adjustment}
+    \min_{a_j, P_i} = \sum_{i=1}^n \sum_{j=1}^m v_{ij} d(Q(a_j, P_i), x_{ij})
+\end{equation}
+Wobei $v_{ij} = 1$ wenn der Punkt $i$ von Kamera $j$ erfasst wurde und ansonsten $0$.
+$Q(a_j, P_i)$ is die geschätzte Projektion des Punktes $P_i$ auf das Bild der Kamera $j$ und $d(x,y)$ ist die Euklidische Distanz.
 
 %Das Bild-Paar mit den meisten Übereinstimmungen wird als Basis für die Rekonstruktion der 3D-Punktwolke genutzt.
 %Wurde aus den beiden Bildern eine initiale Punktwolke erstellt, wird diese mit den verbleibenden Bildern angereichert \cite{alouacheevaluation}. 
@@ -354,7 +363,7 @@ Einige bekannte Implementationen von SfM sind Colmap \cite{schoenberger2016sfm},
 Colmap stellt eine Pipeline bereit die eine inkrementelle Implementation von SfM anbietet. Initial wird nach korrespondierenden Bildern gesucht und diese dann inkrementell in die Rekonstruktion aufgenommen.
 Colmap nutzt Root-SIFT als Feature-Detektor. Root-SIFT nutzt im Gegensatz zu normalen SIFT beim Feature-Matching nicht die Euklidische Distanz sondern die Hellinger-Distanz \cite{arandjelovic2012three}.
 
-ODM stellt auch eine Pipeline bereit die aus den Schritten SfM, Multi View Stereo und Filterpunkte ermitteln besteht. 
+ODM stellt auch eine Pipeline bereit die aus den Schritten SfM, Multi View Stereo und Filterpunkte ermitteln besteht. Eine Besonderheit bei ODM ist, das es für jeden 3D-Punkt auch eine Normale liefert.
 
 Es wurden in den letzten Jahren große Fortschritte im Bereich tiefer Neuronaler Netze (Deep-Learning) \cite{lecun2015deep}, zur Gewinnung von 3D-Punkwolken, gemacht \cite{fan2016point} \cite{tatarchenko2017octree} \cite{wang2018pixel2mesh}. 
 Mit diesen Verfahren ist es möglich aus einer minimalen Datenbasis die auch nur aus einem Bild bestehen kann 3D-Punkwolken zu generieren. Was dem Ziel die Datenübertragung zum Server gering zu halten entgegenkommt.
