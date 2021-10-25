@@ -26,6 +26,7 @@ parser.add_argument('--batch_size', type=int, default=10, help='Batch Size durin
 parser.add_argument('--pred_dir', default='./pointnet2/part_seg/pred_eval/', help='Directory where predictions should be saved to')
 parser.add_argument('--num_classes', type=int, default=2, help='Number of Classes in Test Data [2,3]')
 parser.add_argument('--normalize', type=bool, default=False, help='Should the input point clouds be normalized? Default False')
+parser.add_argument('--input_dimension', type=int, default=6, help='How many values per point? Default 6 (position + normals)')
 FLAGS = parser.parse_args()
 
 VOTE_NUM = 12
@@ -35,6 +36,7 @@ EPOCH_CNT = 0
 BATCH_SIZE = FLAGS.batch_size
 NUM_POINT = FLAGS.num_point
 GPU_INDEX = FLAGS.gpu
+INPUT_DIMENSION = FLAGS.input_dimension
 
 MODEL_PATH = FLAGS.model_path
 MODEL = importlib.import_module(FLAGS.model) # import network module
@@ -69,12 +71,12 @@ def log_string(out_str):
 def evaluate():
     with tf.Graph().as_default():
         with tf.device('/gpu:'+str(GPU_INDEX)):
-            pointclouds_pl, labels_pl = MODEL.placeholder_inputs(BATCH_SIZE, NUM_POINT)
+            pointclouds_pl, labels_pl = MODEL.placeholder_inputs(BATCH_SIZE, NUM_POINT, INPUT_DIMENSION)
             is_training_pl = tf.placeholder(tf.bool, shape=())
             print(is_training_pl)
             
             print("--- Get model and loss")
-            pred, end_points = MODEL.get_model(pointclouds_pl, is_training_pl)
+            pred, end_points = MODEL.get_model(pointclouds_pl, is_training_pl, input_dimension=INPUT_DIMENSION)
             loss = MODEL.get_loss(pred, labels_pl)
             saver = tf.train.Saver()
         
@@ -150,7 +152,7 @@ def eval_one_epoch(sess, ops):
         pred_val = np.zeros((BATCH_SIZE, NUM_POINT, NUM_CLASSES))
         #print("pred_val.shape", pred_val.shape)
         for _ in range(VOTE_NUM):
-            feed_dict = {ops['pointclouds_pl']: batch_data,
+            feed_dict = {ops['pointclouds_pl']: batch_data[:,:,0:INPUT_DIMENSION],
                          ops['labels_pl']: batch_label,
                          ops['is_training_pl']: is_training}
             temp_loss_val, temp_pred_val = sess.run([ops['loss'], ops['pred']], feed_dict=feed_dict)
@@ -166,7 +168,8 @@ def eval_one_epoch(sess, ops):
         cur_pred_val = np.zeros((cur_batch_size, NUM_POINT)).astype(np.int32)
         #print("seg_label_to_cat: ",seg_label_to_cat)
         for i in range(cur_batch_size):
-            #print("cur_batch_label[i,0]: ",cur_batch_label[i,0])
+            print("cur_batch_label[i,0]: ",cur_batch_label[i,0])
+            print(seg_label_to_cat)
             cat = seg_label_to_cat[cur_batch_label[i,0]]
             logits = cur_pred_val_logits[i,:,:]
             cur_pred_val[i,:] = np.argmax(logits[:,seg_classes[cat]], 1) + seg_classes[cat][0]

@@ -1,0 +1,168 @@
+Namespace(batch_size=10, gpu=0, log_dir='./results/evaluation/t10_2Classes_PartSeg_WitNorm_WithRotation/', model='pointnet2_part_seg', model_path='./results/training/t10_2Classes_PartSeg_WitNorm_WithRotation/model.ckpt', normalize=True, num_classes=2, num_point=16384, pred_dir='pred_eval')
+pid: 11892
+2021-10-25 20:26:11.389967
+---- EPOCH 000 EVALUATION ----
+000/015
+BananaT1LabeledShapenetSS2.txt
+BananaT1LabeledShapenetSS5.txt
+BananaT2LabeledShapenetSS1.txt
+BananaT3LabeledShapenetSS4.txt
+BananaT3LabeledShapenetSS5.txt
+BananaT3LabeledShapenetSS9.txt
+BananaT4LabeledShapenetSS11.txt
+BananaT5LabeledShapenetSS15.txt
+Kohlrabi1LabeldShapenetSS1.txt
+Mais1LabeledShapenetNormalsSS8.txt
+Batch 0 mean mIoU: 0.8807475011722431
+Mais1T2LabeledShapenetNormalsSS1.txt
+Mais1T2LabeledShapenetNormalsSS6.txt
+Mais1T3LabeledShapenetNormalsSS13.txt
+Mais1T3LabeledShapenetNormalsSS19.txt
+Mais1T3LabeledShapenetNormalsSS6.txt
+Mais1T5LabeledShapenetNormalsSS8.txt
+Mais1T6LabeledShapenetNormalsSS1.txt
+Mais1T6LabeledShapenetNormalsSS16.txt
+Mais1T6LabeledShapenetNormalsSS2.txt
+Mais1T6LabeledShapenetNormalsSS4.txt
+Batch 1 mean mIoU: 0.9626994945655586
+Mais1T7LabeledShapenetNormalsSS11.txt
+Mais1T7LabeledShapenetNormalsSS3.txt
+Mais1T7LabeledShapenetNormalsSS4.txt
+Mais1T8LabeledShapenetNormalsSS11.txt
+Mais1T8LabeledShapenetNormalsSS3.txt
+Mais1T8LabeledShapenetNormalsSS4.txt
+Mais1T8LabeledShapenetNormalsSS8.txt
+Mais1T9LabeledShapenetNormalsSS11.txt
+Mais1T9LabeledShapenetNormalsSS13.txt
+Mais1T9LabeledShapenetNormalsSS17.txt
+Batch 2 mean mIoU: 0.9082181396677976
+Mais1T9LabeledShapenetNormalsSS20.txt
+Mais2T1LabeledShapenetNormalsSS7.txt
+Mais2T2LabeledShapenetNormalsSS14.txt
+Mais2T3LabeledShapenetNormalsSS5.txt
+Mais2T3LabeledShapenetNormalsSS7.txt
+Mais2T4LabeledShapenetNormalsSS20.txt
+Mais2T4LabeledShapenetNormalsSS8.txt
+Mais2T5LabeledShapenetNormalsSS14.txt
+Mais2T5LabeledShapenetNormalsSS17.txt
+Mais2T5LabeledShapenetNormalsSS18.txt
+Batch 3 mean mIoU: 0.9491505173813575
+Mais2T5LabeledShapenetNormalsSS19.txt
+Mais2T6LabeledShapenetNormalsSS11.txt
+Mais2T6LabeledShapenetNormalsSS15.txt
+Mais2T6LabeledShapenetNormalsSS16.txt
+Mais2T6LabeledShapenetNormalsSS19.txt
+Mais2T6LabeledShapenetNormalsSS20.txt
+Mais2T6LabeledShapenetNormalsSS7.txt
+Mais2T7LabeledShapenetNormalsSS14.txt
+Mais2T7LabeledShapenetNormalsSS17.txt
+Mais2T7LabeledShapenetNormalsSS19.txt
+Batch 4 mean mIoU: 0.9307177237335663
+Mais2T9LabeledShapenetNormalsSS12.txt
+Mais2T9LabeledShapenetNormalsSS18.txt
+Mais3T3LabeledShapenetNormalsSS16.txt
+Mais3T3LabeledShapenetNormalsSS5.txt
+Mais3T4LabeledShapenetNormalsSS11.txt
+Mais3T4LabeledShapenetNormalsSS13.txt
+Mais3T4LabeledShapenetNormalsSS15.txt
+Mais3T4LabeledShapenetNormalsSS19.txt
+Mais3T4LabeledShapenetNormalsSS9.txt
+Mais3T5LabeledShapenetNormalsSS4.txt
+Batch 5 mean mIoU: 0.940361581558461
+Mais3T6LabeledShapenetNormalsSS1.txt
+Mais3T6LabeledShapenetNormalsSS13.txt
+Mais3T6LabeledShapenetNormalsSS20.txt
+Mais3T7LabeledShapenetNormalsSS2.txt
+Mais3T7LabeledShapenetNormalsSS4.txt
+Mais3T7LabeledShapenetNormalsSS6.txt
+Mais3T7LabeledShapenetNormalsSS7.txt
+Mais3T8LabeledShapenetNormalsSS18.txt
+Mais3T8LabeledShapenetNormalsSS8.txt
+Paprika6LabeledShapenetSS2.txt
+Batch 6 mean mIoU: 0.9308112607741164
+Paprika9LabeledShapenetSS1.txt
+Plant1T2LabeledShapenetSS3.txt
+Plant1T2LabeledShapenetSS5.txt
+Plant2T2LabeledShapenetSS4.txt
+Plant2T3LabeledShapenetSS5.txt
+Plant2T3LabeledShapenetSS7.txt
+Plant3T1LabeledShapenetSS3.txt
+Plant8T1LabeledShapenetSS10.txt
+Salat1LabeledShapenetSS4.txt
+Salat4LabeledShapenetSS7.txt
+Batch 7 mean mIoU: 0.8644756551084276
+Salat6LabeledShapenetSS1.txt
+Salat7LabeledShapenetSS1.txt
+Salat9LabeledShapenetSS2.txt
+Salat9LabeledShapenetSS8.txt
+Tomato13LabeledShapenetSS6.txt
+Tomato15LabeledShapenetSS5.txt
+Tomato15LabeledShapenetSS6.txt
+Tomato15LabeledShapenetSS8.txt
+Tomato16LabeledShapenetSS5.txt
+Tomato18LabeledShapenetSS4.txt
+Batch 8 mean mIoU: 0.7804900958913805
+Tomato18LabeledShapenetSS6.txt
+Tomato19LabeledShapenetSS2.txt
+Tomato19LabeledShapenetSS6.txt
+Tomato1T1LabeldShapenetNormalsSS6.txt
+Tomato1T2LabeledShapenetNormalsSS7.txt
+Tomato1T2LabeledShapenetNormalsSS8.txt
+Tomato1T3LabeledShapenetNormalsSS3.txt
+Tomato1T4LabeledShapenetNormalsSS14.txt
+Tomato1T5LabeledShapenetNormalsSS16.txt
+Tomato1T6LabeledShapenetNormalsSS3.txt
+Batch 9 mean mIoU: 0.8941150557041867
+Tomato1T6LabeledShapenetNormalsSS4.txt
+Tomato1T7LabeledShapenetNormalsSS11.txt
+Tomato1T8LabeledShapenetNormalsSS11.txt
+Tomato1T9LabeledShapenetNormalsSS6.txt
+Tomato20LabeledShapenetSS6.txt
+Tomato22LabeledShapenetSS1.txt
+Tomato22LabeledShapenetSS7.txt
+Tomato23LabeledShapenetSS1.txt
+Tomato25LabeledShapenetSS3.txt
+Tomato27LabeledShapenetSS1.txt
+Batch 10 mean mIoU: 0.821834288855029
+Tomato27LabeledShapenetSS5.txt
+Tomato28LabeledShapenetSS2.txt
+Tomato2T2LabeledShapenetNormalsSS6.txt
+Tomato2T4LabeledShapenetNormalsSS1.txt
+Tomato2T4LabeledShapenetNormalsSS3.txt
+Tomato2T4LabeledShapenetNormalsSS8.txt
+Tomato2T5LabeledShapenetNormalsSS10.txt
+Tomato2T5LabeledShapenetNormalsSS4.txt
+Tomato2T6LabeledShapenetNormalsSS1.txt
+Tomato2T7LabeledShapenetNormalsSS19.txt
+Batch 11 mean mIoU: 0.9116559753115128
+Tomato2T9LabeledShapenetNormalsSS1.txt
+Tomato2T9LabeledShapenetNormalsSS11.txt
+Tomato2T9LabeledShapenetNormalsSS18.txt
+Tomato2T9LabeledShapenetNormalsSS8.txt
+Tomato31LabeledShapenetSS2.txt
+Tomato32LabeledShapenetSS5.txt
+Tomato34LabeledShapenetSS5.txt
+Tomato35LabeledShapenetSS5.txt
+Tomato3T1LabeledShapenetNormalsSS4.txt
+Tomato3T1LabeledShapenetNormalsSS5.txt
+Batch 12 mean mIoU: 0.8821504599720656
+Tomato3T2LabeledShapenetNormalsSS11.txt
+Tomato3T6LabeledShapenetNormalsSS14.txt
+Tomato3T6LabeledShapenetNormalsSS15.txt
+Tomato3T8LabeldShapenetNormalsSS16.txt
+Tomato3T8LabeldShapenetNormalsSS17.txt
+Tomato3T8LabeldShapenetNormalsSS19.txt
+Tomato3T9LabeledShapenetNormalsSS8.txt
+Tomato7LabeledShapenetSS3.txt
+Tomato8LabeledShapenetSS1.txt
+Tomato8LabeledShapenetSS2.txt
+Batch 13 mean mIoU: 0.883885888641478
+Tomato9LabeledShapenetSS3.txt
+Tomato9LabeledShapenetSS4.txt
+Batch 14 mean mIoU: 0.7220320379872796
+eval mean loss: 0.078721
+eval accuracy: 0.969226
+eval avg class acc: 0.942541
+eval mIoU of Plant:	 0.893361
+eval mean mIoU: 0.893361
+eval mean mIoU (all shapes): 0.893361

@@ -469,13 +469,17 @@ Mittels dieser Vektoren kann die Skalierung $s$ berechnet werden. Die Berechnung
 \end{equation}
 
 Auch für das Registrierung-Problem gibt es Lösungen aus dem Deep-Learning-Bereich, aber auch hier gibt es das Problem, dass es nur wenige Ansätze gibt die mit Skalierung umgehen können \cite{ScaleLK}.
-Bekannt Ansätze sind DCP \cite{Wang_2019_ICCV}, PointNetLK \cite{aoki2019pointnetlk}, RPM-Net \cite{Yew_2020}, DeepGMR \cite{yuan2020deepgmr}, PRNet \cite{wang2019prnet} und PCRNet \cite{sarode2019pcrnet}.
-Einige dieser Ansätze sollen in dieser Arbeit untersucht werden.
+Bekannt Ansätze sind DCP \cite{Wang_2019_ICCV}, PointNetLK \cite{aoki2019pointnetlk} und RPM-Net \cite{Yew_2020}.
+%DeepGMR \cite{yuan2020deepgmr}, PRNet \cite{wang2019prnet} und PCRNet \cite{sarode2019pcrnet}.
+Dieser Ansätze sollen in dieser Arbeit untersucht werden.
 
 DCP besteht aus drei Teilnetzen. Das erste Netz (PointNet oder DGCNN) überführt die Punktwolke in einen hochdimensionalen Raum. Das zweite Netz codiert die kontextuelle Information mittels eines Transformer-Modells 
 und das letzte Netz schätzt auf Basis der kontextuellen Information mittels eines differnezierbaren SVD Layers die Rotation und Translation.
 
-PointNetLK basiert auf der Idee von PointNet und dem LK-Algorithmus \cite{lk}. Initial wird die Ziel-Punktwolke der Größe nx3 in einen hochdimensionalen Vektorraum der Größe nxk mittels eines MLP überführt. 
+PointNetLK basiert auf der Idee von PointNet und dem LK-Algorithmus \cite{lk} der für die Berechnung des Optischen-Flusses bei einer Folge von Bildern entwickelt wurde. 
+Es wird für jeden Pixel im Bild die Richtung ermittelt in der sich der Pixel über Zeit Bewegen wird.
+Diese Prinzip wird hier auf die Registrierung übertragen.
+Initial wird die Ziel-Punktwolke der Größe nx3 in einen hochdimensionalen Vektorraum der Größe nxk mittels eines MLP überführt. 
 Aus der Ausgabe des MLP-Layers wird mittels einer symmetrischen Polling-Funktion ein $k$ großer globaler Feature-Vektor ermittelt. Für diesen wird die Jakobi-Matrix $J$ berechnet.
 Die Quell-Punktwolke wird nun iterativ an die Ziel-Punktwolke angenähert.
 Die Quell-Punktwolke wird dabei ähnlich wie die Ziel-Punktwolke behandelt. Es wird allerdings nach dem ermitteln des globalen Feature-Vektors nicht die Jakobi-Matrix gebildet, 
@@ -484,7 +488,7 @@ Die Transformation wird angewandt und der Vorgang solange wiederholt bis es zu k
 Die einzelnen Transformationen aus den Iterationen werden miteinander multipliziert um die Transformation zu erlangen die die Quell-Punktwolke mit der Ziel-Punkwolke registriert.
 
 RPM-Net baut auf RPM \cite{RPM} auf. Nur werden im Gegensatz zu RPM die räumlichen Entfernungne durch hybride Feature-Distanzen ersetzt und 
-die Parameter $\alpha$ und $\beta$ werden in jeder Iteration durch ein neuronales Netz geschätzt. Details der Archtektur sind in Abbildung \ref{fig:rpm:net:arch} zu finden.
+die Parameter $\alpha$ und $\beta$ werden in jeder Iteration durch ein neuronales Netz geschätzt. Details der Architektur sind in Abbildung \ref{fig:rpm:net:arch} zu finden.
 
 \begin{figure}
     \centering
@@ -1071,14 +1075,32 @@ Das heißt sie liegen in dem Raum den die beiden Punkte $(0,0,0)$ und $(1,1,1)$ 
 \textbf{Vergleich Training mit und ohne Hintergrund}
 
 In einem ersten Vergleich wird die Güte der Segmentierung zwischen dem Training mit und ohne Hintergrund verglichen. Die Ergebnisse des Trainings sind in Abbildung \ref{fig:T11_2C_PS_WN_NR} und \ref{fig:T4_3C_PS_WN_NR} zu sehen.
-Die Ergebnisse der Evaluation sind in Tabelle \ref{} zu sehen. 
+Die Ergebnisse der Evaluation sind in Tabelle \ref{tab:segmentation:eval} zu sehen. 
 Sowohl die Ergebnisse des Trainings, als auch die Ergebnisse der Evaluation zeigen deutlich, dass die Segmentierung ohne Hintergrund die besseren Ergebnisse liefert.
 Das wird vermutlich daran liegen, dass der Anteil der Punkte die zum Hintergrund gehören dominiert.
 Da die Segmentierung mit Hintegrund aber zur Entfernung des Hintergrundes benötigt wird, wird in einem zweiten Vergleich die Hintergrund-Segmentierung neu trainiert. 
 Diesmal wird aber ein Großteil der Hintergrund-Punkte entfernt, indem nur das Zentrum der Punktwolke beim Training betrachtet wird. Die Ergebnisse sind in Abbildung \ref{fig:T12_3C_PS_WN_NR_OC} zu sehen.
 Wie in Abbildung \ref{fig:T12_3C_PS_WN_NR_OC} zu sehen ist verbessern sich die Ergebnisse für das Training mit weniger Hintergrund deutlich. 
 
-TODO: Tabel Evaluation missing
+\begin{table}
+    \begin{center}
+    \begin{tabular}{|l || c | c | c || c | c | c | c | c |} 
+        \hline
+         & \thead{t11}  & \thead{t6} & \thead{t10} & \thead{t9} & \thead{t4} & \thead{t7} & \thead{t12} & \thead{t13}  \\  
+        \hline
+        \hline
+        Loss & $0,044$ & $0.056$& $0.079$& $0.05$& $0.038$& $0.054$& $0.051$& $0.127$\\
+        \hline
+        Genauigkeit & $0,98$& $0.976$& $0.969$& $0.982$& $0.986$& $0.981$& $0.98$& $0.95$\\
+        \hline
+        IoU & $0.925$& $0.908$& $0.893$& $0.811$& $0.813$& $0.788$& $0.841$& $0.827$\\
+        \hline
+    \end{tabular}
+    \end{center}
+    \caption{Evaluations-Ergebnisse der verschiedenen Netze. Links ohne Hintergrund. Rechts mit Hintergrund.}
+    \label{tab:segmentation:eval}
+\end{table}
+
 
 \begin{figure}
     \centering
@@ -1135,14 +1157,14 @@ Wird die Normalisierung komplett verhindert, kann das Auswirkungen auf die Güte
     \begin{center}
     \begin{tabular}{|l || c | c || c | c | } 
         \hline
-         & \thead{t4 mit \\ normalisiert Daten}  & \thead{t4 mit \\ nicht normalisiert Daten} & \thead{t11 mit \\ normalisiert Daten} & \thead{t11 mit \\ nicht normalisiert Daten}  \\  
+         & \thead{t4 mit \\ normalisiert Daten}  & \thead{t4 mit nicht \\ normalisiert Daten} & \thead{t11 mit \\ normalisiert Daten} & \thead{t11 mit nicht \\ normalisiert Daten}  \\  
         \hline
         \hline
         Loss & $0,038$ & $0,175$& $0.044$& $0.044$\\
         \hline
         Genauigkeit & $0,986$& $0,946$& $0.98$& $0.98$\\
         \hline
-        IoU & $0,84$& $0,684$& $0.926$& $0.925$\\
+        IoU & $0,81$& $0,684$& $0.926$& $0.925$\\
         \hline
     \end{tabular}
     \end{center}
