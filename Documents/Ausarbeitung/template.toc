@@ -4,9 +4,9 @@
 \contentsline {subsection}{\numberline {2.2}Segmentierung von 3D-Punkwolken}{8}{subsection.2.2}%
 \contentsline {subsection}{\numberline {2.3}Registrierung von 3D-Punkwolken}{10}{subsection.2.3}%
 \contentsline {section}{\numberline {3}Realisierung}{13}{section.3}%
-\contentsline {subsection}{\numberline {3.1}Architektur}{13}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.1}Architektur}{14}{subsection.3.1}%
 \contentsline {subsection}{\numberline {3.2}Umsetzung Generierung einer 3D Punktwolke aus Bildern}{14}{subsection.3.2}%
-\contentsline {subsection}{\numberline {3.3}Umsetzung Registrierung zweier Punktwolken}{14}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.3}Umsetzung Registrierung zweier Punktwolken}{15}{subsection.3.3}%
 \contentsline {subsection}{\numberline {3.4}Umsetzung Segmentierung}{16}{subsection.3.4}%
 \contentsline {subsection}{\numberline {3.5}Umsetzung Server}{17}{subsection.3.5}%
 \contentsline {subsection}{\numberline {3.6}Umsetzung Pipelines}{19}{subsection.3.6}%
