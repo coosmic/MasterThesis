@@ -214,32 +214,32 @@ Generell kann man zwischen zwei Methoden der Generierung von Punktwolken untersc
 
 Die erste Methode nutzt Hardware wie LIDAR-Scanner \cite{lidar} um Punktwolken direkt zu erzeugen. Es gibt eine Reihe von Sensoren die das ermöglichen. Da der Großteil der Sensoren aus kostengründen nicht in Frage kommt sei hier nur noch der RGB-D-Sensor erwähnt. 
 Dieser liefert neben den Farbwerten für ein Bild auch noch eine Tiefeninformation für jeden Pixel. In einigen Smartphone-Modellen wird bereits ein solcher Sensor verbaut \cite{rgbd_smartphones}.
-Ein Nachteil bei RGB-D Sensoren ist aber das sie Anfällig für Änderungen der Lichtverhältnisse sind. Was gerade im Außenbereich häufig vorkommt.
+Ein Nachteil bei RGB-D Sensoren ist aber, dass sie anfällig für Änderungen der Lichtverhältnisse sind, was gerade im Außenbereich häufig vorkommt.
 
-Die andere Methode ist Structure from Motion (SfM), bei der die Punktwolke aus Bildern, einer Szene aus verschiedenen Perspektiven, generiert wird. 
-Allgemein werden auf den zugrundeliegenden Bildern nach Merkmalen (Feature) gesucht die robust gegen Translation, Rotation, Skalierung und Beleuchtung seien sollten. 
-Generell ist das ermitteln von geeigneten Feature in zwei Teile zu unterteilen, die Feature-Erkennung und Beschreibung. 
+Die andere Methode ist Structure from Motion (SfM), bei der die Punktwolke aus Bildern einer Szene aus verschiedenen Perspektiven generiert wird. 
+Allgemein wird auf den zugrundeliegenden Bildern nach Merkmalen (Feature) gesucht die robust gegen Translation, Rotation, Skalierung und Beleuchtung seien sollten. 
+Generell ist das Ermitteln von geeigneten Feature in zwei Teile zu unterteilen, die Feature-Erkennung und Beschreibung. 
 Bei der Feature-Erkennung müssen geeignete Punkte im Bild als Kandidaten für Feature-Punkte ermittelt werden. 
 Sind geeignete Kandidaten gewählt worden, müssen diese beschrieben werden, also ein Deskriptor für den Punkt gefunden werden. Hier kann man die bekanntesten Umsetzungen in zwei Bereiche unterteilen. 
 Umsetzungen wie Scale Invariant Feature Transformation (SIFT) \cite{Sift} und Speeded Up Robust Features (SURF) \cite{SURF} beschreiben einen Feature-Punkt als einen Vektor der aus Gradienten-Histogrammen um den Punkt herum gebildet wird.
 Binary Robust Independent Elementary Features (BRIEF) \cite{BRIEF} und FAST and Rotated BRIEF (ORB) \cite{ORB} nutzen statt dessen einen binären Deskriptor um den Feature-Punkt zu beschreiben. 
 Hierbei werden die Intensitäts-Differenzen bestimmter Punkt-Paare in einem Bereich um den Punk mit einem Schwellwert verglichen und so der binäre Deskriptor gebildet.
 
-SIFT ist der wohl bekannteste Ansatz und wird häufig als Goldstandart verwendet um Verfahren miteinander zu vergleichen. Hat allerdings den Nachteil das es zu langsam für Echtzeitanwendung ist.
-SIFT ermittelt die Kandidaten-Punkte im Kern mittels dem Differenz of Gaussians Verfahren (DoG). DoG besteht aus drei Schritten. Im ersten Schritt wird das Bild in verschieden starken Stufen ein Weichzeichner (diskreter Gauß-Filter) angewandt.
+SIFT ist der wohl bekannteste Ansatz und wird häufig als Goldstandart verwendet um Verfahren miteinander zu vergleichen. Es hat allerdings den Nachteil das es zu langsam für Echtzeitanwendungen ist.
+SIFT ermittelt die Kandidaten-Punkte im Kern mittels dem Differenz of Gaussians Verfahren (DoG). DoG besteht aus drei Schritten. Im ersten Schritt wird auf das Bild in verschieden starken Stufen ein Weichzeichner (diskreter Gauß-Filter) angewandt.
 Damit liegt das Bild mit zunehmend niedrigeren Kontrast vor. Zwischen den einzelnen Kontraststufen wird die Differenz ermittelt. Liegen die Differenzen vor kann nach Extrempunkten in den Differenzen gesucht werden.
-Hierbei wird für jeden Pixel im Bild mit seinen direkten Nachbarn und denen in den benachbarten Stufen verglichen. Ist er ein Extrempunkt wird er als Kandidat gewählt.
-DoG wird auf mehreren Skalierungen des Bild angewandt um Skalierungs-Invarianz zu erreichen.
-Im Anschluss werden die Kandidaten noch gefiltert. Kandidaten die einen niedrigen Intensitätswert haben oder eine Kante darstellen werden hierbei ausgeschlossen.
+Hierbei wird für jeden Pixel im Bild mit seinen direkten Nachbarn und denen in der vorherigen und nachfolgenden Stufe verglichen. Ist er ein Extrempunkt, wird er als Kandidat gewählt.
+DoG wird auf mehreren Skalierungen des Bildes angewandt um Skalierungs-Invarianz zu erreichen.
+Im Anschluss werden die Kandidaten noch gefiltert. Kandidaten, die einen niedrigen Intensitätswert haben oder eine Kante darstellen, werden hierbei ausgeschlossen.
 Sind die Positionen der Feature bekannt, kann der Feature-Vektor $f$ für den Punkt $p$ ermittelt werden. 
-Um den Deskriptor für den Punkt $p$ zu berechnen werden zwei Größen benötigt. Zum einen dies Skalierung in der der Feature ermittelt wurde - diese ist bereits bekannt - und die Orientierung des Punktes.
-Um diese zu bestimmen wird in einem Bereich um den Punk $p$ die Gradienten berechnet und in ein Histogramm abgetragen. Der Histogramm-Eintrag mit dem größten Wert entscheidet die Orientierung des Punktes.
+Um den Deskriptor für den Punkt $p$ zu berechnen werden zwei Größen benötigt. Zum einen die Skalierung, in der der Feature ermittelt wurde - diese ist bereits bekannt - und die Orientierung des Punktes.
+Um diese zu bestimmen werden in einem Bereich um den Punk $p$ die Gradienten berechnet und in ein Histogramm abgetragen. Der Histogramm-Eintrag mit dem größten Wert entscheidet die Orientierung des Punktes.
 Sind Skalierung und Orientierung bekannt wird ein Bereich auf Basis der beiden gewählt und in einen $16\times 16$ großen Bereich skaliert. 
 Dieser Bereich wird in $16$ gleichgroße Bereiche unterteilt für die jeweils ein Histogramm gebildet wird. 
 Die Einträge beschreiben in $8$ diskreten Stufen die Orientierung der Punkte im jeweiligen Bereich. Die einzelnen Punkte tragen die Stärke des Gradienten im jeweiligen Bin des Histogramms.
 Diese Histogramme bilden den Feature-Vektor $f$ der für den Vergleich genutzt wird.
 
-SURF ist ähnlich aufgebaut wie SIFT, nur wird der genutzte Gauss-Filter durch Box-Filter die besonders Effizient berechnet werden approximiert.
+SURF ist ähnlich aufgebaut wie SIFT, nur wird der genutzte Gauss-Filter durch Box-Filter die besonders effizient berechnet werden approximiert.
 Des weiteren wird der Feature-Vektor anders gebildet. Mit beiden Anpassungen wird eine bessere Leistung erreicht.
 Bei der Approximation des Gauss-Filters wird zuerst das Integral-Bild $I_\Sigma$ aus den Intensitätswerten des Bildes $I$ berechnet \ref{eq:sfm:surf:integral}.
 \begin{equation}
@@ -259,12 +259,12 @@ Um die approximierte Hesse-Matrix für einen Punkt $p$ mit der Skalierung $s$ zu
     \label{eq:sfm:surf:h}
     H_{approx.}(p,s) = \left( \begin{smallmatrix} D_{xx}(p,s)&D_{xy}(p,s)\\ D_{xy}(p,s)&D_{yy}(p,s) \end{smallmatrix} \right)
 \end{equation}
-Die Determinante der Hesse-Matrix kann dann wie in Gleichung \ref{eq:sfm:surf:det} berechnet werden. Wobei $w\approx 0.9$ ist und den Fehler der approximation minimieren soll.
+Die Determinante der Hesse-Matrix kann dann wie in Gleichung \ref{eq:sfm:surf:det} berechnet werden. Wobei $w\approx 0.9$ ist und den Fehler der Approximation minimieren soll.
 \begin{equation}
     \label{eq:sfm:surf:det}
     det(H_{approx.}) = D_{xx}D_{yy}-(wD_{xy})^2
 \end{equation}
-Ein Beispiel für die Box-Filter ist in Abbildung \ref{fig:surf:filter} zu sehen. Sowohl die verschiedenen Gauss-Stufen, als auch die verschiedenen Skalierungs-Stufen werden durch vergrößern der Filter-Maske erreicht.
+Ein Beispiel für die Box-Filter ist in Abbildung \ref{fig:surf:filter} zu sehen. Sowohl die verschiedenen Gauss-Stufen, als auch die verschiedenen Skalierungs-Stufen werden durch ein Vergrößern der Filter-Maske erreicht.
 \begin{figure}
     \centering
     \includegraphics[width=0.5\textwidth]{./Images/SURF_BoxFilter.png}
@@ -272,18 +272,18 @@ Ein Beispiel für die Box-Filter ist in Abbildung \ref{fig:surf:filter} zu sehen
     \label{fig:surf:filter}
 \end{figure}
 Der Deskriptor wird in zwei Schritten berechnet. Erst wird die Hauptorientierung des Punktes berechnet. Dann wird auf dieser und der Skalierung basierend ein Bereich in dem Bild gewählt und in 16 Bereiche unterteilt.
-Für jeden der Bereiche wird die Intensität der Punkte in einem $4$ Bin großen Histogramm abgetragen was zu einem Feature-Vektor der Größe $64$ führt.
+Für jeden der Bereiche wird die Intensität der Punkte in einem $4$ Bin großen Histogramm abgetragen, was zu einem Feature-Vektor der Größe $64$ führt.
 
 
-BRIEF lässt die Frage der Wahl der korrespondierenden Punkt-Paare die für den Intensitäts-Vergleich nötig sind offen, schlägt aber einige vor, wobei die zufällig generierten Paare die besten Ergebnisse liefern.
+BRIEF lässt die Frage der Wahl der korrespondierenden Punkt-Paare, die für den Intensitäts-Vergleich nötig sind offen, schlägt aber einige vor, wobei die zufällig generierten Paare die besten Ergebnisse liefern.
 Ist die Wahl der Punkt-Paare abgeschlossen kann der binäre Deskriptor gebildet werden. Dafür wird für jedes Paar die Differenz der Intensität zwischen den beiden Punkten ermittelt. 
 Liegt die Differenz unter einem Schwellwert wird die Position für das Paar im binären Deskriptor auf null gesetzt ansonsten auf eins.
-Vorteil an der Umsetzung ist das sie wenig Rechenaufwand hat verglichen mit SIFT, Nachteil an der Umsetzung ist das es nicht Rotationsinvariant ist.
+Vorteil an der Umsetzung ist, dass sie weniger rechenaufwändig ist verglichen mit SIFT, Nachteil an der Umsetzung ist das Sie nicht Rotationsinvariant ist.
 
-ORB geht diesen Nachteil an indem zuerst das das Massezentrum des Bildes $C$ \ref{eq:sfm:orb:c} und dessen Orientierung $\theta$ \ref{eq:sfm:orb:theta} 
-über die Moment $m_{00}$, $m_{10}$ und $m_{01}$ \ref{eq:sfm:orb:m} berechnet wird.
+ORB geht diesen Nachteil an, indem zuerst das Massezentrum des Bildes $C$ \ref{eq:sfm:orb:c} und dessen Orientierung $\theta$ \ref{eq:sfm:orb:theta} 
+über die Momente $m_{00}$, $m_{10}$ und $m_{01}$ \ref{eq:sfm:orb:m} berechnet wird.
 Mit diesen Parametern werden die Koordinaten der Paare umgeformt um so der Anfälligkeit für Rotationen entgegen zu wirken. 
-Des weiteren liefert ORB eine gelernte Paar-Auswahl von $256$ Paaren die dahingehend optimiert ist, dass die Paare unkorreliert sind und eine hohe Varianz aufweisen.
+Des weiteren liefert ORB eine gelernte Paar-Auswahl von $256$ Paaren, die dahingehend optimiert ist, dass die Paare unkorreliert sind und eine hohe Varianz aufweisen.
 
 \begin{equation}
     \label{eq:sfm:orb:m}
@@ -300,13 +300,13 @@ Des weiteren liefert ORB eine gelernte Paar-Auswahl von $256$ Paaren die dahinge
 \end{equation}
 
 
-Wurden die Feature ermittelt müssen korrespondierende Feature zwischen den Bilder ermittelt werden. Hierzu muss einfach nur die Distanz zwischen den Deskriptoren einzelner Feature verglichen werden. 
-Der korrespondierende Punkt des Feature-Punktes ist der mit der geringsten Distanz. Um falsche Paare zu vermeiden können Paare unter einem gewissen Schwellwert ausgeschlossen werden und 
-Paare bei denen der nächst beste korrespondierende Punkt eine sehr ähnliche Distanz aufweist. Das lässt darauf schließen, dass es sich um einen Feature-Punkt handelt der in einem sich wiederholenden Muster befindet.
+Wurden die Feature ermittelt, müssen korrespondierende Feature zwischen den Bilder ermittelt werden. Hierzu muss einfach nur die Distanz zwischen den Deskriptoren einzelner Feature verglichen werden. 
+Der korrespondierende Punkt des Feature-Punktes ist der mit der geringsten Distanz. Um falsche Paare zu vermeiden, können Paare unter einem gewissen Schwellwert ausgeschlossen werden und 
+Paare, bei denen der nächst beste korrespondierende Punkt eine sehr ähnliche Distanz aufweist. Das lässt darauf schließen, dass es sich um einen Feature-Punkt handelt, der sich in einem sich wiederholenden Muster befindet.
 %Danach werden zwischen den Bildern Übereinstimmungen in den Featuren mittels RANSAC gesucht. 
 %Gleichzeitig werden mittels RANSAC auch die einzelne Feature die keine Übereinstimmungen haben aus dem Verfahren ausgeschlossen.
-Nun wird die Fundamental-Matrix $F$ für jedes Bildpaar ermittelt. Ist die Kalibrierung der Kamera bekannt kann direkt die Essential-Matrix $E$ berechnet werden.
-$F$ beschreibt die Kamera-Bewegung von einem zum anderen Bild und hat den Rang 2.
+Um aus den korrespondierenden Bildpaaren zur Position der Kamera zu kommen, wird die Fundamental-Matrix $F=K1^{-T}EK2^{-1}$ für jedes Bildpaar ermittelt. Ist die Kalibrierung der Kamera bekannt kann direkt die Essential-Matrix $E$ berechnet werden.
+$F$ beschreibt die Kamera-Bewegung und Rotation von einem zum anderen Bild und hat den Rang 2.
 %$E$ kodiert die Transformation bestehend aus der Rotation $R$ und der Translation $t$ zwischen den beiden Kamera-Positionen.
 Um $F$ zu ermitteln werden mindestens 8 korrespondierende Feature $(p_{A1},p_{B1})...(p_{A8},p_{B8})$ zwischen den Bildern $A$ und $B$ eines Paares benötigt. 
 Hierzu werden mindestens 8 Gleichungen der Form $p_{Ai}^TEp_{Bi}=0$ gebildet und daraus ein Gleichungssystem der Form $Ax=0$ erzeugt wobei, wobei $x$ die Unbekannten aus $F$ enthält.
@@ -343,13 +343,13 @@ Hierbei wird anhand der bereits ermittelten 3D-Punkte die Pose einer weiteren Ka
 Wurden alle Kamera-Posen und 3D-Punkte geschätzt müssen diese noch einmal korrigiert werden. Diesen Schritt nennt man Bundle-Adjustment (BA).
 Beim BA wird für jede der $m$ Kamera-Posen $A$ mit den Parametern $a_j$ jeder der $n$ 3D-Punkt $P_i$ der von der Kamera aufgenommen wurde zurück auf das Kamera-Bild projiziert und 
 der Abstand des so ermittelten Bild-Punktes zum originalen Bild-Punkt aus der Feature-Detektion gemessen und minimiert. 
-Das Optimisierungs-Problem kann wie in Gleichung \ref{eq:sfm:bundle:adjustment} zu sehen formuliert werden. 
+Das Optimisierungsproblem kann wie in Gleichung \ref{eq:sfm:bundle:adjustment} zu sehen formuliert werden. 
 \begin{equation}
     \label{eq:sfm:bundle:adjustment}
     \min_{a_j, P_i} = \sum_{i=1}^n \sum_{j=1}^m v_{ij} d(Q(a_j, P_i), x_{ij})
 \end{equation}
 Wobei $v_{ij} = 1$ wenn der Punkt $i$ von Kamera $j$ erfasst wurde und ansonsten $0$.
-$Q(a_j, P_i)$ is die geschätzte Projektion des Punktes $P_i$ auf das Bild der Kamera $j$ und $d(x,y)$ ist die Euklidische Distanz.
+$Q(a_j, P_i)$ ist die geschätzte Projektion des Punktes $P_i$ auf das Bild der Kamera $j$ und $d(x,y)$ ist die Euklidische Distanz.
 
 %Das Bild-Paar mit den meisten Übereinstimmungen wird als Basis für die Rekonstruktion der 3D-Punktwolke genutzt.
 %Wurde aus den beiden Bildern eine initiale Punktwolke erstellt, wird diese mit den verbleibenden Bildern angereichert \cite{alouacheevaluation}. 
@@ -360,24 +360,24 @@ $Q(a_j, P_i)$ is die geschätzte Projektion des Punktes $P_i$ auf das Bild der K
 
 Einige bekannte Implementationen von SfM sind Colmap \cite{schoenberger2016sfm},\cite{schoenberger2016mvs}, Open Drone Map (ODM) \cite{ODM}, OpenCV SfM-Pipeline \cite{opencv}, AliceVision (Meshroom)\cite{Moulon2012},\cite{Jancosek2011} und OpenMVG \cite{moulon2016openmvg}.
 
-Colmap stellt eine Pipeline bereit die eine inkrementelle Implementation von SfM anbietet. Initial wird nach korrespondierenden Bildern gesucht und diese dann inkrementell in die Rekonstruktion aufgenommen.
+Colmap stellt eine Pipeline bereit, die eine inkrementelle Implementation von SfM anbietet. Initial wird nach korrespondierenden Bildern gesucht und diese dann inkrementell in die Rekonstruktion aufgenommen.
 Colmap nutzt Root-SIFT als Feature-Detektor. Root-SIFT nutzt im Gegensatz zu normalen SIFT beim Feature-Matching nicht die Euklidische Distanz sondern die Hellinger-Distanz \cite{arandjelovic2012three}.
 
-ODM stellt auch eine Pipeline bereit die aus den Schritten SfM, Multi View Stereo und Filterpunkte ermitteln besteht. Eine Besonderheit bei ODM ist, das es für jeden 3D-Punkt auch eine Normale liefert.
+ODM stellt auch eine Pipeline bereit, die aus den Schritten SfM, Multi View Stereo und Filterpunkte ermitteln besteht. Eine Besonderheit bei ODM ist, das es für jeden 3D-Punkt auch eine Normale liefert.
 
 Es wurden in den letzten Jahren große Fortschritte im Bereich tiefer Neuronaler Netze (Deep-Learning) \cite{lecun2015deep}, zur Gewinnung von 3D-Punkwolken, gemacht \cite{fan2016point} \cite{tatarchenko2017octree} \cite{wang2018pixel2mesh}. 
-Mit diesen Verfahren ist es möglich aus einer minimalen Datenbasis die auch nur aus einem Bild bestehen kann 3D-Punkwolken zu generieren. Was dem Ziel die Datenübertragung zum Server gering zu halten entgegenkommt.
-Nachteil der Verfahren ist, dass auf dem Bild nur ein Objekt ohne Hintergrund abgebildet sein darf, oder das zu erkennende Objekt mit einer binären Maske maskiert werden muss.
+Mit diesen Verfahren ist es möglich aus einer minimalen Datenbasis die auch nur aus einem Bild bestehen kann 3D-Punkwolken zu generieren.
+Nachteil der Verfahren ist, dass auf dem Bild nur ein Objekt ohne Hintergrund abgebildet sein darf, oder dass das zu erkennende Objekt mit einer binären Maske maskiert werden muss.
 Eine Rekonstruktion von komplexen Szenen ist so nicht oder nur mit sehr hohem Aufwand möglich \cite{rs11222644} und wird daher nicht weiter untersucht. 
-Der in \cite{rs11222644} vorgestellte Ansatz geht diese Problematik an und soll daher untersucht werden.
+%Der in \cite{rs11222644} vorgestellte Ansatz geht diese Problematik an und soll daher untersucht werden.
 
 \subsection{Segmentierung von 3D-Punkwolken}
 \label{sec:stand:segmentierung}
 
 Unter der Segmentierung von 3D-Punktwolken versteht man, dass jedem Punkt ein Label zu zugewiesen wird, welches Auskunft über eine Eigenschaft des Punktes gibt. Im Falle dieser Arbeit sollen Label wie Stamm, Blatt, Blüte oder Frucht vergeben werden.
 
-Bei der Analyse von Pflanzen in Form von 3D Punktwolken gibt es einige nicht gelernte Lösungen \cite{ThreeBasics} \cite{ModelBased} die das segmentieren von 3D Punktwolken von Pflanzen in Stiele und Blätter behandeln, 
-diese Ansätze haben aber das Problem, dass sie nur unter bestimmten Bedingungen gute Ergebnisse liefern.
+Bei der Analyse von Pflanzen in Form von 3D Punktwolken gibt es einige nicht gelernte Lösungen \cite{ThreeBasics} \cite{ModelBased} die das Segmentieren von 3D Punktwolken von Pflanzen in Stiele und Blätter behandeln. 
+Diese Ansätze haben aber das Problem, dass sie nur unter bestimmten Bedingungen gute Ergebnisse liefern.
 
 \cite{ThreeBasics} verfolgt den Ansatz eine Punktwolke in Stamm und Blätter anhand der Hauptkrümmung um jeden Punkt zu segmentieren. 
 Hierbei wird die Hauptkrümmung für einen Punkt so interpretiert, dass der Punkt als Stamm interpretiert wird wenn die Krümmung hoch ist. 
