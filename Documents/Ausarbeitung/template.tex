@@ -309,7 +309,7 @@ Um aus den korrespondierenden Bildpaaren zur Position der Kamera zu kommen, wird
 $F$ beschreibt die Kamera-Bewegung und Rotation von einem zum anderen Bild und hat den Rang 2.
 %$E$ kodiert die Transformation bestehend aus der Rotation $R$ und der Translation $t$ zwischen den beiden Kamera-Positionen.
 Um $F$ zu ermitteln werden mindestens 8 korrespondierende Feature $(p_{A1},p_{B1})...(p_{A8},p_{B8})$ zwischen den Bildern $A$ und $B$ eines Paares benötigt. 
-Hierzu werden mindestens 8 Gleichungen der Form $p_{Ai}^TEp_{Bi}=0$ gebildet und daraus ein Gleichungssystem der Form $Ax=0$ erzeugt wobei, wobei $x$ die Unbekannten aus $F$ enthält.
+Hierzu werden mindestens 8 Gleichungen der Form $p_{Ai}^TEp_{Bi}=0$ gebildet und daraus ein Gleichungssystem der Form $Ax=0$ erzeugt, wobei $x$ die Unbekannten aus $F$ enthält.
 Das Gleichungssystem wird mittels SVD-Zerlegung gelöst. Man erhält drei Matrizen $U$, $S$ und $V$. $U$ hat die Größe $m\times m$, $S$ die Größe $m\times 9$ und $V$ die Größe $9\times 9$.
 $S$ ist eine Diagonal-Matrix deren Einträge die Singulärwerte in absteigender Reihenfolge enthält.
 Aus der letzten Spalte von $V$, welche den kleinsten Singulär-Vektor enthält, kann die Approximation $\hat{F}$ von $F$ rekonstruiert werden. 
@@ -412,10 +412,11 @@ Die Architektur ist in Abbildung \ref{fig:point:net:arch} zu finden.
 \end{figure}
 
 PointNet++ baut auf der Architektur von PointNet auf. Hierbei wird das Problem adressiert, dass PointNet nicht gut mit kleinen Details umgehen kann. 
-PointNet++ führt PointNet auf einem kleinen Bereich um gewählte zentrale Punkte aus. Die zentralen Punkte werden mittels Farthest-Point-Sampling ermittelt. 
-Um die gewählten Punkte werden alle Punkte in den Bereich aufgenommen, die einen bestimmten Abstand $k$ von dem zentralen Punkt nicht überschreiten. 
+PointNet++ führt PointNet auf einem kleinen Bereich um gewählte zentrale Punkte aus. Die zentralen Punkte werden mittels Farthest-Point-Sampling (FPS) ermittelt. 
+FPS ermittelt aus $n$ Punkten eine Menge Punkt ${x_1,x_2,...,x_k}$ sodas der Punkt $x_j$ der Punkt mit dem weitesten Abstand zu allen Punkten der Menge ${x_1,x_2,...,x_{j-1}}$ ist.
+Um die gewählten Punkte werden alle Punkte in den Bereich aufgenommen, die einen bestimmten Abstand $d$ von dem zentralen Punkt nicht überschreiten. 
 Auf diesen Punkten wird PointNet angewandt. Für jeden zentralen Punkt wird ein Feature-Vektor ermittelt.
-Dieser Vorgang wird so lange wiederholt, bis alle zentralen Punkte zu einem vereint werden könnten. Für klassifizierung würde dieser Schritt auch durchgeführt, bei der Segmentierung allerdings nicht.
+Dieser Vorgang wird so lange wiederholt, bis alle zentralen Punkte zu einem vereint werden könnten.  Für klassifizierung würde dieser Schritt auch durchgeführt, bei der Segmentierung allerdings nicht.
 Um jeden einzelnen Punkt ein Label zuzuordnen wird der Prozess nun umgekehrt und mittels Interpolation werden die ermittelten Feature-Vektoren schrittweise auf die originalen Punkte übertragen 
 unter zuhilfenahme der in den vorherigen Schritten ermittelten zentralen Punkte.
 Die Architektur von PointNet++ ist in Abbildung \ref{fig:point:net:pp:arch} zu sehen.
@@ -426,6 +427,11 @@ Die Architektur von PointNet++ ist in Abbildung \ref{fig:point:net:pp:arch} zu s
     \caption{PointNet++-Architektur \cite{qi2017pointnet++}}
     \label{fig:point:net:pp:arch}
 \end{figure}
+
+DGCNN führt Faltungen auf Nachbarschaftsgrafen der Punktwolke, die mittels kNN gebildet werden aus und ermittelt so für jeden Punkt einen Feature-Vektor. 
+Ähnlich wie bei PointNet wird erst der globale Feature-Vektor der zu klassifizierung genutzt wird berechnet und dann darauf basierend die Feature-Vektoren für die einzelnen Punkte.
+Hauptunterschied zu PointNet ist, dass die Ausgabeschichten vor dem Max-Pooling-Layer aggregiert werden.
+Da es aber bei der Segmentierung schlechter abschneidet als PointNet++ wird es hier nicht weiter betrachtet.
 
 \subsection{Registrierung von 3D-Punkwolken}
 \label{sec:stand:registrierung}
@@ -488,7 +494,7 @@ sondern mittels der Moore-Penrose Inversen Matrix von $J$ und der Differenz der 
 Die Transformation wird angewandt und der Vorgang solange wiederholt bis es zu keinen oder nur noch kleinen unter einem Schwellwert liegenden Änderungen in den Parametern für die Transformation kommt.
 Die einzelnen Transformationen aus den Iterationen werden miteinander multipliziert um die Transformation zu erlangen die die Quell-Punktwolke mit der Ziel-Punkwolke registriert.
 
-RPM-Net baut auf RPM \cite{RPM} auf. RPM hat zu ICP den Unterschied das zwischen den beidne Punkwolken keine harten Zurodnungen gemacht werden. Statt dessen wird eine weiche Zurodnung vorgenommen die iterativ zu einer harten Zurodnung eingschränkt wird.
+RPM-Net baut auf RPM \cite{RPM} auf. RPM hat zu ICP den Unterschied das zwischen den beiden Punkwolken keine harten Zurodnungen gemacht werden. Statt dessen wird eine weiche Zurodnung vorgenommen die iterativ zu einer harten Zurodnung eingschränkt wird.
 Nur werden im Gegensatz zu RPM die räumlichen Entfernungne durch hybride Feature-Distanzen ersetzt und 
 die Parameter $\alpha$ und $\beta$ werden in jeder Iteration durch ein neuronales Netz geschätzt. $\alpha$ ist ein Parameter der bei der Korrespondenz-Suche steuert welches Punkt-Paar mit einbezogen wird.
 $\beta$ steuert die härte der Zuordnung und wird iterativ erhöht.
@@ -643,9 +649,9 @@ f(p_i) = \left\{
 In einem weiteren Ansatz wurde eine Implementierung von PointNet auf einem Datensatz von Pflanzen-Punktwolken trainiert um so einen geeigneten Classifier zu trainieren.
 Der Classifier soll für jeden Punkt einer Punktwolke bestehend aus Position und Normalen eine Schätzung liefern was der Punkt repräsentiert. Mögliche Repräsentationen können Stamm, Blatt oder Hintergrund sein.
 Weitere denkbare Repräsentationen können die Früchte und Blüten der Pflanzen sein. Wird die Farbe der Punkwolke mit einbezogen, können auch Krankheitsbilder wie vertrocknende Blätter in die Repräsentation eingeschlossen werden.  
-Da die Ergebnisse mit PointNet nicht gut genug waren wurde eine verbesserte Version PointNet++ auf dem Datensatz trainiert. Diese wurde mit und ohne Normalen, mit 2 Labeln ohne Hintergrund und mit 3 Labeln mit Hintergrund trainiert.
+Da die Ergebnisse mit PointNet Probleme im Erkennen einzelner Blätter zeigen wird eine verbesserte Version PointNet++ auf dem Datensatz trainiert. Diese wurde mit und ohne Normalen, mit 2 Labeln ohne Hintergrund und mit 3 Labeln mit Hintergrund trainiert.
 
-Nach der Segmentierung wird das Ergebnis noch einmal überarbeitet. Für jedem Punkt $p_i$ werden die Schätzungen $N_i$ der $k$ ($k=10$) nächsten Nachbarn bestimmt und aus deren Repräsentations-Schätzungen ein Histogramm $H_i$ erzeugt.
+Nach der Segmentierung wird das Ergebnis noch einmal überarbeitet. Für jeden Punkt $p_i$ werden die Schätzungen $N_i$ der $k$ ($k=10$) nächsten Nachbarn bestimmt und aus deren Repräsentations-Schätzungen ein Histogramm $H_i$ erzeugt.
 Die Schätzung mit dem höchsten Histogramm-Wert wird als neue Schätzung $s_i$ für den Punkt $p_i$ genutzt. Die Berechnungs-Vorschrift ist in Gleichung \ref{eq:improve_score} zu finden. 
 Dieser Vorgang wird für alle Punkte solange wiederholt bis es bei den Punkten zu keinen Änderungen mehr kommt oder eine maximale Iterations-Obergrenze erreicht wird.
 
@@ -798,6 +804,7 @@ Der Vorgang wird so lange wiederholt, bis keine Punkte mehr in $P$ enthalten sin
 \textbf{In Registrierungs-Format überführen}
 
 Zuerst wird die Punktwolke wieder anhand der größten Ebene die in der Punktwolke zu finden ist an der XY-Ebene ausgerichtet.
+Dabei kann es sich entweder um die Punktwolke des Hintergrundes oder der bei der Entfernung des Hintergrundes übrig gebliebene Punktwolke eines Zeitstempels handeln.
 Danach wird um das Zentrum der Punktwolke ein Ausschnitt entnommen. 
 Im folgenden wird die Punktwolke wie beim Shapenet Format normiert und es werden zufällig $n=1024$ Punkte aus der Punktwolke gezogen.
 
@@ -893,8 +900,8 @@ Die so erstellte Szene sollte nachbearbeitet werden um etwaige Fehler wie Rausch
 Nun kann mit wenigeren Bildern aus dem selben Datensatz ein weitere Punktwolke generiert werden und die Distanz der Punkte der Goldstandart-Punktwolke zum jeweils nächsten Punkt der erstellten Punktwolke gemessen werden.
 Die Summe dieser Abstände kann als Fehlermaß genutzt werden. Bei der Berechnung der Abstände muss beachtet werden, dass die Punkwolken mit dem Goldstandart registriert ist.
 
-Nach einem manuellen Auswahlverfahren sind ODM und Colmap als geeignete Anwendung zur Generierung von Punktwolken gewählt worden, da diese die einzigen untersuchten Anwendungen sind die gute Ergebnisse bei wenig Bildern erzielen die die Szene erkennen lassen.
-Hierzu wurden auf einer Menge von 25 Bildern die Implementationen ODM, Colmap, OpenCV SfM-Pipeline, Meshroom (nutzt AliceVision) und OpenMVG miteinander verglichen. Die generierten Punktwolken sind in Abbildung \ref{fig:SfM:All:Compare} zu sehen.
+Nach einem manuellen Auswahlverfahren sind ODM und Colmap als geeignete Anwendung zur Generierung von Punktwolken gewählt worden, da diese die einzigen untersuchten Anwendungen sind die gute Ergebnisse bei wenig Bildern erzielen die die Szene mit allen wichtigen Details erkennen lassen.
+Für die manuelle Auswertung wurden auf einer Menge von 25 Bildern die Implementationen ODM, Colmap, OpenCV SfM-Pipeline, Meshroom (nutzt AliceVision) und OpenMVG miteinander verglichen. Die generierten Punktwolken sind in Abbildung \ref{fig:SfM:All:Compare} zu sehen.
 Es ist deutlich zu erkennen, das bis auf Colmap und ODM alle anderen Verfahren schwerwiegende Probleme in der Representation haben. Meshroom hat Probleme feine Strukturen zu erkennen. 
 OpenMVG generiert zu wenig Punkte und OpenCV hat ein Problem bei der Kamera-Kalibrierung wodurch es zu schlechten Ergebnissen kommt.
 \begin{figure}
@@ -992,7 +999,7 @@ Hier dominiert ODM klar. Obwohl, mangels der GEO-Position der Bilder, ODM nur in
 ODM benötigt zur generierung einer Punktwolke mit $73$ Bilder $566$ Sekunden wärend Colmap für die gleiche Datenbasis $4148$ Sekungen benötigt. 
 Sollten GEO-Positionen für die Bilder bekannt sein kann ODM die GPU nutzen und somit die Zeit die benötigt wird die Punktwolken zu generieren weiter verbessern.
 
-Da ODM wesentlich weniger Rauschen beinhaltet, keine Probleme mit doppelt erkannten Szenen hat und weniger Zeit zur Generierung der Punkwolken benötigt wurde in dieser Arbeit ODM zur Generierung von Punktwolken genutzt, wobei die Dauer die zur Generierung der Punktwolke benötigt wird der ausschlaggebende Faktor für die Entscheidung ist.
+Da ODM wesentlich weniger Rauschen beinhaltet, keine Probleme mit doppelt erkannten Szenen hat und weniger Zeit zur Generierung der Punkwolken benötigt wird in dieser Arbeit ODM zur Generierung von Punktwolken genutzt, wobei die Dauer die zur Generierung der Punktwolke benötigt wird der ausschlaggebende Faktor für die Entscheidung ist.
 
 \subsection{Vergleich von Verfahren zur Registrierung 3D-Punkwolken}
 
