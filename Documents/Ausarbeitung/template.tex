@@ -310,7 +310,7 @@ $F$ beschreibt die Kamera-Bewegung und Rotation von einem zum anderen Bild und h
 %$E$ kodiert die Transformation bestehend aus der Rotation $R$ und der Translation $t$ zwischen den beiden Kamera-Positionen.
 Um $F$ zu ermitteln werden mindestens 8 korrespondierende Feature $(p_{A1},p_{B1})...(p_{A8},p_{B8})$ zwischen den Bildern $A$ und $B$ eines Paares benötigt. 
 Hierzu werden mindestens 8 Gleichungen der Form $p_{Ai}^TEp_{Bi}=0$ gebildet und daraus ein Gleichungssystem der Form $Ax=0$ erzeugt, wobei $x$ die Unbekannten aus $F$ enthält.
-Das Gleichungssystem wird mittels SVD-Zerlegung gelöst. Man erhält drei Matrizen $U$, $S$ und $V$. $U$ hat die Größe $m\times m$, $S$ die Größe $m\times 9$ und $V$ die Größe $9\times 9$.
+Das Gleichungssystem wird mittels Singulärwertzerlegung (SVD) gelöst. Man erhält drei Matrizen $U$, $S$ und $V$. $U$ hat die Größe $m\times m$, $S$ die Größe $m\times 9$ und $V$ die Größe $9\times 9$.
 $S$ ist eine Diagonal-Matrix deren Einträge die Singulärwerte in absteigender Reihenfolge enthält.
 Aus der letzten Spalte von $V$, welche den kleinsten Singulär-Vektor enthält, kann die Approximation $\hat{F}$ von $F$ rekonstruiert werden. 
 Wobei der Vektor der Länge $9$ zu einer Matrix der Größe $3\times3$ umgeformt wird.
@@ -396,13 +396,16 @@ Auch im Bereich Segmentierung wurden große Fortschritte im Bereich Deep-Learnin
 Diese Ansätze können auch auf Pflanzen angewandt werden. Dazu müssen Architekturen wie PointNet\cite{qi2017pointnet}/PointNet++\cite{qi2017pointnet++} oder DGCNN \cite{dgcnn} auf Punktwolken von Pflanzen trainiert werden, 
 da für diese Klasse von Objekten noch keine Gewichte trainiert wurden.
 
-Bei PointNet wird jeder der $n$ Punkt der Punktwolke mit einer $3\times 3$ Matrix transformiert deren Gewichte gelernt sind. Dieses Mininetz wird von den Autoren T-Net genannt.
+PointNet ermöglicht Segmentierung durch zwei Schritte. Erst wird ein globaler Feature-Vektor für die Punktwolke ermittelt und dann auf Basis dessen für jeden Punkt ein Feature-Vektor ermittelt.
+Auf Basis dessen wird das Label bestimmt dem der Punkt zugeordnet werden soll. 
+Dabei wird jeder der $n$ Punkt der Punktwolke mit einer $3\times 3$ Matrix transformiert deren Gewichte gelernt sind. Dieses Mininetz wird von den Autoren T-Net genannt.
 Danach wird jeder Punkt nacheinander mittels eines Multi-Layer-Perceptron (MLP) mit zwei Layern, deren Ausgabe-Schicht jeweils die Größe $64$ hat, in einen neuen Feature-Raum überführt. 
 Die Gewichte des MLP werden also über alle Punkte geteilt, was auch für die folgenden MLPs gilt. Der Feature-Vektor für einen Punkt besteht aus $64$ Elementen.
-Die Punkte des Feature-Raums werden wieder mit einem T-Net der Größe $64\times 64$ transformiert. Danach wird wieder ein MLP (drei Layer mit Ausgabeschicht der Größe $64$, $128$, $1024$) angewandt und mittels Max-Pooling eine globaler Feature-Vektor der Größe $1024$ ermittelt. 
-Dieser Vektor wird mit dem lokalen Feature-Vektor für jeden Punkt kombiniert und die daraus entstehende Matrix der Größe $n\times 1088$ wird mittels zwei MLP-Layern in eine Matrix der Größe $n\times m$ überführt, wobei $m$ die Anzahl möglichen Label sind.
+Die Punkte des Feature-Raums werden wieder mit einem T-Net diesmal der Größe $64\times 64$ transformiert. 
+Danach wird wieder ein MLP (drei Layer mit Ausgabeschicht der Größe $64$, $128$, $1024$) angewandt und mittels Max-Pooling der globaler Feature-Vektor der Größe $1024$ ermittelt. 
+Dieser Vektor wird mit dem lokalen Feature-Vektor für jeden Punkt kombiniert und die daraus entstehende Matrix der Größe $n\times 1088$ wird mittels zwei MLP-Layern in eine Matrix der Größe $n\times m$ überführt, wobei $m$ die Anzahl der möglichen Label sind.
 Der erste dieser MLPs hat drei Layer mit den Ausgangs-Schicht-Größen $512$, $256$ und $128$, der Zweite besteht aus zwei Layern der Ausgangs-Schicht-Größe $128$ und $m$.
-Die Architektur ist in Abbildung \ref{fig:point:net:arch} zu finden.
+Die Architektur ist in Abbildung \ref{fig:point:net:arch} dargestellt.
 
 \begin{figure}
     \centering
@@ -412,14 +415,16 @@ Die Architektur ist in Abbildung \ref{fig:point:net:arch} zu finden.
 \end{figure}
 
 PointNet++ baut auf der Architektur von PointNet auf. Hierbei wird das Problem adressiert, dass PointNet nicht gut mit kleinen Details umgehen kann. 
-PointNet++ führt PointNet auf einem kleinen Bereich um gewählte zentrale Punkte aus. Die zentralen Punkte werden mittels Farthest-Point-Sampling (FPS) ermittelt. 
-FPS ermittelt aus $n$ Punkten eine Menge Punkt ${x_1,x_2,...,x_k}$ sodas der Punkt $x_j$ der Punkt mit dem weitesten Abstand zu allen Punkten der Menge ${x_1,x_2,...,x_{j-1}}$ ist.
-Um die gewählten Punkte werden alle Punkte in den Bereich aufgenommen, die einen bestimmten Abstand $d$ von dem zentralen Punkt nicht überschreiten. 
-Auf diesen Punkten wird PointNet angewandt. Für jeden zentralen Punkt wird ein Feature-Vektor ermittelt.
-Dieser Vorgang wird so lange wiederholt, bis alle zentralen Punkte zu einem vereint werden könnten.  Für klassifizierung würde dieser Schritt auch durchgeführt, bei der Segmentierung allerdings nicht.
-Um jeden einzelnen Punkt ein Label zuzuordnen wird der Prozess nun umgekehrt und mittels Interpolation werden die ermittelten Feature-Vektoren schrittweise auf die originalen Punkte übertragen 
-unter zuhilfenahme der in den vorherigen Schritten ermittelten zentralen Punkte.
-Die Architektur von PointNet++ ist in Abbildung \ref{fig:point:net:pp:arch} zu sehen.
+Um das zu bewerkstelligen werden kleinere Bereiche mit PointNet untersucht. Hier wird in drei Schritten vorgegangen Sampling, Gruppieren und Feature-Vektor ermitteln.
+PointNet++ führt also PointNet auf einem kleinen Bereich um gewählte zentrale Punkte aus. Beim Sampling werden diese zentralen Punkte mittels Farthest-Point-Sampling (FPS) ermittelt. 
+FPS ermittelt aus $n$ Punkten eine Menge Punkte ${x_1,x_2,...,x_k}$ sodas der Punkt $x_j$ der Punkt mit dem weitesten Abstand zu allen Punkten der Menge ${x_1,x_2,...,x_{j-1}}$ ist.
+Beim Gruppieren werden um die gewählten Punkte alle Punkte in den Bereich aufgenommen, die einen bestimmten Abstand $d$ von dem zentralen Punkt nicht überschreiten. 
+Auf diesen Punkten wird PointNet angewandt. Für jeden zentralen Punkt wird also ein Feature-Vektor ermittelt.
+Dieser Vorgang kann je nach Model mehrfach mit varierenden Parametern ausgeführt werden. 
+Für die Klassifizierung wird nach dem letzten Layer auf dessen Ergebnis ein letztes mal PointNet angewandt, um den globalen Feature-Vektor zu ermitteln.
+Bei der Segmentierung wird statt dessen um jeden einzelnen Punkt ein Label zuzuordnen der Prozess nun umgekehrt und mittels Interpolation werden die ermittelten Feature-Vektoren schrittweise auf die originalen Punkte 
+unter zuhilfenahme der in den vorherigen Schritten ermittelten Feature-Vektoren der zentralen Punkte übertragen.
+Die vereinfachte Architektur von PointNet++ ist in Abbildung \ref{fig:point:net:pp:arch} zu sehen.
 
 \begin{figure}
     \centering
@@ -429,49 +434,72 @@ Die Architektur von PointNet++ ist in Abbildung \ref{fig:point:net:pp:arch} zu s
 \end{figure}
 
 DGCNN führt Faltungen auf Nachbarschaftsgrafen der Punktwolke, die mittels kNN gebildet werden aus und ermittelt so für jeden Punkt einen Feature-Vektor. 
-Ähnlich wie bei PointNet wird erst der globale Feature-Vektor der zu klassifizierung genutzt wird berechnet und dann darauf basierend die Feature-Vektoren für die einzelnen Punkte.
+Ähnlich wie bei PointNet wird erst der globale Feature-Vektor der auch zur Klassifizierung genutzt wird berechnet und dann darauf basierend die Feature-Vektoren für die einzelnen Punkte.
 Hauptunterschied zu PointNet ist, dass die Ausgabeschichten vor dem Max-Pooling-Layer aggregiert werden.
 Da es aber bei der Segmentierung schlechter abschneidet als PointNet++ wird es hier nicht weiter betrachtet.
 
 \subsection{Registrierung von 3D-Punkwolken}
 \label{sec:stand:registrierung}
 
-Bei der Registrierung von 3D-Punktwolken probiert man eine Transformationen $T$ zu finden die eine Quell-Punktwolke $S_p$ so transformiert, dass der Abstand $d(S_p,T_p)$ zu einer Ziel-Punktwolke $T_p$ minimiert wird.
-Das Abstandsmaß $d(S_p, T_p)$ kann verschieden formuliert werden. Eine Möglichkeit besteht darin die Summe über die Abstände eines jeden Punktes in $S_p$ 
-zum nächsten Punkt in $T_p$ zu bilden und dies als Maß $d(S_p, T_p)$ zu nutzen.
+Bei der Registrierung von 3D-Punktwolken probiert man eine Transformationen $T$ zu finden die eine Quell-Punktwolke $P_s$ so transformiert, dass der Abstand $d(P_s,P_t)$ zu einer Ziel-Punktwolke $P_t$ minimiert wird.
+Das Abstandsmaß $d(P_s, P_t)$ kann verschieden formuliert werden. Eine Möglichkeit besteht darin die Summe über die Abstände eines jeden Punktes in $P_s$ 
+zum nächsten Punkt in $P_t$ zu bilden und dies als Maß $d(P_s, P_t)$ zu nutzen. 
 
-Die am weitesten verbreitete Method zur Registrierung von 3D Punktwolken ist Iterative Closest Points (ICP) \cite{icp_org}. ICP basiert auf dem Ansatz das zwei Punktwolken iterativ aneinander angenähert werden.
-Dabei wird bei jeder Iteration für jeden Punkt $p_i$ aus der Quellpunkwolke $S_p$ der Punkt aus der Zielpunktwolke gesucht der $p_i$ am nächsten ist. In einem zweiten Schritt wird der Abstand zwischen den korrespondierenden Punkten minimiert.
-Zuerst wird für jede Punkwolke das Massezentrum $c_s$ und $c_t$ berechnet und $S_p$ um die Differenz $c_t - c_s$ verschoben. Danach wird mittels Singulärwertzerlegung die Rotation $R$ ermittelt und auf $S_p$ angewandt.
-Der Vorgang wird wiederholt bis es zu einer Konvergenz kommt, also $T$ nahezu der Einheitsmatrix $I$ entspricht.
+Die am weitesten verbreitete Method zur Registrierung von 3D Punktwolken ist Iterative Closest Points (ICP) \cite{icp_org}. 
+ICP basiert auf dem Ansatz das zwei Punktwolken iterativ aneinander angenähert werden, das kann als Optimisierungsproblem \ref{eq:icp} formuliert werden.
+\begin{equation}
+    \label{eq:icp}
+    \underset{R,t}{\operatorname{argmin}}(\sum_{i=1}^N{\|Rp_{s_i} + t - p_{t_i}\|^2})
+\end{equation}
+Wobei $R$ und $t$ die gesuchte Rotation und Translation sind und $p_{t_i}$ und $p_{s_i}$ korrespondierende Punktpaare aus den beiden zu registrierenden Punktwolken. $N$ ist die Anzahl Punkte in der Quell-Punktwolke.
+ICP löst dieses Problem indem iterativ zwei Schritte durchgeführt werden. 
+Erst werden die Zuordnungen für jeden Punkt in der Quell-Punktwolke zu einem Punkt in der Ziel-Punktwolke gesucht und danach die Rotation $R$ und Translation $t$ geschätzt die die Zugeordneten Punkte best möglich angenähert.
+Um eine Zuordnung zwischen den Punkten zu erreichen kann zum Beispiel für jeden Punkt $p_i$ aus der Quellpunkwolke $P_s$ der Punkt aus der Zielpunktwolke gesucht werden der $p_i$ am nächsten ist. 
+Bei der Bestimmung der Zurdnung gillt, je besser die Zurodnung der Punkte ist desto besser ist auch die Schätzung der Transformation.
+Im zweiten Schritt wird zuerst für beide Punkwolken das Massezentrum $c_s$ und $c_t$ berechnet. Wobei das Massezentrum $c$ einer Punktwolke $P$ mit $n$ Punkten wie in \ref{eq:icp:mean} gezeigt berechnet werden kann.
+\begin{equation}
+    \label{eq:icp:mean}
+    c = \frac{1}{n}\sum_{i=1}^n{p(i)}
+\end{equation}
+Mit $c_s$ und $c_t$ lässt sich die Kreuzkovarianz-Matrix $H$ \ref{eq:icp:cross:cov} der beiden Punktwolken berechnen, auf der die SVD ($svd(H) = UDV^T$) angewandt wird.
+\begin{equation}
+    \label{eq:icp:cross:cov}
+    H = \sum_{i=1}^n{(p_{t_i} - c_t)(p_{s_i} - c_s)^T}
+\end{equation}
+Sind $U$ und $V$ bekannt, kann damit die Rotation $R = VU^T$ und mit $R$ die Translation $t=c_t-Rc_s$ berechnet werden.
+Da die Zuordnung im ersten Schritt nicht ideal sein muss wird der Vorgang solange wiederholt bis es in der Transformation $T$, bestehend aus $R$ und $t$, zu keinen größeren Änderungen mehr kommt.
+Das ist der Fall wenn $T$ also etwa der Einheitsmatrix entspricht.
 
-Ein Problem das ICP hat ist, das es auch für lokale Minima konvergiert. Das heißt, das eine initiale Transformation für $S_p$ so gewählt werden muss, so dass der ICP-Durchlauf bei einem globalen Minimum konvergiert.
+Ein Problem das ICP hat ist, das es auch für lokale Minima konvergiert. Das heißt, das eine initiale Transformation für $P_s$ so gewählt werden muss, so dass der ICP-Durchlauf bei einem globalen Minimum konvergiert.
 Ansätze wie Go-ICP \cite{GoICP}, die mit verschiedenen initialen Transformationen starten existieren sind aber sehr Rechenaufwendig und damit recht langsam.
 
-Des weiteren ist ICP anfällig für Ausreißer. Für diese Problem gibt es allerdings existierende Lösungen wie RICP \cite{ICP}. Hierbei kommt in der Regel RANSAC \cite{RANSAC} zum Einsatz um Ausreißer bei der Registrierung auszuschließen.
-RANSAC basiert auf der Idee ein Model in einer Punktwolke zu suchen und möglichst viele Punkte zu finden die in das Model passen. Initial werden zufällig so viele Punkte wie nötig gezogen um das Model minimal zu repräsentieren. 
-So werden zum Beispiel für ein Linien-Model zwei zufällige Punkte aus der Punktwolke gezogen. Nun werden die Parameter für das Model mit den gezogenen Punkten ermittelt und alle Punkte die nahe genug an dem so gebildeten Model sind mit aufgenommen.
+Des weiteren ist ICP anfällig für Ausreißer. Für diese Problem gibt es allerdings existierende Lösungen wie RICP \cite{ICP}. 
+Hierbei kommt in der Regel RANSAC \cite{RANSAC} zum Einsatz um Ausreißer bei der Registrierung auszuschließen.
+RANSAC basiert auf der Idee ein Model in einer Punktwolke zu suchen und möglichst viele Punkte zu finden die in das Model passen. 
+Initial werden zufällig so viele Punkte wie nötig gezogen um das Model minimal zu repräsentieren. 
+So werden zum Beispiel für ein Linien-Model zwei zufällige Punkte aus der Punktwolke gezogen. 
+Nun werden die Parameter für das Model mit den gezogenen Punkten ermittelt und alle Punkte die nahe genug an dem so gebildeten Model sind mit aufgenommen.
 Wenn der Anteil der Punkte die in das Model fallen über einem bestimmten Schwellwert liegen, terminiert der Algorithmus. 
 Ansonsten wird der Vorgang solange wiederholt bis eine Parametrisierung gefunden wurde die terminiert oder eine Obergrenze an Iterationen erreicht wurde.
 Das Ergebnis des Algorithmus ist auf der einen Seite die gefundene Parametrisierung und auf der anderen Seite eine Unterteilung der Punkte in der Punktwolke in Punkte die in das Model mit gegebener Parametrisierung fallen und in die die nicht in das Model fallen.
-Letzteres kann genutzt werden um Punkte bei der Registrierung auszuschließen. Dieser Schritt ist allerdings optional und wird nicht in allen Verfahren angewandt.
+Letzteres kann genutzt werden um Punkte bei der Registrierung auszuschließen.
 
 Ein weiteres Problem ist, dass die meisten ICP-Ansätze keine Werte für die Skalierung schätzen. 
 Dies ist aber nötig, da bei SFM keine Information über die reale Ausdehnung eines Objektes ermittelt werden kann.
 Es gibt einige wenige Ansätze für dieses Problem die auch eine Schätzung für die Skalierung ermitteln \cite{Ziner2005PointSR}.
-In \cite{Ziner2005PointSR} wird die Skalierung geschätzt nachdem die Rotation $R$ bekannt ist, also nach der SVD-Zerlegung. 
-Ist $R$ bekannt können die Vektoren $S_P^*$ und $T_P^*$ gebildet werden (Siehe Gleichung \ref{eq:icp_scale:1}).
+In \cite{Ziner2005PointSR} wird die Skalierung geschätzt nachdem die Rotation $R$ bekannt ist, also nach der SVD. 
+Ist $R$ bekannt können die Vektoren $s$ und $t$ gebildet werden (Siehe Gleichung \ref{eq:icp_scale:1}).
 
 \begin{equation}
     \label{eq:icp_scale:1}
-    S_{P_i}^* = S_{P_i} - \bar{S_P},\quad T_{P_j}^* = T_{P_j} - \bar{T_P}
+    s_i = p_{s_i} - \bar{p_s},\quad t_j = p_{t_j} - \bar{p_t}
 \end{equation}
 
-Mittels dieser Vektoren kann die Skalierung $s$ berechnet werden. Die Berechnung ist in Gleichung \ref{eq:icp_scale:2} zu sehen.
+Mittels dieser Vektoren kann die Skalierung $scale$ berechnet werden. Die Berechnung ist in Gleichung \ref{eq:icp_scale:2} zu sehen.
 
 \begin{equation}
     \label{eq:icp_scale:2}
-    s = \sum_{i,j}{T_{P_j}^{*T}S_{P_i}^*} / \sum_{i}{S_{P_i}^{*T}S_{P_i}^*}
+    scale = \sum_{i,j}{t_j^Ts_i} / \sum_{i}{s_i^TSs_i}
 \end{equation}
 
 Auch für das Registrierung-Problem gibt es Lösungen aus dem Deep-Learning-Bereich, aber auch hier gibt es das Problem, dass es nur wenige Ansätze gibt die mit Skalierung umgehen können \cite{ScaleLK}.
@@ -483,21 +511,48 @@ DCP besteht aus drei Teilnetzen. Das erste Netz (PointNet oder DGCNN) überführ
 Auf Basis dessen wird eine weiche Zurodnung berechnet. Das heißt ein Punkt in der Quell-Punktwolke kann nicht nur einem sondern mehren Punkten in der Ziel-Punktwolke zugordnet werden.
 Das letzte Netz schätzt auf Basis der kontextuellen Information mittels eines differenzierbaren SVD Layers Rotation und Translation.
 
-PointNetLK basiert auf der Idee von PointNet und dem LK-Algorithmus \cite{lk} der für die Berechnung des Optischen-Flusses bei einer Folge von Bildern entwickelt wurde. 
-Es wird für jeden Pixel im Bild die Richtung ermittelt in der sich der Pixel über Zeit Bewegen wird.
-Diese Prinzip wird hier auf die Registrierung übertragen.
-Initial wird die Ziel-Punktwolke der Größe $n\times 3$ in einen hochdimensionalen Vektorraum der Größe $n\times k$ mittels eines MLP überführt. 
-Aus der Ausgabe des MLP-Layers wird mittels einer symmetrischen Polling-Funktion ein $k$ großer globaler Feature-Vektor ermittelt. Für diesen wird die Jakobi-Matrix $J$ berechnet.
-Die Quell-Punktwolke wird nun iterativ an die Ziel-Punktwolke angenähert.
-Die Quell-Punktwolke wird dabei ähnlich wie die Ziel-Punktwolke behandelt. Es wird allerdings nach dem ermitteln des globalen Feature-Vektors nicht die Jakobi-Matrix gebildet, 
-sondern mittels der Moore-Penrose Inversen Matrix von $J$ und der Differenz der beiden globalen Feature-Vektoren die Parameter für die in dieser Iteration auszuführenden Transformation ermittelt.
-Die Transformation wird angewandt und der Vorgang solange wiederholt bis es zu keinen oder nur noch kleinen unter einem Schwellwert liegenden Änderungen in den Parametern für die Transformation kommt.
-Die einzelnen Transformationen aus den Iterationen werden miteinander multipliziert um die Transformation zu erlangen die die Quell-Punktwolke mit der Ziel-Punkwolke registriert.
+PointNetLK basiert auf der Idee von PointNet und dem LK-Algorithmus \cite{lk} der zur Registrierung von Bildern entwickelt wurde und mit dem sich der optische Fluss von einem zum anderen Bild beschreiben lässt. 
+Hierbei wird PointNet für die Ziel und Quell-Wolke ausgeführt und die Distanz zwischen den globalen Feature-Vektoren minimiert und 
+dabei eine Transformation $G$ gefunden die den Abstand zwischen Ziel- und Quell-Punktwolke minimiert.
+Der Vorgang wird wiederholt, bis die Distanz der Feature-Vektoren unter einem gewissen Schwellwert liegt, bzw die Transformation $G$ der Einheitsmatrix ähnelt.
+Über die Iterationen müssen sich die berechneten Transformationen gemerkt und zum Schluss miteinander multipliziert werden um die finale Transformation zu finden, die die beiden Punktwolken miteinander registriert.
 
-RPM-Net baut auf RPM \cite{RPM} auf. RPM hat zu ICP den Unterschied das zwischen den beiden Punkwolken keine harten Zurodnungen gemacht werden. Statt dessen wird eine weiche Zurodnung vorgenommen die iterativ zu einer harten Zurodnung eingschränkt wird.
-Nur werden im Gegensatz zu RPM die räumlichen Entfernungne durch hybride Feature-Distanzen ersetzt und 
-die Parameter $\alpha$ und $\beta$ werden in jeder Iteration durch ein neuronales Netz geschätzt. $\alpha$ ist ein Parameter der bei der Korrespondenz-Suche steuert welches Punkt-Paar mit einbezogen wird.
-$\beta$ steuert die härte der Zuordnung und wird iterativ erhöht.
+%Initial wird die Ziel-Punktwolke der Größe $n\times 3$ in einen hochdimensionalen Vektorraum der Größe $n\times k$ mittels eines MLP überführt. 
+%Aus der Ausgabe des MLP-Layers wird mittels einer symmetrischen Polling-Funktion ein $k$ großer globaler Feature-Vektor ermittelt. Für diesen wird die Jakobi-Matrix $J$ berechnet.
+%Die Quell-Punktwolke wird nun iterativ an die Ziel-Punktwolke angenähert.
+%Die Quell-Punktwolke wird dabei ähnlich wie die Ziel-Punktwolke behandelt. Es wird allerdings nach dem ermitteln des globalen Feature-Vektors nicht die Jakobi-Matrix gebildet, 
+%sondern mittels der Moore-Penrose Inversen Matrix von $J$ und der Differenz der beiden globalen Feature-Vektoren die Parameter für die in dieser Iteration auszuführenden Transformation ermittelt.
+%Die Transformation wird angewandt und der Vorgang solange wiederholt bis es zu keinen oder nur noch kleinen unter einem Schwellwert liegenden Änderungen in den Parametern für die Transformation kommt.
+%Die einzelnen Transformationen aus den Iterationen werden miteinander multipliziert um die Transformation zu erlangen die die Quell-Punktwolke mit der Ziel-Punkwolke registriert.
+
+RPM-Net baut auf RPM \cite{RPM} auf. RPM hat zu ICP den Unterschied das zwischen den Punkten beider Punkwolken auch die Zuordnung der Punkte mit in das Optimisierungsproblem einfliest.
+Damit wird das Optimierungs-Problem \ref{eq:icp} umformuliert zu \ref{eq:rpm:opt}.
+\begin{equation}
+    \label{eq:rpm:opt}
+    \underset{M,R,t}{\operatorname{argmin}}(\sum_{i=1}^N\sum_{k=1}^K{m_{jk}(\|Rp_{s_i} + t - p_{t_k}\|_2^2-\alpha)})
+\end{equation}
+Dabei ist $M$ die Gewichtungsmatrix für die Zuordnungen zwischen den Quell und Zielpunkten und der Parameter $\alpha$ ist dazu da um Korrespondenzen zwischen Paaren auszuschließen. 
+Die Idee dabei ist, das Distanzen unter dem Schwellwert $\alpha$ die Kosten senken.
+Die Matrix $M$ wird in jeder Iteration wie in \ref{eq:rpm:m} initialisiert.
+\begin{equation}
+    \label{eq:rpm:m}
+    m_{ij} = e^{-\beta(\|Rp_{s_i} + t - p_{t_j}\|_2^2-\alpha)}
+\end{equation}
+Dabei ist $\beta$ ein Parameter der über die Itarationen erhöht wird.
+
+Im Vergleich zu RPM werden die räumlichen Entfernung bei der Berechnung von $M$ durch hybride Feature-Distanzen ersetzt \ref{eq:rpm:net:m}.
+\begin{equation}
+    \label{eq:rpm:net:m}
+    m_{ij} = e^{-\beta(\|\hat{f}_{s_i} - f_{t_j}\|_2^2-\alpha)}
+\end{equation}
+Wobei $\hat{f}_{s_i}$ der hybride Feature-Vektor für den aus der vorherigen Iteration transformierten Punkt $p_{s_i}$ ist und $f_{t_j}$ der Feature-Vektor für den Punkt $p_{t_j}$
+Des weiteren werden die Parameter $\alpha$ und $\beta$ in jeder Iteration durch ein neuronales Netz geschätzt. 
+$\beta$ wird dabei nicht wie in RPM immer weiter erhöht, sondern basierend auf der Eingabe geschätzt.
+Zuletzt wird wie beim ICP die SVD der Punktpaare ermittelt und so die Rotation gefunden, nur fließt beim Bilden der SVD auch das Gewicht der einzelnen Paare mit ein. 
+Die Translation kann so wie bei ICP ermittelt werden. 
+
+%$\alpha$ ist ein Parameter der bei der Korrespondenz-Suche steuert welches Punkt-Paar mit einbezogen wird.
+%$\beta$ steuert die härte der Zuordnung und wird iterativ erhöht.
  Details der Architektur sind in Abbildung \ref{fig:rpm:net:arch} zu finden.
 
 \begin{figure}
@@ -1269,13 +1324,15 @@ Im Einsatz sollt also bei der Entfernung des Hintergrundes darauf geachtet werde
 \textbf{Generierung der Punkwolken}
 
 Die Generierung von Punktwolken mit ODM liefert zwar gute Ergebnisse und ist vergleichsweise schnell. Allerdings ist es dennoch die Komponente die am meisten Laufzeit in Anspruch nimmt.
-Da keine Geo-Informationen zu den Bilder vorliegen, kann die GPU von ODM nicht eingesetzt werden. An der Stelle könnte ODM erweitert werden und die alternative Implementierung die ohne Geo-Informationen auskommt könnte parallelisiert werden.
+Da keine Geo-Informationen zu den Bilder vorliegen, kann die GPU von ODM nicht eingesetzt werden. 
+An der Stelle könnte ODM erweitert werden und die alternative Implementierung die ohne Geo-Informationen auskommt könnte parallelisiert werden.
 
 Sollte sich in Zukunft bei Smartphones eine RGB-D Kamera als Standart etablieren, könnte diese Technologie genutzt werden um eine schnelle Generierung der Punktwolken zu ermöglichen.
 Wobei hier zu beachten wäre, das es bei schwankenden Belichtungs-Verhälnissen zu Problemen kommen kann. 
 
 Ein weiterer Ansatz der Untersucht werden könnte ist die Generierung von Punktwolken mit Neuronalen Netzen. Hier gibt es einige interessante Ansätze die im Rahmen dieser Arbeit nicht untersucht wurden. 
-Diese Ansätze ermöglichen es aus einem Bild eine Punktwolke zu generieren, was dem Ziel die zu übertragende Datenmenge gering zu halten entgegen kommt. Dazu würden Sie vorraussichtlich nach dem Training schnellere Laufzeiten als ODM liefern.
+Diese Ansätze ermöglichen es aus einem Bild eine Punktwolke zu generieren, was dem Ziel die zu übertragende Datenmenge gering zu halten entgegen kommt. 
+Dazu würden Sie vorraussichtlich nach dem Training schnellere Laufzeiten als ODM liefern.
 Probleme die dabei zu lösen sind, sind die Anzahl der Punkte diese sollte für die Segmentierungs-Verfahren mehrere Tausend sein, zur Zeit sind meist 1000 Punkte üblich.
 
 \textbf{Registrierung}
@@ -1284,6 +1341,7 @@ Die Ergebnisse der Registrierung sind zwar für den Zweck ausreichend, aber kön
 
 Bei der Datengewinnung könnte zu den Bildern auch eine GPS-Position ermittelt werden und so Punktwolken mit gleichem Maßstab erstellt werden. Das würde die Registrierung erleichtern, da die Skalierung nicht mehr geschätzt werden müsste.
 Zudem könnte so die exakte Größe der Pflanze berechnet werden und damit auch der totale Größenuterschied zweischen zwei Wachstums-Zeitpunkten einer Pflanze.
+Zudem würde die Generierung der Punktwolken mit ODM beschleunigt, da die GPU von ODM genutzt werden könnte.
 
 Ein weiterer Ansatz der in dieser Arbeit nicht verfolgt wurde ist ScaleLK. ScaleLK hat eine ähnliche Architektur wie PoinNetLK allerdings wird neben Rotation und Translation auch eine Schätzung für die Skalierung geliefert.
 
@@ -1293,7 +1351,9 @@ Die Segmentierung ist für die Hintergrundentfernung noch recht fehleranfällig.
 mehr Punkte während des Trainings zu nutzen oder wie untersucht nur einen Ausschnitt um das Zentrum der Punktwolke segmentieren.
 
 Der untersuchte Ansatz einen Ausschnitt aus der Szene um dessen Zentrum zu nehmen wirkt sich zwar positiv auf die Ergebnisse aus, aber wird im praktischem Einsatz auf das Problem stoßen, das nicht garantiert werden kann, das der relevante Teil der Szene ausgeschnitten wird.
-Statt dessen könnte die Szene als ganzes im Vorfeld untersucht werden und so relevante Bereich ermittelt werden. Scenen-Segmentierung ist mittels Point-Net++ möglich hier müssten nur geeignete Daten gesammelt werden die dem Einsatz in der Realität entsprechen. 
+Statt dessen könnte die Szene als ganzes im Vorfeld untersucht werden und so relevante Bereich ermittelt werden. Szenen-Segmentierung ist mittels Point-Net++ möglich hier müssten nur geeignete Daten gesammelt werden die dem Einsatz in der Realität entsprechen. 
+So könnten auch einzelne Pflanzen isoliert untersucht werden und der Einfluss den die Pflanzen beim Wachstum aufeinander haben untersucht werden.
+Neben Nutzpflanzen könnten bei einer Szene-Segmentierung auch Unkräuter erkannt werden und deren Wachstum unter bestimmten Bedingungen analysiert werden.
 
 Des weiteren kann die Segmentierung der Pflanze erweitert werden um zusätzliche Informationen über eine Pflanze zu erhalten. 
 Zum Beispiel können neben Blättern und Stielen auch Blüten und Früchte erkannt werden, was für die Analyse des Ertrags einer Fruchtfolge genutzt werden könnte.
@@ -1302,10 +1362,13 @@ Um das zu bewerkstelligen muss für jedes Merkmal ein weiters Label hinzugefügt
 Bisher wurden beim Training die Farben nicht mit einbezogen. Diese könnten zusätzlich genutzt weitere Informationen wie den Zustand einzelner Segmente der Pflanze zu erkennen. 
 Die Farbe kann bei Früchten Aufschluss über den Reifgrad geben und bei Blättern und Stamm Anzeichen von Krankheiten erkennen lassen.
 
+
+
 \textbf{Server}
 
-Um die Perfomance des Servers zu steigern könnte für die in c++ Implementierten Funktionalitäten ein Python-Binding erstellt werden. Bisher werden diese Funktionen über System-Kommandos angesteuert. 
-Mit einem Python-Binding könnten diese direkt aus dem Python-Code angesprochen werden. Dadurch könnten die Daten zwischen den einzelnen Pipelines im Hauptspeicher gehalten werden und müssten nur noch zu Persistierungs-Zwecken auf der Festplatte abgelegt werden.
+Um die Perfomance des Servers zu steigern könnte für die in c++ Implementierten Funktionalitäten ein Python-Binding erstellt werden oder in Python-Code portiert werden. Bisher werden diese Funktionen über System-Kommandos angesteuert. 
+Mit einem Python-Binding oder einer entsprechenden Portierung könnten diese direkt aus dem Python-Code angesprochen werden. 
+Dadurch könnten die Daten zwischen den einzelnen Pipelines im Hauptspeicher gehalten werden und müssten nur noch zu Persistierungs-Zwecken auf der Festplatte abgelegt werden.
 
 Da der Server keine Sicherheitsmechanismen zur Verfügung stellt ist von einem Einsatz in der Praxis in diesem Zustand abzuraten. Es sollte mindestens ein User-Management hinzugefügt werden um die Schnittstellen vor Missbrauch zu schützen.
 
