@@ -4,3 +4,4 @@ data/
 python/data/
 python/pointnet2/data/
 python/pointnet2/part_seg/pred_eval/
+python/pointnet2/part_seg/results/prediction_background_result/

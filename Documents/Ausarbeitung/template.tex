@@ -501,14 +501,14 @@ Ist $R$ bekannt, können die Vektoren $s$ und $t$ gebildet werden (Siehe Gleichu
 
 \begin{equation}
     \label{eq:icp_scale:1}
-    s_i = p_{s_i} - \bar{p_s},\quad t_j = p_{t_j} - \bar{p_t}
+    s_i = R (p_{s_i} - \bar{p_s}),\quad t_j = p_{t_j} - \bar{p_t}
 \end{equation}
 
 Mittels dieser Vektoren kann die Skalierung $scale$ berechnet werden. Die Berechnung ist in Gleichung \ref{eq:icp_scale:2} zu sehen.
 
 \begin{equation}
     \label{eq:icp_scale:2}
-    scale = \sum_{i,j}{t_j^Ts_i} / \sum_{i}{s_i^TSs_i}
+    scale = \sum_{i,j}{t_j^Ts_i} / \sum_{i}{s_i^Ts_i}
 \end{equation}
 
 Auch für das Registrierungs-Problem gibt es Lösungen aus dem Deep-Learning-Bereich, aber auch hier gibt es das Problem, dass es nur wenige Ansätze gibt, die mit Skalierung umgehen können \cite{ScaleLK}.
@@ -1471,6 +1471,11 @@ Zudem würde die Generierung der Punktwolken mit ODM beschleunigt, da die GPU vo
 
 Ein weiterer Ansatz, der in dieser Arbeit nicht verfolgt wurde, ist ScaleLK. 
 ScaleLK hat eine ähnliche Architektur wie PoinNetLK, allerdings wird neben Rotation und Translation auch eine Schätzung für die Skalierung geliefert.
+
+Ein letzter Ansatz, der nicht zur Gänze untersucht wurde ist es RPM-Net mit dem Ansatz in \cite{Ziner2005PointSR} zu verbinden.
+Hierbei wird die Archtiektur von RPM belassen, allerdings wird nach dem Rotation bekannt ist die Sklaierung, wie in den Gleichungen \ref{eq:icp_scale:1} - \ref{eq:icp_scale:2} beschrieben, berechenet.
+Des weiteren muss die Berechnung der Translation angepasst werden. Für das Training des angepassten Netzes muss auch das Training überarbeitet werden. 
+Diese Schritte wurde bereits ausgeführt, nur konnte das Training bisher nicht ausgewertet und mit den bisher genutzten Verfahren verglichen werden. 
 
 \textbf{Segmentierung}
 
