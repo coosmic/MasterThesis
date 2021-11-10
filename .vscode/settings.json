@@ -70,5 +70,6 @@
         "markdown",
         "plaintext"
     ],
-    "python.pythonPath": "/home/solomon/anaconda3/envs/l3d/bin/python"
+    "python.pythonPath": "/home/solomon/anaconda3/envs/l3d/bin/python",
+    "cSpell.language": "de,de-DE"
 }
