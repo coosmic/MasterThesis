@@ -58,10 +58,6 @@
 
 #define DEBUG true
 
-//#define PointTypePCL pcl::PointXYZRGBNormal
-
-//using namespace std::chrono_literals;
-
 namespace po = boost::program_options;
 
 void stemSegmentation3(pcl::PointCloud<PointTypePCL>::Ptr cloud){
