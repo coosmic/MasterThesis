@@ -1,1 +1,37 @@
 Namespace(batch_size=10, gpu=0, log_dir='./pointnet2/part_seg/log_eval', model='pointnet2_part_seg', model_path='./pointnet2/part_seg/results/training/t6_2ClassesPartSeg/model.ckpt', num_point=16384, pred_dir='./data/predictions/background')
+2021-11-12 17:53:57.827836
+---- EPOCH 000 EVALUATION ----
+000/001
+eval mean loss: 0.000000
+eval accuracy: 0.946838
+eval avg class acc: nan
+eval mIoU of Plant:	 0.473419
+eval mean mIoU: 0.473419
+eval mean mIoU (all shapes): 0.473419
+2021-11-12 17:56:54.682371
+---- EPOCH 000 EVALUATION ----
+000/001
+eval mean loss: 0.000000
+eval accuracy: 0.923889
+eval avg class acc: nan
+eval mIoU of Plant:	 0.461945
+eval mean mIoU: 0.461945
+eval mean mIoU (all shapes): 0.461945
+2021-11-12 17:58:45.597477
+---- EPOCH 000 EVALUATION ----
+000/001
+eval mean loss: 0.000000
+eval accuracy: 0.949402
+eval avg class acc: nan
+eval mIoU of Plant:	 0.474701
+eval mean mIoU: 0.474701
+eval mean mIoU (all shapes): 0.474701
+2021-11-12 18:00:50.503687
+---- EPOCH 000 EVALUATION ----
+000/001
+eval mean loss: 0.000000
+eval accuracy: 0.943176
+eval avg class acc: nan
+eval mIoU of Plant:	 0.471588
+eval mean mIoU: 0.471588
+eval mean mIoU (all shapes): 0.471588
