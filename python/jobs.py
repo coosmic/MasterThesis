@@ -32,7 +32,7 @@ def jobGeneratePointCloud(jobParameter):
 
     #cleanup
     basePath = f'{os.path.join(os.path.abspath(os.getcwd()), "data" )}/{jobParameter["testSet"]}/{jobParameter["timeStamp"]}'
-    cleanupCommand = f'rm -r {basePath}/odm_georeferencing ; rm -r {basePath}/opensfm ; rm {basePath}/result.json ; rm {basePath}/cameras.json ; rm {basePath}/images.json ; rm {basePath}/img_list.txt'
+    cleanupCommand = f'rm -r {basePath}/odm_georeferencing ; rm -r {basePath}/opensfm ; rm {basePath}/cameras.json ; rm {basePath}/images.json ; rm {basePath}/img_list.txt'
     os.system(cleanupCommand)
 
     return {"Status": constants.statusDone}
@@ -277,31 +277,38 @@ def jobCalculateGrowth(jobParameter):
     
     baseFolderPath = os.path.join(os.path.abspath(os.getcwd()), 'data', jobParameter['testSet'])
     if timestamp != "t1":
-        lastTimestamp = "t"+int(timestamp.replace("t", ""))
-        inPathThis = os.path.join(baseFolderPath, timestamp, 'shapenet', 'tbd')
-        inPathLast = os.path.join(baseFolderPath, lastTimestamp, 'shapenet', 'tbd')
+        lastTimestamp = "t"+str(int(timestamp.replace("t", ""))+1)
+        #inPathThis = os.path.join(baseFolderPath, timestamp, 'shapenet', 'tbd')
+        #inPathLast = os.path.join(baseFolderPath, lastTimestamp, 'shapenet', 'tbd')
 
         try:
             resultsThis = utilities.getResultObject(os.path.join(baseFolderPath, timestamp))
         except Exception as e:
-            return {"Status": constants.statusFailed, "Details": "Result for this missing. Run BackgroundRegistration"}
+            return {"Status": constants.statusFailed, "Details": "Result for this missing. Readd images"}
         try:
             resultsLast = utilities.getResultObject(os.path.join(baseFolderPath, lastTimestamp))
         except Exception as e:
-            return {"Status": constants.statusFailed, "Details": f"Result for last ({lastTimestamp}) missing. Run BackgroundRegistration for {lastTimestamp}"}
-        if "BackgroundRegistration" not in resultsThis:
-            return {"Status": constants.statusFailed, "Details": "BackgroundRegistration Result is missing for this. Run BackgroundRegistration"}
-        if "BackgroundRegistration" not in resultsLast:
-            return {"Status": constants.statusFailed, "Details": "BackgroundRegistration Result is missing for this. Run BackgroundRegistration"}
+            return {"Status": constants.statusFailed, "Details": f"Result for last ({lastTimestamp}) missing."}
+        if "Height" not in resultsThis:
+            return {"Status": constants.statusFailed, "Details": f"Height Result is missing for {timestamp}. Run CalculateSize"}
+        if "Height" not in resultsLast:
+            return {"Status": constants.statusFailed, "Details": f"Height Result is missing for {lastTimestamp}. Run CalculateSize"}
 
-        # load This via inPathThis
-        # load Last via inPathLast
-        # Transform This and Last with there Background Results respectivly.
-        # Compare Height
-        # 
-        # Maybe split this. First find Height, Volume and so on of Cloud after Background Registration.
-        # Then run Comparison of PointCloud in different Size
-    return {"Status": constants.statusDone}
+        # get this height
+        thisHeight = resultsThis["Height"]
+
+        # get last height
+        lastHeight = resultsLast["Height"]
+
+        # calculate growth
+        growth = thisHeight / lastHeight
+
+        # add growth to result
+        utilities.updateResultObject(os.path.join(baseFolderPath, timestamp), {'JobName': 'GrowthSinceLastSnapshot', 'Value' : growth})
+
+        return {"Status": constants.statusDone}
+    else:
+        return {"Status": constants.statusNotAllowed, "Details": "Calculating growth for first timestamp is not possible"}
 
         
 
@@ -315,7 +322,8 @@ knownJobs = {
         "CountLeaves" : jobCountLeaves,
         "BackgroundRegistration" : jobBackgroundRegistration,
         "ConvertToRegistration" : jobConvertToBackground,
-        "CalculateSize" : jobCalculateSizes
+        "CalculateSize" : jobCalculateSizes,
+        "CalculateGrowth" : jobCalculateGrowth
 }
 
 def genericJob(jobParameter):

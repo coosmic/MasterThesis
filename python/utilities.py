@@ -12,7 +12,7 @@ def createResultObject(path):
         "LeaveCount" : -1,
         "Height" : -1,
         "Volume" : -1,
-        "GrothSinceLastSnapshot" : -1,
+        "GrowthSinceLastSnapshot" : -1,
         "BackgroundRegistration" : {"Transformation" : "", "Scale" : -1}
     }
 
@@ -27,8 +27,11 @@ def updateResultObject(path, resultUpdate):
         print(resultUpdate)
         if resultUpdate["JobName"] in result:
             result[resultUpdate["JobName"]] = resultUpdate["Value"]
-        with open(os.path.join(path, "result.json"), 'w') as fs:
-            json.dump(result, fs)
+            with open(os.path.join(path, "result.json"), 'w') as fs:
+                json.dump(result, fs)
+        else:
+            print(f'Unknown Job {resultUpdate["JobName"]}. Could not save result. Current path {path} Current result object: {result}')
+        
 
 def getResultObject(path):
     if not os.path.isfile(os.path.join(path, "result.json")):
