@@ -32,7 +32,7 @@ def jobGeneratePointCloud(jobParameter):
 
     #cleanup
     basePath = f'{os.path.join(os.path.abspath(os.getcwd()), "data" )}/{jobParameter["testSet"]}/{jobParameter["timeStamp"]}'
-    cleanupCommand = f'rm -r {basePath}/odm_georeferencing ; rm {basePath}/cameras.json ; rm {basePath}/images.json ; rm {basePath}/img_list.txt'
+    cleanupCommand = f'rm -r {basePath}/odm_georeferencing ; rm -r {basePath}/opensfm ; rm {basePath}/result.json ; rm {basePath}/cameras.json ; rm {basePath}/images.json ; rm {basePath}/img_list.txt'
     os.system(cleanupCommand)
 
     return {"Status": constants.statusDone}
