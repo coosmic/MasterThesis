@@ -13,6 +13,10 @@ N.~Mehendale and S.~Neoge, ``Review on lidar technology,'' {\em ssrn preprint
 A.~Taneja, ``Top 10 smartphones with a dedicated depth sensor camera to capture
   perfect bokeh shots,'' 2020.
 
+\bibitem{sfm}
+D.~Robertson and R.~Cipolla, ``Practical image processing and computer vision -
+  chapter 13 structure from motion,'' 2008.
+
 \bibitem{Sift}
 D.~G. Lowe, ``Distinctive image features from scale-invariant keypoints,'' {\em
   International journal of computer vision}, vol.~60, no.~2, pp.~91--110, 2004.
@@ -31,6 +35,19 @@ M.~Calonder, V.~Lepetit, C.~Strecha, and P.~Fua, ``Brief: Binary robust
 E.~Rublee, V.~Rabaud, K.~Konolige, and G.~Bradski, ``Orb: An efficient
   alternative to sift or surf,'' in {\em 2011 International conference on
   computer vision}, pp.~2564--2571, Ieee, 2011.
+
+\bibitem{sfm2}
+C.~D. Singh, ``Structure from motion - the traditional approach,'' 2021.
+
+\bibitem{pnp}
+X.~X. Lu, ``A review of solutions for perspective-n-point problem in camera
+  pose estimation,'' in {\em Journal of Physics: Conference Series}, vol.~1087,
+  p.~052009, IOP Publishing, 2018.
+
+\bibitem{triggs1999bundle}
+B.~Triggs, P.~F. McLauchlan, R.~I. Hartley, and A.~W. Fitzgibbon, ``Bundle
+  adjustment—a modern synthesis,'' in {\em International workshop on vision
+  algorithms}, pp.~298--372, Springer, 1999.
 
 \bibitem{schoenberger2016sfm}
 J.~L. Sch\"{o}nberger and J.-M. Frahm, ``Structure-from-motion revisited,''
@@ -67,6 +84,11 @@ P.~Moulon, P.~Monasse, R.~Perrot, and R.~Marlet, ``Openmvg: Open multiple view
 R.~Arandjelovi{\'c} and A.~Zisserman, ``Three things everyone should know to
   improve object retrieval,'' in {\em 2012 IEEE Conference on Computer Vision
   and Pattern Recognition}, pp.~2911--2918, IEEE, 2012.
+
+\bibitem{mikolajczyk2002affine}
+K.~Mikolajczyk and C.~Schmid, ``An affine invariant interest point detector,''
+  in {\em European conference on computer vision}, pp.~128--142, Springer,
+  2002.
 
 \bibitem{lecun2015deep}
 Y.~LeCun, Y.~Bengio, and G.~Hinton, ``Deep learning,'' {\em nature}, vol.~521,
@@ -156,19 +178,6 @@ Y.~Aoki, H.~Goforth, R.~A. Srivatsan, and S.~Lucey, ``Pointnetlk: Robust and
 Z.~J. Yew and G.~H. Lee, ``Rpm-net: Robust point matching using learned
   features,'' {\em 2020 IEEE/CVF Conference on Computer Vision and Pattern
   Recognition (CVPR)}, Jun 2020.
-
-\bibitem{yuan2020deepgmr}
-W.~Yuan, B.~Eckart, K.~Kim, V.~Jampani, D.~Fox, and J.~Kautz, ``Deepgmr:
-  Learning latent gaussian mixture models for registration,'' 2020.
-
-\bibitem{wang2019prnet}
-Y.~Wang and J.~M. Solomon, ``Prnet: Self-supervised learning for
-  partial-to-partial registration,'' 2019.
-
-\bibitem{sarode2019pcrnet}
-V.~Sarode, X.~Li, H.~Goforth, Y.~Aoki, R.~A. Srivatsan, S.~Lucey, and
-  H.~Choset, ``Pcrnet: Point cloud registration network using pointnet
-  encoding,'' 2019.
 
 \bibitem{lk}
 B.~Lucas and T.~Kanade, ``An iterative image registration technique with an

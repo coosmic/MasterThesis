@@ -3,47 +3,49 @@ Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: template.aux
 The style file: ieeetr.bst
 Database file #1: ./bibleografie.bib
+Warning--empty journal in sfm2
+Warning--can't use both volume and number fields in pnp
 Warning--empty booktitle in RANSAC
 Warning--empty booktitle in lk
-You've used 43 entries,
+You've used 45 entries,
             1876 wiz_defined-function locations,
-            716 strings with 10893 characters,
-and the built_in function-call counts, 10022 in all, are:
-= -- 888
-> -- 488
+            732 strings with 11076 characters,
+and the built_in function-call counts, 10786 in all, are:
+= -- 982
+> -- 475
 < -- 0
-+ -- 179
-- -- 136
-* -- 683
-:= -- 1434
-add.period$ -- 43
-call.type$ -- 43
-change.case$ -- 43
++ -- 176
+- -- 131
+* -- 721
+:= -- 1511
+add.period$ -- 45
+call.type$ -- 45
+change.case$ -- 45
 chr.to.int$ -- 0
-cite$ -- 45
-duplicate$ -- 515
-empty$ -- 1021
-format.name$ -- 136
-if$ -- 2428
+cite$ -- 49
+duplicate$ -- 582
+empty$ -- 1107
+format.name$ -- 131
+if$ -- 2633
 int.to.chr$ -- 0
-int.to.str$ -- 43
-missing$ -- 31
-newline$ -- 132
-num.names$ -- 43
-pop$ -- 225
+int.to.str$ -- 45
+missing$ -- 35
+newline$ -- 138
+num.names$ -- 45
+pop$ -- 234
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 335
+skip$ -- 380
 stack$ -- 0
-substring$ -- 461
-swap$ -- 171
+substring$ -- 537
+swap$ -- 203
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
-warning$ -- 2
-while$ -- 82
-width$ -- 45
-write$ -- 369
-(There were 2 warnings)
+warning$ -- 4
+while$ -- 91
+width$ -- 47
+write$ -- 393
+(There were 4 warnings)

@@ -13,6 +13,6 @@
 \contentsline {section}{\numberline {4}Ergebnisse}{25}{section.4}%
 \contentsline {subsection}{\numberline {4.1}Vergleich von Verfahren zur Generierung von 3D-Punktwolken auf Basis von Bildern}{25}{subsection.4.1}%
 \contentsline {subsection}{\numberline {4.2}Vergleich von Verfahren zur Registrierung von 3D-Punkwolken}{29}{subsection.4.2}%
-\contentsline {subsection}{\numberline {4.3}Vergleich von Verfahren zur Segmentierung von Pflanzen auf 3D-Punkwolken}{31}{subsection.4.3}%
+\contentsline {subsection}{\numberline {4.3}Vergleich von Verfahren zur Segmentierung von Pflanzen auf 3D-Punkwolken}{30}{subsection.4.3}%
 \contentsline {section}{\numberline {5}Fazit und Ausblick}{37}{section.5}%
 \contentsline {section}{Literatur}{40}{section.5}%
