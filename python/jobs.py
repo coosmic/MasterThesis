@@ -29,6 +29,12 @@ def jobGeneratePointCloud(jobParameter):
     makePointCloudCommand = f'docker run -ti --rm --user "$(id -u):$(id -g)" -v {os.path.join(os.path.abspath(os.getcwd()), "data" )}/{jobParameter["testSet"]}:/{jobParameter["testSet"]} --cpus {cpus} --gpus all opendronemap/odm:gpu --rerun-all -e  odm_filterpoints --project-path /{jobParameter["testSet"]} {jobParameter["timeStamp"]}'
     print("starting ", makePointCloudCommand)
     os.system(makePointCloudCommand)
+
+    #cleanup
+    basePath = f'{os.path.join(os.path.abspath(os.getcwd()), "data" )}/{jobParameter["testSet"]}/{jobParameter["timeStamp"]}'
+    cleanupCommand = f'rm -r {basePath}/odm_georeferencing ; rm {basePath}/cameras.json ; rm {basePath}/images.json ; rm {basePath}/img_list.txt'
+    os.system(cleanupCommand)
+
     return {"Status": constants.statusDone}
 
 
