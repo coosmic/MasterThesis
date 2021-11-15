@@ -1,0 +1,34 @@
+\begin{thebibliography}{1}
+
+\bibitem{ODM}
+pierotofy, ``Open drone map - a command line toolkit to generate maps, point
+  clouds, 3d models and dems from drone, balloon or kite images.,'' 2020.
+
+\bibitem{schoenberger2016sfm}
+J.~L. Sch\"{o}nberger and J.-M. Frahm, ``Structure-from-motion revisited,''
+  2016.
+
+\bibitem{schoenberger2016mvs}
+J.~L. Sch\"{o}nberger, E.~Zheng, M.~Pollefeys, and J.-M. Frahm, ``{Pixelwise
+  View Selection for Unstructured Multi-View Stereo},'' in {\em European
+  Conference on Computer Vision (ECCV)}, 2016.
+
+\bibitem{Moulon2012}
+P.~Moulon, P.~Monasse, and R.~Marlet, ``Adaptive structure from motion with
+  a~contrario model estimation,'' in {\em Proceedings of the Asian Computer
+  Vision Conference (ACCV 2012)}, pp.~257--270, Springer Berlin Heidelberg,
+  2012.
+
+\bibitem{Jancosek2011}
+M.~Jancosek and T.~Pajdla, ``Multi-view reconstruction preserving
+  weakly-supported surfaces,'' in {\em {CVPR} 2011}, {IEEE}, jun 2011.
+
+\bibitem{moulon2016openmvg}
+P.~Moulon, P.~Monasse, R.~Perrot, and R.~Marlet, ``Openmvg: Open multiple view
+  geometry,'' in {\em International Workshop on Reproducible Research in
+  Pattern Recognition}, pp.~60--74, Springer, 2016.
+
+\bibitem{opencv}
+alalek, ``Structure from motion module,'' 2016.
+
+\end{thebibliography}

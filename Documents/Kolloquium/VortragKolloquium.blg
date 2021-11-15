@@ -1,0 +1,46 @@
+This is BibTeX, Version 0.99d (TeX Live 2021)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: VortragKolloquium.aux
+The style file: ieeetr.bst
+Database file #1: ./bibleografie.bib
+You've used 7 entries,
+            1876 wiz_defined-function locations,
+            515 strings with 4655 characters,
+and the built_in function-call counts, 1482 in all, are:
+= -- 125
+> -- 63
+< -- 0
++ -- 24
+- -- 17
+* -- 92
+:= -- 212
+add.period$ -- 7
+call.type$ -- 7
+change.case$ -- 7
+chr.to.int$ -- 0
+cite$ -- 7
+duplicate$ -- 78
+empty$ -- 174
+format.name$ -- 17
+if$ -- 361
+int.to.chr$ -- 0
+int.to.str$ -- 7
+missing$ -- 4
+newline$ -- 24
+num.names$ -- 7
+pop$ -- 48
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 0
+skip$ -- 45
+stack$ -- 0
+substring$ -- 56
+swap$ -- 18
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 0
+warning$ -- 0
+while$ -- 13
+width$ -- 8
+write$ -- 60

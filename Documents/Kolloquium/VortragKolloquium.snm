@@ -1,0 +1,17 @@
+\beamer@slide {fig:odm}{5}
+\beamer@slide {fig:colmap}{5}
+\beamer@slide {fig:meshroom}{6}
+\beamer@slide {fig:openmvg}{6}
+\beamer@slide {fig:opencv}{6}
+\beamer@slide {fig:classifier:1}{8}
+\beamer@slide {fig:classifier:2}{8}
+\beamer@slide {fig:classifier:1}{9}
+\beamer@slide {fig:classifier:2}{9}
+\beamer@slide {fig:background}{11}
+\beamer@slide {fig:meshroom}{16}
+\beamer@slide {fig:openmvg}{16}
+\beamer@slide {fig:opencv}{16}
+\beamer@slide {fig:Pipelines}{18}
+\beamer@slide {fig:PiplineBackgroundSegmentation}{19}
+\beamer@slide {fig:PipelinePlantSegmentation}{19}
+\beamer@slide {fig:PipelineLeaveSegmentation}{19}
