@@ -16,8 +16,6 @@ def robustICP(srcPath, targetPath, outPath, scale, srcCloud, targetCloud):
 
     # Apply Transformation
     transformation = np.loadtxt(pathToTransformation).astype(np.float32)
-    #srcCloud = np.loadtxt(srcPath).astype(np.float32)
-    #targetCloud = np.loadtxt(targetPath).astype(np.float32)
     
     srcCloud *= scale
     transformedSrc = np.hstack((srcCloud, np.ones((srcCloud.shape[0], 1))))  #(nx3)->(nx4)
@@ -39,7 +37,6 @@ def display_open3d(template, source, transformed_source):
     template_.paint_uniform_color([1, 0, 0])
     source_.paint_uniform_color([0, 1, 0])
     transformed_source_.paint_uniform_color([0, 0, 1])
-    #o3d.visualization.draw_geometries([template_, source_, transformed_source_])
     o3d.visualization.draw_geometries([template_, transformed_source_])
     
 def scaleRegistration(srcPath, targetPath, outPath, start_scale = 1.0, end_scale = 3.0, scale_step_width=0.1):

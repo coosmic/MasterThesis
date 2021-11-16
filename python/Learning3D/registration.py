@@ -26,7 +26,6 @@ def display_open3d(template, source, transformed_source):
     template_.paint_uniform_color([1, 0, 0])
     source_.paint_uniform_color([0, 1, 0])
     transformed_source_.paint_uniform_color([0, 0, 1])
-    #o3d.visualization.draw_geometries([template_, source_, transformed_source_])
     o3d.visualization.draw_geometries([template_, transformed_source_])
 
 def get_transformations(igt):
@@ -107,14 +106,9 @@ def icp(src, target, threshold, scale, show=False):
 
     trans_init = np.identity(4)
 
-    #evaluation = o3d.pipelines.registration.evaluate_registration(pcdSrc, pcdTarget, threshold, trans_init)
-    #print("eval ",evaluation)
-
     icp_res = o3d.pipelines.registration.registration_icp(
     pcdSrc, pcdTarget, threshold, trans_init,
     o3d.pipelines.registration.TransformationEstimationPointToPoint())
-
-    #print("res ", icp_res)
 
     tmp = pcdSrc.transform(icp_res.transformation)
 
@@ -122,14 +116,11 @@ def icp(src, target, threshold, scale, show=False):
     distances, indices = nbrs.kneighbors(np.asarray(pcdTarget.points)) # target
     error = (np.sum(distances) / distances.shape[0])
 
-    #print("error ", error)
-    
     if show:
         tmp.paint_uniform_color([1, 0, 0])
         pcdTarget.paint_uniform_color([0, 1, 0])
         o3d.visualization.draw_geometries([tmp, pcdTarget])
 
-    #return icp_res.inlier_rmse
     return error, icp_res
 
 def runWithDifferentScalesWithArgs(args, data, model = None):

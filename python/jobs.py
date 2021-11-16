@@ -6,6 +6,7 @@ import psutil
 import constants
 import time
 
+#Used for RICP
 import registration
 
 from Learning3D.registration import runWithDifferentScales, loadRawDataWithoutArgs, loadModel, loadDataLoader
@@ -15,9 +16,6 @@ PARTSEG3 = None
 
 
 def startPartSegPipelines():
-    #global PARTSEG2
-    #PARTSEG2 = estimate.Pointnet2PartSegmentation2("pointnet2_part_seg", "./pointnet2/part_seg/results/t6_2ClassesPartSeg/model.ckpt")
-    #PARTSEG2 = estimate.Pointnet2PartSegmentation("pointnet2_part_seg3C", "./pointnet2/part_seg/results/t5_3ClassesPartSeg3C/model.ckpt", {'Plant': [0, 1, 2] })
     global PARTSEG3
     PARTSEG3 = estimate.Pointnet2PartSegmentation2("pointnet2_part_seg3C", "./pointnet2/part_seg/results/training/t7_3ClassesPartSegNoNorm/model.ckpt", {'Plant': [0, 1, 2] })
 
@@ -48,7 +46,6 @@ def jobLeavesSegmentation(jobParameter):
         os.system(copyCommand)
 
         evaluate2.evaluate()
-        #PARTSEG2.predict()
 
         pointCloudPath = os.path.join(basePath, 'shapenet', "point_cloudSS1LeavePrediction.txt" )
         estimationLocation = os.path.join(os.path.abspath(os.getcwd()), 'data', 'predictions/background/Plant/point_cloudSS1.txt' )
@@ -57,14 +54,9 @@ def jobLeavesSegmentation(jobParameter):
 
         predictionPath = os.path.join(os.path.abspath(os.getcwd()), 'data', jobParameter['testSet'], jobParameter['timeStamp'], 'shapenet', "point_cloudSS1LeavePrediction.pcd" )
         data = np.loadtxt(pointCloudPath).astype(np.float32)
-        #print("data.shape ", data.shape)
         predictions = utilities.improveBackgroundPrediction(data[:, 0:6], data[:, 6].astype(np.int))
         utilities.predictionToColor(data[:, 0:6], predictions, predictionPath)
-
-        #sampledCloud, predictions = PARTSEG3.estimate(pointCloudPath)
-        #predictions = utilities.improveBackgroundPrediction(sampledCloud, predictions)
-        #predictionPath = os.path.join(os.path.abspath(os.getcwd()), 'data', jobParameter['testSet'], jobParameter['timeStamp'], 'shapenet', "point_cloudSS1LeavePrediction.pcd" )
-        #utilities.predictionToColor(sampledCloud, predictions, predictionPath)
+        
         return {"Status": constants.statusDone}
     else:
         print(f"File {pointCloudPath} is not existing")
@@ -94,22 +86,16 @@ def jobBackgroundSegmentation(jobParameter):
 
         predictionPath = os.path.join(os.path.abspath(os.getcwd()), 'data', jobParameter['testSet'], jobParameter['timeStamp'], 'shapenet', "point_cloudSS1BackgroundPrediction.pcd" )
         data = np.loadtxt(pointCloudPath).astype(np.float32)
-        #print("data.shape ", data.shape)
-        #print(data)
-        #print(data[:, 0:6])
-        #print(data[:, 6:])
         predictions = utilities.improveBackgroundPrediction(data[:, 0:6], data[:, 6].astype(np.int))
         utilities.predictionToColor(data[:, 0:6], predictions, predictionPath)
 
         orgCloudPath = os.path.join(basePath, 'shapenet', "point_cloud.ply" )
         outFolder = os.path.join(basePath, 'shapenet')
         removeBackgroundCommand = f"../build/pgm -J BackgroundRemovalPipeline --SourceCloudPath {predictionPath} --TargetCloudPath {orgCloudPath} --OutputFolder {outFolder} --SearchRadius 0.0075"
-        #print(removeBackgroundCommand)
         os.system(removeBackgroundCommand)
 
 
         toShapenetFormatCommand = f"../build/pgm -J Shapenet --in {os.path.join(basePath, 'shapenet', 'CloudWithoutBackground.ply')} --out {os.path.join(basePath, 'shapenet', 'CloudWithoutBackground')} --RemoveBackground false --MaxSubsample 1 --NoPlaneAlignment"
-        #print(toShapenetFormatCommand)
         os.system(toShapenetFormatCommand)
         return {"Status": constants.statusDone}
         
@@ -130,7 +116,6 @@ def jobToShapenetFormat(jobParameter):
     return {"Status": constants.statusDone}
 
 def jobLeaveStemSplit(jobParameter):
-    #point_cloudSS1LeavePrediction.txt
     pointCloudPath = os.path.join(os.path.abspath(os.getcwd()), 'data', jobParameter['testSet'], jobParameter['timeStamp'], "shapenet", "point_cloudSS1LeavePrediction.txt")
     rawData = np.loadtxt(pointCloudPath).astype(np.float32)
     points = rawData[:, 0:6]
@@ -176,8 +161,9 @@ def jobBackgroundRegistration(jobParameter):
     targetPath = os.path.join(os.path.abspath(os.getcwd()), 'data', jobParameter['testSet'], 'background', 'shapenet', 'registrationFormat.txt')
     outPath = os.path.join(folderPath, 'shapenet', 'registration/')
 
+    # We keep this comments to change the registration method when ever needed.
     print("start reg")
-    #transformation, scale = registration.scaleRegistration(srcPath, targetPath, outPath)
+    #transformation, scale = registration.scaleRegistration(srcPath, targetPath, outPath)   #RICP
     
     model = None #ICP
     #model = loadModel("PointNetLK")
@@ -278,8 +264,6 @@ def jobCalculateGrowth(jobParameter):
     baseFolderPath = os.path.join(os.path.abspath(os.getcwd()), 'data', jobParameter['testSet'])
     if timestamp != "t1":
         lastTimestamp = "t"+str(int(timestamp.replace("t", ""))+1)
-        #inPathThis = os.path.join(baseFolderPath, timestamp, 'shapenet', 'tbd')
-        #inPathLast = os.path.join(baseFolderPath, lastTimestamp, 'shapenet', 'tbd')
 
         try:
             resultsThis = utilities.getResultObject(os.path.join(baseFolderPath, timestamp))

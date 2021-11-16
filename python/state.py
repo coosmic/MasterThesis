@@ -22,7 +22,7 @@ class State():
             "CalculateSize" : {"Status" : constants.statusNotDone},
             "CalculateGrowth" : {"Status" : constants.statusNotDone}
         }
-        #print(folderPath)
+        
         if os.path.isdir(os.path.join(folderPath, "images")) and len(os.listdir(os.path.join( folderPath, "images"))) != 0:
             pipelineStatus["ImagesUploaded"] = {"Status" : constants.statusDone}
         if os.path.isfile(os.path.join( folderPath, "odm_filterpoints", "point_cloud.ply")):
@@ -82,7 +82,6 @@ class State():
                 currentTimestamps = dirs = [name for name in os.listdir(currentDirPath) if os.path.isdir(os.path.join(currentDirPath,name))]
                 self.state[d] = {}
                 for t in currentTimestamps:
-                    #print(os.path.join(currentDirPath,t))
                     if t != "background":
                         self.state[d][t] = self.getPipelineStatus(os.path.join(currentDirPath,t))
                     else:
