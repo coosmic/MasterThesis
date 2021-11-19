@@ -35,6 +35,10 @@ CUDA is required to use PointNet++
 
 ## Build 
 
+### PointNet++
+
+To use PointNet++ you have to build the tensorflow operators under `<base>/python/pointnet2/tf_ops/`. You can use the `tf_*_compile.sh` in each folder to do so. Maybe you have to adjust the CUDE include and lib path dependend on your installation of CUDA.
+
 ### BusyBox
 
 ```
