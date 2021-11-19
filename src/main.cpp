@@ -111,13 +111,11 @@ void stemSegmentation3(pcl::PointCloud<PointTypePCL>::Ptr cloud){
     cloud_cylinder->points[i].b = 0;
   }
 
-  //showCloud2(cloud_cylinder, "detected stems");
   *cloud_labeld += *cloud;
   *cloud_labeld += *cloud_cylinder;
 
 
   showCloud2(cloud_labeld, "other");
-  //std::cerr << "Cylinder coefficients: " << *coefficients_cylinder << std::endl;
 
 }
 
@@ -167,33 +165,6 @@ void stemSegmentation2(pcl::PointCloud<PointTypePCL>::Ptr cloud, float searchRad
       else if(principalCurvatures->points[i].principal_curvature_z > maxpcz)
         maxpcz = principalCurvatures->points[i].principal_curvature_z;
 
-      //cloud->points[i].r = 0;
-      //cloud->points[i].g = 0;
-      //cloud->points[i].b = max(255 * (principalCurvatures->points[i].principal_curvature_x), max(255 * principalCurvatures->points[i].principal_curvature_y, 255 * principalCurvatures->points[i].principal_curvature_z));
-      //std::cout << i << " pc1: "<< principalCurvatures->points[i].pc1 << " pc2: " << principalCurvatures->points[i].pc2 << std::endl;
-      /*if(principalCurvatures->points[i].pc1 * principalCurvatures->points[i].pc2 > 0.0){
-        cloud->points[i].r = 0;
-        cloud->points[i].g = 0;
-        cloud->points[i].b = 255;
-      }
-
-      if(principalCurvatures->points[i].pc1 * principalCurvatures->points[i].pc2 < 0.0){
-        cloud->points[i].r = 255;
-        cloud->points[i].g = 0;
-        cloud->points[i].b = 0;
-      }
-
-      if(principalCurvatures->points[i].pc1 <= 0.001 && principalCurvatures->points[i].pc2 <= 0.0001 && principalCurvatures->points[i].pc1 >= 0.001 && principalCurvatures->points[i].pc2 >= 0.0001){
-        cloud->points[i].r = 0;
-        cloud->points[i].g = 255;
-        cloud->points[i].b = 0;
-      }
-
-      if(principalCurvatures->points[i].pc1 - principalCurvatures->points[i].pc2 <= 0.01 ){
-        cloud->points[i].r = 255;
-        cloud->points[i].g = 255;
-        cloud->points[i].b = 0;
-      }*/
       cloud->points[i].r = (uint8_t)((principalCurvatures->points[i].pc1 - 0.192002f) * pc1ScaleFactorToColor);
       cloud->points[i].g = 0;
       cloud->points[i].b = 0;
@@ -204,34 +175,6 @@ void stemSegmentation2(pcl::PointCloud<PointTypePCL>::Ptr cloud, float searchRad
     cout<< "maxpcx: "<<maxpcx << "\nminpcx: "<<minpcx<<"\nmaxpcy: "<<maxpcy<<"\nminpcy: "<<minpcy<<"\nmaxpcz: "<<maxpcz<<"\nminpcz: "<<minpcz<<endl;
     showCloud2(cloud, "intensity");
   }
-
-
-  /*std::string input = "asdf";
-  cout << "enter float: "<<endl;
-  cin >> input;
-  while(input != "q"){
-    float threshold = stof(input);
-
-    for(int i=0; i<principalCurvatures->points.size(); ++i){
-      //float meanCurvature = (principalCurvatures->points[i].pc1 + principalCurvatures->points[i].pc2) * 0.5;
-
-      if(principalCurvatures->points[i].pc1  > threshold){
-        cloud->points[i].r = 255;
-        cloud->points[i].g = 0;
-        cloud->points[i].b = 0;
-      } else {
-        cloud->points[i].r = 0;
-        cloud->points[i].g = 0;
-        cloud->points[i].b = 255;
-      }
-    }
-
-    showCloud2(cloud, "segmentation", nullptr, true);
-
-    cout << "enter float: "<<endl;
-    cin >> input;
-
-  }*/
 
   std::string input = "asdf";
   cout << "enter float: "<<endl;
@@ -271,8 +214,6 @@ void stemSegementation(pcl::PointCloud<PointTypePCL>::Ptr cloud, float searchRad
 
   int pointsInCloud = cloud->points.size();
 
-  //#pragma omp parallel num_threads(24)
-  //#pragma omp target teams distribute parallel for collapse(2)
   #pragma omp parallel for 
   for(int i=0; i< pointsInCloud; i++){
     std::vector<int> neighborIndices; //to store index of surrounding points 
@@ -390,7 +331,6 @@ int main1(std::string pathToFile){
   noiseFilter(cloud, 1000, 10.0);
 
   rotateCloud(cloud, coefficients);
-  //showCloud2(cloud, "Noise2", nullptr, true);
 
   printMinMax(cloud);
   //stemSegementation(cloud, 0.25);
@@ -670,8 +610,6 @@ int convertToShapenetFormat(po::variables_map vm){
     //cout << "remaining points in org cloud: "<<std::to_string(cloudPlant->size())<<endl;
   }
 
-
-  //writeShapenetFormat(cloudPlant, pathToShapenetFormatResult, false);
   pcl::io::savePLYFileBinary(pathToShapenetFormatResult+".ply", *cloudPlant);
 
   return 0;
@@ -723,7 +661,6 @@ int iterativeScaleRegistration(po::variables_map vm){
   rotateCloud(cloudTgt, coefficientsA);
   //removePointsInCloud(cloudTgt, inliersA);
 
-  
 
   extractCenterOfCloud(cloudSrc, 0.3);
   extractCenterOfCloud(cloudTgt, 0.3);

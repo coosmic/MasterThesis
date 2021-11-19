@@ -83,10 +83,6 @@ void showCloud2(pcl::PointCloud<PointTypePCL>::Ptr cloud, std::string windowName
     
     cout << "centroid: " << centroid[0] << " " <<  centroid[1] << " " <<   centroid[2] << " " <<   centroid[3] << " \n";
 
-    //vtkSmartPointer<vtkPolyData> plane = createPlane(*coefficientsPlane,0,0,0,2.0);
-    
-    //viewer->addModelFromPolyData(plane,"myplane");
-
     viewer->addPlane (*coefficientsPlane, centroid[0],centroid[1],centroid[2], "plane");
     viewer->addPlane (coeffs, centroid[0],centroid[1],centroid[2], "planeBase");
   }
@@ -140,8 +136,6 @@ void showCloud2(pcl::PointCloud<pcl::PointNormal>::Ptr cloud, std::string window
   pcl::visualization::PCLVisualizer::Ptr viewer (new pcl::visualization::PCLVisualizer (windowName));
   viewer->setBackgroundColor (0, 0, 0);
 
-  //pcl::visualization::PointCloudColorHandlerRGBField<pcl::PointNormal> rgb(cloud);
-  //pcl::visualization::PointCloudColorHandler<pcl::PointNormal> color(cloud);
   viewer->addPointCloud<pcl::PointNormal> (cloud, "sample cloud");
   viewer->setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 3, "sample cloud");
 
@@ -168,18 +162,8 @@ void debug_showCombinedCloud(pcl::PointCloud<PointTypePCL>::Ptr cloudA, pcl::Poi
 
   *combinedCloud += *cloudA;
   *combinedCloud += *cloudB;
-  //std::cout << "show combined cloud started" << std::endl;
   
   showCloud2(combinedCloud, windowName);
-  /*pcl::visualization::PointCloudColorHandlerRGBField<PointTypePCL> rgb(combinedCloud);
-  //std::cout << "waiting for mutex" << std::endl;
-  updateModelMutex.lock();
-  //std::cout << "mutex taken for add or update cloud" << std::endl;
-  if(!viewer->updatePointCloud( combinedCloud, rgb, "combinedCloud")){
-    viewer->addPointCloud(combinedCloud, rgb, "combinedCloud");
-  }
-  updateModelMutex.unlock();
-  */
 }
 
 void debug_showCombinedCloud(pcl::PointCloud<PointTypeRegistration>::Ptr cloudA, pcl::PointCloud<PointTypeRegistration>::Ptr cloudB, std::string windowName){
