@@ -16,9 +16,43 @@ Add following to `sift_keypoint.h` in you pcl installation:
   };
 ```
 
-cmake -S ./src -B ./build_python_binding
+### Python Dependencies
+
+In folder "python" is a conda environment file with name "environment.yml".
+
+Importent dependencies are
+
+- Tensorflow 1.15 (1.x should be ok, but 2.x is not supported)
+- Python 3.7 (highest version which is compatible with with TF 1.15)
+- open3d
+- torch
+- flask
+- numpy
+- scikit-learn
+- scipy
+
+CUDA is required to use PointNet++
+
+## Build 
+
+### BusyBox
+
+```
+mkdir ./build
+cmake -S ./src -B ./build
+```
+### Fast-Robust-ICP (RICP)
+
+To use RICP you have to build the code in folder "Fast-Robust-ICP" and place the binary with name "FRICP" under "build".
 
 ## Usage
+
+### Flask Server
+
+``` shell
+cd python
+python flaskServer.py
+```
 
 ### BusyBox
 

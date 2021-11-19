@@ -405,15 +405,22 @@ void backgroundPreparation(Cloud::Ptr backgroundCloud){
   //showCloud2(backgroundCloud, "Background");
 }
 
-int backgroundRemovalPipeline(int argc, char** argv){
+int manuellbackgroundRemovalPipeline(po::variables_map vm){
+
+  if(!vm.count("SourceCloudPath")){
+    cout << "Missing Parameter SourceCloudPath\n";
+    return 1;
+  }
+
+  if(!vm.count("TargetCloudPath")){
+    cout << "Missing Parameter TargetCloudPath\n";
+    return 1;
+  }
+
   boost::thread t = startVisualization();
-  /*std::string pathToFolder = argv[1];
 
-  std::string pathToBackground = pathToFolder+"/background2.ply";
-  std::string pathToPlant = pathToFolder+"/t1.ply";*/
-
-  std::string pathToBackground = argv[1];
-  std::string pathToPlant = argv[2];
+  std::string pathToBackground = vm["TargetCloudPath"].as<std::string>();
+  std::string pathToPlant = vm["SourceCloudPath"].as<std::string>();
 
   pcl::PointCloud<PointTypePCL>::Ptr cloudPlant(new pcl::PointCloud<PointTypePCL>);
   pcl::PointCloud<PointTypePCL>::Ptr cloudBackground(new pcl::PointCloud<PointTypePCL>);
@@ -978,6 +985,7 @@ enum JobName {
   IterativeScaleRegistration,
   BackgroundRemovalPipeline,
   HandcraftedClassifier,
+  ManuellBackgroundRemovalPipeline,
   UnknownJob
 };
 
@@ -988,7 +996,7 @@ JobName jobStringToEnum(std::string jobString){
   if(jobString == "ComputeAndShowNormals") return ComputeAndShowNormals;
   if(jobString == "RegistrationFormat") return RegistrationFormat;
   if(jobString == "IterativeScaleRegistration") return IterativeScaleRegistration;
-  if(jobString == "BackgroundRemovalPipeline") return BackgroundRemovalPipeline;
+  if(jobString == "ManuellBackgroundRemovalPipeline") return ManuellBackgroundRemovalPipeline;
   if(jobString == "HandcraftedClassifier") return HandcraftedClassifier;
   return UnknownJob;
 }
@@ -1055,6 +1063,8 @@ int main (int argc, char** argv)
         return iterativeScaleRegistration(vm);
       case BackgroundRemovalPipeline:
         return backgroundRemovalPipeline(vm);
+      case ManuellBackgroundRemovalPipeline:
+        return manuellbackgroundRemovalPipeline(vm);
       case HandcraftedClassifier:
         return handcraftedClassifier(vm);
       case UnknownJob:
