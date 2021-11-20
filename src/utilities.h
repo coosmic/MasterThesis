@@ -114,7 +114,7 @@ void rotateCloud(pcl::PointCloud<PointTypePCL>::Ptr cloud, pcl::ModelCoefficient
 
 }
 
-void noiseFilter(pcl::PointCloud<PointTypePCL>::Ptr cloud, int minNumberNeighbors, float radius){
+void innerNoiseFilter(pcl::PointCloud<PointTypePCL>::Ptr cloud, int minNumberNeighbors, float radius){
   pcl::RadiusOutlierRemoval<PointTypePCL> outrem;
   // build the filter
   outrem.setInputCloud(cloud);
@@ -129,18 +129,19 @@ void noiseFilter(pcl::PointCloud<PointTypePCL>::Ptr cloud, int minNumberNeighbor
   pcl::removeNaNFromPointCloud(*cloud, *cloud, indices);
 }
 
-void noiseFilter(pcl::PointCloud<PointTypePCL>::Ptr cloud){
+void noiseFilter(pcl::PointCloud<PointTypePCL>::Ptr cloud, int minNeighbors1=50, float radius1=0.08, int minNeighbors2=1400, float radius2=0.2){
+
   //////////////////////////
   // Remove Noise Level 1 //
   //////////////////////////
-  
-  noiseFilter(cloud, 50, 0.08);
+  if(minNeighbors1 > 0)
+    innerNoiseFilter(cloud, minNeighbors1, radius1);
 
   //////////////////////////
   // Remove Noise Level 2 //
   //////////////////////////
-
-  noiseFilter(cloud, 1400, 0.2);
+  if(minNeighbors2 > 0)
+    innerNoiseFilter(cloud, minNeighbors2, radius2);
 }
 
 void findPlaneInCloud (pcl::PointCloud<PointTypePCL>::Ptr cloud, pcl::ModelCoefficients::Ptr coefficients, pcl::PointIndices::Ptr inliers){

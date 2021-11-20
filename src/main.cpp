@@ -55,8 +55,8 @@
 
 #include <boost/program_options.hpp>
 
-
-#define DEBUG true
+bool debugShowResult = true;
+bool debugShowStepResult = true;
 
 namespace po = boost::program_options;
 
@@ -283,7 +283,7 @@ void printMinMax(pcl::PointCloud<PointTypePCL>::Ptr cloud){
 
 }
 
-int main1(std::string pathToFile){
+int testStemSegmentation(std::string pathToFile, int classifierNumber, po::variables_map vm){
   pcl::PointCloud<PointTypePCL>::Ptr cloud(new pcl::PointCloud<PointTypePCL>);
 
   if(pathToFile.substr(pathToFile.find_last_of(".") + 1) == "ply"){
@@ -298,10 +298,36 @@ int main1(std::string pathToFile){
       PCL_ERROR ("Couldn't read txt file\n");
       return (-1);
     }
-    showCloud2(cloud, "raw acsi cloud");
+    showCloud2(cloud, "raw asci cloud");
       
   } else
     return -1;
+
+  bool doNoiseFilter = true;
+  int noiseFilterMinNeighbors1 = 30;
+  int noiseFilterMinNeighbors2 = 500;
+  int noiseFilterMinNeighbors3 = 1000;
+  float noiseFilterRadius1 = 0.8;
+  float noiseFilterRadius2 = 3.0;
+  float noiseFilterRadius3 = 10.0;
+
+  if(vm.count("NoiseFilterActive")){
+    doNoiseFilter = vm["NoiseFilterActive"].as<bool>();
+    if(doNoiseFilter){
+      if(vm.count("NoiseFilterMinNeighbors1"))
+        noiseFilterMinNeighbors1 = vm["NoiseFilterMinNeighbors1"].as<int>();
+      if(vm.count("NoiseFilterMinNeighbors2"))
+        noiseFilterMinNeighbors2 = vm["NoiseFilterMinNeighbors2"].as<int>();
+      if(vm.count("NoiseFilterMinNeighbors3"))
+        noiseFilterMinNeighbors3 = vm["NoiseFilterMinNeighbors3"].as<int>();
+      if(vm.count("NoiseFilterRadius1"))
+        noiseFilterRadius1 = vm["NoiseFilterRadius1"].as<float>();
+      if(vm.count("NoiseFilterRadius2"))
+        noiseFilterRadius2 = vm["NoiseFilterRadius2"].as<float>();
+      if(vm.count("NoiseFilterRadius3"))
+        noiseFilterRadius3 = vm["NoiseFilterRadius3"].as<float>();
+    }
+  }
 
   ///////////////////
   // Remove Planes //
@@ -309,40 +335,88 @@ int main1(std::string pathToFile){
 
   pcl::ModelCoefficients::Ptr coefficients = planeFilter(cloud);
 
-  //showCloud2(cloud, "PlaneFilter", coefficients);
+  if(doNoiseFilter){
+    //////////////////////////
+    // Remove Noise Level 1 //
+    //////////////////////////
+    if(noiseFilterMinNeighbors1 > 0)
+      noiseFilter(cloud, noiseFilterMinNeighbors1, noiseFilterRadius1);
 
-  //////////////////////////
-  // Remove Noise Level 1 //
-  //////////////////////////
-  noiseFilter(cloud, 30, 0.8);
+    //showCloud(cloud, "Noise1");
 
-  //showCloud(cloud, "Noise1");
+    //////////////////////////
+    // Remove Noise Level 2 //
+    //////////////////////////
+    if(noiseFilterMinNeighbors2 > 0)
+      noiseFilter(cloud, noiseFilterMinNeighbors2, noiseFilterRadius2);
 
-  //////////////////////////
-  // Remove Noise Level 2 //
-  //////////////////////////
-
-  noiseFilter(cloud, 500, 3.0);
-
-  //////////////////////////
-  // Remove Noise Level 3 //
-  //////////////////////////
-
-  noiseFilter(cloud, 1000, 10.0);
-
+    //////////////////////////
+    // Remove Noise Level 3 //
+    //////////////////////////
+    if(noiseFilterMinNeighbors3 > 0)
+      noiseFilter(cloud, noiseFilterMinNeighbors3, noiseFilterRadius3);
+  }
+  
   rotateCloud(cloud, coefficients);
 
   printMinMax(cloud);
-  //stemSegementation(cloud, 0.25);
-  stemSegmentation2(cloud, 0.25);
-  //stemSegmentation3(cloud);
+
+  float searchRadius;
+  switch(classifierNumber){
+    case 0:
+      if(!vm.count("SearchRadius")){
+        cout << "Missing parameter SearchRadius\n";
+        return 1;
+      }
+      searchRadius = vm["SearchRadius"].as<float>();
+      stemSegementation(cloud, searchRadius);
+      break;
+    case 1:
+      if(!vm.count("SearchRadius")){
+        cout << "Missing parameter SearchRadius\n";
+        return 1;
+      }
+      searchRadius = vm["SearchRadius"].as<float>();
+      stemSegmentation2(cloud, searchRadius);
+      break;
+    case 2:
+      stemSegmentation3(cloud);
+      break;
+    default:
+      return 1;
+  }
 
   return (0);
 }
 
 
 
-void matchClouds(pcl::PointCloud<PointTypePCL>::Ptr cloudA, pcl::PointCloud<PointTypePCL>::Ptr cloudB){
+void matchClouds(pcl::PointCloud<PointTypePCL>::Ptr cloudA, pcl::PointCloud<PointTypePCL>::Ptr cloudB, po::variables_map vm){
+
+  bool doNoiseFilter = true;
+  int noiseFilterMinNeighbors1 = 50;
+  int noiseFilterMinNeighbors2 = 1400;
+  float noiseFilterRadius1 = 0.08;
+  float noiseFilterRadius2 = 0.2;
+
+  if(vm.count("NoiseFilterActive")){
+    doNoiseFilter = vm["NoiseFilterActive"].as<bool>();
+    if(doNoiseFilter){
+      if(vm.count("NoiseFilterMinNeighbors1"))
+        noiseFilterMinNeighbors1 = vm["NoiseFilterMinNeighbors1"].as<int>();
+      if(vm.count("NoiseFilterMinNeighbors2"))
+        noiseFilterMinNeighbors2 = vm["NoiseFilterMinNeighbors2"].as<int>();
+      if(vm.count("NoiseFilterRadius1"))
+        noiseFilterRadius1 = vm["NoiseFilterRadius1"].as<float>();
+      if(vm.count("NoiseFilterRadius2"))
+        noiseFilterRadius2 = vm["NoiseFilterRadius2"].as<float>();
+    }
+  }
+
+  float voxelSize=0.015;
+  if(vm.count("VoxelSize"))
+    voxelSize = vm["VoxelSize"].as<float>();
+
   pcl::ModelCoefficients::Ptr coefficientsA (new pcl::ModelCoefficients);
   pcl::PointIndices::Ptr inliersA (new pcl::PointIndices);
   findPlaneInCloud(cloudA, coefficientsA, inliersA);
@@ -359,8 +433,6 @@ void matchClouds(pcl::PointCloud<PointTypePCL>::Ptr cloudA, pcl::PointCloud<Poin
   transformCloudsToSameSize(cloudA, cloudB);
   //debug_showCombinedCloud(cloudA, cloudB, "prescaled Clouds");
 
-  
-
   cout << "extracting center of clouds..." <<endl;
   extractCenterOfCloud(cloudA, 0.3);
   extractCenterOfCloud(cloudB, 0.3);
@@ -369,28 +441,27 @@ void matchClouds(pcl::PointCloud<PointTypePCL>::Ptr cloudA, pcl::PointCloud<Poin
   cout << "Transform clouds to same size..." <<endl;
   transformCloudsToSameSize(cloudA, cloudB);
   centerCloud(cloudA);
-  debug_showCombinedCloud(cloudA, cloudB, "rescaled src Cloud");
+  if(debugShowStepResult)debug_showCombinedCloud(cloudA, cloudB, "rescaled src Cloud");
 
   cout << "downsampling clouds..." <<endl;
-  downsampleCloud(cloudA, 0.0075f);
-  downsampleCloud(cloudB, 0.0075f);
+  downsampleCloud(cloudA, voxelSize);
+  downsampleCloud(cloudB, voxelSize);
   cout << "cloudA Points: "<<cloudA->size()<<endl; 
   //debug_showCombinedCloud(cloudA, cloudB, "downsampled Clouds");
 
-  cout << "noise filtering clouds..." <<endl;
-  noiseFilter(cloudA);
-  noiseFilter(cloudB);
-  debug_showCombinedCloud(cloudA, cloudB, "noise filtered Clouds");
-
+  if(doNoiseFilter){
+    cout << "noise filtering clouds..." <<endl;
+    noiseFilter(cloudA, noiseFilterMinNeighbors1, noiseFilterRadius1, noiseFilterMinNeighbors2, noiseFilterRadius2);
+    noiseFilter(cloudB, noiseFilterMinNeighbors1, noiseFilterRadius1, noiseFilterMinNeighbors2, noiseFilterRadius2);
+    if(debugShowStepResult)debug_showCombinedCloud(cloudA, cloudB, "noise filtered Clouds");
+  }
+  
   registrationPipeline(cloudA, cloudB, true, true, true, false, true); 
 
   cout << "Transform clouds to same size..." <<endl;
   transformCloudsToSameSize(cloudA, cloudB);
   centerCloud(cloudA);
-  debug_showCombinedCloud(cloudA, cloudB, "rescaled src Cloud");
-
-  
-
+  if(debugShowStepResult)debug_showCombinedCloud(cloudA, cloudB, "rescaled src Cloud");
 }
 
 void backgroundPreparation(Cloud::Ptr backgroundCloud){
@@ -405,7 +476,7 @@ void backgroundPreparation(Cloud::Ptr backgroundCloud){
   //showCloud2(backgroundCloud, "Background");
 }
 
-int manuellbackgroundRemovalPipeline(po::variables_map vm){
+int manuellRegistrationPipeline(po::variables_map vm){
 
   if(!vm.count("SourceCloudPath")){
     cout << "Missing Parameter SourceCloudPath\n";
@@ -417,7 +488,9 @@ int manuellbackgroundRemovalPipeline(po::variables_map vm){
     return 1;
   }
 
-  boost::thread t = startVisualization();
+  bool doSegmentation = false;
+  if(vm.count("SegmentationAfterRegistration"))
+    doSegmentation = vm["SegmentationAfterRegistration"].as<bool>();
 
   std::string pathToBackground = vm["TargetCloudPath"].as<std::string>();
   std::string pathToPlant = vm["SourceCloudPath"].as<std::string>();
@@ -427,13 +500,13 @@ int manuellbackgroundRemovalPipeline(po::variables_map vm){
 
   if( pcl::io::loadPLYFile(pathToPlant, *cloudPlant) == -1){
 
-    PCL_ERROR ("Couldn't read ply file\n");
+    PCL_ERROR ("Couldn't read ply file %s \n", pathToPlant);
     return (-1);
 
   }
   if( pcl::io::loadPLYFile(pathToBackground, *cloudBackground) == -1){
 
-    PCL_ERROR ("Couldn't read ply file\n");
+    PCL_ERROR ("Couldn't read ply %s file\n", pathToBackground);
     return (-1);
 
   }
@@ -445,30 +518,40 @@ int manuellbackgroundRemovalPipeline(po::variables_map vm){
 
   //debug_showCombinedCloud(cloudPlant, cloudBackground, "ChannelSwap");
 
-  matchClouds(cloudPlant, cloudBackground);
-  debug_showCombinedCloud(cloudBackground, cloudPlant, "Matched Clouds");
-  substractCloudFromOtherCloud(cloudBackground, cloudPlant, 0.05);
+  matchClouds(cloudPlant, cloudBackground, vm);
+  if(debugShowResult)debug_showCombinedCloud(cloudBackground, cloudPlant, "Matched Clouds");
 
-  //showCloud2(cloudPlant, "Cloud without Background");
+  if(doSegmentation){
+    substractCloudFromOtherCloud(cloudBackground, cloudPlant, 0.05);
 
-  stemSegmentation2(cloudPlant, 3.0);
+    stemSegmentation2(cloudPlant, 3.0);
 
-  showCloud2(cloudPlant, "Classified Cloud");
-  t.join();
+    if(debugShowResult)showCloud2(cloudPlant, "Classified Cloud");
+  }
+  
+  //t.join();
   return 0;
 
 }
 
-int handcraftedClassifier(po::variables_map vm){
+int handcraftedStemSegmentation(po::variables_map vm){
 
   if(!vm.count("in")){
     cout << "Missing parameter in\n";
     return 1;
   }
-
   std::string pathIn = vm["in"].as<std::string>();
+  if(!vm.count("Classifier")){
+    cout << "Missing parameter in\n";
+    return 1;
+  }
+  int classifierNumber = vm["Classifier"].as<int>();
+  if(classifierNumber < 0 || classifierNumber > 2){
+    cout << "Unsuported Classifier "<< classifierNumber <<"\n";
+    return 1;
+  }
 
-  main1(pathIn);
+  testStemSegmentation(pathIn, classifierNumber, vm);
 
   return 0;
 }
@@ -984,8 +1067,8 @@ enum JobName {
   RegistrationFormat,
   IterativeScaleRegistration,
   BackgroundRemovalPipeline,
-  HandcraftedClassifier,
-  ManuellBackgroundRemovalPipeline,
+  HandcraftedStemSegmentation,
+  ManuellRegistrationPipeline,
   UnknownJob
 };
 
@@ -996,8 +1079,8 @@ JobName jobStringToEnum(std::string jobString){
   if(jobString == "ComputeAndShowNormals") return ComputeAndShowNormals;
   if(jobString == "RegistrationFormat") return RegistrationFormat;
   if(jobString == "IterativeScaleRegistration") return IterativeScaleRegistration;
-  if(jobString == "ManuellBackgroundRemovalPipeline") return ManuellBackgroundRemovalPipeline;
-  if(jobString == "HandcraftedClassifier") return HandcraftedClassifier;
+  if(jobString == "ManuellRegistrationPipeline") return ManuellRegistrationPipeline;
+  if(jobString == "HandcraftedStemSegmentation") return HandcraftedStemSegmentation;
   return UnknownJob;
 }
 
@@ -1027,7 +1110,19 @@ int main (int argc, char** argv)
     ("SearchRadius", po::value<float>(), "Radius that should be used for nearest neighbor search")
     ("NoPlaneAlignment", po::bool_switch()->default_value(false), "Ignore plane alignment step")
     ("RotateRandom", po::bool_switch()->default_value(false), "Rotate cloud randomly")
-    ("CenterOnly", po::bool_switch()->default_value(false), "Rotate cloud randomly")
+    ("CenterOnly", po::bool_switch()->default_value(false), "Extrect center of cloud")
+    ("DebugShowResults", po::bool_switch()->default_value(true), "Show Results of Jobs if available")
+    ("DebugShowStepResults", po::bool_switch()->default_value(true), "Show Step Results of Jobs if available")
+    ("NoiseFilterActive", po::bool_switch()->default_value(false), "Noise filter clouds")
+    ("NoiseFilterMinNeighbors1", po::value<int>(), "Number of Neighbors that should be in the neighborhood of each point (0 or negativ number if level should be skipped)")
+    ("NoiseFilterRadius1", po::value<float>(), "Radius that should be used for noise filter")
+    ("NoiseFilterMinNeighbors2", po::value<int>(), "Number of Neighbors that should be in the neighborhood of each point (0 or negativ number if level should be skipped)")
+    ("NoiseFilterRadius2", po::value<float>(), "Radius that should be used for noise filter")
+    ("NoiseFilterMinNeighbors3", po::value<int>(), "Number of Neighbors that should be in the neighborhood of each point (0 or negativ number if level should be skipped)")
+    ("NoiseFilterRadius3", po::value<float>(), "Radius that should be used for noise filter")
+    ("VoxelSize", po::value<float>(), "Used for Downsampling")
+    ("SegmentationAfterRegistration", po::bool_switch()->default_value(false), "Should target be substracted from source followed by segmentation of Source?")
+    ("Classifier", po::value<int>()->default_value(1), "Classifier that should be used for HandcraftedClassifier. 0: 1: 2:")
   ;
 
   po::variables_map vm;
@@ -1038,6 +1133,12 @@ int main (int argc, char** argv)
     cout << desc << "\n";
     return 1;
   }
+
+  if(vm.count("DebugShowResults"))
+    debugShowResult = vm["DebugShowResults"].as<bool>();
+
+  if(vm.count("DebugShowStepResults"))
+    debugShowStepResult = vm["DebugShowStepResults"].as<bool>();
 
   srand (time(NULL)); //set Random
 
@@ -1063,10 +1164,10 @@ int main (int argc, char** argv)
         return iterativeScaleRegistration(vm);
       case BackgroundRemovalPipeline:
         return backgroundRemovalPipeline(vm);
-      case ManuellBackgroundRemovalPipeline:
-        return manuellbackgroundRemovalPipeline(vm);
-      case HandcraftedClassifier:
-        return handcraftedClassifier(vm);
+      case ManuellRegistrationPipeline:
+        return manuellRegistrationPipeline(vm);
+      case HandcraftedStemSegmentation:
+        return handcraftedStemSegmentation(vm);
       case UnknownJob:
         cout << "Job " << vm["job"].as<std::string>() << " is unknown.\n";
         return 1;
@@ -1077,12 +1178,4 @@ int main (int argc, char** argv)
     cout << "You have to specify a Job that should be performed" << endl;
     return 1;
   }
-
-  //testKeyPoints(argc, argv);
-  /*std::map<std::string,std::string> testConfig = readConfig("../config/test.config");
-  if(testConfig.find("registration_debug") != testConfig.end())
-    cout << "config contains key registration_debug" << endl;*/
-
-  //return backgroundRemovalPipeline(argc, argv);
-
 }

@@ -37,7 +37,7 @@ CUDA is required to use PointNet++
 
 ### PointNet++
 
-To use PointNet++ you have to build the tensorflow operators under `<base>/python/pointnet2/tf_ops/`. You can use the `tf_*_compile.sh` in each folder to do so. Maybe you have to adjust the CUDE include and lib path dependend on your installation of CUDA.
+To use PointNet++ you have to build the tensorflow operators under `<base>/python/pointnet2/tf_ops/`. You can use the `tf_*_compile.sh` in each folder to do so. Maybe you have to adjust the CUDA include and lib path dependend on your installation of CUDA.
 
 ### BusyBox
 
@@ -61,7 +61,9 @@ python flaskServer.py
 ### BusyBox
 
 ``` shell
-./pgm -J HandcraftedClassifier --in ../python/data/plant2/t1/odm_filterpoints/point_cloud.ply
+./pgm -J HandcraftedStemSegmentation --in ../python/data/plant2/t1/odm_filterpoints/point_cloud.ply --Classifier 1 --NoiseFilterMinNeighbors1 30 --NoiseFilterMinNeighbors2 500 --NoiseFilterMinNeighbors3 -1 --NoiseFilterRadius1 0.8 --NoiseFilterRadius2 3.0 --SearchRadius 0.25
+
+./pgm -J HandcraftedStemSegmentation --in ../python/data/banana/t2/shapenet/CloudWithoutBackground.ply --Classifier 1 --NoiseFilterMinNeighbors1 30 --NoiseFilterMinNeighbors2 500 --NoiseFilterMinNeighbors3 -1 --NoiseFilterRadius1 0.8 --NoiseFilterRadius2 3.0 --SearchRadius 0.025
 
 ./pgm -J RegistrationFormat --SourceCloudPath <PATH> --TargetCloudPath <PATH> --OutputFolder <PATH>
 
@@ -77,6 +79,11 @@ python flaskServer.py
 
 ./pgm -J BackgroundRemovalPipeline --SourceCloudPath ~/Thesis/MasterThesis/python/data/avocado/background/shapenet/point_cloudSS1BackgroundPrediction.pcd --TargetCloudPath ~/Thesis/MasterThesis/python/data/avocado/background/shapenet/point_cloud.ply --OutputFolder ~/Thesis/MasterThesis/python/data/avocado/background/ --SearchRadius 0.0125
 
+\# Using default Params
+./pgm -J ManuellRegistrationPipeline --SourceCloudPath ~/Thesis/MasterThesis/python/data/avocado/t1/shapenet/CloudWithoutPlant.ply --TargetCloudPath ~/Thesis/MasterThesis/python/data/avocado/background/odm_filterpoints/point_cloud.ply
+
+\# With all Params
+./pgm -J ManuellRegistrationPipeline --SourceCloudPath ~/Thesis/MasterThesis/python/data/avocado/t1/shapenet/CloudWithoutPlant.ply --TargetCloudPath ~/Thesis/MasterThesis/python/data/avocado/background/odm_filterpoints/point_cloud.ply --NoiseFilterActive true --NoiseFilterMinNeighbors1 10 --NoiseFilterMinNeighbors2 200 --NoiseFilterRadius1 0.08 --NoiseFilterRadius2 0.2 --VoxelSize 0.015 --SegmentationAfterRegistration false
 ```
 
 ### Convert ply to Shapenet format
@@ -97,6 +104,4 @@ python reportPointNetpp.py --pathIn /home/solomon/Thesis/MasterThesis/python/poi
 python reportPointNetpp.py --pathIn /home/solomon/Thesis/MasterThesis/python/pointnet2/part_seg/results/training/t6_2ClassesPartSeg/log_train.txt --plotName T6_2C_PS_NN_NR
 python reportPointNetpp.py --pathIn /home/solomon/Thesis/MasterThesis/python/pointnet2/part_seg/results/training/t5_3ClassesPartSeg3C/log_train.txt --plotName T5_3C_PS_WN_NR
 python reportPointNetpp.py --pathIn /home/solomon/Thesis/MasterThesis/python/pointnet2/part_seg/results/training/t4_3ClassesPartSeg/log_train.txt --plotName T4_3C_PS_WN_NR
-
-
 ```
