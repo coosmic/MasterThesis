@@ -65,6 +65,9 @@ python flaskServer.py
 
 ./pgm -J HandcraftedStemSegmentation --in ../python/data/banana/t2/shapenet/CloudWithoutBackground.ply --Classifier 1 --NoiseFilterMinNeighbors1 30 --NoiseFilterMinNeighbors2 500 --NoiseFilterMinNeighbors3 -1 --NoiseFilterRadius1 0.8 --NoiseFilterRadius2 3.0 --SearchRadius 0.025
 
+\# 0.05 as threshold
+./pgm -J HandcraftedStemSegmentation --in ~/Thesis/test/Mais/plant1/t5/Mais1T5LabeledShapenet.ply --Classifier 1 --NoiseFilterMinNeighbors1 -1 --NoiseFilterMinNeighbors2 -1 --NoiseFilterMinNeighbors3 -1 --SearchRadius 1.0  --CalculateNormals true
+
 ./pgm -J RegistrationFormat --SourceCloudPath <PATH> --TargetCloudPath <PATH> --OutputFolder <PATH>
 
 ./pgm -J Shapenet --in /home/solomon/Thesis/MasterThesis/python/data/avocado/background/odm_filterpoints/point_cloud.ply --out /home/solomon/Thesis/MasterThesis/python/data/avocado/background/shapenet/point_cloud --RemoveBackground false --MaxSubsample 1

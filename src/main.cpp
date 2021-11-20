@@ -120,6 +120,7 @@ void stemSegmentation3(pcl::PointCloud<PointTypePCL>::Ptr cloud){
 }
 
 void stemSegmentation2(pcl::PointCloud<PointTypePCL>::Ptr cloud, float searchRadius, bool printInfos=true){
+
   pcl::PrincipalCurvaturesEstimation<PointTypePCL, PointTypePCL, pcl::PrincipalCurvatures> principalCurvaturesEstimation;
   principalCurvaturesEstimation.setInputCloud (cloud);
   principalCurvaturesEstimation.setInputNormals (cloud);
@@ -300,8 +301,10 @@ int testStemSegmentation(std::string pathToFile, int classifierNumber, po::varia
     }
     showCloud2(cloud, "raw asci cloud");
       
-  } else
+  } else{
+    PCL_ERROR ("Unkown cloud type %s \n", pathToFile);
     return -1;
+  }
 
   bool doNoiseFilter = true;
   int noiseFilterMinNeighbors1 = 30;
@@ -328,6 +331,8 @@ int testStemSegmentation(std::string pathToFile, int classifierNumber, po::varia
         noiseFilterRadius3 = vm["NoiseFilterRadius3"].as<float>();
     }
   }
+
+  centerCloud(cloud);
 
   ///////////////////
   // Remove Planes //
@@ -362,6 +367,30 @@ int testStemSegmentation(std::string pathToFile, int classifierNumber, po::varia
   printMinMax(cloud);
 
   float searchRadius;
+  if(vm["CalculateNormals"].as<bool>()){
+    if(!vm.count("SearchRadius")){
+      cout << "Missing parameter SearchRadius\n";
+      return 1;
+    }
+    searchRadius = vm["SearchRadius"].as<float>();
+    pcl::NormalEstimation<PointTypePCL, PointTypePCL> ne;
+    pcl::PointCloud<PointTypePCL>::Ptr src_normals_ptr (new pcl::PointCloud<PointTypePCL>);
+    pcl::PointCloud<PointTypePCL>& src_normals = *src_normals_ptr;
+    pcl::search::KdTree<PointTypePCL>::Ptr tree_xyz (new pcl::search::KdTree<PointTypePCL>());
+    ne.setInputCloud(cloud);
+    ne.setSearchMethod(tree_xyz);
+    ne.setRadiusSearch(searchRadius);
+    ne.compute(*src_normals_ptr);
+    for(size_t i = 0;  i < src_normals.points.size(); ++i) {
+        src_normals.points[i].x = cloud->points[i].x;
+        src_normals.points[i].y = cloud->points[i].y;
+        src_normals.points[i].z = cloud->points[i].z;
+    }
+    if(debugShowStepResult)showCloud2(src_normals_ptr, "Cloud with normals", nullptr, true);
+    cloud = src_normals_ptr;
+  }
+
+  
   switch(classifierNumber){
     case 0:
       if(!vm.count("SearchRadius")){
@@ -1122,7 +1151,8 @@ int main (int argc, char** argv)
     ("NoiseFilterRadius3", po::value<float>(), "Radius that should be used for noise filter")
     ("VoxelSize", po::value<float>(), "Used for Downsampling")
     ("SegmentationAfterRegistration", po::bool_switch()->default_value(false), "Should target be substracted from source followed by segmentation of Source?")
-    ("Classifier", po::value<int>()->default_value(1), "Classifier that should be used for HandcraftedClassifier. 0: 1: 2:")
+    ("Classifier", po::value<int>()->default_value(1), "Classifier that should be used for HandcraftedStemSegmentation. 0: 1: 2:")
+    ("CalculateNormals", po::bool_switch()->default_value(false), "CalculateNormals")
   ;
 
   po::variables_map vm;
