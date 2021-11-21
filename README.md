@@ -80,7 +80,11 @@ python flaskServer.py
 
 ./pgm -J IterativeScaleRegistration --SourceCloudPath ~/Thesis/test/banana/t2/labeled/BananaT2LabeledShapenet.ply --TargetCloudPath ~/Thesis/test/banana/background_constructed/BananaBackground.ply --SubsamplePointCount 4096
 
-./pgm -J IterativeScaleRegistration --SourceCloudPath ~/Thesis/test/Generated/Background/FieldSmall.ply --TargetCloudPath ~/Thesis/test/Generated/Background/FieldSmall.ply --SubsamplePointCount 4096
+./pgm -J IterativeScaleRegistration --SourceCloudPath ~/Thesis/test/Generated/Background/FieldSmall.ply --TargetCloudPath ~/Thesis/test/Generated/Background/FieldBig.ply --SubsamplePointCount 4096
+
+./pgm -J IterativeScaleRegistration --SourceCloudPath ~/Thesis/test/Generated/Background/SurfaceSlope45Gauss500Waves4.ply --TargetCloudPath ~/Thesis/test/Generated/Background/SurfaceSlope25Gauss250Waves4Scale1_4.ply --SubsamplePointCount 4096 --UseShapenetFormat false
+
+./pgm -J IterativeScaleRegistration --SourceCloudPath ~/Thesis/test/Generated/Background/SurfaceSlope30Gauss350Waves4Partial.ply --TargetCloudPath ~/Thesis/test/Generated/Background/SurfaceSlope25Gauss250Waves4Scale1_4.ply --SubsamplePointCount 4096 --UseShapenetFormat false
 
 ./pgm -J IterativeScaleRegistration --SourceCloudPath ~/Thesis/test/ --TargetCloudPath ~/Thesis/MasterThesis/python/data/banana/background/odm_filterpoints/point_cloud.ply --SubsamplePointCount 4096
 

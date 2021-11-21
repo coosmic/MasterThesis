@@ -161,17 +161,40 @@ def jobBackgroundRegistration(jobParameter):
     targetPath = os.path.join(os.path.abspath(os.getcwd()), 'data', jobParameter['testSet'], 'background', 'shapenet', 'registrationFormat.txt')
     outPath = os.path.join(folderPath, 'shapenet', 'registration/')
 
-    # We keep this comments to change the registration method when ever needed.
-    print("start reg")
-    #transformation, scale = registration.scaleRegistration(srcPath, targetPath, outPath)   #RICP
-    
-    model = None #ICP
-    #model = loadModel("PointNetLK")
-    #model = loadModel("DCP")
-    #model = loadModel("RPM")
-    #data = loadDataLoader(srcPath, targetPath, 2048) # For Nets
-    data = loadRawDataWithoutArgs(srcPath, targetPath, 2048) # For ICP
-    transformation, scale = runWithDifferentScales(data, show=True, model=model, use_icp=True, net="PointNetLK")
+    showResults = False
+    if 'ShowResult' in jobParameter:
+        showResults = jobParameter['ShowResult']
+
+    registrationMethod = 'ICP'
+    if 'RegistrationMethod' in jobParameter:
+        registrationMethod = jobParameter['RegistrationMethod']
+
+    netName = 'PointNetLK'
+    runWithICP = True
+    if registrationMethod == 'RICP':
+        transformation, scale = registration.scaleRegistration(srcPath, targetPath, outPath)   #RICP
+        return {"Status": constants.statusDone, "Results" : {"JobName": "BackgroundRegistration", "Value": {"Transformation" : transformation.tolist(), "Scale" : scale}} }
+    elif registrationMethod == 'ICP':
+        model = None #ICP
+        data = loadRawDataWithoutArgs(srcPath, targetPath, 2048) # For ICP
+    elif registrationMethod == 'PointNetLK':
+        runWithICP = False
+        model = loadModel("PointNetLK")
+        data = loadDataLoader(srcPath, targetPath, 2048) # For Nets
+    elif registrationMethod == 'DCP':
+        runWithICP = False
+        netName = 'DCP'
+        model = loadModel("DCP")
+        data = loadDataLoader(srcPath, targetPath, 2048) # For Nets
+    elif registrationMethod == 'RPM':
+        runWithICP = False
+        netName = 'RPM'
+        model = loadModel("RPM")
+        data = loadDataLoader(srcPath, targetPath, 2048) # For Nets
+    else:
+        return {"Status": constants.statusFailed, "Reason": f"Unknown  Registration Method {registrationMethod}"}
+
+    transformation, scale = runWithDifferentScales(data, show=showResults, model=model, use_icp=runWithICP, net=netName)
 
     print("Transformation", transformation)
     print("Scale", scale)
@@ -189,7 +212,16 @@ def jobConvertToBackground(jobParameter):
     if not os.path.isdir(os.path.join(folderPath, 'shapenet')):
         os.makedirs(os.path.join(folderPath, 'shapenet'))
 
-    registrationFormatCommand = f"../build/pgm -J RegistrationFormat --in {inPath} --out {outPath} --SubsamplePointCount 2048"
+    centerOnly = "true"
+    if 'ExtractCenter' in jobParameter:
+        if not jobParameter['ExtractCenter']:
+            centerOnly = "false"
+    useShapenet = "true"
+    if 'UseShapenetFormat' in jobParameter:
+        if not jobParameter['UseShapenetFormat']:
+            useShapenet = "false"
+
+    registrationFormatCommand = f"../build/pgm -J RegistrationFormat --in {inPath} --out {outPath} --SubsamplePointCount 2048 --CenterOnly "+centerOnly+" --UseShapenetFormat "+useShapenet
     os.system(registrationFormatCommand)
     return {"Status": constants.statusDone}
 

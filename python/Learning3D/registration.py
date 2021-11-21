@@ -42,9 +42,10 @@ def test_one_epoch(net, device, model, test_loader, withError=False, show=False,
     count = 0
     rotation_errors, translation_errors, rmses = [], [], []
     test_error = 0.0
+    transformationResults = []
 
     for i, data in enumerate(tqdm(test_loader)):
-        print(data)
+        #print(data)
         template, source, igt = data
         source = source * scale
         transformations = get_transformations(igt)
@@ -56,6 +57,8 @@ def test_one_epoch(net, device, model, test_loader, withError=False, show=False,
         igt = igt.to(device)
 
         output = model(template, source)
+        #print(output)
+        transformationResults.append(output['est_T'])
 
         identity = torch.eye(3).cuda().unsqueeze(0).repeat(template.shape[0], 1, 1)
         loss_val = -1.0
@@ -86,13 +89,13 @@ def test_one_epoch(net, device, model, test_loader, withError=False, show=False,
     test_loss = float(test_loss)/count
     if withError:
         test_error = float(test_error)/count
-        return test_loss, error
+        return test_loss, error, transformationResults
     return test_loss
 
 def test(args, model, test_loader, scale):
-    test_loss, test_dist_sum = test_one_epoch(args.net, args.device, model, test_loader, True, args.show, scale)
+    test_loss, test_dist_sum, transformations = test_one_epoch(args.net, args.device, model, test_loader, True, args.show, scale)
     print('Validation Loss: %f & Validation Distance Sum: %f'%(test_loss, test_dist_sum))
-    return test_dist_sum
+    return test_dist_sum, transformations[0].cpu().detach().numpy()
 
 def icp(src, target, threshold, scale, show=False):
 
@@ -104,11 +107,14 @@ def icp(src, target, threshold, scale, show=False):
     pcdTarget = o3d.geometry.PointCloud()
     pcdTarget.points = o3d.utility.Vector3dVector(target)
 
+    pcdSrc.estimate_normals()
+    pcdTarget.estimate_normals()
+
     trans_init = np.identity(4)
 
     icp_res = o3d.pipelines.registration.registration_icp(
     pcdSrc, pcdTarget, threshold, trans_init,
-    o3d.pipelines.registration.TransformationEstimationPointToPoint())
+    o3d.pipelines.registration.TransformationEstimationPointToPlane())
 
     tmp = pcdSrc.transform(icp_res.transformation)
 
@@ -138,6 +144,7 @@ def runWithDifferentScales(data, model=None, start_scale = 1.0, end_scale = 3.0,
     best_result = sys.float_info.max
     best_iteration = -1
     current_iteration = 0
+    best_transform = None
     while currentScale <= endScale:
         if use_icp:
             result, _ = icp(data['source'][0], data['template'][0], icp_threshold, currentScale)
@@ -149,8 +156,9 @@ def runWithDifferentScales(data, model=None, start_scale = 1.0, end_scale = 3.0,
             args.net = net
             args.scale = currentScale
             args.show = False
-            result = test(args, model, data, currentScale)
+            result, transformations = test(args, model, data, currentScale)
             if result < best_result:
+                best_transform = transformations[0]
                 best_result = result
                 best_iteration = current_iteration
 
@@ -172,8 +180,7 @@ def runWithDifferentScales(data, model=None, start_scale = 1.0, end_scale = 3.0,
         err, result = icp(data['source'][0], data['template'][0], icp_threshold, scale, False)
         return result.transformation, scale
     else:
-        #test(args, model, data, scale)  
-        return None, scale #TODO Return Transformation from NN Registration
+        return best_transform, scale 
             
 
 def loadRawDataWithoutArgs(srcPath, targetPath, numPoints):
@@ -235,7 +242,7 @@ def loadModel(net, device="cuda:0", pathPrefix="Learning3D/"):
         model.load_state_dict(torch.load(pathPrefix+'learning3d/pretrained/exp_rpmnet/models/partial-trained.pth', map_location='cpu')['state_dict'])
         model.to(device)
     else:
-        raise Exception(f"Unkown value for parameter net: {net}")
+        raise Exception(f"Unknown value for parameter net: {net}")
     return model
 
 def options():

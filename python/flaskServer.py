@@ -49,7 +49,7 @@ global mutexServerState
 mutexServerState = Lock()
 
 global debug
-debug = False
+debug = True
 
 global mutexResult
 mutexResult = Lock()

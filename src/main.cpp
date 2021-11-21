@@ -753,11 +753,6 @@ int iterativeScaleRegistration(po::variables_map vm){
     cout << "Missing Parameter SubsamplePointCount\n";
     return 1;
   }
-
-  if(!vm.count("SubsamplePointCount")){
-    cout << "Missing Parameter SubsamplePointCount\n";
-    return 1;
-  }
   
   std::string srcCloudPath = vm["SourceCloudPath"].as<std::string>();
   std::string tgtCloudPath = vm["TargetCloudPath"].as<std::string>();
@@ -776,27 +771,43 @@ int iterativeScaleRegistration(po::variables_map vm){
   rotateCloud(cloudTgt, coefficientsA);
   //removePointsInCloud(cloudTgt, inliersA);
 
+  bool shoudlExtractCenterOfCloud = true;
+  if(vm.count("CenterOnly")){
+    shoudlExtractCenterOfCloud = vm["CenterOnly"].as<bool>();
+  }
 
-  extractCenterOfCloud(cloudSrc, 0.3);
-  extractCenterOfCloud(cloudTgt, 0.3);
-
+  if(shoudlExtractCenterOfCloud){
+    cout << "Extracting Center of Clouds\n";
+    extractCenterOfCloud(cloudSrc, 0.3);
+    extractCenterOfCloud(cloudTgt, 0.3);
+  }
+  
   Cloud::Ptr backgroundSrc = removeBackgroundPointsShapenet(cloudSrc);
   //showCloud2(backgroundSrc, "Background Src");
 
+  setColorChannelExclusive(backgroundSrc, ColorChannel::r, 255);
+  setColorChannelExclusive(backgroundSrc, ColorChannel::g, 0);
+  setColorChannelExclusive(backgroundSrc, ColorChannel::b, 0);
+
+  setColorChannelExclusive(cloudTgt, ColorChannel::r, 0);
+  setColorChannelExclusive(cloudTgt, ColorChannel::g, 255);
+  setColorChannelExclusive(cloudTgt, ColorChannel::b, 0);
+
   pcl::PointCloud<PointTypePCL>::Ptr cloudSrcSubsampled = subSampleCloudRandom(backgroundSrc, subsampleCount);
   pcl::PointCloud<PointTypePCL>::Ptr cloudTgtSubsampled = subSampleCloudRandom(cloudTgt, subsampleCount);
-  setColorChannelExclusive(cloudSrcSubsampled, ColorChannel::r, 255);
-  setColorChannelExclusive(cloudSrcSubsampled, ColorChannel::g, 0);
-  setColorChannelExclusive(cloudSrcSubsampled, ColorChannel::b, 0);
+  
 
-  setColorChannelExclusive(cloudTgtSubsampled, ColorChannel::r, 0);
-  setColorChannelExclusive(cloudTgtSubsampled, ColorChannel::g, 255);
-  setColorChannelExclusive(cloudTgtSubsampled, ColorChannel::b, 0);
-
+  bool shouldTransformToShapenet = true;
+  if(vm.count("UseShapenetFormat")){
+    shouldTransformToShapenet = vm["UseShapenetFormat"].as<bool>();
+  }
   Eigen::Matrix4f ts,ss,tt,st;
-  transformToShapenetFormat(cloudTgtSubsampled, tt,st);
-  transformToShapenetFormat(cloudSrcSubsampled, ts,ss); 
-  //debug_showCombinedCloud(cloudSrcSubsampled, cloudTgtSubsampled, "ShapenetFormat");
+  if(shouldTransformToShapenet){
+    transformToShapenetFormat(cloudTgtSubsampled, tt,st);
+    transformToShapenetFormat(cloudSrcSubsampled, ts,ss); 
+    //debug_showCombinedCloud(cloudSrcSubsampled, cloudTgtSubsampled, "ShapenetFormat");
+  } else
+    ts = ss = tt = st = Eigen::Matrix4f::Identity();
 
   double bestScore = DBL_MAX;
   float scaleFactor = 0.01;
@@ -831,6 +842,8 @@ int iterativeScaleRegistration(po::variables_map vm){
   }
 
   pcl::PointCloud<PointTypePCL>::Ptr cloudSrcResultTmp = pcl::PointCloud<PointTypePCL>().makeShared();
+
+  std::cout << "Best Scale: " << (scaleFactor * (float)bestScaleStep)<<std::endl;
 
   //transform subsamped src to subsampeled target
   pcl::transformPointCloud (*cloudSrcSubsampled, *cloudSrcSubsampled, scaleMatrix*(float)bestScaleStep);
@@ -913,7 +926,12 @@ int convertToRegistrationFormat(po::variables_map vm){
   findPlaneInCloud(cloudSrc, coefficientsA, inliersA);
   rotateCloud(cloudSrc, coefficientsA);
 
-  extractCenterOfCloud(cloudSrc, 0.3);
+  bool extractCenter = true;
+  if(vm.count("CenterOnly")){
+    extractCenter = vm["CenterOnly"].as<bool>();
+  }
+  if(extractCenter)
+    extractCenterOfCloud(cloudSrc, 0.3);
 
   int numOfPoints = 1024;
   if(vm.count("SubsamplePointCount")){
@@ -922,8 +940,11 @@ int convertToRegistrationFormat(po::variables_map vm){
 
   pcl::PointCloud<PointTypePCL>::Ptr cloudSrcSubsampled = subSampleCloudRandom(cloudSrc, numOfPoints);
 
-  Eigen::Matrix4f t,s;
-  transformToShapenetFormat(cloudSrcSubsampled, t,s);
+  if(vm["UseShapenetFormat"].as<bool>()){
+    Eigen::Matrix4f t,s;
+    transformToShapenetFormat(cloudSrcSubsampled, t,s);
+  }
+  
 
   writeRegistrationFormat(cloudSrcSubsampled, outPath);
 
@@ -1150,7 +1171,6 @@ int surfaceGenerator(po::variables_map vm){
     if(vm.count("Sigma")){
       sigma = vm["Sigma"].as<float>();
     }
-    
   }
   Matrix gaussKernel = getGaussianKernel(height,width, sigma, sigma);
 
@@ -1271,7 +1291,7 @@ int main (int argc, char** argv)
     ("SearchRadius", po::value<float>(), "Radius that should be used for nearest neighbor search")
     ("NoPlaneAlignment", po::bool_switch()->default_value(false), "Ignore plane alignment step")
     ("RotateRandom", po::bool_switch()->default_value(false), "Rotate cloud randomly")
-    ("CenterOnly", po::bool_switch()->default_value(false), "Extrect center of cloud")
+    ("CenterOnly", po::value<bool>()->default_value(false), "Extrect center of cloud")
     ("DebugShowResults", po::bool_switch()->default_value(true), "Show Results of Jobs if available")
     ("DebugShowStepResults", po::bool_switch()->default_value(true), "Show Step Results of Jobs if available")
     ("NoiseFilterActive", po::bool_switch()->default_value(false), "Noise filter clouds")
@@ -1295,6 +1315,7 @@ int main (int argc, char** argv)
     ("SlopeAmplitude", po::value<float>(), "Amplitude of the Sinus used for Slope")
     ("Gaussian", po::value<bool>()->default_value(false), "Apply Gaussian Distribution on surface")
     ("Sigma", po::value<float>(), "Sigma for Gauss Distribution")
+    ("UseShapenetFormat", po::value<bool>()->default_value(true), "Use Shapent Format in iterative scale registration")
   ;
 
   po::variables_map vm;
