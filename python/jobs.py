@@ -6,6 +6,7 @@ import psutil
 import constants
 import time
 
+#Used for RICP
 import registration
 
 from Learning3D.registration import runWithDifferentScales, loadRawDataWithoutArgs, loadModel, loadDataLoader
@@ -15,9 +16,6 @@ PARTSEG3 = None
 
 
 def startPartSegPipelines():
-    #global PARTSEG2
-    #PARTSEG2 = estimate.Pointnet2PartSegmentation2("pointnet2_part_seg", "./pointnet2/part_seg/results/t6_2ClassesPartSeg/model.ckpt")
-    #PARTSEG2 = estimate.Pointnet2PartSegmentation("pointnet2_part_seg3C", "./pointnet2/part_seg/results/t5_3ClassesPartSeg3C/model.ckpt", {'Plant': [0, 1, 2] })
     global PARTSEG3
     PARTSEG3 = estimate.Pointnet2PartSegmentation2("pointnet2_part_seg3C", "./pointnet2/part_seg/results/training/t7_3ClassesPartSegNoNorm/model.ckpt", {'Plant': [0, 1, 2] })
 
@@ -29,6 +27,12 @@ def jobGeneratePointCloud(jobParameter):
     makePointCloudCommand = f'docker run -ti --rm --user "$(id -u):$(id -g)" -v {os.path.join(os.path.abspath(os.getcwd()), "data" )}/{jobParameter["testSet"]}:/{jobParameter["testSet"]} --cpus {cpus} --gpus all opendronemap/odm:gpu --rerun-all -e  odm_filterpoints --project-path /{jobParameter["testSet"]} {jobParameter["timeStamp"]}'
     print("starting ", makePointCloudCommand)
     os.system(makePointCloudCommand)
+
+    #cleanup
+    basePath = f'{os.path.join(os.path.abspath(os.getcwd()), "data" )}/{jobParameter["testSet"]}/{jobParameter["timeStamp"]}'
+    cleanupCommand = f'rm -r {basePath}/odm_georeferencing ; rm -r {basePath}/opensfm ; rm {basePath}/cameras.json ; rm {basePath}/images.json ; rm {basePath}/img_list.txt'
+    os.system(cleanupCommand)
+
     return {"Status": constants.statusDone}
 
 
@@ -42,7 +46,6 @@ def jobLeavesSegmentation(jobParameter):
         os.system(copyCommand)
 
         evaluate2.evaluate()
-        #PARTSEG2.predict()
 
         pointCloudPath = os.path.join(basePath, 'shapenet', "point_cloudSS1LeavePrediction.txt" )
         estimationLocation = os.path.join(os.path.abspath(os.getcwd()), 'data', 'predictions/background/Plant/point_cloudSS1.txt' )
@@ -51,14 +54,9 @@ def jobLeavesSegmentation(jobParameter):
 
         predictionPath = os.path.join(os.path.abspath(os.getcwd()), 'data', jobParameter['testSet'], jobParameter['timeStamp'], 'shapenet', "point_cloudSS1LeavePrediction.pcd" )
         data = np.loadtxt(pointCloudPath).astype(np.float32)
-        #print("data.shape ", data.shape)
         predictions = utilities.improveBackgroundPrediction(data[:, 0:6], data[:, 6].astype(np.int))
         utilities.predictionToColor(data[:, 0:6], predictions, predictionPath)
-
-        #sampledCloud, predictions = PARTSEG3.estimate(pointCloudPath)
-        #predictions = utilities.improveBackgroundPrediction(sampledCloud, predictions)
-        #predictionPath = os.path.join(os.path.abspath(os.getcwd()), 'data', jobParameter['testSet'], jobParameter['timeStamp'], 'shapenet', "point_cloudSS1LeavePrediction.pcd" )
-        #utilities.predictionToColor(sampledCloud, predictions, predictionPath)
+        
         return {"Status": constants.statusDone}
     else:
         print(f"File {pointCloudPath} is not existing")
@@ -88,22 +86,16 @@ def jobBackgroundSegmentation(jobParameter):
 
         predictionPath = os.path.join(os.path.abspath(os.getcwd()), 'data', jobParameter['testSet'], jobParameter['timeStamp'], 'shapenet', "point_cloudSS1BackgroundPrediction.pcd" )
         data = np.loadtxt(pointCloudPath).astype(np.float32)
-        #print("data.shape ", data.shape)
-        #print(data)
-        #print(data[:, 0:6])
-        #print(data[:, 6:])
         predictions = utilities.improveBackgroundPrediction(data[:, 0:6], data[:, 6].astype(np.int))
         utilities.predictionToColor(data[:, 0:6], predictions, predictionPath)
 
         orgCloudPath = os.path.join(basePath, 'shapenet', "point_cloud.ply" )
         outFolder = os.path.join(basePath, 'shapenet')
         removeBackgroundCommand = f"../build/pgm -J BackgroundRemovalPipeline --SourceCloudPath {predictionPath} --TargetCloudPath {orgCloudPath} --OutputFolder {outFolder} --SearchRadius 0.0075"
-        #print(removeBackgroundCommand)
         os.system(removeBackgroundCommand)
 
 
         toShapenetFormatCommand = f"../build/pgm -J Shapenet --in {os.path.join(basePath, 'shapenet', 'CloudWithoutBackground.ply')} --out {os.path.join(basePath, 'shapenet', 'CloudWithoutBackground')} --RemoveBackground false --MaxSubsample 1 --NoPlaneAlignment"
-        #print(toShapenetFormatCommand)
         os.system(toShapenetFormatCommand)
         return {"Status": constants.statusDone}
         
@@ -124,7 +116,6 @@ def jobToShapenetFormat(jobParameter):
     return {"Status": constants.statusDone}
 
 def jobLeaveStemSplit(jobParameter):
-    #point_cloudSS1LeavePrediction.txt
     pointCloudPath = os.path.join(os.path.abspath(os.getcwd()), 'data', jobParameter['testSet'], jobParameter['timeStamp'], "shapenet", "point_cloudSS1LeavePrediction.txt")
     rawData = np.loadtxt(pointCloudPath).astype(np.float32)
     points = rawData[:, 0:6]
@@ -170,16 +161,68 @@ def jobBackgroundRegistration(jobParameter):
     targetPath = os.path.join(os.path.abspath(os.getcwd()), 'data', jobParameter['testSet'], 'background', 'shapenet', 'registrationFormat.txt')
     outPath = os.path.join(folderPath, 'shapenet', 'registration/')
 
-    print("start reg")
-    #transformation, scale = registration.scaleRegistration(srcPath, targetPath, outPath)
-    
-    model = None #ICP
-    #model = loadModel("PointNetLK")
-    #model = loadModel("DCP")
-    #model = loadModel("RPM")
-    #data = loadDataLoader(srcPath, targetPath, 2048) # For Nets
-    data = loadRawDataWithoutArgs(srcPath, targetPath, 2048) # For ICP
-    transformation, scale = runWithDifferentScales(data, show=True, model=model, use_icp=True, net="PointNetLK")
+    showBevor = False
+    if 'ShowBevor' in jobParameter:
+        showBevor = jobParameter['ShowBevor']
+
+    if showBevor:
+        srcCloud = np.loadtxt(srcPath).astype(np.float32)
+        targetCloud = np.loadtxt(targetPath).astype(np.float32)
+        registration.display_open3d(targetCloud, srcCloud, srcCloud)
+
+    startScale = 0.25
+    endScale = 1.0
+    stepWidth = 0.01
+    if 'StartScale' in jobParameter:
+        startScale = jobParameter['StartScale']
+    if 'EndScale' in jobParameter:
+        endScale = jobParameter['EndScale']
+    if 'StepWidth' in jobParameter:
+        stepWidth = jobParameter['StepWidth']
+    if 'StartScale' in jobParameter or 'EndScale' in jobParameter or 'StepWidth' in jobParameter:
+        #validate steps
+        if startScale >= endScale:
+            return {"Status": constants.statusFailed, "Reason": f"Invalid StartScale EndScale combination! StartScale has to be smaller then EndScale. Current StartScale: {startScale} CurrentEndScale:{endScale}"}
+        numberOfIteration = (endScale - startScale)/stepWidth
+        if numberOfIteration > 500:
+            return {"Status": constants.statusFailed, "Reason": f"To many iterations required. Current StartScale: {startScale} CurrentEndScale:{endScale} Current StepWidth {stepWidth} results in {numberOfIteration} iterations."}
+
+    print(f"number of iterations: {(endScale - startScale)/stepWidth}")
+
+    showResults = False
+    if 'ShowResult' in jobParameter:
+        showResults = jobParameter['ShowResult']
+
+    registrationMethod = 'ICP'
+    if 'RegistrationMethod' in jobParameter:
+        registrationMethod = jobParameter['RegistrationMethod']
+
+    netName = 'PointNetLK'
+    runWithICP = True
+    if registrationMethod == 'RICP':
+        transformation, scale = registration.scaleRegistration(srcPath, targetPath, outPath, start_scale=startScale, end_scale=endScale, scale_step_width=stepWidth, showResult=showResults)   #RICP
+        return {"Status": constants.statusDone, "Results" : {"JobName": "BackgroundRegistration", "Value": {"Transformation" : transformation.tolist(), "Scale" : scale}} }
+    elif registrationMethod == 'ICP':
+        model = None #ICP
+        data = loadRawDataWithoutArgs(srcPath, targetPath, 2048) # For ICP
+    elif registrationMethod == 'PointNetLK':
+        runWithICP = False
+        model = loadModel("PointNetLK")
+        data = loadDataLoader(srcPath, targetPath, 2048) # For Nets
+    elif registrationMethod == 'DCP':
+        runWithICP = False
+        netName = 'DCP'
+        model = loadModel("DCP")
+        data = loadDataLoader(srcPath, targetPath, 2048) # For Nets
+    elif registrationMethod == 'RPM':
+        runWithICP = False
+        netName = 'RPM'
+        model = loadModel("RPM")
+        data = loadDataLoader(srcPath, targetPath, 2048) # For Nets
+    else:
+        return {"Status": constants.statusFailed, "Reason": f"Unknown  Registration Method {registrationMethod}"}
+
+    transformation, scale = runWithDifferentScales(data, show=showResults, model=model, use_icp=runWithICP, net=netName, start_scale=startScale, end_scale=endScale, scale_step_width=stepWidth)
 
     print("Transformation", transformation)
     print("Scale", scale)
@@ -197,7 +240,16 @@ def jobConvertToBackground(jobParameter):
     if not os.path.isdir(os.path.join(folderPath, 'shapenet')):
         os.makedirs(os.path.join(folderPath, 'shapenet'))
 
-    registrationFormatCommand = f"../build/pgm -J RegistrationFormat --in {inPath} --out {outPath} --SubsamplePointCount 2048"
+    centerOnly = "true"
+    if 'ExtractCenter' in jobParameter:
+        if not jobParameter['ExtractCenter']:
+            centerOnly = "false"
+    useShapenet = "true"
+    if 'UseShapenetFormat' in jobParameter:
+        if not jobParameter['UseShapenetFormat']:
+            useShapenet = "false"
+
+    registrationFormatCommand = f"../build/pgm -J RegistrationFormat --in {inPath} --out {outPath} --SubsamplePointCount 2048 --CenterOnly "+centerOnly+" --UseShapenetFormat "+useShapenet
     os.system(registrationFormatCommand)
     return {"Status": constants.statusDone}
 
@@ -271,31 +323,36 @@ def jobCalculateGrowth(jobParameter):
     
     baseFolderPath = os.path.join(os.path.abspath(os.getcwd()), 'data', jobParameter['testSet'])
     if timestamp != "t1":
-        lastTimestamp = "t"+int(timestamp.replace("t", ""))
-        inPathThis = os.path.join(baseFolderPath, timestamp, 'shapenet', 'tbd')
-        inPathLast = os.path.join(baseFolderPath, lastTimestamp, 'shapenet', 'tbd')
+        lastTimestamp = "t"+str(int(timestamp.replace("t", ""))+1)
 
         try:
             resultsThis = utilities.getResultObject(os.path.join(baseFolderPath, timestamp))
         except Exception as e:
-            return {"Status": constants.statusFailed, "Details": "Result for this missing. Run BackgroundRegistration"}
+            return {"Status": constants.statusFailed, "Details": "Result for this missing. Readd images"}
         try:
             resultsLast = utilities.getResultObject(os.path.join(baseFolderPath, lastTimestamp))
         except Exception as e:
-            return {"Status": constants.statusFailed, "Details": f"Result for last ({lastTimestamp}) missing. Run BackgroundRegistration for {lastTimestamp}"}
-        if "BackgroundRegistration" not in resultsThis:
-            return {"Status": constants.statusFailed, "Details": "BackgroundRegistration Result is missing for this. Run BackgroundRegistration"}
-        if "BackgroundRegistration" not in resultsLast:
-            return {"Status": constants.statusFailed, "Details": "BackgroundRegistration Result is missing for this. Run BackgroundRegistration"}
+            return {"Status": constants.statusFailed, "Details": f"Result for last ({lastTimestamp}) missing."}
+        if "Height" not in resultsThis:
+            return {"Status": constants.statusFailed, "Details": f"Height Result is missing for {timestamp}. Run CalculateSize"}
+        if "Height" not in resultsLast:
+            return {"Status": constants.statusFailed, "Details": f"Height Result is missing for {lastTimestamp}. Run CalculateSize"}
 
-        # load This via inPathThis
-        # load Last via inPathLast
-        # Transform This and Last with there Background Results respectivly.
-        # Compare Height
-        # 
-        # Maybe split this. First find Height, Volume and so on of Cloud after Background Registration.
-        # Then run Comparison of PointCloud in different Size
-    return {"Status": constants.statusDone}
+        # get this height
+        thisHeight = resultsThis["Height"]
+
+        # get last height
+        lastHeight = resultsLast["Height"]
+
+        # calculate growth
+        growth = thisHeight / lastHeight
+
+        # add growth to result
+        utilities.updateResultObject(os.path.join(baseFolderPath, timestamp), {'JobName': 'GrowthSinceLastSnapshot', 'Value' : growth})
+
+        return {"Status": constants.statusDone}
+    else:
+        return {"Status": constants.statusNotAllowed, "Details": "Calculating growth for first timestamp is not possible"}
 
         
 
@@ -309,7 +366,8 @@ knownJobs = {
         "CountLeaves" : jobCountLeaves,
         "BackgroundRegistration" : jobBackgroundRegistration,
         "ConvertToRegistration" : jobConvertToBackground,
-        "CalculateSize" : jobCalculateSizes
+        "CalculateSize" : jobCalculateSizes,
+        "CalculateGrowth" : jobCalculateGrowth
 }
 
 def genericJob(jobParameter):

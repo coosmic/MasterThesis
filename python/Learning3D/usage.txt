@@ -1,3 +1,9 @@
 python test_user_data.py --icp True --icp_threshold 0.2 --estimate_scale True --show True
 
 python test_user_data.py --estimate_scale True --show True --net RPM
+
+python registration.py --icp True --dataset_path ~/Thesis/test/Generated/Background/tmp
+
+./pgm -J Shapenet --in ~/Thesis/test/Generated/Background/SurfaceSlope30Gauss350Waves4Partial.ply --out ~/Thesis/test/Generated/Background/shapenet/SurfaceSlope30Gauss350Waves4Partial --RemoveBackground false --MaxSubsample 1
+
+./pgm -J Shapenet --in ~/Thesis/test/Generated/Background/SurfaceSlope25Gauss250Waves4Scale1_4.ply --out ~/Thesis/test/Generated/Background/shapenet/SurfaceSlope25Gauss250Waves4Scale1_4 --RemoveBackground false --MaxSubsample 1

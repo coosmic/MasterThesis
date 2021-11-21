@@ -15,10 +15,7 @@ def showCloudTransformation(src, tgt, rotation, translation, showOrgSrc = False)
     pcdSrc.paint_uniform_color([0, 0, 1])
 
     srctmp = src.T.dot(rotation)
-    #print(srctmp)
-    #print(translation_ab_pred[0].cpu().detach().numpy())
     srctmp += translation
-    #print(srctmp)
     pcdSrcT = o3d.geometry.PointCloud()
     pcdSrcT.points = o3d.utility.Vector3dVector(srctmp)
     pcdSrcT.paint_uniform_color([1, 0, 0])

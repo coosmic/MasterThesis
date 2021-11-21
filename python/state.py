@@ -19,9 +19,10 @@ class State():
             "CountLeaves" : {"Status" : constants.statusNotDone},
             "BackgroundRegistration" : {"Status" : constants.statusNotDone},
             "ConvertToRegistration" : {"Status" : constants.statusNotDone},
-            "CalculateSize" : {"Status" : constants.statusNotDone}
+            "CalculateSize" : {"Status" : constants.statusNotDone},
+            "CalculateGrowth" : {"Status" : constants.statusNotDone}
         }
-        #print(folderPath)
+        
         if os.path.isdir(os.path.join(folderPath, "images")) and len(os.listdir(os.path.join( folderPath, "images"))) != 0:
             pipelineStatus["ImagesUploaded"] = {"Status" : constants.statusDone}
         if os.path.isfile(os.path.join( folderPath, "odm_filterpoints", "point_cloud.ply")):
@@ -48,6 +49,9 @@ class State():
             if 'BackgroundRegistration' in results:
                 if results['BackgroundRegistration']['Scale'] != -1:
                     pipelineStatus["BackgroundRegistration"] = {"Status" : constants.statusDone}
+            if 'GrowthSinceLastSnapshot' in results:
+                if results['GrowthSinceLastSnapshot'] != -1:
+                    pipelineStatus["CalculateGrowth"] = {"Status" : constants.statusDone}
         return pipelineStatus
 
     def getPipelineStatusBackground(self,folderPath):
@@ -78,7 +82,6 @@ class State():
                 currentTimestamps = dirs = [name for name in os.listdir(currentDirPath) if os.path.isdir(os.path.join(currentDirPath,name))]
                 self.state[d] = {}
                 for t in currentTimestamps:
-                    #print(os.path.join(currentDirPath,t))
                     if t != "background":
                         self.state[d][t] = self.getPipelineStatus(os.path.join(currentDirPath,t))
                     else:
@@ -119,7 +122,8 @@ class State():
                     "CountLeaves" : {"Status" : constants.statusNotDone},
                     "BackgroundRegistration" : {"Status" : constants.statusNotDone},
                     "ConvertToRegistration" : {"Status" : constants.statusNotDone},
-                    "CalculateSize" : {"Status" : constants.statusNotDone}
+                    "CalculateSize" : {"Status" : constants.statusNotDone},
+                    "CalculateGrowth" : {"Status" : constants.statusNotDone}
                 }
             else:
                 self.state[dataSet][timeStamp] = {
@@ -149,5 +153,7 @@ class State():
             self.state[dataSet][timeStamp]["ConvertToRegistration"] = result
         if stateUpdate["jobName"] == "CalculateSize":
             self.state[dataSet][timeStamp]["CalculateSize"] = result
+        if stateUpdate["jobName"] == "CalculateGrowth":
+            self.state[dataSet][timeStamp]["CalculateGrowth"] = result
 
         return self.state

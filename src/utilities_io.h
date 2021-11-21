@@ -3,6 +3,10 @@
 #include "utilities.h"
 #include "configuration.h"
 
+#include <pcl/io/pcd_io.h>
+#include <pcl/io/ply_io.h>
+#include <pcl/io/ascii_io.h>
+
 #include <stdio.h>
 #include <iostream>
 #include <map>
@@ -165,4 +169,32 @@ std::map<std::string, std::string> readConfig(std::string path){
         config.insert(std::make_pair(key, value));
     }
     return config;
+}
+
+Cloud::Ptr loadAnyCloud(std::string path){
+    Cloud::Ptr cloud(new Cloud);
+
+    if(path.substr(path.find_last_of(".") + 1) == "ply"){
+        if( pcl::io::loadPLYFile(path, *cloud) == -1){
+
+        PCL_ERROR ("Couldn't read ply file\n");
+        return nullptr;
+
+        }
+    } else if (path.substr(path.find_last_of(".") + 1) == "pcd"){
+        if( pcl::io::loadPCDFile(path, *cloud) == -1){
+
+            PCL_ERROR ("Couldn't read pcd file\n");
+            return nullptr;
+        }
+    } else if (path.substr(path.find_last_of(".") + 1) == "txt"){
+        if(!loadAsciCloud(path, cloud)){
+            PCL_ERROR ("Couldn't read txt file\n");
+            return nullptr;
+        }
+    } else {
+        PCL_ERROR ("Couldn't read file under path %s \n", path);
+    }
+
+    return cloud;
 }

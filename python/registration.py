@@ -16,8 +16,6 @@ def robustICP(srcPath, targetPath, outPath, scale, srcCloud, targetCloud):
 
     # Apply Transformation
     transformation = np.loadtxt(pathToTransformation).astype(np.float32)
-    #srcCloud = np.loadtxt(srcPath).astype(np.float32)
-    #targetCloud = np.loadtxt(targetPath).astype(np.float32)
     
     srcCloud *= scale
     transformedSrc = np.hstack((srcCloud, np.ones((srcCloud.shape[0], 1))))  #(nx3)->(nx4)
@@ -39,10 +37,9 @@ def display_open3d(template, source, transformed_source):
     template_.paint_uniform_color([1, 0, 0])
     source_.paint_uniform_color([0, 1, 0])
     transformed_source_.paint_uniform_color([0, 0, 1])
-    #o3d.visualization.draw_geometries([template_, source_, transformed_source_])
     o3d.visualization.draw_geometries([template_, transformed_source_])
     
-def scaleRegistration(srcPath, targetPath, outPath, start_scale = 1.0, end_scale = 3.0, scale_step_width=0.1):
+def scaleRegistration(srcPath, targetPath, outPath, start_scale = 0.5, end_scale = 5.0, scale_step_width=0.1, showResult=False):
     
     startScale = start_scale
     endScale = end_scale
@@ -72,12 +69,14 @@ def scaleRegistration(srcPath, targetPath, outPath, start_scale = 1.0, end_scale
         current_iteration += 1
 
     # DEBUG
-    srcCloud = np.loadtxt(srcPath).astype(np.float32)
-    srcCloud *= best_scale
-    transformedSrc = np.hstack((srcCloud, np.ones((srcCloud.shape[0], 1))))  #(nx3)->(nx4)
-    transformedSrc = transformedSrc.dot(best_transformation.T)[:, 0:3]
-    targetCloud = np.loadtxt(targetPath).astype(np.float32)
-    display_open3d(targetCloud, srcCloud, transformedSrc)
+    if showResult:
+        srcCloud = np.loadtxt(srcPath).astype(np.float32)
+        srcCloud *= best_scale
+        transformedSrc = np.hstack((srcCloud, np.ones((srcCloud.shape[0], 1))))  #(nx3)->(nx4)
+        transformedSrc = transformedSrc.dot(best_transformation.T)[:, 0:3]
+        targetCloud = np.loadtxt(targetPath).astype(np.float32)
+        
+        display_open3d(targetCloud, srcCloud, transformedSrc)
 
     print("Error: ",best_result)
 

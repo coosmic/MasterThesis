@@ -12,7 +12,6 @@ import state
 import traceback
 import constants
 
-import multiprocessing
 from multiprocessing.managers import BaseManager
 
 from flask import Flask, request
@@ -60,11 +59,7 @@ def jobProcessingThread(state):
     print("Job Processing Thread started")
 
     while serverRunning:
-        
-        #print("thread waked up")
-        #print(len(jobqueue))
         if(len(jobqueue) != 0):
-            #print("processing job")
             try:
                 mutexJobQueue.acquire()
                 job = jobqueue[0]
@@ -114,13 +109,10 @@ def jobProcessingThread(state):
                     raise e
         time.sleep(1.0)
     print("cleanup job processing queue")
-    #TODO
+    # If anything has to be cleaned up, here is the right place to do so. Right now we don't need any cleanup.
     print("jobProcessingThread stopped")
 
 jobProcessingThreadInstance = threading.Thread(target=jobProcessingThread)
-
-#x = threading.Thread(target=jobThread)
-#x.start()
 
 def atExitBackgroundThreads():
     print("Server shutdown gracefully")
@@ -132,7 +124,6 @@ def tearDownBackgroundThreads(sig, frame):
     serverRunning = False
     jobProcessingThreadInstance.join()
     print("background jobs stopped")
-    #raise ServiceExit
     sys.exit(0)
 
 def startBackgroundThreads():
@@ -152,11 +143,6 @@ def startBackgroundThreads():
 
     atexit.register(atExitBackgroundThreads)
     signal.signal(signal.SIGINT, tearDownBackgroundThreads)
-    #global serverState
-    #serverState = utilities.restoreState( os.path.join(os.path.abspath(os.getcwd()), "data") )
-    #print(serverState)
-
-    
 
     print("background jobs started")
 
@@ -212,7 +198,6 @@ def data(testSet, timeStamp):
             os.makedirs(image_folder_path)
         for file in uploaded_files:
             filePath = os.path.join(image_folder_path, file.filename)
-            #print(filePath)
             file.save(filePath)
 
         mutexImageQueue.release()
@@ -222,12 +207,8 @@ def data(testSet, timeStamp):
         mutexJobQueue.acquire()
         jobqueue.append(job2)
         mutexJobQueue.release()
-        #makePointCloudCommand = f"docker run -ti --rm -v {base_folder_path}/{testSet}:/{testSet} --gpus all opendronemap/odm:gpu --rerun-all -e  odm_filterpoints --project-path /{testSet} {timeStamp}"
-        #print(makePointCloudCommand)
-        #os.system(makePointCloudCommand)
         return("OK")
     elif request.method == 'GET':
-        #serve login page
         print(testSet, timeStamp)
         mutexServerState.acquire()
 
@@ -244,8 +225,6 @@ def data(testSet, timeStamp):
             payloadR = request.get_json()
             jobList = payloadR["jobs"]
             for job in jobList:
-                #print(f"Job with name {job['jobName']} will be started")
-                #job = {"job" : jobs.genericJob, "data" : {"jobName": job['jobName'], "jobParameter": job['jobParameter'],"testSet" : testSet, "timeStamp" : timeStamp}}
                 job = jobs.getJob(job['jobName'], testSet, timeStamp, job['jobParameter'])
                 mutexJobQueue.acquire()
                 jobqueue.append(job)
