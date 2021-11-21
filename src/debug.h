@@ -61,9 +61,9 @@ void showCloud2(pcl::PointCloud<PointTypePCL>::Ptr cloud, std::string windowName
 
   pcl::visualization::PointCloudColorHandlerRGBField<PointTypePCL> rgb(cloud);
   viewer->addPointCloud<PointTypePCL> (cloud, rgb, "sample cloud");
-  viewer->setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 3, "sample cloud");
+  viewer->setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 2.5, "sample cloud");
 
-  viewer->addCoordinateSystem (1.0);
+  //viewer->addCoordinateSystem (1.0);
   viewer->initCameraParameters ();
 
   //---------------------------------------
@@ -88,8 +88,7 @@ void showCloud2(pcl::PointCloud<PointTypePCL>::Ptr cloud, std::string windowName
   }
 
   if(showNormals){
-    viewer->addPointCloudNormals<PointTypePCL, PointTypePCL> (cloud, cloud, 10, 0.15, "normals"); 
-
+    viewer->addPointCloudNormals<PointTypePCL, PointTypePCL> (cloud, cloud, 10, 0.15, "normals");
   }
   
   while (!viewer->wasStopped ())
@@ -110,7 +109,7 @@ void showCloud2(pcl::PointCloud<PointTypeRegistration>::Ptr cloud, std::string w
 
   pcl::visualization::PointCloudColorHandlerRGBField<PointTypeRegistration> rgb(cloud);
   viewer->addPointCloud<PointTypeRegistration> (cloud, rgb, "sample cloud");
-  viewer->setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 3, "sample cloud");
+  viewer->setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 2.5, "sample cloud");
 
   viewer->addCoordinateSystem (1.0);
   viewer->initCameraParameters ();

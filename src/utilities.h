@@ -18,6 +18,8 @@
 #include <pcl/filters/extract_indices.h>
 #include <pcl/filters/random_sample.h>
 
+#include <pcl/features/normal_3d.h>
+
 vtkSmartPointer<vtkPolyData> createPlane(const pcl::ModelCoefficients &coefficients, double x, double y, double z, double scale = 1.0)
 {
 	vtkSmartPointer<vtkPlaneSource> plane = vtkSmartPointer<vtkPlaneSource>::New();
@@ -530,4 +532,26 @@ Cloud::Ptr subSampleCloudRandom(Cloud::Ptr cloud, int numberOfSamples){
   extract.filter(*cloud);
 
   return subsampledCloud;
+}
+
+Cloud::Ptr calculateNormals(Cloud::Ptr cloud, float searchRadius){
+  pcl::NormalEstimation<PointTypePCL, PointTypePCL> ne;
+  pcl::PointCloud<PointTypePCL>::Ptr src_normals_ptr (new pcl::PointCloud<PointTypePCL>);
+  pcl::PointCloud<PointTypePCL>& src_normals = *src_normals_ptr;
+  pcl::search::KdTree<PointTypePCL>::Ptr tree_xyz (new pcl::search::KdTree<PointTypePCL>());
+  ne.setInputCloud(cloud);
+  ne.setSearchMethod(tree_xyz);
+  ne.setRadiusSearch(searchRadius);
+  ne.compute(*src_normals_ptr);
+  for(size_t i = 0;  i < src_normals.points.size(); ++i) {
+      src_normals.points[i].x = cloud->points[i].x;
+      src_normals.points[i].y = cloud->points[i].y;
+      src_normals.points[i].z = cloud->points[i].z;
+
+      src_normals.points[i].r = cloud->points[i].r;
+      src_normals.points[i].g = cloud->points[i].g;
+      src_normals.points[i].b = cloud->points[i].b;
+  }
+  cloud = src_normals_ptr;
+  return cloud;
 }

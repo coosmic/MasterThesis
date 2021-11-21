@@ -3882,6 +3882,14 @@ pcl/point_types.h
 pcl/io/io.h
 -
 
+/home/solomon/Thesis/MasterThesis/src/gaussian.h
+iostream
+-
+vector
+-
+cmath
+-
+
 /home/solomon/Thesis/MasterThesis/src/main.cpp
 definitions.h
 /home/solomon/Thesis/MasterThesis/src/definitions.h
@@ -3899,6 +3907,8 @@ utilities.h
 /home/solomon/Thesis/MasterThesis/src/utilities.h
 utilities_io.h
 /home/solomon/Thesis/MasterThesis/src/utilities_io.h
+gaussian.h
+/home/solomon/Thesis/MasterThesis/src/gaussian.h
 iostream
 -
 thread
@@ -3910,6 +3920,8 @@ stdio.h
 stdlib.h
 -
 chrono
+-
+math.h
 -
 pcl/io/pcd_io.h
 -
@@ -4079,6 +4091,8 @@ pcl/filters/extract_indices.h
 -
 pcl/filters/random_sample.h
 -
+pcl/features/normal_3d.h
+-
 
 /home/solomon/Thesis/MasterThesis/src/utilities_io.h
 definitions.h
@@ -4087,6 +4101,12 @@ utilities.h
 /home/solomon/Thesis/MasterThesis/src/utilities.h
 configuration.h
 /home/solomon/Thesis/MasterThesis/src/configuration.h
+pcl/io/pcd_io.h
+-
+pcl/io/ply_io.h
+-
+pcl/io/ascii_io.h
+-
 stdio.h
 -
 iostream

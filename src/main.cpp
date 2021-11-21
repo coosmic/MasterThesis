@@ -7,6 +7,7 @@
 #include "registration_pcl.h"
 #include "utilities.h"
 #include "utilities_io.h"
+#include "gaussian.h"
 
 #include <iostream>
 #include <thread>
@@ -16,6 +17,8 @@
 #include <stdlib.h>
 
 #include <chrono>
+
+#include <math.h>
 
 #include <pcl/io/pcd_io.h>
 #include <pcl/io/ply_io.h>
@@ -751,25 +754,18 @@ int iterativeScaleRegistration(po::variables_map vm){
     return 1;
   }
 
+  if(!vm.count("SubsamplePointCount")){
+    cout << "Missing Parameter SubsamplePointCount\n";
+    return 1;
+  }
+  
   std::string srcCloudPath = vm["SourceCloudPath"].as<std::string>();
   std::string tgtCloudPath = vm["TargetCloudPath"].as<std::string>();
   int subsampleCount = vm["SubsamplePointCount"].as<int>();
 
-  pcl::PointCloud<PointTypePCL>::Ptr cloudSrc(new pcl::PointCloud<PointTypePCL>);
+  pcl::PointCloud<PointTypePCL>::Ptr cloudSrc = loadAnyCloud(srcCloudPath);
 
-  if( pcl::io::loadPCDFile(srcCloudPath, *cloudSrc) == -1){
-
-    PCL_ERROR ("Couldn't read pcd file\n");
-    return (-1);
-  }
-
-  pcl::PointCloud<PointTypePCL>::Ptr cloudTgt(new pcl::PointCloud<PointTypePCL>);
-
-  if( pcl::io::loadPLYFile(tgtCloudPath, *cloudTgt) == -1){
-
-    PCL_ERROR ("Couldn't read ply file\n");
-    return (-1);
-  }
+  pcl::PointCloud<PointTypePCL>::Ptr cloudTgt = loadAnyCloud(tgtCloudPath);
 
   pcl::ModelCoefficients::Ptr coefficientsA (new pcl::ModelCoefficients);
   pcl::PointIndices::Ptr inliersA (new pcl::PointIndices);
@@ -794,8 +790,8 @@ int iterativeScaleRegistration(po::variables_map vm){
   setColorChannelExclusive(cloudSrcSubsampled, ColorChannel::b, 0);
 
   setColorChannelExclusive(cloudTgtSubsampled, ColorChannel::r, 0);
-  setColorChannelExclusive(cloudTgtSubsampled, ColorChannel::g, 0);
-  setColorChannelExclusive(cloudTgtSubsampled, ColorChannel::b, 255);
+  setColorChannelExclusive(cloudTgtSubsampled, ColorChannel::g, 255);
+  setColorChannelExclusive(cloudTgtSubsampled, ColorChannel::b, 0);
 
   Eigen::Matrix4f ts,ss,tt,st;
   transformToShapenetFormat(cloudTgtSubsampled, tt,st);
@@ -1088,6 +1084,140 @@ int backgroundRemovalPipeline(po::variables_map vm){
   return 0;
 }
 
+int surfaceGenerator(po::variables_map vm){
+  
+  if(!vm.count("PointCountX")){
+      cout << "Missing parameter PointCountX\n";
+      return 1;
+  }
+
+  if(!vm.count("PointCountY")){
+      cout << "Missing parameter PointCountY\n";
+      return 1;
+  }
+
+  if(!vm.count("NumberOfWaves")){
+      cout << "Missing parameter NumberOfWaves\n";
+      return 1;
+  }
+
+  if(!vm.count("WaveAmplitude")){
+      cout << "Missing parameter WaveAmplitude\n";
+      return 1;
+  }
+
+  int width = vm["PointCountX"].as<int>();
+  int height = vm["PointCountY"].as<int>();
+  float numberOfWaves = vm["NumberOfWaves"].as<float>();
+  float amplitude = vm["WaveAmplitude"].as<float>();
+  float widthFaktor = 1.f/width;
+  float heightFaktor = 1.f/height;
+  float minDistanceBetweenPoints = min(widthFaktor, heightFaktor);
+  float maxDistanceBetweenPoints = max(widthFaktor, heightFaktor);
+  
+  bool jitter = true;
+  if(vm.count("Jitter")){
+    jitter = vm["Jitter"].as<bool>();
+  }
+  float maxJitter;
+  float jitterScale = 1.0;
+  if(jitter){
+    if(vm.count("JitterScale")){
+      jitterScale = vm["JitterScale"].as<float>();
+    }
+    maxJitter = minDistanceBetweenPoints * jitterScale;
+  }
+
+  bool slope = false;
+  if(vm.count("Slope")){
+    slope = vm["Slope"].as<bool>();
+  }
+  float slopeAmplitued = 1.0;
+  if(slope){
+    cout << "Slope active\n";
+    if(vm.count("SlopeAmplitude")){
+      slopeAmplitued = vm["SlopeAmplitude"].as<float>();
+    }
+  }
+
+  bool gaussian = false;
+  if(vm.count("Gaussian")){
+    gaussian = vm["Gaussian"].as<bool>();
+  }
+  float sigma = 0.5;
+  if(gaussian){
+    cout << "Gaussian active\n";
+    if(vm.count("Sigma")){
+      sigma = vm["Sigma"].as<float>();
+    }
+    
+  }
+  Matrix gaussKernel = getGaussianKernel(height,width, sigma, sigma);
+
+  pcl::PointCloud<PointTypePCL> cloud;
+  cloud.width = width;
+  cloud.height = height;
+  cloud.is_dense = false;
+  cloud.resize (width * height);
+
+  float sinusVal = 0.0;
+  float iterValue = 0.0;
+  float stepWidth = (2 * M_PI) * numberOfWaves * widthFaktor;
+  float maxZJitter = amplitude * sin(stepWidth) * jitterScale;
+  float offset = 0.0;
+  float finalOffset = 0.0;
+  for(int i=0; i<width; ++i){
+    if(slope)
+      offset = slopeAmplitued * sin(i*widthFaktor);
+    for(int j=0; j<height; ++j){
+      if(gaussian)
+        finalOffset = offset + gaussKernel[i][j];
+      else
+        finalOffset = offset;
+      int index = i*width + j;
+      if(jitter){
+        cloud.points[index].x = (i * widthFaktor) + (static_cast <float> (rand()) / static_cast <float> (RAND_MAX)) * maxJitter;
+        cloud.points[index].y = (j * heightFaktor) + (static_cast <float> (rand()) / static_cast <float> (RAND_MAX)) * maxJitter;
+        cloud.points[index].z = iterValue + finalOffset + ((static_cast <float> (rand()) / static_cast <float> (RAND_MAX)) * maxZJitter);
+      } else {
+        cloud.points[index].x =   i * widthFaktor;
+        cloud.points[index].y =   j * heightFaktor;
+        cloud.points[index].z =   iterValue + finalOffset;
+      }
+
+      cloud.points[index].r = 255;
+      cloud.points[index].g = 0;
+      cloud.points[index].b = 0;
+    }
+    sinusVal += stepWidth;
+    iterValue = amplitude*sin(sinusVal);
+  }
+
+  pcl::PointCloud<PointTypePCL>::Ptr cloud_ptr = cloud.makeShared();
+
+  if(vm["CalculateNormals"].as<bool>()){
+    float searchRadius = maxDistanceBetweenPoints*3;
+    cloud_ptr = calculateNormals(cloud_ptr, searchRadius);
+  }
+
+  for(int i=0; i<cloud_ptr->size(); ++i){
+    if(cloud_ptr->points[i].normal_z < 0){
+      cloud_ptr->points[i].normal_x = -cloud_ptr->points[i].normal_x;
+      cloud_ptr->points[i].normal_y = -cloud_ptr->points[i].normal_y;
+      cloud_ptr->points[i].normal_z = -cloud_ptr->points[i].normal_z;
+    }
+  }
+
+  if(debugShowResult)showCloud2(cloud_ptr, "Generated Background", nullptr, true);
+
+  if(vm.count("out")){
+    pcl::io::savePLYFileBinary(vm["out"].as<std::string>(), *cloud_ptr);
+  }
+  
+  return 0;
+
+}
+
 enum JobName {
   Shapenet,
   Shapenet2,
@@ -1098,6 +1228,7 @@ enum JobName {
   BackgroundRemovalPipeline,
   HandcraftedStemSegmentation,
   ManuellRegistrationPipeline,
+  SurfaceGenerator,
   UnknownJob
 };
 
@@ -1110,6 +1241,7 @@ JobName jobStringToEnum(std::string jobString){
   if(jobString == "IterativeScaleRegistration") return IterativeScaleRegistration;
   if(jobString == "ManuellRegistrationPipeline") return ManuellRegistrationPipeline;
   if(jobString == "HandcraftedStemSegmentation") return HandcraftedStemSegmentation;
+  if(jobString == "SurfaceGenerator") return SurfaceGenerator;
   return UnknownJob;
 }
 
@@ -1152,7 +1284,17 @@ int main (int argc, char** argv)
     ("VoxelSize", po::value<float>(), "Used for Downsampling")
     ("SegmentationAfterRegistration", po::bool_switch()->default_value(false), "Should target be substracted from source followed by segmentation of Source?")
     ("Classifier", po::value<int>()->default_value(1), "Classifier that should be used for HandcraftedStemSegmentation. 0: 1: 2:")
-    ("CalculateNormals", po::bool_switch()->default_value(false), "CalculateNormals")
+    ("CalculateNormals", po::value<bool>()->default_value(true), "CalculateNormals")
+    ("PointCountX", po::value<int>(), "Number of Points in x Direction")
+    ("PointCountY", po::value<int>(), "Number of Points in y Direction")
+    ("NumberOfWaves", po::value<float>(), "Number of Waves that should be generated")
+    ("WaveAmplitude", po::value<float>(), "Amplitude of the Waves")
+    ("JitterScale", po::value<float>(), "minDistanceBetweenPoints * JitterScale = maxJitterDistance")
+    ("Jitter", po::value<bool>()->default_value(true), "Should generated points be Jittered?")
+    ("Slope", po::value<bool>()->default_value(false), "Should Surface be with Slope?")
+    ("SlopeAmplitude", po::value<float>(), "Amplitude of the Sinus used for Slope")
+    ("Gaussian", po::value<bool>()->default_value(false), "Apply Gaussian Distribution on surface")
+    ("Sigma", po::value<float>(), "Sigma for Gauss Distribution")
   ;
 
   po::variables_map vm;
@@ -1198,6 +1340,8 @@ int main (int argc, char** argv)
         return manuellRegistrationPipeline(vm);
       case HandcraftedStemSegmentation:
         return handcraftedStemSegmentation(vm);
+      case SurfaceGenerator:
+        return surfaceGenerator(vm);
       case UnknownJob:
         cout << "Job " << vm["job"].as<std::string>() << " is unknown.\n";
         return 1;

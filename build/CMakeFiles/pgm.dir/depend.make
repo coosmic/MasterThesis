@@ -357,6 +357,7 @@ CMakeFiles/pgm.dir/main.cpp.o: /home/solomon/Thesis/CGAL-5.2/include/CGAL/wmult.
 CMakeFiles/pgm.dir/main.cpp.o: /home/solomon/Thesis/MasterThesis/src/configuration.h
 CMakeFiles/pgm.dir/main.cpp.o: /home/solomon/Thesis/MasterThesis/src/debug.h
 CMakeFiles/pgm.dir/main.cpp.o: /home/solomon/Thesis/MasterThesis/src/definitions.h
+CMakeFiles/pgm.dir/main.cpp.o: /home/solomon/Thesis/MasterThesis/src/gaussian.h
 CMakeFiles/pgm.dir/main.cpp.o: /home/solomon/Thesis/MasterThesis/src/main.cpp
 CMakeFiles/pgm.dir/main.cpp.o: /home/solomon/Thesis/MasterThesis/src/registration_cgal.h
 CMakeFiles/pgm.dir/main.cpp.o: /home/solomon/Thesis/MasterThesis/src/registration_pcl.h
