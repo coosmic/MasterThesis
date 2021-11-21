@@ -132,11 +132,12 @@ def icp(src, target, threshold, scale, show=False):
 def runWithDifferentScalesWithArgs(args, data, model = None):
     runWithDifferentScales(data, model, args.start_scale, args.end_scale, args.scale_step_width, args.show, args.icp, args.icp_threshold, args.net)
 
-def runWithDifferentScales(data, model=None, start_scale = 1.0, end_scale = 3.0, scale_step_width=0.1, show=False, use_icp=True, icp_threshold = 0.2, net="PointNetLK" ):
+def runWithDifferentScales(data, model=None, start_scale = 0.5, end_scale = 5.0, scale_step_width=0.1, show=False, use_icp=True, icp_threshold = 0.2, net="PointNetLK" ):
 
     startScale = start_scale
     endScale = end_scale
     scaleStepWidth = scale_step_width
+    
 
     assert startScale < endScale
 

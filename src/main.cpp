@@ -1262,6 +1262,7 @@ JobName jobStringToEnum(std::string jobString){
   if(jobString == "ManuellRegistrationPipeline") return ManuellRegistrationPipeline;
   if(jobString == "HandcraftedStemSegmentation") return HandcraftedStemSegmentation;
   if(jobString == "SurfaceGenerator") return SurfaceGenerator;
+  if(jobString == "BackgroundRemovalPipeline") return BackgroundRemovalPipeline;
   return UnknownJob;
 }
 

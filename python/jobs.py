@@ -161,6 +161,34 @@ def jobBackgroundRegistration(jobParameter):
     targetPath = os.path.join(os.path.abspath(os.getcwd()), 'data', jobParameter['testSet'], 'background', 'shapenet', 'registrationFormat.txt')
     outPath = os.path.join(folderPath, 'shapenet', 'registration/')
 
+    showBevor = False
+    if 'ShowBevor' in jobParameter:
+        showBevor = jobParameter['ShowBevor']
+
+    if showBevor:
+        srcCloud = np.loadtxt(srcPath).astype(np.float32)
+        targetCloud = np.loadtxt(targetPath).astype(np.float32)
+        registration.display_open3d(targetCloud, srcCloud, srcCloud)
+
+    startScale = 0.25
+    endScale = 1.0
+    stepWidth = 0.01
+    if 'StartScale' in jobParameter:
+        startScale = jobParameter['StartScale']
+    if 'EndScale' in jobParameter:
+        endScale = jobParameter['EndScale']
+    if 'StepWidth' in jobParameter:
+        stepWidth = jobParameter['StepWidth']
+    if 'StartScale' in jobParameter or 'EndScale' in jobParameter or 'StepWidth' in jobParameter:
+        #validate steps
+        if startScale >= endScale:
+            return {"Status": constants.statusFailed, "Reason": f"Invalid StartScale EndScale combination! StartScale has to be smaller then EndScale. Current StartScale: {startScale} CurrentEndScale:{endScale}"}
+        numberOfIteration = (endScale - startScale)/stepWidth
+        if numberOfIteration > 500:
+            return {"Status": constants.statusFailed, "Reason": f"To many iterations required. Current StartScale: {startScale} CurrentEndScale:{endScale} Current StepWidth {stepWidth} results in {numberOfIteration} iterations."}
+
+    print(f"number of iterations: {(endScale - startScale)/stepWidth}")
+
     showResults = False
     if 'ShowResult' in jobParameter:
         showResults = jobParameter['ShowResult']
@@ -172,7 +200,7 @@ def jobBackgroundRegistration(jobParameter):
     netName = 'PointNetLK'
     runWithICP = True
     if registrationMethod == 'RICP':
-        transformation, scale = registration.scaleRegistration(srcPath, targetPath, outPath)   #RICP
+        transformation, scale = registration.scaleRegistration(srcPath, targetPath, outPath, start_scale=startScale, end_scale=endScale, scale_step_width=stepWidth, showResult=showResults)   #RICP
         return {"Status": constants.statusDone, "Results" : {"JobName": "BackgroundRegistration", "Value": {"Transformation" : transformation.tolist(), "Scale" : scale}} }
     elif registrationMethod == 'ICP':
         model = None #ICP
@@ -194,7 +222,7 @@ def jobBackgroundRegistration(jobParameter):
     else:
         return {"Status": constants.statusFailed, "Reason": f"Unknown  Registration Method {registrationMethod}"}
 
-    transformation, scale = runWithDifferentScales(data, show=showResults, model=model, use_icp=runWithICP, net=netName)
+    transformation, scale = runWithDifferentScales(data, show=showResults, model=model, use_icp=runWithICP, net=netName, start_scale=startScale, end_scale=endScale, scale_step_width=stepWidth)
 
     print("Transformation", transformation)
     print("Scale", scale)
