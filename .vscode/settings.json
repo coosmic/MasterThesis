@@ -71,5 +71,35 @@
         "plaintext"
     ],
     "python.pythonPath": "/home/solomon/anaconda3/envs/l3d/bin/python",
-    "cSpell.language": "de,de-DE"
+    "cSpell.language": "en,de,de-DE",
+    "cSpell.words": [
+        "Dalitz",
+        "Gauß-Funktion",
+        "Görner",
+        "hochdimensionalen",
+        "Intensitäts-",
+        "Intensitäts-Differenzen",
+        "Intensitäts-Vergleich",
+        "Jakobi-Matrix",
+        "Kalibrierungs-Matrizen",
+        "Kanade",
+        "Kovarianzmatrix",
+        "Layern",
+        "LIDAR",
+        "Pohle-Fröhlich",
+        "Registrierungs-",
+        "Registrierungs-Format",
+        "Registrierungsergebnisse",
+        "Registrierungsmethode",
+        "Registrierungsverfahren",
+        "rotationsinvariant",
+        "Segmentierungs",
+        "Shapenet-",
+        "Shapnet-Format",
+        "Skalierungs-Invarianz",
+        "Skalierungs-Schritt",
+        "vortrainierte",
+        "vortrainiertes",
+        "wenigern"
+    ]
 }
