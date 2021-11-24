@@ -145,10 +145,10 @@ Mönchengladbach, \today \> Unterschrift
 
 \section*{Danksagungen}
 
-An dieser Stelle möchte ich mich noch bei allen jenen bedanken die mich während dieser Arbeit unterstützt haben.
-Zuerst möchte ich mich bei meiner betreuenden Professorin Frau Prf. Dr. Pohle-Fröhlich bedanken die mir in vielen Sitzungen und auch bei der Literatur-Recherche immer wieder große Hilfe geleistet hat.
+An dieser Stelle möchte ich mich bei allen jenen bedanken die mich während dieser Arbeit unterstützt haben.
+Zuerst möchte ich mich bei meiner betreuenden Professorin Frau Prof. Dr. Pohle-Fröhlich bedanken, die mich in vielen Sitzungen mit Ratschlägen und auch bei der Literatur-Recherche sehr unterstützt hat.
 Des Weiteren möchte ich mich bei Herr Lentzen für seine unermüdliche Hilfe und Ratschläge beim Training von PointNet++ bedanken.
-Auch bei meiner Familie und meiner Freundin möchte ich mich für das fleißige Korrekturlesen ganz herzlich bedanken.
+Auch bei meiner Familie und meiner Freundin möchte ich mich abschließend für das fleißige Korrekturlesen ganz besonders bedanken.
 
 \newpage
 %\begin{abstract}
@@ -1424,6 +1424,7 @@ Diesmal wird jedoch ein Großteil der Hintergrund-Punkte entfernt, indem nur das
 Die Ergebnisse sind in Abbildung \ref{fig:T12_3C_PS_WN_NR_OC} zu sehen und lassen erkenne, dass sich die Ergebnisse für das Training mit weniger Hintergrund deutlich verbessern. 
 Ein Vergleich der Segmentierung mit und ohne Hintergrund ist in Abbildung \ref{fig:segmentation:compare} zu sehen. 
 Dort ist zu erkennen, dass bei der Hintergrund-Segmentierung Teile der Pflanze als Hintergrund erkannt werden. Dies betrifft vor allem den Stiel-Ansatz und niedrig hängende Blätter.
+Auch können nah stehende Pflanzen nicht differenziert werden und können in die weitere Analyse mit aufgenommen werden. Das führt zu Fehlern bei der Berechnung der Maße der Pflanze.
 
 \begin{figure}[htb]
     \centering 
@@ -1488,7 +1489,7 @@ Dort ist zu erkennen, dass bei der Hintergrund-Segmentierung Teile der Pflanze a
         \hline
     \end{tabular}
     \end{center}
-    \caption{Evaluations-Ergebnisse der verschiedenen Netze. Links ohne Hintergrund. Rechts mit Hintergrund.}
+    \caption{Evaluations-Ergebnisse der verschiedenen Netze. Links ohne Hintergrund (t11, t6, 10). Rechts mit Hintergrund (t9, t4, t7, t12, t13).}
     \label{tab:segmentation:eval}
 \end{table}
 
@@ -1524,6 +1525,9 @@ Dort ist zu erkennen, dass bei der Hintergrund-Segmentierung Teile der Pflanze a
         \label{fig:T13_2C_PS_WN_NR_NN}
     \end{minipage}
 \end{figure}
+
+%Style
+\newpage
 
 \textbf{Vergleich Training mit und ohne Normalen}
 
