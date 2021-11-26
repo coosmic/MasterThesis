@@ -324,7 +324,7 @@ Des Weiteren liefert ORB eine gelernte Paar-Auswahl von $256$ Paaren, die dahing
 Wurden die Features ermittelt, müssen korrespondierende Features zwischen den Bildern ermittelt werden. 
 Hierzu muss die Distanz zwischen den Deskriptoren einzelner Features verglichen werden. 
 Der korrespondierende Punkt des Feature-Punktes ist der mit der geringsten Distanz. 
-Um falsche Paare zu vermeiden, können Paare unter einem gewissen Schwellwert ausgeschlossen werden, genau so wie 
+Um falsche Paare zu vermeiden, können Paare mit Distanz unter einem gewissen Schwellwert ausgeschlossen werden, genau so wie 
 Paare, bei denen der nächstbeste korrespondierende Punkt eine sehr ähnliche Distanz aufweist. 
 Das lässt darauf schließen, dass es sich um einen Feature-Punkt handelt, der sich in einem sich wiederholenden Muster befindet.
 %Danach werden zwischen den Bildern Übereinstimmungen in den Featuren mittels RANSAC gesucht. 
@@ -1377,27 +1377,39 @@ Dieses Objekt sollte eine markante Struktur haben und immer an der gleichen Posi
 
 In Experimenten mit dem handgeschriebenen Classifier konnte keine Parametrisierung, die eine gute Unterteilung in Blätter und Stämme erreicht, gefunden werden. 
 Dies liegt in erster Linie an der Qualität der Punktwolken.
-Diese haben das Problem, dass die oft sehr feinen Stiele der Pflanze nicht als Zylinder sondern als Ebene in den Punktwolken repräsentiert werden, wie in Abbildung \ref{fig:handcrafted:classifier} (oben) zu sehen ist.
-Ein weiteres Problem ist eine allgemeingültige Parametrisierung für den Schwellwert zu finden, wie Abbildung \ref{fig:handcrafted:classifier} (unten) zeigt. Hier wurden mit demselben Schwellwert verschiedene Pflanzen segmentiert.
+Diese haben das Problem, dass die oft sehr feinen Stiele der Pflanze nicht als Zylinder sondern als Ebene in den Punktwolken repräsentiert werden, 
+wie in den Abbildungen \ref{fig:handcrafted:classifier:odm:error:1} und \ref{fig:handcrafted:classifier:odm:error:2} zu sehen ist.
+Ein weiteres Problem ist eine allgemeingültige Parametrisierung für den Schwellwert zu finden, wie Abbildungen \ref{fig:handcrafted:classifier:avocado} und \ref{fig:handcrafted:classifier:plant2} zeigen. Hier wurden mit demselben Schwellwert verschiedene Pflanzen segmentiert.
 Es ist zu erkennen, dass bei der linken Abbildung die Blätter (blau) bis auf eins eindeutig als solche erkannt wurden, wohingegen in der rechten Abbildung die Ergebnisse stark verrauscht sind. 
 Des Weiteren ist in beiden Abbildungen zu erkennen, dass die Ergebnisse für den Stiel (rot) durch die nicht zylindrische Form stark verrauscht sind.
-Zuletzt ist bei diesem Ansatz auch zu beachten, dass es Blätter gibt, die eine ähnlich starke Krümmung wie die Stiele der Pflanze aufweisen. Dieses Phänomen ist in Abbildung \ref{fig:handcrafted:classifier} links unten zu sehen.
+Zuletzt ist bei diesem Ansatz auch zu beachten, dass es Blätter gibt, die eine ähnlich starke Krümmung wie die Stiele der Pflanze aufweisen. Dieses Phänomen ist in Abbildung \ref{fig:handcrafted:classifier:avocado} zu sehen.
+
 
 \begin{figure}
-    \centering
-    \begin{subfigure}[t]{1.0\textwidth}
-        \centering
-        \raisebox{-\height}{\includegraphics[width=\imageSizeTwo, height=\imageSizeTwoHeight]{./Images/OdmFlatError1.png}}
-        \centering
-        \raisebox{-\height}{\includegraphics[width=\imageSizeTwo, height=\imageSizeTwoHeight]{./Images/OdmFlatError2.png}}
-        \vspace{.6ex}
-        \centering
-        \raisebox{-\height}{\includegraphics[width=\imageSizeTwo, height=\imageSizeTwoHeight]{./Images/HandcraftedClassifierAvocado.png}}
-        \centering
-        \raisebox{-\height}{\includegraphics[width=\imageSizeTwo, height=\imageSizeTwoHeight]{./Images/HandcraftedClassifierPlant2.png}}
-    \end{subfigure}
-    \caption{Oben: ODM Seitenansicht die als Ebene erkannten Stiel zeigt.\\Unten: Segmentierungs-Ergebnis für zwei verschiedene Pflanzen mit demselben Schwellwert. Rote Punkte stehen für Stiele und blaue für Blätter.}
-    \label{fig:handcrafted:classifier}
+    \centering 
+\begin{subfigure}{0.45\textwidth}
+  \includegraphics[width=\linewidth]{./Images/OdmFlatError1.png}
+  \caption{Seitenansicht}
+  \label{fig:handcrafted:classifier:odm:error:1}
+\end{subfigure}\hfil
+\begin{subfigure}{0.45\textwidth}
+  \includegraphics[width=\linewidth]{./Images/OdmFlatError2.png}
+  \caption{Frontansicht}
+  \label{fig:handcrafted:classifier:odm:error:2}
+\end{subfigure}
+\medskip
+\begin{subfigure}{0.45\textwidth}
+  \includegraphics[width=\linewidth]{./Images/HandcraftedClassifierAvocado.png}
+  \caption{Geigneter Schwellwert für Blätter, aber ein sehr gekrümmtes Blatt wurde als Stiel erkannt.}
+  \label{fig:handcrafted:classifier:avocado}
+\end{subfigure}\hfil 
+\begin{subfigure}{0.45\textwidth}
+  \includegraphics[width=\linewidth]{./Images/HandcraftedClassifierPlant2.png}
+  \caption{Ungeigneter Schwellwert für Blätter.}
+  \label{fig:handcrafted:classifier:plant2}
+\end{subfigure}
+\caption{Oben: Stiele werden als Ebene erkannt. Unten: Segmentierungs-Ergebnis für zwei verschiedene Pflanzen mit demselben Schwellwert.}
+\label{fig:handcrafted:classifier}
 \end{figure}
 
 \textbf{Datenbasis für das Training von PointNet++}
@@ -1493,37 +1505,31 @@ Auch können nah stehende Pflanzen nicht differenziert werden und können in die
     \label{tab:segmentation:eval}
 \end{table}
 
-
 \begin{figure}
-    \centering
-    \begin{minipage}{0.475\textwidth}
-        \centering
-        \includegraphics[width=1.0\textwidth]{./Images/T11_2C_PS_WN_NR.png}
-        \caption{PointNet++ Trainings-Ergebnisse pro Epoche mit 2 Klassen und Normalisierung ohne zufällige Rotationen}
-        \label{fig:T11_2C_PS_WN_NR}
-    \end{minipage}\hfill
-    \begin{minipage}{0.475\textwidth}
-        \centering
-        \includegraphics[width=1.0\textwidth]{./Images/T4_3C_PS_WN_NR.png}
-        \caption{PointNet++ Trainings-Ergebnisse pro Epoche mit 3 Klassen und Normalisierung ohne zufällige Rotationen}
-        \label{fig:T4_3C_PS_WN_NR}
-    \end{minipage}
-\end{figure}
-
-\begin{figure}
-    \centering
-    \begin{minipage}{0.475\textwidth}
-        \centering
-        \includegraphics[width=1.0\textwidth]{./Images/T12_3C_PS_WN_NR_OC.png}
-        \caption{PointNet++ Trainings-Ergebnisse pro Epoche mit 3 Klassen und Normalisierung ohne zufällige Rotationen. Mit Ausschnitt um das Zentrum.}
-        \label{fig:T12_3C_PS_WN_NR_OC}
-    \end{minipage}\hfill
-    \begin{minipage}{0.475\textwidth}
-        \centering
-        \includegraphics[width=1.0\textwidth]{./Images/T13_2C_PS_WN_NR_NN.png}
-        \caption{PointNet++ Trainings-Ergebnisse pro Epoche mit 2 Klassen und Normalisierung ohne zufällige Rotationen. Ohne Normalen}
-        \label{fig:T13_2C_PS_WN_NR_NN}
-    \end{minipage}
+    \centering 
+\begin{subfigure}{0.485\textwidth}
+  \includegraphics[width=\linewidth]{./Images/T11_2C_PS_WN_NR.png}
+  \caption{Mit 2 Klassen und Normalisierung ohne zufällige Rotationen}
+  \label{fig:T11_2C_PS_WN_NR}
+\end{subfigure}\hfil
+\begin{subfigure}{0.485\textwidth}
+  \includegraphics[width=\linewidth]{./Images/T4_3C_PS_WN_NR.png}
+  \caption{Mit 3 Klassen und Normalisierung ohne zufällige Rotationen}
+  \label{fig:T4_3C_PS_WN_NR}
+\end{subfigure}
+\medskip
+\begin{subfigure}{0.485\textwidth}
+  \includegraphics[width=\linewidth]{./Images/T12_3C_PS_WN_NR_OC.png}
+  \caption{Mit 3 Klassen und Normalisierung ohne zufällige Rotationen. Mit Ausschnitt um das Zentrum.}
+  \label{fig:T12_3C_PS_WN_NR_OC}
+\end{subfigure}\hfil 
+\begin{subfigure}{0.485\textwidth}
+  \includegraphics[width=\linewidth]{./Images/T13_2C_PS_WN_NR_NN.png}
+  \caption{Mit 2 Klassen und Normalisierung ohne zufällige Rotationen. Ohne Normalen}
+  \label{fig:T13_2C_PS_WN_NR_NN}
+\end{subfigure}
+\caption{PointNet++ Trainings-Ergebnisse pro Epoche}
+\label{fig:segmentation:training:result}
 \end{figure}
 
 %Style
@@ -1736,7 +1742,7 @@ Auch die Segmentierung des Hintergrundes könnte noch weiter verbessert werden.
 Die Segmentierung der Pflanzen hingegen hat sehr gute Ergebnisse geliefert und sollte um weitere Merkmale erweitert werden.
 
 In diesem Zustand ist die Software für einen praktischen Einsatz nur bedingt bereit, da einige Problematiken, die sich in der Praxis ergeben können, noch nicht untersucht wurden.
-So wird beispielsweise bisher immer davon ausgegangen, dass einzelne Pflanzen isoliert betrachtet werden. Das wird in der Praxis aber nicht der Fall sein, da auch ganze Felder mit mehreren Pflanzen untersucht werden sollen.
+So wird beispielsweise bisher immer davon ausgegangen, dass einzelne Pflanzen isoliert betrachtet werden. Das wird in der Praxis aber nicht immer der Fall sein, da auch ganze Felder mit mehreren Pflanzen untersucht werden sollen.
 Auch der Einfluss, den das Wetter bei der Aufnahme der Bilder haben kann, wurde bisher nicht untersucht. 
 Ist es beispielsweise sehr windig bei der Aufnahme von Bildern und bewegt sich die Pflanze dadurch, führt dies zu Fehlern bei der Generierung der Punktwolke.
 
