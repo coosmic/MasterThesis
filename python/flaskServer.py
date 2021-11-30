@@ -49,7 +49,7 @@ global mutexServerState
 mutexServerState = Lock()
 
 global debug
-debug = False
+debug = True
 
 global mutexResult
 mutexResult = Lock()
@@ -159,7 +159,7 @@ def test():
     mutexJobQueue.release()
     return("OK")
 
-@app.route('/listings/<testSet>', methods=['GET'])
+@app.route('/listing/<testSet>', methods=['GET'])
 def listing(testSet):
     mutexServerState.acquire()
 
@@ -171,7 +171,7 @@ def listing(testSet):
     mutexServerState.release()
     return("Not Found", 404)
 
-@app.route('/results/<testSet>/<timeStamp>', methods=['GET'])
+@app.route('/result/<testSet>/<timeStamp>', methods=['GET'])
 def results(testSet, timeStamp):
     path = os.path.join(os.path.abspath(os.getcwd()), "data", testSet, timeStamp)
     mutexResult.acquire()
@@ -183,7 +183,7 @@ def results(testSet, timeStamp):
         mutexResult.release()
         return("Not Found", 404)
 
-@app.route('/data/<testSet>/<timeStamp>', methods=['GET','POST', 'PUT'])
+@app.route('/detail/<testSet>/<timeStamp>', methods=['GET','POST', 'PUT'])
 def data(testSet, timeStamp):
     if request.method == 'POST':
         mutexImageQueue.acquire()
