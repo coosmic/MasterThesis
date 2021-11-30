@@ -1,6 +1,7 @@
 \beamer@sectionintoc {1}{Ziele}{3}{0}{1}
 \beamer@sectionintoc {2}{Generierung von Punktwolken}{4}{0}{2}
-\beamer@sectionintoc {3}{Segmentierung}{7}{0}{3}
-\beamer@sectionintoc {4}{Registrierung}{12}{0}{4}
-\beamer@sectionintoc {5}{Server}{17}{0}{5}
-\beamer@sectionintoc {6}{Quellen}{20}{0}{6}
+\beamer@sectionintoc {3}{Segmentierung}{8}{0}{3}
+\beamer@sectionintoc {4}{Registrierung}{14}{0}{4}
+\beamer@sectionintoc {5}{Server}{19}{0}{5}
+\beamer@sectionintoc {6}{Demo}{21}{0}{6}
+\beamer@sectionintoc {7}{Quellen}{22}{0}{7}

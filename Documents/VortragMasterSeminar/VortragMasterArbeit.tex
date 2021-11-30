@@ -28,35 +28,39 @@
 	\frame {
 		\frametitle{Ziele} 
 		\begin{itemize}
-			\item Es soll eine Software entwickelt werden die das Wachstum einer Pflanze über Zeit analysiert und Auswertungen über die Entwicklung zur Verfügung stellt.
+			\item Analyse von Pflanzen mittels 3D-Punktwolken
 			\item Generierung von Punktwolken auf Basis von Bildern
-			\item Registration Pipeline
+			\item Kernprobleme
 			\begin{itemize}
-				\item Wachstums-Analyse Pipeline
-				\item Background Removel Pipeline
+				\item Entfernung des Hintergrundes
+				\item Segmentierung der Pflanze
+				\item Skalierung der Punktwolken ist unbekannt.
 			\end{itemize}
-			\item Binary-Classifier Pipeline zum klassifizieren von Blättern und Zweigen.
-			\item REST-Interface zum einspielen von Datensätzen und ansteuern der Pipelines.
+			\item REST-Interface zum einspielen von Datensätzen und ansteuern der Funktionalitäten.
+			\item Datenübertragung zum Server sollte gering gehalten werden.
 		\end{itemize}
 	}
 \section{Punktwolken Generieren}
 	\frame {
 		\frametitle{Generierung von Punktwolken auf Basis von Bildern} 
 		\begin{itemize}
-				\item Vorraussetzungen an das Framework
+				\item Einsatz von spezieller Hardware sollte nicht nötig sein.
+				\item Da es viele bestehende Lösungen für das Problem existieren wird auf eine existierende Implementationen zurück gegriffen.
+				\item Voraussetzungen an die Implementation
 			\begin{itemize}
 				\item Keine Information über Kamera Position und Ausrichtung
-				\item Keine Information über Reihenfolge der Bilder
+				\item Gegebenenfalls keine Information über die Reihenfolge der Bilder
 			\end{itemize}
-			\item Evaluation mehrerer Frameworks
+			\item Evaluation mehrerer Implementationen
 			\begin{itemize}
 				\item Open Drone Map \cite{ODM}
 				\item Colmap \cite{schoenberger2016sfm}
 				\item AliceVision (Meshroom) \cite{Moulon2012}
+				\item OpenMVG \cite{moulon2016openmvg} 
 				\item OpenCV SFM Pipeline
 			\end{itemize}
 			\item Open Drone Map und Colmap liefern gute Ergebnisse
-			\item Open Drone Map(ODM) wesentlich performanter als Colmap (schnellere Berechnung bei weniger Resourcen-Verbrauch)
+			\item Open Drone Map(ODM) wesentlich performanter als Colmap (schnellere Berechnung bei weniger Ressourcen-Verbrauch)
 			\item ODM liefert gute Schätzung der Normalen.
 		\end{itemize}
 		

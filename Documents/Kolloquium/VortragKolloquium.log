@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2021) (preloaded format=pdflatex 2021.8.18)  15 NOV 2021 21:51
+This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2021) (preloaded format=pdflatex 2021.8.18)  30 NOV 2021 23:56
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -702,24 +702,24 @@ LaTeX Warning: Label `fig:opencv' multiply defined.
 )
 \openout1 = `VortragKolloquium.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 19.
+LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 19.
+LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 19.
+LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 19.
+LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 19.
+LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 19.
+LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 19.
+LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 19.
+LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 19.
+LaTeX Font Info:    ... okay on input line 19.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -777,7 +777,7 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
-Package hyperref Info: Link coloring OFF on input line 18.
+Package hyperref Info: Link coloring OFF on input line 19.
 
 (/usr/local/texlive/2021/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2021-04-02 v2.47 Cross-referencing by name of section
@@ -791,65 +791,65 @@ Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 )
 \c@section@level=\count333
 )
-LaTeX Info: Redefining \ref on input line 18.
-LaTeX Info: Redefining \pageref on input line 18.
-LaTeX Info: Redefining \nameref on input line 18.
+LaTeX Info: Redefining \ref on input line 19.
+LaTeX Info: Redefining \pageref on input line 19.
+LaTeX Info: Redefining \nameref on input line 19.
  (./VortragKolloquium.out) (./VortragKolloquium.out)
 \@outlinefile=\write5
 \openout5 = `VortragKolloquium.out'.
 
 LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
-(Font)                  OT1/cmr/m/n --> OT1/cmss/m/n on input line 18.
+(Font)                  OT1/cmr/m/n --> OT1/cmss/m/n on input line 19.
 LaTeX Font Info:    Overwriting symbol font `operators' in version `bold'
-(Font)                  OT1/cmr/bx/n --> OT1/cmss/b/n on input line 18.
+(Font)                  OT1/cmr/bx/n --> OT1/cmss/b/n on input line 19.
 \symnumbers=\mathgroup6
 \sympureletters=\mathgroup7
 LaTeX Font Info:    Overwriting math alphabet `\mathrm' in version `normal'
-(Font)                  OT1/cmss/m/n --> OT1/cmr/m/n on input line 18.
-LaTeX Font Info:    Redeclaring math alphabet \mathbf on input line 18.
+(Font)                  OT1/cmss/m/n --> OT1/cmr/m/n on input line 19.
+LaTeX Font Info:    Redeclaring math alphabet \mathbf on input line 19.
 LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `normal'
-(Font)                  OT1/cmr/bx/n --> OT1/cmss/b/n on input line 18.
+(Font)                  OT1/cmr/bx/n --> OT1/cmss/b/n on input line 19.
 LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `bold'
-(Font)                  OT1/cmr/bx/n --> OT1/cmss/b/n on input line 18.
-LaTeX Font Info:    Redeclaring math alphabet \mathsf on input line 18.
+(Font)                  OT1/cmr/bx/n --> OT1/cmss/b/n on input line 19.
+LaTeX Font Info:    Redeclaring math alphabet \mathsf on input line 19.
 LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `normal'
-(Font)                  OT1/cmss/m/n --> OT1/cmss/m/n on input line 18.
+(Font)                  OT1/cmss/m/n --> OT1/cmss/m/n on input line 19.
 LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `bold'
-(Font)                  OT1/cmss/bx/n --> OT1/cmss/m/n on input line 18.
-LaTeX Font Info:    Redeclaring math alphabet \mathit on input line 18.
+(Font)                  OT1/cmss/bx/n --> OT1/cmss/m/n on input line 19.
+LaTeX Font Info:    Redeclaring math alphabet \mathit on input line 19.
 LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `normal'
-(Font)                  OT1/cmr/m/it --> OT1/cmss/m/it on input line 18.
+(Font)                  OT1/cmr/m/it --> OT1/cmss/m/it on input line 19.
 LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `bold'
-(Font)                  OT1/cmr/bx/it --> OT1/cmss/m/it on input line 18.
-LaTeX Font Info:    Redeclaring math alphabet \mathtt on input line 18.
+(Font)                  OT1/cmr/bx/it --> OT1/cmss/m/it on input line 19.
+LaTeX Font Info:    Redeclaring math alphabet \mathtt on input line 19.
 LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `normal'
-(Font)                  OT1/cmtt/m/n --> OT1/cmtt/m/n on input line 18.
+(Font)                  OT1/cmtt/m/n --> OT1/cmtt/m/n on input line 19.
 LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `bold'
-(Font)                  OT1/cmtt/m/n --> OT1/cmtt/m/n on input line 18.
+(Font)                  OT1/cmtt/m/n --> OT1/cmtt/m/n on input line 19.
 LaTeX Font Info:    Overwriting symbol font `numbers' in version `bold'
-(Font)                  OT1/cmss/m/n --> OT1/cmss/b/n on input line 18.
+(Font)                  OT1/cmss/m/n --> OT1/cmss/b/n on input line 19.
 LaTeX Font Info:    Overwriting symbol font `pureletters' in version `bold'
-(Font)                  OT1/cmss/m/it --> OT1/cmss/b/it on input line 18.
+(Font)                  OT1/cmss/m/it --> OT1/cmss/b/it on input line 19.
 LaTeX Font Info:    Overwriting math alphabet `\mathrm' in version `bold'
-(Font)                  OT1/cmss/b/n --> OT1/cmr/b/n on input line 18.
+(Font)                  OT1/cmss/b/n --> OT1/cmr/b/n on input line 19.
 LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `bold'
-(Font)                  OT1/cmss/b/n --> OT1/cmss/b/n on input line 18.
+(Font)                  OT1/cmss/b/n --> OT1/cmss/b/n on input line 19.
 LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `bold'
-(Font)                  OT1/cmss/m/n --> OT1/cmss/b/n on input line 18.
+(Font)                  OT1/cmss/m/n --> OT1/cmss/b/n on input line 19.
 LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `bold'
-(Font)                  OT1/cmss/m/it --> OT1/cmss/b/it on input line 18.
+(Font)                  OT1/cmss/m/it --> OT1/cmss/b/it on input line 19.
 LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `bold'
-(Font)                  OT1/cmtt/m/n --> OT1/cmtt/b/n on input line 18.
-LaTeX Font Info:    Redeclaring symbol font `pureletters' on input line 18.
+(Font)                  OT1/cmtt/m/n --> OT1/cmtt/b/n on input line 19.
+LaTeX Font Info:    Redeclaring symbol font `pureletters' on input line 19.
 LaTeX Font Info:    Overwriting symbol font `pureletters' in version `normal'
 (Font)                  OT1/cmss/m/it --> OT1/mathkerncmss/m/sl on input line 1
-8.
+9.
 LaTeX Font Info:    Overwriting symbol font `pureletters' in version `bold'
 (Font)                  OT1/cmss/b/it --> OT1/mathkerncmss/m/sl on input line 1
-8.
+9.
 LaTeX Font Info:    Overwriting symbol font `pureletters' in version `bold'
 (Font)                  OT1/mathkerncmss/m/sl --> OT1/mathkerncmss/bx/sl on inp
-ut line 18.
+ut line 19.
 
 (/usr/local/texlive/2021/texmf-dist/tex/latex/translator/translator-basic-dicti
 onary-English.dict
@@ -880,20 +880,20 @@ Dictionary: translator-theorem-dictionary, Language: English
 ragKolloquium.toc) [2
 
 ]
-LaTeX Font Info:    Trying to load font information for U+msa on input line 39.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 49.
 
 
 (/usr/local/texlive/2021/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 39.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 49.
 
 
 (/usr/local/texlive/2021/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
 LaTeX Font Info:    Trying to load font information for OT1+mathkerncmss on inp
-ut line 39.
+ut line 49.
 
 (/usr/local/texlive/2021/texmf-dist/tex/latex/sansmathaccent/ot1mathkerncmss.fd
 File: ot1mathkerncmss.fd 2020/01/31 Fontinst v1.933 font definitions for OT1/ma
@@ -902,209 +902,213 @@ thkerncmss.
 
 ] [4
 
+] [5
+
 ]
-<./Images/PointCloudGeneration_odm.png, id=171, 883.3pt x 832.10875pt>
+<./Images/PointCloudGeneration_odm.png, id=196, 883.3pt x 832.10875pt>
 File: ./Images/PointCloudGeneration_odm.png Graphic file (type png)
 <use ./Images/PointCloudGeneration_odm.png>
 Package pdftex.def Info: ./Images/PointCloudGeneration_odm.png  used on input l
-ine 73.
+ine 109.
 (pdftex.def)             Requested size: 145.96455pt x 137.49516pt.
-<./Images/PointCloudGeneration_colmap.png, id=173, 883.3pt x 832.10875pt>
+<./Images/PointCloudGeneration_colmap.png, id=198, 883.3pt x 832.10875pt>
 File: ./Images/PointCloudGeneration_colmap.png Graphic file (type png)
 <use ./Images/PointCloudGeneration_colmap.png>
 Package pdftex.def Info: ./Images/PointCloudGeneration_colmap.png  used on inpu
-t line 73.
+t line 109.
 (pdftex.def)             Requested size: 145.96455pt x 137.49516pt.
- [5
+ [6
 
  <./Images/PointCloudGeneration_odm.png> <./Images/PointCloudGeneration_colmap.
 png>]
-<./Images/PointCloudGeneration_meshroom.png, id=202, 883.3pt x 832.10875pt>
+<./Images/PointCloudGeneration_meshroom.png, id=227, 883.3pt x 832.10875pt>
 File: ./Images/PointCloudGeneration_meshroom.png Graphic file (type png)
 <use ./Images/PointCloudGeneration_meshroom.png>
 Package pdftex.def Info: ./Images/PointCloudGeneration_meshroom.png  used on in
-put line 97.
+put line 133.
 (pdftex.def)             Requested size: 92.1879pt x 86.83437pt.
-<./Images/PointCloudGeneration_openmvg.png, id=203, 883.3pt x 832.10875pt>
+<./Images/PointCloudGeneration_openmvg.png, id=228, 883.3pt x 832.10875pt>
 File: ./Images/PointCloudGeneration_openmvg.png Graphic file (type png)
 <use ./Images/PointCloudGeneration_openmvg.png>
 Package pdftex.def Info: ./Images/PointCloudGeneration_openmvg.png  used on inp
-ut line 97.
+ut line 133.
 (pdftex.def)             Requested size: 92.1879pt x 86.83437pt.
-<./Images/PointCloudGeneration_opencv.png, id=204, 883.3pt x 832.10875pt>
+<./Images/PointCloudGeneration_opencv.png, id=229, 883.3pt x 832.10875pt>
 File: ./Images/PointCloudGeneration_opencv.png Graphic file (type png)
 <use ./Images/PointCloudGeneration_opencv.png>
 Package pdftex.def Info: ./Images/PointCloudGeneration_opencv.png  used on inpu
-t line 97.
+t line 133.
 (pdftex.def)             Requested size: 92.1879pt x 86.83437pt.
- [6
+ [7
 
  <./Images/PointCloudGeneration_meshroom.png> <./Images/PointCloudGeneration_op
 enmvg.png> <./Images/PointCloudGeneration_opencv.png>]
-[7
+[8
 
 ]
-<./Images/HandcraftedClassifierAvocado.png, id=263, 883.3pt x 832.10875pt>
+<./Images/HandcraftedClassifierAvocado.png, id=288, 883.3pt x 832.10875pt>
 File: ./Images/HandcraftedClassifierAvocado.png Graphic file (type png)
 <use ./Images/HandcraftedClassifierAvocado.png>
 Package pdftex.def Info: ./Images/HandcraftedClassifierAvocado.png  used on inp
-ut line 137.
+ut line 165.
 (pdftex.def)             Requested size: 145.96455pt x 137.49516pt.
-<./Images/HandcraftedClassifierPlant2.png, id=264, 883.3pt x 832.10875pt>
+<./Images/HandcraftedClassifierPlant2.png, id=289, 883.3pt x 832.10875pt>
 File: ./Images/HandcraftedClassifierPlant2.png Graphic file (type png)
 <use ./Images/HandcraftedClassifierPlant2.png>
 Package pdftex.def Info: ./Images/HandcraftedClassifierPlant2.png  used on inpu
-t line 137.
+t line 165.
 (pdftex.def)             Requested size: 145.96455pt x 137.49516pt.
- [8
+ [9
 
  <./Images/HandcraftedClassifierAvocado.png> <./Images/HandcraftedClassifierPla
-nt2.png>]
-<./Images/Plant_Avocado.png, id=294, 883.3pt x 832.10875pt>
+nt2.png>] [10
+
+]
+<./Images/Plant_Avocado.png, id=344, 883.3pt x 832.10875pt>
 File: ./Images/Plant_Avocado.png Graphic file (type png)
 <use ./Images/Plant_Avocado.png>
-Package pdftex.def Info: ./Images/Plant_Avocado.png  used on input line 155.
+Package pdftex.def Info: ./Images/Plant_Avocado.png  used on input line 193.
 (pdftex.def)             Requested size: 145.96455pt x 137.49516pt.
 pdfTeX warning (ext4): destination with the same identifier (name{fig:classifie
 r:1}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.155 }
+l.193 }
        
-<./Images/Plant_Plant2.png, id=295, 885.3075pt x 929.4725pt>
+<./Images/Plant_Plant2.png, id=345, 885.3075pt x 929.4725pt>
 File: ./Images/Plant_Plant2.png Graphic file (type png)
 <use ./Images/Plant_Plant2.png>
-Package pdftex.def Info: ./Images/Plant_Plant2.png  used on input line 155.
+Package pdftex.def Info: ./Images/Plant_Plant2.png  used on input line 193.
 (pdftex.def)             Requested size: 145.96455pt x 153.24289pt.
 pdfTeX warning (ext4): destination with the same identifier (name{fig:classifie
 r:2}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.155 }
-        [9
+l.193 }
+        [11
 
- <./Images/Plant_Avocado.png> <./Images/Plant_Plant2.png>] [10
+ <./Images/Plant_Avocado.png> <./Images/Plant_Plant2.png>] [12
 
 ]
-<./Images/BG_Banana.png, id=347, 883.3pt x 832.10875pt>
+<./Images/BG_Banana.png, id=398, 883.3pt x 832.10875pt>
 File: ./Images/BG_Banana.png Graphic file (type png)
 <use ./Images/BG_Banana.png>
-Package pdftex.def Info: ./Images/BG_Banana.png  used on input line 172.
+Package pdftex.def Info: ./Images/BG_Banana.png  used on input line 211.
 (pdftex.def)             Requested size: 199.73653pt x 188.15596pt.
 
-[11
+[13
 
- <./Images/BG_Banana.png>] [12
-
-] [13
-
-] [14
+ <./Images/BG_Banana.png>] [14
 
 ] [15
 
+] [16
+
+] [17
+
 ]
-<./Images/RegistrationBananaT1.png, id=477, 972.63374pt x 743.77875pt>
+<./Images/RegistrationBananaT1.png, id=533, 972.63374pt x 743.77875pt>
 File: ./Images/RegistrationBananaT1.png Graphic file (type png)
 <use ./Images/RegistrationBananaT1.png>
 Package pdftex.def Info: ./Images/RegistrationBananaT1.png  used on input line 
-242.
+286.
 (pdftex.def)             Requested size: 92.1879pt x 70.48947pt.
 pdfTeX warning (ext4): destination with the same identifier (name{fig:meshroom}
 ) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.242 }
+l.286 }
        
-<./Images/RegistrationBananaT2.png, id=478, 943.525pt x 851.18pt>
+<./Images/RegistrationBananaT2.png, id=534, 943.525pt x 851.18pt>
 File: ./Images/RegistrationBananaT2.png Graphic file (type png)
 <use ./Images/RegistrationBananaT2.png>
 Package pdftex.def Info: ./Images/RegistrationBananaT2.png  used on input line 
-242.
+286.
 (pdftex.def)             Requested size: 92.1879pt x 83.1618pt.
 pdfTeX warning (ext4): destination with the same identifier (name{fig:openmvg})
  has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.242 }
+l.286 }
        
-<./Images/RegistrationBananaT3.png, id=479, 610.28pt x 521.95pt>
+<./Images/RegistrationBananaT3.png, id=535, 610.28pt x 521.95pt>
 File: ./Images/RegistrationBananaT3.png Graphic file (type png)
 <use ./Images/RegistrationBananaT3.png>
 Package pdftex.def Info: ./Images/RegistrationBananaT3.png  used on input line 
-242.
+286.
 (pdftex.def)             Requested size: 92.1879pt x 78.83865pt.
 pdfTeX warning (ext4): destination with the same identifier (name{fig:opencv}) 
 has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.242 }
-        [16
+l.286 }
+        [18
 
  <./Images/RegistrationBananaT1.png> <./Images/RegistrationBananaT2.png> <./Ima
 ges/RegistrationBananaT3.png>]
 LaTeX Font Info:    Trying to load font information for OMS+cmss on input line 
-258.
-LaTeX Font Info:    No file OMScmss.fd. on input line 258.
+308.
+LaTeX Font Info:    No file OMScmss.fd. on input line 308.
 
 
 LaTeX Font Warning: Font shape `OMS/cmss/m/n' undefined
 (Font)              using `OMS/cmsy/m/n' instead
-(Font)              for symbol `textbraceleft' on input line 258.
+(Font)              for symbol `textbraceleft' on input line 308.
 
-[17
+[19
 
 ]
-<./Images/Pipelines.png, id=534, 967.615pt x 887.315pt>
+<./Images/Pipelines.png, id=589, 967.615pt x 887.315pt>
 File: ./Images/Pipelines.png Graphic file (type png)
 <use ./Images/Pipelines.png>
-Package pdftex.def Info: ./Images/Pipelines.png  used on input line 267.
+Package pdftex.def Info: ./Images/Pipelines.png  used on input line 317.
 (pdftex.def)             Requested size: 199.73653pt x 183.15991pt.
- [18
+ [20
 
  <./Images/Pipelines.png>]
-<./Images/PipelineBackgroundSegmentationStriped.png, id=561, 883.3pt x 832.1087
+<./Images/PipelineBackgroundSegmentationStriped.png, id=617, 883.3pt x 832.1087
 5pt>
 File: ./Images/PipelineBackgroundSegmentationStriped.png Graphic file (type png
 )
 <use ./Images/PipelineBackgroundSegmentationStriped.png>
 Package pdftex.def Info: ./Images/PipelineBackgroundSegmentationStriped.png  us
-ed on input line 291.
+ed on input line 343.
 (pdftex.def)             Requested size: 128.02805pt x 128.03595pt.
 
-Overfull \hbox (35.84015pt too wide) in paragraph at lines 291--291
+Overfull \hbox (35.84015pt too wide) in paragraph at lines 343--343
  [][] 
  []
 
-<./Images/PipelinePlantSegmentation.png, id=562, 883.3pt x 832.10875pt>
+<./Images/PipelinePlantSegmentation.png, id=618, 883.3pt x 832.10875pt>
 File: ./Images/PipelinePlantSegmentation.png Graphic file (type png)
 <use ./Images/PipelinePlantSegmentation.png>
 Package pdftex.def Info: ./Images/PipelinePlantSegmentation.png  used on input 
-line 291.
+line 343.
 (pdftex.def)             Requested size: 128.02805pt x 128.03595pt.
 
-Overfull \hbox (35.84015pt too wide) in paragraph at lines 291--291
+Overfull \hbox (35.84015pt too wide) in paragraph at lines 343--343
  [][] 
  []
 
-<./Images/PipelineLeaveSegmentationStriped.png, id=563, 883.3pt x 832.10875pt>
+<./Images/PipelineLeaveSegmentationStriped.png, id=619, 883.3pt x 832.10875pt>
 File: ./Images/PipelineLeaveSegmentationStriped.png Graphic file (type png)
 <use ./Images/PipelineLeaveSegmentationStriped.png>
 Package pdftex.def Info: ./Images/PipelineLeaveSegmentationStriped.png  used on
- input line 291.
+ input line 343.
 (pdftex.def)             Requested size: 128.02805pt x 128.03595pt.
 
-Overfull \hbox (35.84015pt too wide) in paragraph at lines 291--291
+Overfull \hbox (35.84015pt too wide) in paragraph at lines 343--343
  [][] 
  []
 
-[19
+[21
 
  <./Images/PipelineBackgroundSegmentationStriped.png> <./Images/PipelinePlantSe
 gmentation.png> <./Images/PipelineLeaveSegmentationStriped.png>]
-(./VortragKolloquium.bbl) [20
+(./VortragKolloquium.bbl) [22
 
  </usr/local/texlive/2021/texmf-dist/tex/latex/beamer/beamericonarticle.pdf>] [
-21
+23
 
 
 ]
@@ -1125,28 +1129,29 @@ LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 LaTeX Warning: There were multiply-defined labels.
 
 Package rerunfilecheck Info: File `VortragKolloquium.out' has not changed.
-(rerunfilecheck)             Checksum: 8ECAA6B5FB0D1348374F62E3F6270872;619.
+(rerunfilecheck)             Checksum: 71036BBFF03C9FE8112F4238A5091971;682.
  ) 
 Here is how much of TeX's memory you used:
- 20997 strings out of 478542
- 392738 string characters out of 5850401
- 675725 words of memory out of 5000000
- 38400 multiletter control sequences out of 15000+600000
+ 21020 strings out of 478542
+ 393054 string characters out of 5850401
+ 675758 words of memory out of 5000000
+ 38417 multiletter control sequences out of 15000+600000
  414681 words of font info for 67 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  128i,14n,124p,421b,546s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmss10.pfb
-></usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmss12.pfb>
-</usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmss8.pfb></
-usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmssi10.pfb></
-usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmssi8.pfb></u
-sr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></us
-r/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb>
-
-Output written on VortragKolloquium.pdf (21 pages, 1466326 bytes).
+</usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb
+></usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb><
+/usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmss10.pfb></
+usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmss12.pfb></u
+sr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmss8.pfb></usr
+/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmssi10.pfb></usr
+/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmssi8.pfb></usr/
+local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/l
+ocal/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb>
+Output written on VortragKolloquium.pdf (23 pages, 1489043 bytes).
 PDF statistics:
- 701 PDF objects out of 1000 (max. 8388607)
- 614 compressed objects within 7 object streams
- 68 named destinations out of 1000 (max. 500000)
- 176 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 772 PDF objects out of 1000 (max. 8388607)
+ 677 compressed objects within 7 object streams
+ 74 named destinations out of 1000 (max. 500000)
+ 184 words of extra memory for PDF output out of 10000 (max. 10000000)
 
