@@ -14,6 +14,8 @@ import constants
 
 from multiprocessing.managers import BaseManager
 
+from job import JobInterface
+
 from flask import Flask, request
 app = Flask(__name__)
 
