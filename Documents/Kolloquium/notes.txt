@@ -1,0 +1,195 @@
+- Titel
+	- Hallo noch mal, heute stelle ich Ihnen meine Master-Arbeit mit dem Thema "Analyse von Pflanzenwachstum auf Basis von 3D-Punktwolken" vor
+-Inhalt
+	- Ziele
+	- Generierung, Segmentierung und Registrierung von 3D-Punktwolken
+	- Implementation
+	- Demonstation der Ergebnisse
+- Ziele
+	- Hauptziel: Analyse von Pflanze durch Punkwolken
+		- Biomasse
+		- Anzahl Früchte
+	- Kerprobleme
+		- Generierung von Punktwolken
+			- Registrierung wegen ungleichem Maßstab.
+		- Segmentierung der Pflanze
+			- Hintergrund-Entfernung
+	- Implementation mit Client-Server Anwendung
+	- REST-Interface
+	- Ziel: Wenig Datenübertragung zum Server, da Anwender Kleinbauern sind.
+		- (Überleitung zur nächsten Folie)
+- Generierung von Punktwolken
+	- Einsatz von Hardware nicht möglich
+		- Hohe Kosten
+		- Anwender müssen erst angelernt werden
+		- Daher SfM
+	- Es wird eine existierende Implementationen genutzt
+	- Voraussetzungen 
+		- Wenig Bilder
+		- Laufzeit
+		- Unbekannte Kamera Position und Ausrichtung
+		- Reihenfolge nicht unbedingt bekannt
+	- (Nächste Folie)
+	- Evaluierte Framworks:
+		- ODM
+		- Colmap
+		- Meshroom
+		- OpenMVB
+		- SfM Pipeline
+	- ODM und Colmap beide brauchbar
+	- Colmap liefert gute Auflösung
+	- ODM performanter und bessere Oberflächenabdeckung
+	- ODM liefert Normalen
+	- Colmap kann Rauschen beinhalten.
+	- Folie Vergleich ODM vs Colmap
+	- Folie andere Verfahren
+- Segmentierung
+	- Ansatz 1: Entscheidung auf Basis der Krümmung eines Punktes ob dieser ein Stiel ist oder nicht.
+		- Je höher die Krümmung umso wahrscheinlicher ist der Punkt ein Stiel
+		- Probleme: 
+			- Gute Parmetriesierung für verschiedene Pflanzen finden
+			- Ähnliche Krümmung bei Blättern.
+		- Nachteile: 
+			- Hintergrundsegmentierung bleibt offen
+			- Weiter unterteilung der Pflanze nicht möglich
+			- Normalen müssen bekannt sein
+		- Nächste Folie Bilder
+	- Ansatz 2: PointNet++
+		- PointNet++
+			- Klassifizierung
+			- Segmentierung
+			- Szenen-Analyse
+			- Kein Model zur Segmentierung von Pflanzen
+		- Vorteil
+			- Weitere Klassen neben Stielen möglich
+		- Nachteil
+			- Aufwendige Erstellung des Datensatzes (Eine Woche+ für 144 Punktwolken)
+		- Datensatz
+			- 144 individuelle Punktwolken
+			- max 20 Subsample
+		- Training
+			- Mit/ohne Hintergrund
+				- Hintegrund ohne Zentrum
+			- Mit/ohne Normalen
+			- Mit/ohne Normalisierung
+			- Mit/ohne zufällige Rotation
+	- Hintergrund-Segmenetierung
+		- Hinzufügen eines dritten Labels
+		- Problem: Großer Anteil der Hintergrundpunkte
+		- Lösung: Nur das Zentrum untersuchen + Nachverarbeitung
+			- Nächster Nachbarvote
+		- Problem: Ungwollte Pflanzen
+		- Potentielle Lösung:
+			- Einzelne Pflanzen erkenne
+			- Diese isolieren
+			- Wenn nötig Hintergrund-Segmentierung
+			- (optional) Pflanze klassifizieren (Unkräuter ausblenden)
+			- Pflanze segmentieren
+		- Folie: Ergebnisse Hintergrund-Segmentierung
+	- Folien Training
+		- mIoU
+			- Jaccard zwischen (der)
+				- Menge der Punkte die als Klasse C klassifiziert wurden (und der)
+				- Menge der Punkte die Klasse C angehören
+				- Mittelwert über alle Klassen
+	- Folie Evaluation
+		- ohne Hintergrund
+			- t11 normalisierung, normalen, keine rotationen
+			- t6 ohne Normalisierung
+			- t10 zufällige Rotationen
+			- t13 ohne Normalen
+		- mit Hintergrund
+			- t9 zufällige Roationen
+			- t4 normalisierung, normalen, keine rotationen
+			- t7 ohne Normalisierung 
+			- t12 nur das Zentrum
+- Registrierung
+	- Problem: Ungleicher Maßstab der mit SfM generierten Punktwolken
+	- Lösung: Registrierung mit Hintergrund-Punktwolke bringt die Punktwolke einzelner Zeitpunkte in den selben Maßstab.
+	- Problem: Die meisten Registrierungs-Verfahren schätzen nicht die Skalierung.
+	- Drei Ansätze untersucht
+- Ansatz 1: ICP mit Schätzung der Skalierung.
+	- Erste Ansatz nutzt ICP Implementation mit Skalierung
+	- Problem: Gute Initialisierung finden
+	- Lösung:
+		- Punktwolke an XY-Ebene ausrichten
+		- Nur Zentrum analysieren
+		- Quell-Punktwolke auf Größe der Ziel-Punktwolke bringen.
+		- Störung filtern
+		- Initialregistrierung mit ausgewählten Punkten
+	- Abschließende Registrierung um Fehler auszugleichen
+	- Funktioniert nicht immer
+- Ansatz 2: DCP anpassen
+	- DCP besteht aus drei Schichten
+		- DGCNN (Dynamic Graph Convolutional Neuronal Network) überführt Punkte in hochdimensonal Feature-Raum
+		- Transformer-Netz findet Zuordnung zwischen Punkten
+		- SVD-Head wie ICP
+			- SVD bilden
+			- Rotation ermitteln
+			- Translation berechen
+	- Eingabe um Einsen erweitern
+	- Resultat der SVD-Zerlegung als affine Transformations-Matrix betrachten
+	- Besserer Ansatz:
+		- Berechnung der Rotation belassen
+		- Auf Basis der Rotation Skalierung berechnen
+			- Abstand zum Zentrum der Punktwolke berechnen
+			- Skalierung basierend auf Abständen berechnen
+			- Angepasste berechnung der Translation
+		- RPM-Net statt DCP
+- Ansatz 3: Iterative Schätzung der Registrierung
+	- Ausprobieren verschiedener Skalierungen mit anschließender Registrierung
+	- Bewertung der Iterationen durch Abstandsmaß, oder Fehlermaß der Implementationen. 
+		- Beim vergleich der Verfahren wurde das selbe Maß genutzt.
+	- Liste einzelene Verfahren:
+		- PointNetLK
+		- DCP
+		- RPM-Net
+		- ICP
+			- Point to Plan statt Point to Point
+		- RICP
+	- RPM-Net und ICP sind gut
+	- Es ist immernoch mit Ausreißern zu rechnen.
+	- Folie: Probleme
+		- kleine Abweichungen in der Skalierung
+		- Dominante Ebenen sind problematisch
+	- Folie: Generierte Oberflächen -> Praktischer Einsatz
+- Server-Pipelines und Jobs
+	- Einzelne Pipelines in Jobs aufgeteilt
+	- Vorteil: Ergebnisse geteilter Jobs können wiederverwertet werden
+	- Vorteil: Genauere Status-Updates möglich
+	- Vorteil: Leicht erweiterbar
+- Server-Schnittstellen
+	- detail
+		- POST: Zeitpunkt hinzufügen/überschreiben
+		- PUT: Jobs für Zeitpunkt starten
+		- GET: Status zu Jobs abholen
+	- listing
+		- GET: Status zu Messreihe abholen
+	- result
+		- GET: Resultat zu einem Zeitpunkt abholen
+- Demo
+	- Postman
+		- Pipelines zeigen in Master Thesis Pre-Request Script
+		- Banana T1 starten & zeigen
+		- Demo Banana zeigen
+			- Registrierung
+			- Segmentierung
+	- Cloud-Compare
+		- Eregebnisse Demo Banana
+			- Segmentation
+				- T1
+				- Background
+				- Plants
+			- Registration
+				- Hintergrund
+				- Pflanze
+		- Evaluation
+			- Background
+				- Einzelne Sample
+			- Pflanzen
+			
+			
+	
+	
+	
+	

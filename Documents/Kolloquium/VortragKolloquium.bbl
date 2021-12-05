@@ -1,4 +1,4 @@
-\begin{thebibliography}{1}
+\begin{thebibliography}{10}
 
 \bibitem{ODM}
 pierotofy, ``Open drone map - a command line toolkit to generate maps, point
@@ -8,20 +8,11 @@ pierotofy, ``Open drone map - a command line toolkit to generate maps, point
 J.~L. Sch\"{o}nberger and J.-M. Frahm, ``Structure-from-motion revisited,''
   2016.
 
-\bibitem{schoenberger2016mvs}
-J.~L. Sch\"{o}nberger, E.~Zheng, M.~Pollefeys, and J.-M. Frahm, ``{Pixelwise
-  View Selection for Unstructured Multi-View Stereo},'' in {\em European
-  Conference on Computer Vision (ECCV)}, 2016.
-
 \bibitem{Moulon2012}
 P.~Moulon, P.~Monasse, and R.~Marlet, ``Adaptive structure from motion with
   a~contrario model estimation,'' in {\em Proceedings of the Asian Computer
   Vision Conference (ACCV 2012)}, pp.~257--270, Springer Berlin Heidelberg,
   2012.
-
-\bibitem{Jancosek2011}
-M.~Jancosek and T.~Pajdla, ``Multi-view reconstruction preserving
-  weakly-supported surfaces,'' in {\em {CVPR} 2011}, {IEEE}, jun 2011.
 
 \bibitem{moulon2016openmvg}
 P.~Moulon, P.~Monasse, R.~Perrot, and R.~Marlet, ``Openmvg: Open multiple view
@@ -30,5 +21,37 @@ P.~Moulon, P.~Monasse, R.~Perrot, and R.~Marlet, ``Openmvg: Open multiple view
 
 \bibitem{opencv}
 alalek, ``Structure from motion module,'' 2016.
+
+\bibitem{qi2017pointnet++}
+C.~R. Qi, L.~Yi, H.~Su, and L.~J. Guibas, ``Pointnet++: Deep hierarchical
+  feature learning on point sets in a metric space,'' {\em arXiv preprint
+  arXiv:1706.02413}, 2017.
+
+\bibitem{Wang_2019_ICCV}
+Y.~Wang and J.~M. Solomon, ``Deep closest point: Learning representations for
+  point cloud registration,'' in {\em The IEEE International Conference on
+  Computer Vision (ICCV)}, October 2019.
+
+\bibitem{Ziner2005PointSR}
+T.~Zin{\ss}er, J.~Schmidt, and H.~Niemann, ``Point set registration with
+  integrated scale estimation,'' in {\em Point Set Registration with Integrated
+  Scale Estimation}, 2005.
+
+\bibitem{aoki2019pointnetlk}
+Y.~Aoki, H.~Goforth, R.~A. Srivatsan, and S.~Lucey, ``Pointnetlk: Robust and
+  efficient point cloud registration using pointnet,'' 2019.
+
+\bibitem{Yew_2020}
+Z.~J. Yew and G.~H. Lee, ``Rpm-net: Robust point matching using learned
+  features,'' {\em 2020 IEEE/CVF Conference on Computer Vision and Pattern
+  Recognition (CVPR)}, Jun 2020.
+
+\bibitem{zhou2018open3d}
+Q.-Y. Zhou, J.~Park, and V.~Koltun, ``Open3d: A modern library for 3d data
+  processing,'' {\em arXiv preprint arXiv:1801.09847}, 2018.
+
+\bibitem{ICP}
+J.~Zhang, Y.~Yao, and B.~Deng, ``Fast and robust iterative closest point,''
+  {\em IEEE Transactions on Pattern Analysis and Machine Intelligence}, 2021.
 
 \end{thebibliography}
