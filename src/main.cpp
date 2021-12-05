@@ -941,9 +941,22 @@ int convertToRegistrationFormat(po::variables_map vm){
   pcl::PointCloud<PointTypePCL>::Ptr cloudSrcSubsampled = subSampleCloudRandom(cloudSrc, numOfPoints);
 
   if(vm["UseShapenetFormat"].as<bool>()){
+    if(!vm.count("ShapenetFormatTransformationLocation")){
+      cout << "Missing Parameter ShapenetFormatTransformationLocation\n";
+      return 1;
+    }
     Eigen::Matrix4f t,s;
     transformToShapenetFormat(cloudSrcSubsampled, t,s);
+
+    //save t and s
+    Eigen::Matrix4f translation = s * t;
+    std::ofstream out_trans(vm["ShapenetFormatTransformationLocation"].as<std::string>());
+    //res_trans.block(0,3,3,1) *= scale;
+    out_trans << translation << std::endl;
+    out_trans.close();
   }
+
+  
   
 
   writeRegistrationFormat(cloudSrcSubsampled, outPath);
@@ -1317,6 +1330,7 @@ int main (int argc, char** argv)
     ("Gaussian", po::value<bool>()->default_value(false), "Apply Gaussian Distribution on surface")
     ("Sigma", po::value<float>(), "Sigma for Gauss Distribution")
     ("UseShapenetFormat", po::value<bool>()->default_value(true), "Use Shapent Format in iterative scale registration")
+    ("ShapenetFormatTransformationLocation", po::value<std::string>(), "Location where transformation is saved which is applied while transforming to shapenet")
   ;
 
   po::variables_map vm;

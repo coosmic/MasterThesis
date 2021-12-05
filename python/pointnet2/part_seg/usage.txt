@@ -24,9 +24,9 @@ python evaluate.py --model pointnet2_part_seg3C --model_path ./results/training/
 
 python evaluate.py --model pointnet2_part_seg3C --model_path ./results/training/t6_2ClassesPartSeg/model.ckpt --log_dir ./results/evaluation/t6_without_normalization/ --pred_dir pred_eval --num_classes 3
 
-python evaluate.py --model pointnet2_part_seg --model_path ./results/training/t11_2Classes_PartSeg_WithNorm_WithoutRot/model.ckpt --log_dir ./results/evaluation/t11_2Classes_PartSeg_WithNorm_WithoutRot/ --pred_dir pred_eval --num_classes 2 --normalize False
+python evaluate.py --model pointnet2_part_seg --model_path ./results/training/t11_2Classes_PartSeg_WithNorm_WithoutRot/model.ckpt --log_dir ./results/evaluation/t11_2Classes_PartSeg_WithNorm_WithoutRot2/ --pred_dir pred_eval --num_classes 2 --normalize True
 
-python evaluate.py --model pointnet2_part_seg3C --model_path ./results/training/t4_3ClassesPartSeg/model.ckpt --log_dir ./results/evaluation/t4_3ClassesPartSeg/ --pred_dir pred_eval --num_classes 3 --normalize False
+python evaluate_without_input_dimension.py --model pointnet2_part_seg3C --model_path ./results/training/t4_3ClassesPartSeg/model.ckpt --log_dir ./results/evaluation/t4_3ClassesPartSeg2/ --pred_dir pred_eval --num_classes 3 --normalize True
 
 python evaluate.py --model pointnet2_part_seg3C --model_path ./results/training/t5_3ClassesPartSeg3C/model.ckpt --log_dir ./results/evaluation/t5_3ClassesPartSeg3C/ --pred_dir pred_eval --num_classes 3 --normalize True
 

@@ -1,1 +1,10 @@
-Namespace(batch_size=10, gpu=0, log_dir='./pointnet2/part_seg/log_eval', model='pointnet2_part_seg', model_path='./pointnet2/part_seg/results/training/t6_2ClassesPartSeg/model.ckpt', num_point=16384, pred_dir='./data/predictions/background')
+Namespace(batch_size=10, gpu=0, log_dir='./pointnet2/part_seg/log_eval', model='pointnet2_part_seg', model_path='./pointnet2/part_seg/results/training/t6_2ClassesPartSeg/model.ckpt', num_point=16384, pred_dir='data/predictions/background')
+2021-12-05 21:42:47.775739
+---- EPOCH 000 EVALUATION ----
+000/001
+eval mean loss: 0.000000
+eval accuracy: 0.900330
+eval avg class acc: nan
+eval mIoU of Plant:	 0.450165
+eval mean mIoU: 0.450165
+eval mean mIoU (all shapes): 0.450165

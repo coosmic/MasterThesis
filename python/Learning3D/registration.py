@@ -1,6 +1,7 @@
 import argparse
 import os
 import numpy as np
+from numpy.lib.npyio import save
 import torch
 import torch.utils.data
 from sklearn.neighbors import NearestNeighbors
@@ -97,7 +98,7 @@ def test(args, model, test_loader, scale):
     print('Validation Loss: %f & Validation Distance Sum: %f'%(test_loss, test_dist_sum))
     return test_dist_sum, transformations[0].cpu().detach().numpy()
 
-def icp(src, target, threshold, scale, show=False):
+def icp(src, target, threshold, scale, show=False, savePath=None):
 
     src = src * scale
 
@@ -127,12 +128,15 @@ def icp(src, target, threshold, scale, show=False):
         pcdTarget.paint_uniform_color([0, 1, 0])
         o3d.visualization.draw_geometries([tmp, pcdTarget])
 
+    if savePath is not None:
+        np.savetxt(savePath, np.asarray(tmp.points))
+
     return error, icp_res
 
 def runWithDifferentScalesWithArgs(args, data, model = None):
     runWithDifferentScales(data, model, args.start_scale, args.end_scale, args.scale_step_width, args.show, args.icp, args.icp_threshold, args.net)
 
-def runWithDifferentScales(data, model=None, start_scale = 0.5, end_scale = 5.0, scale_step_width=0.1, show=False, use_icp=True, icp_threshold = 0.2, net="PointNetLK" ):
+def runWithDifferentScales(data, model=None, start_scale = 0.5, end_scale = 5.0, scale_step_width=0.1, show=False, use_icp=True, icp_threshold = 0.2, net="PointNetLK", savePath=None ):
 
     startScale = start_scale
     endScale = end_scale
@@ -178,7 +182,7 @@ def runWithDifferentScales(data, model=None, start_scale = 0.5, end_scale = 5.0,
 
     scale = startScale + (scaleStepWidth * best_iteration)
     if use_icp:
-        err, result = icp(data['source'][0], data['template'][0], icp_threshold, scale, False)
+        err, result = icp(data['source'][0], data['template'][0], icp_threshold, scale, False, savePath)
         return result.transformation, scale
     else:
         return best_transform, scale 

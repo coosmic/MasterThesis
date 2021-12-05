@@ -23,7 +23,7 @@ parser.add_argument('--model_path', default='./pointnet2/part_seg/results/traini
 parser.add_argument('--log_dir', default='./pointnet2/part_seg/log_eval', help='Log dir [default: log_eval]')
 parser.add_argument('--num_point', type=int, default=16384, help='Point Number [default: 2048]')
 parser.add_argument('--batch_size', type=int, default=10, help='Batch Size during training [default: 32]')
-parser.add_argument('--pred_dir', default='./data/predictions/background', help='Directory where predictions should be saved to')
+parser.add_argument('--pred_dir', default='data/predictions/background', help='Directory where predictions should be saved to')
 FLAGS = parser.parse_args()
 
 VOTE_NUM = 12
@@ -49,6 +49,7 @@ PRED_DIR = FLAGS.pred_dir
 
 # Shapenet official train/test split
 DATA_PATH = DATA_PATH = os.path.join(os.path.abspath(os.getcwd()), 'data', 'predictions/background/')#os.path.join(ROOT_DIR, 'data', 'shapenetcore_partanno_segmentation_benchmark_v0_normal')
+global TEST_DATASET
 TEST_DATASET = part_dataset_all_normal.PartNormalDataset(root=DATA_PATH, npoints=NUM_POINT, classification=False, split='val', normalize=False, seg_classes={'Plant': [0, 1] } )
 
 def log_string(out_str):
@@ -81,6 +82,8 @@ def evaluate():
                'is_training_pl': is_training_pl,
                'pred': pred,
                'loss': loss}
+        global TEST_DATASET
+        TEST_DATASET = part_dataset_all_normal.PartNormalDataset(root=DATA_PATH, npoints=NUM_POINT, classification=False, split='val', normalize=False, seg_classes={'Plant': [0, 1] } )
 
         eval_one_epoch(sess, ops)
 
@@ -188,6 +191,7 @@ def eval_one_epoch(sess, ops):
             print(file_name)
             with open(os.path.join("./"+PRED_DIR, cat, file_name), "w") as prediction_file:
                 # iterate over segp (cur_pred_val) as those are only the valid data
+                print(os.path.join("./"+PRED_DIR, cat, file_name))
                 for i in range(len(segp)):
                     prediction_file.write(" ".join([str(x) for x in [*points[i], str(segp[i])]]) + "\n")
 

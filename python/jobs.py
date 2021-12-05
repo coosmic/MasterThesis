@@ -14,7 +14,6 @@ from Learning3D.registration import runWithDifferentScales, loadRawDataWithoutAr
 PARTSEG2 = None
 PARTSEG3 = None
 
-
 def startPartSegPipelines():
     global PARTSEG3
     PARTSEG3 = estimate.Pointnet2PartSegmentation2("pointnet2_part_seg3C", "./pointnet2/part_seg/results/training/t7_3ClassesPartSegNoNorm/model.ckpt", {'Plant': [0, 1, 2] })
@@ -44,6 +43,7 @@ def jobLeavesSegmentation(jobParameter):
         estimationLocation = os.path.join(os.path.abspath(os.getcwd()), 'data', 'predictions/background/13371337/point_cloudSS1.txt' )
         copyCommand = f"cp {pointCloudPath} {estimationLocation}"
         os.system(copyCommand)
+        time.sleep(0.25)
 
         evaluate2.evaluate()
 
@@ -160,6 +160,7 @@ def jobBackgroundRegistration(jobParameter):
     srcPath = os.path.join(folderPath, 'shapenet', 'registrationFormat.txt')
     targetPath = os.path.join(os.path.abspath(os.getcwd()), 'data', jobParameter['testSet'], 'background', 'shapenet', 'registrationFormat.txt')
     outPath = os.path.join(folderPath, 'shapenet', 'registration/')
+    savePath = os.path.join(folderPath, 'shapenet', 'registered_background.txt')
 
     showBevor = False
     if 'ShowBevor' in jobParameter:
@@ -171,7 +172,7 @@ def jobBackgroundRegistration(jobParameter):
         registration.display_open3d(targetCloud, srcCloud, srcCloud)
 
     startScale = 0.25
-    endScale = 1.0
+    endScale = 1.5
     stepWidth = 0.01
     if 'StartScale' in jobParameter:
         startScale = jobParameter['StartScale']
@@ -222,7 +223,7 @@ def jobBackgroundRegistration(jobParameter):
     else:
         return {"Status": constants.statusFailed, "Reason": f"Unknown  Registration Method {registrationMethod}"}
 
-    transformation, scale = runWithDifferentScales(data, show=showResults, model=model, use_icp=runWithICP, net=netName, start_scale=startScale, end_scale=endScale, scale_step_width=stepWidth)
+    transformation, scale = runWithDifferentScales(data, show=showResults, model=model, use_icp=runWithICP, net=netName, start_scale=startScale, end_scale=endScale, scale_step_width=stepWidth, savePath=savePath)
 
     print("Transformation", transformation)
     print("Scale", scale)
@@ -237,6 +238,11 @@ def jobConvertToBackground(jobParameter):
         inPath = os.path.join(folderPath, 'odm_filterpoints', "point_cloud.ply")
     outPath = os.path.join(folderPath, 'shapenet', "registrationFormat.txt")
 
+    if not os.path.exists(os.path.join(folderPath, 'shapenet', 'registration')):
+        os.mkdir(os.path.join(folderPath, 'shapenet', 'registration'))
+
+    shapenetTransformationLocation = os.path.join(folderPath, 'shapenet', 'registration', "backgroundFormatShapenetTransformation.txt")
+
     if not os.path.isdir(os.path.join(folderPath, 'shapenet')):
         os.makedirs(os.path.join(folderPath, 'shapenet'))
 
@@ -249,7 +255,7 @@ def jobConvertToBackground(jobParameter):
         if not jobParameter['UseShapenetFormat']:
             useShapenet = "false"
 
-    registrationFormatCommand = f"../build/pgm -J RegistrationFormat --in {inPath} --out {outPath} --SubsamplePointCount 2048 --CenterOnly "+centerOnly+" --UseShapenetFormat "+useShapenet
+    registrationFormatCommand = f"../build/pgm -J RegistrationFormat --in {inPath} --out {outPath} --SubsamplePointCount 2048  --ShapenetFormatTransformationLocation {shapenetTransformationLocation} --CenterOnly "+centerOnly+" --UseShapenetFormat "+useShapenet
     os.system(registrationFormatCommand)
     return {"Status": constants.statusDone}
 
@@ -282,24 +288,33 @@ def jobCalculateSizes(jobParameter):
     points = pointsWithLabels[isBackgroundPoint][:,0:3]
     print(points.shape)
 
+    # apply shapenet transformation
+    if os.path.exists(os.path.join(baseFolderPath, 'shapenet', 'registration', "backgroundFormatShapenetTransformation.txt")):
+        print("shapenet correction")
+        shapenet_transformation = np.loadtxt(os.path.join(baseFolderPath, 'shapenet', 'registration', "backgroundFormatShapenetTransformation.txt")).astype(np.float32)
+        shapenetScale = shapenet_transformation[0,0]
+        shapenetTranslation = shapenet_transformation[0:3,3] / shapenetScale
+        points -= shapenetTranslation
+        points = points * shapenetScale
+        
     # Scale Point Cloud
     points = points * scale
     
     # Transform Point Cloud
-    pointsTMP = np.hstack((points, np.ones((points.shape[0], 1))))  #(nx3)->(nx4)
-    points_t = pointsTMP.dot(transformation.T)[:,:-1]
+    points = np.hstack((points, np.ones((points.shape[0], 1))))  #(nx3)->(nx4)
+    #points = points.dot(transformation.T)[:,:-1]
 
-    print(points_t.shape)
+    print(points.shape)
 
     # Get Box Dimensions => Volume
-    minX = np.min(points_t[:,0])
-    maxX = np.max(points_t[:,0])
+    minX = np.min(points[:,0])
+    maxX = np.max(points[:,0])
 
-    minY = np.min(points_t[:,1])
-    maxY = np.max(points_t[:,1])
+    minY = np.min(points[:,1])
+    maxY = np.max(points[:,1])
 
-    minZ = np.min(points_t[:,2])
-    maxZ = np.max(points_t[:,2])
+    minZ = np.min(points[:,2])
+    maxZ = np.max(points[:,2])
 
     lengthX = abs(minX) + maxX if minX < 0.0 else maxX - minX
     lengthY = abs(minY) + maxY if minY < 0.0 else maxY - minY
@@ -308,11 +323,17 @@ def jobCalculateSizes(jobParameter):
     volume = lengthY * lengthX * lengthZ
     
     # Get Max Z => Height
-    heigth = maxZ
+    heigth = lengthZ
 
     # Update Result
     utilities.updateResultObject(baseFolderPath, {'JobName': 'Height', 'Value' : heigth})
     utilities.updateResultObject(baseFolderPath, {'JobName': 'Volume', 'Value' : volume})
+
+    # Save transformed cloud
+    if 'SaveTransformedCloud' in jobParameter:
+        if jobParameter['SaveTransformedCloud']:
+            savePath = os.path.join(baseFolderPath, 'shapenet', 'point_cloud_scaled.txt')
+            np.savetxt(savePath, points+np.array([0,0,-minZ,0]))
 
     return {"Status": constants.statusDone}
 
@@ -323,7 +344,7 @@ def jobCalculateGrowth(jobParameter):
     
     baseFolderPath = os.path.join(os.path.abspath(os.getcwd()), 'data', jobParameter['testSet'])
     if timestamp != "t1":
-        lastTimestamp = "t"+str(int(timestamp.replace("t", ""))+1)
+        lastTimestamp = "t"+str(int(timestamp.replace("t", ""))-1)
 
         try:
             resultsThis = utilities.getResultObject(os.path.join(baseFolderPath, timestamp))
