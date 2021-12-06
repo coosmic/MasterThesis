@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2021) (preloaded format=pdflatex 2021.8.18)  5 DEC 2021 22:14
+This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2021) (preloaded format=pdflatex 2021.8.18)  6 DEC 2021 00:06
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -413,7 +413,23 @@ File: l3backend-pdftex.def 2021-08-04 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count296
 \l__pdf_internal_box=\box57
 )
-(./formeln.aux)
+(./formeln.aux
+
+LaTeX Warning: Label `eq:sfm:camera:pose:w' multiply defined.
+
+
+LaTeX Warning: Label `eq:sfm:bundle:adjustment' multiply defined.
+
+
+LaTeX Warning: Label `eq:sfm:camera:pose:w' multiply defined.
+
+
+LaTeX Warning: Label `eq:sfm:bundle:adjustment' multiply defined.
+
+
+LaTeX Warning: Label `eq:hauptkruemmung:2' multiply defined.
+
+)
 \openout1 = `formeln.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 88.
@@ -434,8 +450,7 @@ LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 88.
 LaTeX Font Info:    ... okay on input line 88.
 LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 88.
 LaTeX Font Info:    ... okay on input line 88.
-
-(/usr/local/texlive/2021/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
+ (/usr/local/texlive/2021/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count297
 \scratchdimen=\dimen181
@@ -540,82 +555,37 @@ Package lastpage Info: Please have a look at the pageslts package at
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
+LaTeX Font Info:    Trying to load font information for U+msa on input line 96.
 
-LaTeX Warning: Citation `Sift' on page 1 undefined on input line 94.
-
-LaTeX Font Info:    Trying to load font information for U+msa on input line 100
-.
 (/usr/local/texlive/2021/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 100
-.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 96.
+
 
 (/usr/local/texlive/2021/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
-)
+) [1
 
-LaTeX Warning: Citation `SURF' on page 1 undefined on input line 109.
-
-[1
-
-{/usr/local/texlive/2021/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-<./Images/SURF_BoxFilter.png, id=54, 1187.43625pt x 576.1525pt>
-File: ./Images/SURF_BoxFilter.png Graphic file (type png)
-<use ./Images/SURF_BoxFilter.png>
-Package pdftex.def Info: ./Images/SURF_BoxFilter.png  used on input line 137.
-(pdftex.def)             Requested size: 209.12683pt x 101.46996pt.
-
-
-LaTeX Warning: Citation `SURF' on page 2 undefined on input line 138.
-
-
-LaTeX Warning: Citation `SURF' on page 2 undefined on input line 138.
-
-
-LaTeX Warning: Citation `ORB' on page 2 undefined on input line 144.
-
-[2 <./Images/SURF_BoxFilter.png>]
-
-LaTeX Warning: Citation `sfm2' on page 3 undefined on input line 207.
-
-[3]
-
-LaTeX Warning: Citation `pnp' on page 4 undefined on input line 229.
-
-
-LaTeX Warning: Citation `triggs1999bundle' on page 4 undefined on input line 23
-1.
-
-
-LaTeX Warning: Citation `icp_org' on page 4 undefined on input line 256.
-
-[4]
-
-LaTeX Warning: Citation `Ziner2005PointSR' on page 5 undefined on input line 27
-8.
-
-
-LaTeX Warning: Citation `Ziner2005PointSR' on page 5 undefined on input line 27
-9.
-
-[5] [6] [7] 
+{/usr/local/texlive/2021/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2] [3]
+ [4] [5]
+[6] 
 AED: lastpage setting LastPage
-[8] (./formeln.aux)
+[7] (./formeln.aux)
 
-LaTeX Warning: There were undefined references.
+LaTeX Warning: There were multiply-defined labels.
 
 Package rerunfilecheck Info: File `formeln.out' has not changed.
-(rerunfilecheck)             Checksum: 94418F807088B6AFD2BFB18F03825EF7;1377.
+(rerunfilecheck)             Checksum: AA9851C08A739265EDFF32FDAC399340;1395.
  ) 
 Here is how much of TeX's memory you used:
- 13412 strings out of 478542
- 200468 string characters out of 5850401
- 532109 words of memory out of 5000000
- 31113 multiletter control sequences out of 15000+600000
+ 13411 strings out of 478542
+ 200334 string characters out of 5850401
+ 529081 words of memory out of 5000000
+ 31105 multiletter control sequences out of 15000+600000
  416566 words of font info for 57 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 67i,15n,77p,560b,378s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 67i,15n,77p,560b,363s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2021/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/t
 exlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/te
 xlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/local/tex
@@ -628,10 +598,10 @@ xmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2021/tex
 mf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2021/texmf
 -dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2021/texmf-dist/font
 s/type1/urw/times/utmr8a.pfb>
-Output written on formeln.pdf (8 pages, 212699 bytes).
+Output written on formeln.pdf (7 pages, 147375 bytes).
 PDF statistics:
- 200 PDF objects out of 1000 (max. 8388607)
- 164 compressed objects within 2 object streams
- 44 named destinations out of 1000 (max. 500000)
- 62 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 185 PDF objects out of 1000 (max. 8388607)
+ 152 compressed objects within 2 object streams
+ 54 named destinations out of 1000 (max. 500000)
+ 73 words of extra memory for PDF output out of 10000 (max. 10000000)
 

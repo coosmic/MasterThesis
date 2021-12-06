@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2021) (preloaded format=pdflatex 2021.8.18)  5 DEC 2021 23:19
+This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2021) (preloaded format=pdflatex 2021.8.18)  6 DEC 2021 00:21
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1221,7 +1221,7 @@ Package rerunfilecheck Info: File `VortragKolloquium.out' has not changed.
 Here is how much of TeX's memory you used:
  21602 strings out of 478542
  402493 string characters out of 5850401
- 689728 words of memory out of 5000000
+ 689726 words of memory out of 5000000
  38929 multiletter control sequences out of 15000+600000
  417234 words of font info for 76 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
@@ -1238,7 +1238,7 @@ l/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmssi10.pfb></usr/loca
 l/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmssi8.pfb></usr/local
 /texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/
 texlive/2021/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb>
-Output written on VortragKolloquium.pdf (31 pages, 1912339 bytes).
+Output written on VortragKolloquium.pdf (31 pages, 1912327 bytes).
 PDF statistics:
  1053 PDF objects out of 1200 (max. 8388607)
  919 compressed objects within 10 object streams
